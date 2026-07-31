@@ -1,0 +1,40 @@
+name: Diagnosticar site publicado
+
+on:
+  workflow_dispatch:
+    inputs:
+      diagnostic_url:
+        description: Endereço completo do site a verificar
+        required: false
+        default: https://beta-gestao-365.scolarisamuel.workers.dev
+      wait_ms:
+        description: Tempo máximo de carregamento em milissegundos
+        required: false
+        default: "45000"
+
+permissions:
+  contents: read
+
+jobs:
+  live-browser-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js com WebSocket estável
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+
+      - name: Confirmar recursos nativos do Node.js
+        run: |
+          node --version
+          node -e "if (typeof WebSocket !== 'function') throw new Error('WebSocket global indisponível')"
+
+      - name: Abrir e diagnosticar o site em Chrome real
+        run: npm run diagnose:live
+        env:
+          DIAGNOSTIC_URL: ${{ inputs.diagnostic_url }}
+          DIAGNOSTIC_WAIT_MS: ${{ inputs.wait_ms }}
