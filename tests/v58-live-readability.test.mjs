@@ -1,0 +1,149 @@
+import assert from "node:assert/strict";
+import { spawn, spawnSync } from "node:child_process";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import test from "node:test";
+
+const TARGET = "https://beta-gestao-365.scolarisamuel.workers.dev";
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function findChrome() {
+  for (const name of ["google-chrome-stable", "google-chrome", "chromium", "chromium-browser"]) {
+    const result = spawnSync("which", [name], { encoding: "utf8" });
+    if (result.status === 0 && result.stdout.trim()) return result.stdout.trim();
+  }
+  return "";
+}
+
+async function waitJson(port, path, options = {}, timeoutMs = 15_000) {
+  const deadline = Date.now() + timeoutMs;
+  let lastError;
+  while (Date.now() < deadline) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}${path}`, options);
+      if (response.ok) return response.json();
+      lastError = new Error(`${response.status} ${response.statusText}`);
+    } catch (error) {
+      lastError = error;
+    }
+    await sleep(200);
+  }
+  throw lastError || new Error(`Chrome não respondeu em ${path}`);
+}
+
+async function inspect(attempt) {
+  const chromePath = findChrome();
+  assert.ok(chromePath, "Chrome/Chromium não está disponível no runner");
+  const port = 9700 + attempt;
+  const profile = await mkdtemp(join(tmpdir(), "beta-v58-"));
+  const chrome = spawn(chromePath, [
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--disable-extensions",
+    `--remote-debugging-port=${port}`,
+    `--user-data-dir=${profile}`,
+    "about:blank",
+  ], { stdio: "ignore" });
+
+  let socket;
+  const pending = new Map();
+  let nextId = 1;
+
+  try {
+    await waitJson(port, "/json/version");
+    const page = await waitJson(port, `/json/new?${encodeURIComponent("about:blank")}`, { method: "PUT" });
+    socket = new WebSocket(page.webSocketDebuggerUrl);
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error("WebSocket do Chrome não abriu")), 10_000);
+      socket.addEventListener("open", () => { clearTimeout(timer); resolve(); });
+      socket.addEventListener("error", reject);
+    });
+
+    socket.addEventListener("message", (event) => {
+      const message = JSON.parse(String(event.data));
+      if (!message.id) return;
+      const waiter = pending.get(message.id);
+      if (!waiter) return;
+      clearTimeout(waiter.timer);
+      pending.delete(message.id);
+      if (message.error) waiter.reject(new Error(message.error.message));
+      else waiter.resolve(message.result);
+    });
+
+    const command = (method, params = {}, timeoutMs = 12_000) => {
+      const id = nextId++;
+      socket.send(JSON.stringify({ id, method, params }));
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => {
+          pending.delete(id);
+          reject(new Error(`Timeout CDP em ${method}`));
+        }, timeoutMs);
+        pending.set(id, { resolve, reject, timer });
+      });
+    };
+
+    await command("Runtime.enable");
+    await command("Page.enable");
+    await command("Page.navigate", { url: `${TARGET}/?verify_v58=${Date.now()}-${attempt}` });
+    await sleep(12_000);
+
+    const result = await command("Runtime.evaluate", {
+      expression: `(() => {
+        const size = (selector) => {
+          const element = document.querySelector(selector);
+          return element ? Number.parseFloat(getComputedStyle(element).fontSize) : 0;
+        };
+        return {
+          title: document.querySelector('.cost-chart-heading > div:first-child > strong')?.textContent?.trim() || '',
+          titleSize: size('.cost-chart-heading > div:first-child > strong'),
+          introSize: size('.cost-bar-heading p'),
+          labelSize: size('.cost-bar-label b'),
+          descriptionSize: size('.cost-bar-label small'),
+          valueSize: size('.cost-bar-value strong'),
+          percentageSize: size('.cost-bar-value small'),
+          rows: document.querySelectorAll('.cost-bar-row').length,
+          loading: Boolean(document.querySelector('.page-area .loading-state')),
+        };
+      })()`,
+      returnByValue: true,
+    });
+    return result.result?.value;
+  } finally {
+    try { socket?.close(); } catch {}
+    chrome.kill("SIGKILL");
+    await rm(profile, { recursive: true, force: true });
+  }
+}
+
+test("V58 melhora a leitura do mapa executivo no site publicado", { timeout: 240_000 }, async () => {
+  const deadline = Date.now() + 210_000;
+  let attempt = 0;
+  let state;
+  let lastError;
+
+  while (Date.now() < deadline) {
+    attempt += 1;
+    try {
+      state = await inspect(attempt);
+      if (
+        !state?.loading &&
+        state?.title === "Distribuição dos custos por grupo" &&
+        state?.rows >= 7 &&
+        state?.titleSize >= 25 &&
+        state?.introSize >= 14 &&
+        state?.labelSize >= 15 &&
+        state?.descriptionSize >= 12 &&
+        state?.valueSize >= 16 &&
+        state?.percentageSize >= 12
+      ) return;
+    } catch (error) {
+      lastError = error;
+    }
+    await sleep(12_000);
+  }
+
+  assert.fail(`A V58 ainda não está publicada ou legível. Estado=${JSON.stringify(state)} Erro=${String(lastError || "nenhum")}`);
+});
