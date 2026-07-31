@@ -276,7 +276,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "dueDate", label: "Vencimento", type: "date", required: true, aliases: ["Vencimento"] },
       { key: "expectedAmount", label: "Valor a pagar", type: "currency", required: true, aliases: ["Valor previsto"] },
       { key: "approval", label: "Situação da aprovação", type: "select", options: ["Pendente", "Aprovada", "Devolvida", "Rejeitada"], help: "Mostra se um responsável já autorizou o pagamento.", aliases: ["Aprovação"] },
-      { key: "status", label: "Status do pagamento", type: "select", required: true, options: statusFinanceiro, aliases: ["Status pagamento"] },
+      { key: "status", label: "Status do pagamento", type: "select", required: true, options: ["Aguardando validação", "Reprovado", "Pago"], aliases: ["Status pagamento"] },
       { key: "paymentDate", label: "Data do pagamento", type: "date", aliases: ["Data pagamento"] },
       { key: "paidAmount", label: "Valor pago", type: "currency", aliases: ["Valor pago"] },
       { key: "invoiceUrl", label: "Nota fiscal ou cobrança", type: "url", placeholder: "Cole o link do arquivo", help: "Informe o link da nota fiscal, boleto ou fatura salvo no SharePoint/OneDrive.", aliases: ["Link nota/fatura", "Link nota", "Documento fiscal"] },

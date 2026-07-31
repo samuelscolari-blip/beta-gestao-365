@@ -255,20 +255,39 @@ export async function ensureDemoRecords() {
     }>();
 
   const pendingStatusBackfills = (existing.results || []).flatMap((row) => {
+    if (row.source !== DEMO_SOURCE) return [];
     let payload: Record<string, unknown> = {};
     try {
       payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
     } catch {
       payload = {};
     }
-    const topLevelUsesLegacyStatus = row.status === "Vence em 7 dias";
-    const payloadUsesLegacyStatus =
-      String(payload.status || "") === "Vence em 7 dias";
-    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];
+
+    const rawStatus = String(row.status || payload.status || "");
+    const normalizedStatus = rawStatus
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+
+    let status = rawStatus;
+    if (row.module === "expenses") {
+      status = normalizedStatus.includes("pag")
+        ? "Pago"
+        : normalizedStatus.includes("reprov") || normalizedStatus.includes("rejeit")
+          ? "Reprovado"
+          : "Aguardando validação";
+    } else if (rawStatus === "Vence em 7 dias") {
+      status = "Pendente";
+    }
+
+    const payloadStatus = String(payload.status || "");
+    if (status === row.status && status === payloadStatus) return [];
     return [{
       id: row.id,
       module: row.module,
-      payload: { ...payload, status: "Pendente" },
+      status,
+      payload: { ...payload, status },
     }];
   });
 
@@ -283,7 +302,7 @@ export async function ensureDemoRecords() {
              WHERE tenant_id = ? AND id = ? AND source = ?`,
           )
           .bind(
-            "Pendente",
+            record.status,
             JSON.stringify(record.payload),
             updatedAt,
             DEFAULT_TENANT_ID,
@@ -297,7 +316,7 @@ export async function ensureDemoRecords() {
         "DEMO_REFRESH",
         record.module,
         record.id,
-        "Situação fictícia padronizada como Pendente",
+        `Situação fictícia padronizada como ${record.status}`,
         "Sistema",
       );
     }
