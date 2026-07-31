@@ -100,8 +100,9 @@ export default function SecureBetaAppV52(props: Props) {
         nextInit = { ...init, body: JSON.stringify(securedBody) };
       }
 
+      const protectedWrite = isRecordsUrl(input) && method !== "GET";
       const response = await previousFetch(
-        isRecordsUrl(input) ? securedInput(input) : input,
+        protectedWrite ? securedInput(input) : input,
         nextInit,
       );
 
