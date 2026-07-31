@@ -193,18 +193,18 @@ export const demoRecords: DemoRecord[] = [
     documentsUrl: docs("fornecedor-003"),
   }),
 
-  demo("expenses", "Compra fictícia de cimento e argamassa", "TST-PAG-001", "Aguardando aprovação", "2026-08-05", 12850.4, {
+  demo("expenses", "Compra fictícia de cimento e argamassa", "TST-PAG-001", "Aguardando validação", "2026-08-05", 12850.4, {
     accountId: "TST-PAG-001", supplierCode: "TST-FOR-001", supplier: "Cimento Modelo Comércio Ltda. — TESTE",
     work: "Residencial Horizonte — Obra Teste", costCenter: "CC-TESTE-001", category: "Materiais",
     description: "Compra fictícia de cimento e argamassa", issueDate: "2026-07-27", dueDate: "2026-08-05",
-    expectedAmount: 12850.4, approval: "Pendente", status: "Aguardando aprovação",
+    expectedAmount: 12850.4, approval: "Pendente", status: "Aguardando validação",
     invoiceUrl: docs("nf-pag-001"), responsible: "Financeiro Teste",
   }),
-  demo("expenses", "Locação mensal fictícia de escavadeira", "TST-PAG-002", "Pendente", "2026-08-02", 18400, {
+  demo("expenses", "Locação mensal fictícia de escavadeira", "TST-PAG-002", "Aguardando validação", "2026-08-02", 18400, {
     accountId: "TST-PAG-002", supplierCode: "TST-FOR-002", supplier: "Locadora Exemplo Equipamentos Ltda. — TESTE",
     work: "Galpão Industrial Modelo — Obra Teste", costCenter: "CC-TESTE-002", category: "Locação",
     description: "Locação mensal fictícia de escavadeira", issueDate: "2026-07-25", dueDate: "2026-08-02",
-    expectedAmount: 18400, approval: "Aprovada", status: "Pendente",
+    expectedAmount: 18400, approval: "Aprovada", status: "Aguardando validação",
     invoiceUrl: docs("nf-pag-002"), responsible: "Financeiro Teste",
   }),
   demo("expenses", "Internet do alojamento — lançamento fictício", "TST-PAG-003", "Pago", "2026-07-20", 189.9, {

@@ -586,7 +586,7 @@ function requestIsReadyForManagement(record: StoredRecord) {
   }
   return (
     approval === "pendente" ||
-    ["pendente", "aguardando aprovacao", "em analise"].includes(status)
+    ["pendente", "aguardando aprovacao", "aguardando validacao", "em analise"].includes(status)
   );
 }
 
@@ -630,7 +630,7 @@ function requestOwner(record: StoredRecord) {
 }
 
 function requestApprovedStatus(record: StoredRecord) {
-  if (record.module === "expenses") return "Aprovado";
+  if (record.module === "expenses") return "Aguardando validação";
   if (record.module === "cards") return "Conferida";
   if (record.module === "purchases") return "Aprovado";
   return "Aprovada";
@@ -2918,6 +2918,62 @@ function ConstructionExecutivePanel({
         </div>
       </header>
 
+      <section
+        className="construction-stage-roadmap"
+        aria-label="Passo a passo das etapas da obra"
+      >
+        <header>
+          <div>
+            <span className="eyebrow">PASSO A PASSO DA OBRA</span>
+            <h3>Onde a obra está e o que vem depois</h3>
+            <p>
+              As etapas anteriores ficam concluídas, a etapa atual mostra seu
+              próprio avanço e as próximas permanecem sinalizadas para início.
+            </p>
+          </div>
+          <strong>
+            {currentStagePosition || "—"}
+            <small>de {constructionStages.length} etapas</small>
+          </strong>
+        </header>
+        <div className="construction-stage-track" role="list">
+          {constructionStages.map((stage, index) => {
+            const stageState =
+              currentStageIndex < 0
+                ? "upcoming"
+                : index < currentStageIndex
+                  ? "completed"
+                  : index === currentStageIndex
+                    ? "current"
+                    : "upcoming";
+            return (
+              <article
+                key={stage}
+                className={stageState}
+                role="listitem"
+                aria-current={stageState === "current" ? "step" : undefined}
+              >
+                <span>
+                  {stageState === "completed" ? (
+                    <Icon name="check" size={14} />
+                  ) : (
+                    String(index + 1).padStart(2, "0")
+                  )}
+                </span>
+                <strong>{stage}</strong>
+                <small>
+                  {stageState === "completed"
+                    ? "Concluída"
+                    : stageState === "current"
+                      ? `${decimalNumber(currentStageProgress)}% executada`
+                      : "A iniciar"}
+                </small>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
       <section className={`construction-project-command ${riskTone}`}>
         <div className="construction-project-progress">
           <div
@@ -3002,35 +3058,43 @@ function ConstructionExecutivePanel({
         </div>
 
         <div
-          className={`construction-cost-to-complete ${
+          className={`construction-cost-to-complete construction-finance-summary ${
             projectedBudgetVariance > 0 ? "over" : "within"
           }`}
         >
           <header>
-            <span><Icon name="alert" size={19} /></span>
+            <span><Icon name="expenses" size={19} /></span>
             <div>
-              <small>VALOR NECESSÁRIO PARA CONCLUIR</small>
-              <strong>{currency.format(estimatedCostToComplete)}</strong>
+              <small>ORÇAMENTO & CUSTOS</small>
+              <strong>
+                {projectedBudgetVariance > 0
+                  ? "Alerta de estouro"
+                  : projectBudget > 0
+                    ? "Dentro do orçamento"
+                    : "Cadastro financeiro incompleto"}
+              </strong>
             </div>
           </header>
-          <p>
-            Inclui {currency.format(projectOpenCommitments)} já comprometidos e{" "}
-            {currency.format(uncommittedCostToComplete)} ainda a contratar ou
-            executar.
-          </p>
-          <div>
+          <div className="construction-finance-pair">
             <span>
               <small>Orçamento aprovado</small>
               <strong>{currency.format(projectBudget)}</strong>
             </span>
             <span>
-              <small>Custo realizado</small>
-              <strong>{currency.format(projectRealizedCost)}</strong>
+              <small>Custo final projetado</small>
+              <strong>{currency.format(projectedFinalCost)}</strong>
+            </span>
+          </div>
+          <div className="construction-finance-needed">
+            <small>NECESSÁRIO PARA CONCLUIR</small>
+            <strong>{currency.format(estimatedCostToComplete)}</strong>
+            <span>
+              Inclui {currency.format(projectOpenCommitments)} comprometidos e {currency.format(uncommittedCostToComplete)} ainda a contratar ou executar.
             </span>
           </div>
           <footer>
-            <span>Custo final projetado</span>
-            <strong>{currency.format(projectedFinalCost)}</strong>
+            <span>Custo realizado</span>
+            <strong>{currency.format(projectRealizedCost)}</strong>
             <b>
               {projectedBudgetVariance > 0
                 ? `${currency.format(projectedBudgetVariance)} acima do orçamento`
@@ -3040,230 +3104,51 @@ function ConstructionExecutivePanel({
         </div>
       </section>
 
-      <section className="construction-capacity-section">
-        <header>
+      <section className="construction-capacity-section construction-capacity-compact">
+        <header className="construction-capacity-compact-header">
           <div>
-            <span className="eyebrow">ÍNDICE GERAL E CAPACIDADE DE PRODUÇÃO</span>
-            <h3>A obra está em {decimalNumber(overallIndex)}% no desempenho geral</h3>
-            <p>
-              Síntese ponderada de avanço, prazo, equipe própria, máquinas,
-              horas produtivas e orçamento. Não substitui o avanço físico.
-            </p>
+            <span className="eyebrow">ÍNDICES DE PRODUÇÃO</span>
+            <h3>Capacidade e desempenho da obra</h3>
           </div>
-          <strong className={overallTone}>
-            {overallStatus}
-            <small>{overallFactors.length} fatores com dados disponíveis</small>
-          </strong>
+          <details className="construction-index-help">
+            <summary aria-label="Entenda o Índice Geral">?</summary>
+            <div>
+              <strong>Como funciona o Índice Geral</strong>
+              <p>
+                Nota gerencial ponderada que considera avanço físico, prazo,
+                equipe, máquinas, produtividade e orçamento. Não representa
+                isoladamente a porcentagem concluída da obra.
+              </p>
+            </div>
+          </details>
         </header>
-        <div className="construction-capacity-grid">
-          <article className={`featured-progress overall-index ${overallTone}`}>
-            <span><Icon name="dashboard" size={21} /></span>
-            <div>
-              <small>ÍNDICE GERAL DA OBRA</small>
-              <strong>{decimalNumber(overallIndex)}%</strong>
-              <p>
-                {overallStatus} • resultado gerencial ponderado
-              </p>
-              <b><i style={{ width: `${overallIndex}%` }} /></b>
-              <div className="construction-overall-factors">
-                {overallFactors.map((factor) => (
-                  <span key={factor.label}>
-                    <i>{factor.label}</i>
-                    <em>{decimalNumber(factor.score)}%</em>
-                  </span>
-                ))}
-              </div>
-            </div>
+        <div className="construction-capacity-grid construction-capacity-grid-compact">
+          <article className={`construction-kpi-card overall ${overallTone}`}>
+            <span><Icon name="dashboard" size={19} /></span>
+            <div><small>ÍNDICE GERAL</small><strong>{decimalNumber(overallIndex)}%</strong><p>{overallStatus} • resultado ponderado</p></div>
           </article>
-          <article className={operationCapacity < 60 ? "negative" : operationCapacity < 90 ? "warning" : "positive"}>
-            <span><Icon name="works" size={19} /></span>
-            <div>
-              <small>CAPACIDADE OPERACIONAL</small>
-              <strong>{decimalNumber(operationCapacity)}%</strong>
-              <p>
-                Limitada por {capacityConstraint.label} em{" "}
-                {decimalNumber(capacityConstraint.value)}%
-              </p>
-              <b><i style={{ width: `${operationCapacity}%` }} /></b>
-            </div>
+          <article className={`construction-kpi-card ${operationCapacity < 60 ? "negative" : operationCapacity < 90 ? "warning" : "positive"}`}>
+            <span><Icon name="works" size={18} /></span>
+            <div><small>CAPACIDADE OPERACIONAL</small><strong>{decimalNumber(operationCapacity)}%</strong><p>Limitada por {capacityConstraint.label} em {decimalNumber(capacityConstraint.value)}%</p></div>
           </article>
-          <article className={ownWorkforceCapacity < 100 ? "warning" : "positive"}>
-            <span><Icon name="people" size={19} /></span>
-            <div>
-              <small>EQUIPE PRÓPRIA DISPONÍVEL</small>
-              <strong>{decimalNumber(ownWorkforceCapacity)}%</strong>
-              <p>
-                {ownTeamCount} mobilizados de {requiredOwnTeamCount || "—"} necessários
-                {ownWorkforceGap ? ` • faltam ${ownWorkforceGap}` : " • equipe completa"}
-              </p>
-              <b><i style={{ width: `${ownWorkforceCapacity}%` }} /></b>
-            </div>
+          <article className={`construction-kpi-card ${ownWorkforceCapacity < 100 ? "warning" : "positive"}`}>
+            <span><Icon name="people" size={18} /></span>
+            <div><small>EQUIPE DISPONÍVEL</small><strong>{decimalNumber(ownWorkforceCapacity)}%</strong><p>{ownTeamCount} mobilizados de {requiredOwnTeamCount || "—"}</p></div>
           </article>
-          <article className={machineAvailability < 100 ? "negative" : "positive"}>
-            <span><Icon name="assets" size={19} /></span>
-            <div>
-              <small>MÁQUINAS PRODUZINDO</small>
-              <strong>{decimalNumber(machineAvailability)}%</strong>
-              <p>
-                {activeMachines} ativas de {machineRows.length} •{" "}
-                {unavailableMachines} indisponíveis
-              </p>
-              <b><i style={{ width: `${machineAvailability}%` }} /></b>
-            </div>
+          <article className={`construction-kpi-card ${machineAvailability < 100 ? "negative" : "positive"}`}>
+            <span><Icon name="assets" size={18} /></span>
+            <div><small>MÁQUINAS PRODUZINDO</small><strong>{decimalNumber(machineAvailability)}%</strong><p>{activeMachines} ativas de {machineRows.length} • {unavailableMachines} indisponíveis</p></div>
           </article>
-          <article className={utilizationPercent < 80 ? "negative" : "positive"}>
-            <span><Icon name="worklogs" size={19} /></span>
-            <div>
-              <small>HORAS PRODUTIVAS</small>
-              <strong>{decimalNumber(utilizationPercent)}%</strong>
-              <p>
-                {decimalNumber(productiveHours)} h produtivas •{" "}
-                {decimalNumber(lostHours)} h perdidas
-              </p>
-              <b><i style={{ width: `${utilizationPercent}%` }} /></b>
-            </div>
+          <article className={`construction-kpi-card ${utilizationPercent < 80 ? "warning" : "positive"}`}>
+            <span><Icon name="worklogs" size={18} /></span>
+            <div><small>HORAS PRODUTIVAS</small><strong>{decimalNumber(utilizationPercent)}%</strong><p>{decimalNumber(productiveHours)} h produtivas • {decimalNumber(lostHours)} h perdidas</p></div>
           </article>
         </div>
       </section>
 
-      <section
-        className="construction-stage-roadmap"
-        aria-label="Passo a passo das etapas da obra"
-      >
-        <header>
-          <div>
-            <span className="eyebrow">PASSO A PASSO DA OBRA</span>
-            <h3>Onde a obra está e o que vem depois</h3>
-            <p>
-              As etapas anteriores ficam concluídas, a etapa atual mostra seu
-              próprio avanço e as próximas permanecem sinalizadas para início.
-            </p>
-          </div>
-          <strong>
-            {currentStagePosition || "—"}
-            <small>de {constructionStages.length} etapas</small>
-          </strong>
-        </header>
-        <div className="construction-stage-track" role="list">
-          {constructionStages.map((stage, index) => {
-            const stageState =
-              currentStageIndex < 0
-                ? "upcoming"
-                : index < currentStageIndex
-                  ? "completed"
-                  : index === currentStageIndex
-                    ? "current"
-                    : "upcoming";
-            return (
-              <article
-                key={stage}
-                className={stageState}
-                role="listitem"
-                aria-current={stageState === "current" ? "step" : undefined}
-              >
-                <span>
-                  {stageState === "completed" ? (
-                    <Icon name="check" size={14} />
-                  ) : (
-                    String(index + 1).padStart(2, "0")
-                  )}
-                </span>
-                <strong>{stage}</strong>
-                <small>
-                  {stageState === "completed"
-                    ? "Concluída"
-                    : stageState === "current"
-                      ? `${decimalNumber(currentStageProgress)}% executada`
-                      : "A iniciar"}
-                </small>
-              </article>
-            );
-          })}
-        </div>
-      </section>
 
-      <section
-        className={`construction-project-finance ${
-          projectedBudgetVariance > 0 ? "over" : "within"
-        }`}
-        aria-label="Orçamento e valor necessário para concluir a obra"
-      >
-        <header>
-          <div>
-            <span className="eyebrow">ORÇAMENTO PARA CONCLUSÃO</span>
-            <h3>Quanto já foi realizado e quanto ainda será necessário</h3>
-            <p>
-              O valor para concluir é uma estimativa gerencial e deve ser
-              revisado pela engenharia e pelo financeiro a cada medição.
-            </p>
-          </div>
-          <strong>
-            {projectedBudgetVariance > 0 ? "Acima do orçamento" : "Dentro do orçamento"}
-            <small>
-              {decimalNumber(projectedVariancePercent)}% de{" "}
-              {projectedBudgetVariance > 0 ? "estouro projetado" : "margem prevista"}
-            </small>
-          </strong>
-        </header>
-        <div className="construction-project-finance-grid">
-          <article>
-            <small>ORÇAMENTO APROVADO</small>
-            <strong>{currency.format(projectBudget)}</strong>
-            <span>Base financeira da obra</span>
-          </article>
-          <article className="realized">
-            <small>REALIZADO ACUMULADO</small>
-            <strong>{currency.format(projectRealizedCost)}</strong>
-            <span>
-              {decimalNumber(budgetConsumption)}% do orçamento consumido
-            </span>
-          </article>
-          <article className="committed">
-            <small>COMPROMETIDO EM ABERTO</small>
-            <strong>{currency.format(projectOpenCommitments)}</strong>
-            <span>{decimalNumber(commitmentShare)}% do orçamento</span>
-          </article>
-          <article className="needed">
-            <small>NECESSÁRIO PARA CONCLUIR</small>
-            <strong>{currency.format(estimatedCostToComplete)}</strong>
-            <span>Inclui compromissos já assumidos</span>
-          </article>
-          <article className="forecast">
-            <small>CUSTO FINAL PROJETADO</small>
-            <strong>{currency.format(projectedFinalCost)}</strong>
-            <span>
-              {projectedBudgetVariance > 0
-                ? `${currency.format(projectedBudgetVariance)} acima da base`
-                : `${currency.format(Math.abs(projectedBudgetVariance))} abaixo da base`}
-            </span>
-          </article>
-        </div>
-        <div className="construction-project-finance-bar">
-          <div>
-            <span className="realized" style={{ width: `${realizedForecastShare}%` }} />
-            <span className="committed" style={{ width: `${commitmentForecastShare}%` }} />
-            <span className="remaining" style={{ width: `${uncommittedForecastShare}%` }} />
-          </div>
-          <footer>
-            <span><i className="realized" /> Realizado</span>
-            <span><i className="committed" /> Comprometido</span>
-            <span><i className="remaining" /> Ainda a contratar/executar</span>
-            <strong>
-              Livre no orçamento após compromissos:{" "}
-              {currency.format(budgetAvailableAfterCommitments)}
-            </strong>
-          </footer>
-        </div>
-        {costAheadOfProgress > 0 ? (
-          <p className="construction-cost-progress-alert">
-            <Icon name="alert" size={15} />
-            O custo realizado consumiu {decimalNumber(budgetConsumption)}% do
-            orçamento, enquanto o avanço físico está em{" "}
-            {decimalNumber(physicalProgress)}% — diferença de{" "}
-            {decimalNumber(costAheadOfProgress)} p.p. que exige análise.
-          </p>
-        ) : null}
-      </section>
+
+
 
       <div className="construction-decision-grid">
         <article className="construction-priority-board">
@@ -4956,44 +4841,7 @@ function Dashboard({
     (sum, record) => sum + Math.max(0, Number(record.amount || 0)),
     0,
   );
-  const decisionExamples = [
-    {
-      process: "Compra",
-      title: "120 sacos de cimento CP-II • Obra Salvador",
-      amount: 5_760,
-      decision: "Aprovar",
-      tone: "approve",
-      documents: "Solicitação, três cotações e mapa comparativo anexados",
-      reason:
-        "Quantidade, necessidade da obra, prazo e menor proposta estão coerentes com a solicitação.",
-      belongs:
-        "Sim. É uma compra aguardando análise, com responsável, valor e documentos suficientes.",
-    },
-    {
-      process: "Cartão corporativo",
-      title: "Refeição sem vínculo com atividade ou viagem autorizada",
-      amount: 438.7,
-      decision: "Reprovar",
-      tone: "reject",
-      documents: "Recibo anexado, mas sem justificativa empresarial",
-      reason:
-        "O documento existe, porém a finalidade não atende à política nem demonstra relação com a operação.",
-      belongs:
-        "Sim. A despesa precisa de decisão gerencial; a reprovação deve registrar o motivo.",
-    },
-    {
-      process: "Pagamento",
-      title: "Locação de guindaste • competência de julho",
-      amount: 18_900,
-      decision: "Documento ausente",
-      tone: "missing",
-      documents: "Nota fiscal, contrato ou boleto não foram vinculados",
-      reason:
-        "O pedido permanece na fila, mas a aprovação fica bloqueada até a evidência obrigatória ser anexada.",
-      belongs:
-        "Sim. O pagamento está em análise; deve ficar na etapa de documentos ausentes.",
-    },
-  ] as const;
+
 
   return (
     <div className="page-stack">
@@ -5041,33 +4889,7 @@ function Dashboard({
                 <small>{pendingExpenses.length} obrigações localizadas</small>
               </article>
             </div>
-            <div className="cost-monitor-progress">
-              <div>
-                <span>
-                  <strong>Execução dos compromissos financeiros</strong>
-                  <small>
-                    {paidCommitmentShare.toLocaleString("pt-BR", {
-                      maximumFractionDigits: 1,
-                    })}
-                    % quitado entre os itens com situação de pagamento
-                  </small>
-                </span>
-                <span className="cost-driver">
-                  <small>Maior pressão da competência</small>
-                  <strong>
-                    {largestCostRow
-                      ? `${largestCostRow.label} · ${largestCostRow.share.toLocaleString(
-                          "pt-BR",
-                          { maximumFractionDigits: 1 },
-                        )}%`
-                      : "Sem custos registrados"}
-                  </strong>
-                </span>
-              </div>
-              <span className="cost-progress-track" aria-hidden="true">
-                <span style={{ width: `${paidCommitmentShare}%` }} />
-              </span>
-            </div>
+
           </section>
           <div className="executive-cost-layout">
             <section className="cost-composition-card" aria-label="Composição do custo total">
@@ -5271,91 +5093,6 @@ function Dashboard({
         canEdit={canEdit}
       />
 
-      <section className="content-card quick-card action-center">
-        <header className="action-center-header">
-          <div className="action-center-title">
-            <span className="eyebrow">CENTRAL OPERACIONAL</span>
-            <h1>Ações rápidas</h1>
-            <p>{settings.welcomeMessage}</p>
-          </div>
-          <div className="action-center-status">
-            <span className="pulse-dot" />
-            <span>
-              <strong>Sistema online</strong>
-              <small>Dados por empresa e auditoria imutável</small>
-            </span>
-          </div>
-          <div className="action-center-buttons">
-            {canEdit ? (
-              <>
-                <button className="button primary" onClick={() => onNew("expenses")}>
-                  <Icon name="plus" size={18} /> Novo lançamento
-                </button>
-                <button className="button secondary" onClick={onImport}>
-                  <Icon name="upload" size={18} /> Importar planilha
-                </button>
-              </>
-            ) : (
-              <>
-                <a
-                  className="button primary"
-                  href="/signin-with-chatgpt?return_to=%2F"
-                  title="Entre como administrador para criar um lançamento"
-                >
-                  <Icon name="plus" size={18} /> Novo lançamento
-                </a>
-                <a
-                  className="button secondary"
-                  href="/signin-with-chatgpt?return_to=%2F"
-                  title="Entre como administrador para importar uma planilha"
-                >
-                  <Icon name="upload" size={18} /> Importar planilha
-                </a>
-              </>
-            )}
-          </div>
-        </header>
-        <div className="quick-section-label">
-          <div>
-            <span className="eyebrow">ATALHOS POR PROCESSO</span>
-            <strong>Escolha a operação que deseja realizar</strong>
-          </div>
-          <small>{canEdit ? "Cadastros e importação liberados" : "Modo de consulta"}</small>
-        </div>
-        <div className="quick-grid">
-          {[
-            ["works", "Cadastrar obra", "Escopo, cronograma e avanço físico"],
-            ["worklogs", "Registrar diário", "Produção, equipes e ocorrências"],
-            ["expenses", "Lançar conta", "Nota fiscal e vencimento"],
-            ["purchases", "Solicitar compra", "Material para a obra"],
-            ["asset_events", "Registrar parada ou manutenção", "Causa, correção, custo e perda"],
-            ["people", "Cadastrar funcionário", "Quadro e custo mensal"],
-            ["compliance", "Preparar evento fiscal", "eSocial, Reinf e CNO"],
-          ].map(([id, title, detail]) => (
-            <button
-              key={id}
-              onClick={() =>
-                canEdit
-                  ? onNew(id)
-                  : onNavigate(id === "asset_events" ? "assets" : id)
-              }
-            >
-              <span
-                className="quick-icon"
-                style={{ color: moduleMap[id].color, background: moduleMap[id].lightColor }}
-              >
-                <Icon name={id} />
-              </span>
-              <span>
-                <strong>{title}</strong>
-                <small>{canEdit ? detail : `Abrir ${moduleMap[id].shortLabel.toLowerCase()}`}</small>
-              </span>
-              <Icon name="arrow" size={17} />
-            </button>
-          ))}
-        </div>
-      </section>
-
       <section className="management-center content-card">
         <div className="management-heading">
           <div>
@@ -5377,65 +5114,6 @@ function Dashboard({
             </span>
           </div>
         </div>
-        <section className="management-training">
-          <header>
-            <div>
-              <span className="eyebrow">EXEMPLOS FICTÍCIOS • GUIA DE DECISÃO</span>
-              <h3>Relatórios para treinar a análise gerencial</h3>
-              <p>
-                Estes exemplos não entram nos totais e não podem ser aprovados.
-                Eles mostram quando o pedido pertence à fila e qual decisão é
-                coerente.
-              </p>
-            </div>
-            <span className="management-training-chip">
-              <Icon name="eye" size={14} /> Dados fictícios
-            </span>
-          </header>
-          <div className="management-training-grid">
-            {decisionExamples.map((example) => (
-              <article key={example.title} className={example.tone}>
-                <header>
-                  <span>{example.process}</span>
-                  <strong>{example.decision}</strong>
-                </header>
-                <h4>{example.title}</h4>
-                <b>{currency.format(example.amount)}</b>
-                <dl>
-                  <div>
-                    <dt>Documentos</dt>
-                    <dd>{example.documents}</dd>
-                  </div>
-                  <div>
-                    <dt>Caracterização</dt>
-                    <dd>{example.reason}</dd>
-                  </div>
-                  <div>
-                    <dt>Pertence à tela?</dt>
-                    <dd>{example.belongs}</dd>
-                  </div>
-                </dl>
-              </article>
-            ))}
-          </div>
-          <footer>
-            <span>
-              <Icon name="check" size={15} />
-              <strong>Aprovar:</strong> necessidade, valor, responsável e
-              documento coerentes.
-            </span>
-            <span>
-              <Icon name="close" size={15} />
-              <strong>Reprovar:</strong> finalidade, valor ou política
-              incompatível, sempre com justificativa.
-            </span>
-            <span>
-              <Icon name="alert" size={15} />
-              <strong>Ausente:</strong> o pedido pertence à fila, mas sem o
-              documento obrigatório não pode ser aprovado.
-            </span>
-          </footer>
-        </section>
         <div className="management-overview">
           <article className="validation">
             <span><Icon name="history" size={17} /></span>
@@ -5604,6 +5282,8 @@ function ModulePage({
   onImport,
   onOpen,
   canEdit,
+  headerModule,
+  topNavigation,
 }: {
   module: ModuleDefinition;
   records: StoredRecord[];
@@ -5617,9 +5297,12 @@ function ModulePage({
   onImport: () => void;
   onOpen: (record: StoredRecord) => void;
   canEdit: boolean;
+  headerModule?: ModuleDefinition;
+  topNavigation?: ReactNode;
 }) {
   const { visible: showInternalCodes, toggle: toggleInternalCodes } =
     useContext(InternalCodeVisibilityContext);
+  const presentationModule = headerModule || module;
   const statuses = Array.from(
     new Set(records.map(recordStatusLabel).filter(Boolean)),
   );
@@ -5652,14 +5335,17 @@ function ModulePage({
         <div className="module-title-wrap">
           <span
             className="module-big-icon"
-            style={{ color: module.color, backgroundColor: module.lightColor }}
+            style={{
+              color: presentationModule.color,
+              backgroundColor: presentationModule.lightColor,
+            }}
           >
-            <Icon name={module.id} size={26} />
+            <Icon name={presentationModule.id} size={26} />
           </span>
           <div>
-            <span className="eyebrow">{module.eyebrow}</span>
-            <h1>{module.label}</h1>
-            <p>{module.description}</p>
+            <span className="eyebrow">{presentationModule.eyebrow}</span>
+            <h1>{presentationModule.label}</h1>
+            <p>{presentationModule.description}</p>
           </div>
         </div>
         {canEdit ? (
@@ -5683,6 +5369,8 @@ function ModulePage({
           <p>{moduleTips[module.id]}</p>
         </div>
       </aside>
+
+      {topNavigation}
 
       {module.id === "emails" ? (
         <aside className="info-strip microsoft">
@@ -5928,6 +5616,98 @@ function ModulePage({
         </div>
       </section>
     </div>
+  );
+}
+
+function FinancialCenterPage({
+  allRecords,
+  search,
+  setSearch,
+  status,
+  setStatus,
+  onNew,
+  onEdit,
+  onDelete,
+  onImport,
+  onOpen,
+  canEdit,
+}: {
+  allRecords: StoredRecord[];
+  search: string;
+  setSearch: (value: string) => void;
+  status: string;
+  setStatus: (value: string) => void;
+  onNew: (moduleId: string) => void;
+  onEdit: (record: StoredRecord) => void;
+  onDelete: (record: StoredRecord) => void;
+  onImport: (moduleId: string) => void;
+  onOpen: (record: StoredRecord) => void;
+  canEdit: boolean;
+}) {
+  const [tab, setTab] = useState<"expenses" | "suppliers" | "approved">("expenses");
+  const expenseRecords = allRecords.filter((record) => record.module === "expenses");
+  const supplierRecords = allRecords.filter((record) => record.module === "suppliers");
+  const approvedRecords = expenseRecords.filter(
+    (record) => requestDecisionState(record) === "approved",
+  );
+  const payableRecords = expenseRecords.filter(
+    (record) => requestDecisionState(record) !== "approved",
+  );
+  const selectedModule = tab === "suppliers" ? moduleMap.suppliers : moduleMap.expenses;
+  const selectedRecords =
+    tab === "suppliers"
+      ? supplierRecords
+      : tab === "approved"
+        ? approvedRecords
+        : payableRecords;
+
+  function selectTab(next: "expenses" | "suppliers" | "approved") {
+    setTab(next);
+    setSearch("");
+    setStatus("");
+  }
+
+  return (
+    <ModulePage
+      module={selectedModule}
+      headerModule={moduleMap.expenses}
+      records={selectedRecords}
+      search={search}
+      setSearch={setSearch}
+      status={status}
+      setStatus={setStatus}
+      onNew={() => onNew(selectedModule.id)}
+      onEdit={onEdit}
+      onDelete={onDelete}
+      onImport={() => onImport(selectedModule.id)}
+      onOpen={onOpen}
+      canEdit={canEdit}
+      topNavigation={(
+        <nav className="financial-center-tabs" aria-label="Áreas da Central Financeira">
+          <button
+            type="button"
+            className={tab === "expenses" ? "active" : ""}
+            onClick={() => selectTab("expenses")}
+          >
+            Contas a pagar <span>{payableRecords.length}</span>
+          </button>
+          <button
+            type="button"
+            className={tab === "suppliers" ? "active" : ""}
+            onClick={() => selectTab("suppliers")}
+          >
+            Fornecedores <span>{supplierRecords.length}</span>
+          </button>
+          <button
+            type="button"
+            className={tab === "approved" ? "active" : ""}
+            onClick={() => selectTab("approved")}
+          >
+            Aprovados <span>{approvedRecords.length}</span>
+          </button>
+        </nav>
+      )}
+    />
   );
 }
 
@@ -8732,20 +8512,36 @@ export default function BetaApp({
                   canEdit={isAdmin}
                 />
               ) : null}
-              <ModulePage
-                module={activeModule}
-                records={moduleRecords}
-                search={search}
-                setSearch={setSearch}
-                status={statusFilter}
-                setStatus={setStatusFilter}
-                onNew={() => openNew(activeModule.id)}
-                onEdit={openEdit}
-                onDelete={remove}
-                onImport={() => requestImport(activeModule.id)}
-                onOpen={openRecord}
-                canEdit={isAdmin}
-              />
+              {activeView === "expenses" ? (
+                <FinancialCenterPage
+                  allRecords={operationalRecords}
+                  search={search}
+                  setSearch={setSearch}
+                  status={statusFilter}
+                  setStatus={setStatusFilter}
+                  onNew={openNew}
+                  onEdit={openEdit}
+                  onDelete={remove}
+                  onImport={requestImport}
+                  onOpen={openRecord}
+                  canEdit={isAdmin}
+                />
+              ) : (
+                <ModulePage
+                  module={activeModule}
+                  records={moduleRecords}
+                  search={search}
+                  setSearch={setSearch}
+                  status={statusFilter}
+                  setStatus={setStatusFilter}
+                  onNew={() => openNew(activeModule.id)}
+                  onEdit={openEdit}
+                  onDelete={remove}
+                  onImport={() => requestImport(activeModule.id)}
+                  onOpen={openRecord}
+                  canEdit={isAdmin}
+                />
+              )}
             </div>
           ) : null}
         </div>

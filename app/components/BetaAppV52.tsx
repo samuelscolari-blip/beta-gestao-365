@@ -309,6 +309,11 @@ function configureV52Modules() {
     help: "Obrigatório para qualquer lançamento com valor.",
     required: true,
   });
+  patchField(expenses, {
+    key: "status",
+    options: ["Aguardando validação", "Reprovado", "Pago"],
+    required: true,
+  });
 
   const purchases = moduleMap.purchases;
   Object.assign(purchases, {

@@ -74,6 +74,99 @@ const protectedPeopleFields = new Set([
   "dependentDetails",
 ]);
 
+function normalizedWriteText(value: unknown) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function requiredWriteField(
+  payload: Record<string, unknown>,
+  key: string,
+  message: string,
+) {
+  if (!String(payload[key] || "").trim()) {
+    throw new Error(message);
+  }
+}
+
+function normalizeRecordForWrite(input: Record<string, unknown>) {
+  const moduleId = String(input.module || "").trim();
+  const payload = {
+    ...((input.payload && typeof input.payload === "object" && !Array.isArray(input.payload)
+      ? input.payload
+      : {}) as Record<string, unknown>),
+  };
+  const amount = Math.max(0, Number(input.amount || 0));
+  const next: Record<string, unknown> = { ...input, payload };
+
+  if (moduleId === "expenses") {
+    if (amount > 0) {
+      requiredWriteField(
+        payload,
+        "invoiceUrl",
+        "Lançamento bloqueado: anexe a nota fiscal, o cupom fiscal ou o recibo.",
+      );
+      requiredWriteField(
+        payload,
+        "supplierCode",
+        "Lançamento bloqueado: informe o CPF ou CNPJ do fornecedor ou estabelecimento.",
+      );
+    }
+    const statusText = normalizedWriteText(input.status || payload.status);
+    const status = statusText.includes("pag")
+      ? "Pago"
+      : statusText.includes("reprov") || statusText.includes("rejeit")
+        ? "Reprovado"
+        : "Aguardando validação";
+    next.status = status;
+    payload.status = status;
+  }
+
+  if (moduleId === "cards" && amount > 0) {
+    requiredWriteField(
+      payload,
+      "documentUrl",
+      "Despesa de cartão bloqueada: anexe a nota fiscal, o cupom fiscal ou o recibo.",
+    );
+    requiredWriteField(
+      payload,
+      "cardEnding",
+      "Despesa de cartão bloqueada: informe o CPF ou CNPJ do estabelecimento.",
+    );
+  }
+
+  if (moduleId === "food" && amount > 0) {
+    requiredWriteField(
+      payload,
+      "invoiceUrl",
+      "Lançamento de alimentação bloqueado: anexe o documento fiscal.",
+    );
+    requiredWriteField(
+      payload,
+      "supplierCode",
+      "Lançamento de alimentação bloqueado: informe o CPF ou CNPJ do fornecedor.",
+    );
+  }
+
+  if (moduleId === "rentals") {
+    requiredWriteField(
+      payload,
+      "contractUrl",
+      "Cadastro de aluguel bloqueado: vincule o documento e o contrato.",
+    );
+    requiredWriteField(
+      payload,
+      "work",
+      "Cadastro de aluguel bloqueado: informe o CPF ou CNPJ do locador.",
+    );
+  }
+
+  return next;
+}
+
 function publicPayload(moduleId: string, payload: Record<string, unknown>) {
   const redacted = redactAdminIdentity(payload) as Record<string, unknown>;
   if (moduleId === "payroll") {
@@ -263,14 +356,19 @@ export async function POST(request: Request) {
     };
     if (Array.isArray(payload.records)) {
       return Response.json(
-        { result: await createMany(payload.records, actorFrom(request)) },
+        {
+          result: await createMany(
+            payload.records.map((record) => normalizeRecordForWrite(record)),
+            actorFrom(request),
+          ),
+        },
         { status: 201 },
       );
     }
     return Response.json(
       {
         record: await createRecord(
-          payload.record || payload,
+          normalizeRecordForWrite(payload.record || payload),
           actorFrom(request),
         ),
       },
@@ -297,7 +395,7 @@ export async function PUT(request: Request) {
     return Response.json({
       record: await updateRecord(
         payload.id,
-        payload.record || payload,
+        normalizeRecordForWrite(payload.record || payload),
         actorFrom(request),
         payload.expectedUpdatedAt,
       ),
