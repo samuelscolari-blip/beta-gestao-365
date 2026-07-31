@@ -76,16 +76,19 @@ text = replace_exact(
     "Marcador específico do ícone financeiro",
 )
 
-old_d1_end = r'''    }
-  }
-
-  const demoWorkerCounts = new Map(''',
-    "Normalização dos status no D1",
-)'''
-new_d1_end = r'''    }
-  }''',
-    "Normalização dos status no D1",
-)'''
+old_d1_end = (
+    "    }\n"
+    "  }\n\n"
+    "  const demoWorkerCounts = new Map(''',\n"
+    "    \"Normalização dos status no D1\",\n"
+    ")"
+)
+new_d1_end = (
+    "    }\n"
+    "  }''',\n"
+    "    \"Normalização dos status no D1\",\n"
+    ")"
+)
 text = replace_exact(
     text,
     old_d1_end,
