@@ -1,15 +1,28 @@
-/* Dashboard executivo da obra V56 — leitura clara, contraste e dados em primeiro plano. */
+/* Dashboard executivo da obra V57 — identidade visual unificada com o mapa executivo financeiro. */
 
 .construction-dashboard-v56 {
+  --exec-navy-950: #062642;
+  --exec-navy-900: #082f50;
+  --exec-navy-800: #0d4267;
+  --exec-navy-700: #125a7c;
+  --exec-cyan: #38c8e3;
+  --exec-cyan-soft: #9ee7f3;
+  --exec-white: #ffffff;
+  --exec-copy: #d7eaf2;
+  --exec-muted: #a9c9d8;
+  --exec-line: rgba(255, 255, 255, 0.14);
   display: flex;
   flex-direction: column;
   gap: 20px;
   margin-top: 22px;
-  padding: 22px;
-  border: 1px solid #d8e2e8;
-  border-radius: 22px;
-  background: #f8fafc;
-  box-shadow: 0 14px 34px rgba(15, 44, 64, 0.08);
+  padding: 24px;
+  overflow: visible;
+  border: 1px solid rgba(16, 91, 124, 0.55);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(53, 199, 226, 0.18), transparent 28%),
+    linear-gradient(145deg, var(--exec-navy-950) 0%, var(--exec-navy-900) 52%, var(--exec-navy-800) 100%);
+  box-shadow: 0 22px 54px rgba(6, 38, 66, 0.24);
 }
 
 .construction-dashboard-v56 * {
@@ -25,18 +38,19 @@
 }
 
 .construction-dashboard-heading-v56 .eyebrow {
-  color: #087f97;
+  color: var(--exec-cyan-soft);
   font-size: 11px;
   font-weight: 900;
-  letter-spacing: 1.1px;
+  letter-spacing: 1.35px;
 }
 
 .construction-dashboard-heading-v56 h3 {
-  margin: 5px 0 0;
-  color: #0f2e43;
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: -0.45px;
+  margin: 6px 0 0;
+  color: var(--exec-white);
+  font-size: 27px;
+  font-weight: 950;
+  letter-spacing: -0.55px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.16);
 }
 
 .construction-index-chip-v56 {
@@ -47,11 +61,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 12px;
-  border: 1px solid #cbdce4;
+  padding: 10px 14px;
+  border: 1px solid rgba(158, 231, 243, 0.32);
   border-radius: 999px;
-  color: #23485e;
-  background: #ffffff;
+  color: #e9f8fc;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   cursor: pointer;
   font-size: 12px;
   font-weight: 800;
@@ -63,24 +78,24 @@
 }
 
 .construction-index-chip-v56 summary strong {
-  color: #087f97;
+  color: #7ce2f1;
   font-size: 14px;
 }
 
 .construction-index-chip-v56 > div {
   position: absolute;
-  z-index: 5;
+  z-index: 20;
   top: calc(100% + 8px);
   right: 0;
-  width: min(340px, 80vw);
-  padding: 13px 15px;
-  border: 1px solid #cbdce4;
-  border-radius: 12px;
-  color: #496677;
-  background: #ffffff;
-  box-shadow: 0 12px 28px rgba(15, 44, 64, 0.15);
+  width: min(360px, 82vw);
+  padding: 14px 16px;
+  border: 1px solid rgba(158, 231, 243, 0.3);
+  border-radius: 14px;
+  color: #dceff6;
+  background: #082f50;
+  box-shadow: 0 18px 38px rgba(2, 25, 43, 0.35);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .construction-kpi-row-v56 {
@@ -92,107 +107,123 @@
 .construction-kpi-v56 {
   position: relative;
   min-width: 0;
-  min-height: 142px;
-  padding: 18px;
+  min-height: 154px;
+  padding: 19px;
   overflow: hidden;
-  border: 1px solid #d7e1e7;
-  border-top: 4px solid #2563eb;
-  border-radius: 15px;
-  background: #ffffff;
-  box-shadow: 0 8px 22px rgba(15, 44, 64, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 4px solid var(--exec-cyan);
+  border-radius: 16px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 13px 28px rgba(2, 27, 47, 0.18);
 }
 
 .construction-kpi-v56::after {
   position: absolute;
-  top: -24px;
-  right: -24px;
-  width: 90px;
-  height: 90px;
+  top: -34px;
+  right: -32px;
+  width: 112px;
+  height: 112px;
   border-radius: 50%;
-  background: rgba(37, 99, 235, 0.07);
+  background: rgba(56, 200, 227, 0.14);
   content: "";
 }
 
 .construction-kpi-v56.warning {
-  border-top-color: #d97706;
+  border-top-color: #f2b33c;
 }
 
 .construction-kpi-v56.warning::after {
-  background: rgba(217, 119, 6, 0.09);
+  background: rgba(242, 179, 60, 0.15);
 }
 
 .construction-kpi-v56.success {
-  border-top-color: #15936b;
+  border-top-color: #31d09a;
 }
 
 .construction-kpi-v56.success::after {
-  background: rgba(21, 147, 107, 0.08);
+  background: rgba(49, 208, 154, 0.14);
 }
 
 .construction-kpi-v56.danger {
-  border-top-color: #d64545;
+  border-top-color: #ff6b67;
 }
 
 .construction-kpi-v56.danger::after {
-  background: rgba(214, 69, 69, 0.08);
+  background: rgba(255, 107, 103, 0.14);
 }
 
 .construction-kpi-v56 > small {
+  position: relative;
+  z-index: 1;
   display: block;
-  color: #647b8b;
+  color: #b8d9e6;
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.75px;
+  letter-spacing: 0.9px;
   text-transform: uppercase;
 }
 
 .construction-kpi-v56 > strong {
+  position: relative;
+  z-index: 1;
   display: block;
-  margin-top: 9px;
-  color: #102f45;
-  font-size: clamp(27px, 2.15vw, 37px);
+  margin-top: 10px;
+  color: #ffffff;
+  font-size: clamp(28px, 2.15vw, 38px);
   font-weight: 950;
   line-height: 1;
   letter-spacing: -1px;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.18);
 }
 
 .construction-kpi-v56 > p {
-  margin: 9px 0 0;
-  color: #526d7e;
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  color: #d7eaf2;
   font-size: 12px;
   font-weight: 650;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .construction-kpi-v56 > span {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
-  margin-top: 10px;
-  padding: 5px 8px;
+  margin-top: 11px;
+  padding: 6px 9px;
+  border: 1px solid rgba(121, 225, 241, 0.18);
   border-radius: 999px;
-  color: #1e4b63;
-  background: #eef5f8;
+  color: #dff8fc;
+  background: rgba(56, 200, 227, 0.12);
   font-size: 10px;
   font-weight: 850;
 }
 
 .construction-kpi-v56.danger > span {
-  color: #a62f2f;
-  background: #fee9e7;
+  border-color: rgba(255, 171, 168, 0.2);
+  color: #ffe2e0;
+  background: rgba(255, 107, 103, 0.15);
 }
 
 .construction-kpi-v56.warning > span {
-  color: #8d5408;
-  background: #fff1d9;
+  border-color: rgba(255, 215, 132, 0.22);
+  color: #ffebbc;
+  background: rgba(242, 179, 60, 0.15);
 }
 
 .construction-kpi-v56.success > span {
-  color: #126c50;
-  background: #e7f8f1;
+  border-color: rgba(148, 240, 207, 0.2);
+  color: #d8fff1;
+  background: rgba(49, 208, 154, 0.14);
 }
 
 .construction-main-grid-v56 {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(340px, 1fr);
   gap: 18px;
   align-items: stretch;
 }
@@ -200,15 +231,18 @@
 .construction-stage-card-v56,
 .construction-budget-card-v56 {
   min-width: 0;
-  padding: 22px;
-  border: 1px solid #d7e1e7;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 8px 22px rgba(15, 44, 64, 0.07);
+  padding: 23px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 17px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 15px 32px rgba(2, 27, 47, 0.18);
 }
 
 .construction-stage-card-v56 {
-  border-left: 5px solid #2563eb;
+  border-left: 5px solid #38c8e3;
 }
 
 .construction-stage-card-v56 > header,
@@ -221,147 +255,154 @@
 
 .construction-stage-card-v56 > header small,
 .construction-budget-card-v56 > header small {
-  color: #607789;
+  color: #b7d7e4;
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.85px;
+  letter-spacing: 0.9px;
   text-transform: uppercase;
 }
 
 .construction-stage-card-v56 > header span,
 .construction-budget-card-v56 > header span {
-  padding: 6px 9px;
+  padding: 6px 10px;
+  border: 1px solid rgba(158, 231, 243, 0.18);
   border-radius: 999px;
-  color: #1e5c79;
-  background: #e8f4f8;
+  color: #dff8fc;
+  background: rgba(56, 200, 227, 0.12);
   font-size: 10px;
   font-weight: 850;
 }
 
 .construction-stage-card-v56 h3 {
-  margin: 17px 0 6px;
-  color: #102f45;
-  font-size: 26px;
-  font-weight: 900;
-  line-height: 1.13;
-  letter-spacing: -0.55px;
+  margin: 18px 0 7px;
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 950;
+  line-height: 1.12;
+  letter-spacing: -0.65px;
 }
 
 .construction-stage-card-v56 > p {
   max-width: 72ch;
   margin: 0;
-  color: #3c596b;
+  color: #d8ebf2;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .construction-stage-progress-v56 {
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .construction-stage-progress-v56 > span {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  color: #587182;
+  margin-bottom: 9px;
+  color: #c6e0ea;
   font-size: 12px;
   font-weight: 750;
 }
 
 .construction-stage-progress-v56 > span strong {
-  color: #145ea8;
+  color: #7ce2f1;
   font-size: 15px;
   font-weight: 900;
 }
 
 .construction-stage-progress-v56 > b {
   display: block;
-  height: 11px;
+  height: 12px;
   overflow: hidden;
   border-radius: 999px;
-  background: #dce6ec;
+  background: rgba(255, 255, 255, 0.13);
 }
 
 .construction-stage-progress-v56 > b i {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #2563eb 0%, #18a9c6 100%);
+  background: linear-gradient(90deg, #2ab2df 0%, #43d3c0 100%);
+  box-shadow: 0 0 18px rgba(56, 200, 227, 0.32);
 }
 
 .construction-stage-meta-v56 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 19px;
+  margin-top: 20px;
 }
 
 .construction-stage-meta-v56 > div {
   min-width: 0;
-  padding: 13px 14px;
-  border: 1px solid #dfe7ec;
-  border-radius: 12px;
-  background: #f8fafc;
+  padding: 14px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .construction-stage-meta-v56 small {
   display: block;
-  color: #667d8d;
+  color: #a9cedd;
   font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.7px;
+  letter-spacing: 0.75px;
   text-transform: uppercase;
 }
 
 .construction-stage-meta-v56 strong {
   display: block;
-  margin-top: 5px;
-  color: #17394f;
+  margin-top: 6px;
+  color: #ffffff;
   font-size: 12px;
   font-weight: 850;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .construction-stage-meta-v56 span {
   display: block;
-  margin-top: 3px;
-  color: #087f97;
+  margin-top: 4px;
+  color: #7ce2f1;
   font-size: 10px;
   font-weight: 750;
   line-height: 1.4;
 }
 
 .construction-budget-card-v56 {
-  border-left: 5px solid #d64545;
-  background: linear-gradient(145deg, #ffffff 0%, #fff8f5 100%);
+  border-left: 5px solid #f2b33c;
+  background:
+    radial-gradient(circle at 96% 4%, rgba(242, 179, 60, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045));
 }
 
 .construction-budget-card-v56.within {
-  border-left-color: #15936b;
-  background: linear-gradient(145deg, #ffffff 0%, #f4fcf8 100%);
+  border-left-color: #31d09a;
+  background:
+    radial-gradient(circle at 96% 4%, rgba(49, 208, 154, 0.15), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045));
 }
 
 .construction-budget-card-v56 h3 {
-  margin: 14px 0 3px;
-  color: #102f45;
-  font-size: 30px;
+  margin: 16px 0 4px;
+  color: #ffffff;
+  font-size: 34px;
   font-weight: 950;
-  letter-spacing: -0.8px;
+  letter-spacing: -0.95px;
+  text-shadow: 0 3px 16px rgba(0, 0, 0, 0.16);
 }
 
 .construction-budget-card-v56 > p {
   margin: 0;
-  color: #647989;
+  color: #c2dce7;
   font-size: 11px;
   font-weight: 700;
 }
 
 .construction-budget-lines-v56 {
   display: grid;
-  gap: 9px;
-  margin-top: 17px;
+  gap: 0;
+  margin-top: 19px;
 }
 
 .construction-budget-lines-v56 > div {
@@ -369,8 +410,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #e3e9ed;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .construction-budget-lines-v56 > div:last-child {
@@ -378,34 +419,253 @@
 }
 
 .construction-budget-lines-v56 span {
-  color: #617888;
+  color: #bbd4df;
   font-size: 11px;
   font-weight: 700;
 }
 
 .construction-budget-lines-v56 strong {
-  color: #18394e;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 900;
   text-align: right;
 }
 
 .construction-budget-alert-v56 {
-  margin-top: 15px;
-  padding: 11px 12px;
-  border: 1px solid #f0c1bb;
-  border-radius: 10px;
-  color: #9f3030;
-  background: #feecea;
+  margin-top: 16px;
+  padding: 12px 13px;
+  border: 1px solid rgba(255, 177, 173, 0.24);
+  border-radius: 11px;
+  color: #ffe2e0;
+  background: rgba(255, 107, 103, 0.14);
   font-size: 11px;
   font-weight: 850;
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .construction-budget-card-v56.within .construction-budget-alert-v56 {
-  border-color: #bde5d5;
-  color: #15694f;
-  background: #eaf8f2;
+  border-color: rgba(148, 240, 207, 0.22);
+  color: #d8fff1;
+  background: rgba(49, 208, 154, 0.14);
+}
+
+/* Grandes painéis operacionais — mesma linguagem do mapa executivo financeiro. */
+.construction-decision-grid,
+.construction-operational-detail-grid {
+  gap: 18px;
+}
+
+.construction-decision-grid .construction-priority-board,
+.construction-decision-grid .construction-health-board,
+.construction-operational-detail-grid .construction-workforce-card,
+.construction-operational-detail-grid .construction-loss-card {
+  overflow: hidden;
+  border: 1px solid rgba(16, 91, 124, 0.5);
+  border-radius: 22px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 96% 2%, rgba(56, 200, 227, 0.13), transparent 30%),
+    linear-gradient(145deg, #062642 0%, #082f50 52%, #0d4267 100%);
+  box-shadow: 0 18px 42px rgba(6, 38, 66, 0.2);
+}
+
+.construction-priority-board > header,
+.construction-health-board > header,
+.construction-workforce-card > header,
+.construction-loss-card > header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.construction-priority-board .eyebrow,
+.construction-health-board .eyebrow,
+.construction-workforce-card .eyebrow,
+.construction-loss-card .eyebrow {
+  color: #9ee7f3 !important;
+}
+
+.construction-priority-board h3,
+.construction-health-board h3,
+.construction-workforce-card h3,
+.construction-loss-card h3 {
+  color: #ffffff !important;
+}
+
+.construction-priority-board header p,
+.construction-health-board header p,
+.construction-workforce-card header p,
+.construction-loss-card header p {
+  color: #bdd8e3 !important;
+}
+
+.construction-priority-board > header > strong {
+  border: 1px solid rgba(158, 231, 243, 0.22) !important;
+  color: #dff8fc !important;
+  background: rgba(56, 200, 227, 0.13) !important;
+}
+
+.construction-priority-board > div > button {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+.construction-priority-board > div > button:hover {
+  background: rgba(255, 255, 255, 0.105) !important;
+}
+
+.construction-priority-rank {
+  color: #ffffff !important;
+  background: rgba(255, 107, 103, 0.2) !important;
+}
+
+.construction-priority-copy small,
+.construction-priority-value small {
+  color: #9ec6d6 !important;
+}
+
+.construction-priority-copy strong,
+.construction-priority-value strong {
+  color: #ffffff !important;
+}
+
+.construction-priority-copy p {
+  color: #c5dde7 !important;
+}
+
+.construction-health-columns {
+  gap: 12px;
+  padding: 14px;
+}
+
+.construction-health-columns > section {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.construction-health-columns > section.positive {
+  border-color: rgba(83, 224, 174, 0.28) !important;
+  background: rgba(49, 208, 154, 0.1) !important;
+}
+
+.construction-health-columns > section.negative {
+  border-color: rgba(255, 136, 132, 0.28) !important;
+  background: rgba(255, 107, 103, 0.1) !important;
+}
+
+.construction-health-columns header strong,
+.construction-health-columns > section > div > strong {
+  color: #ffffff !important;
+}
+
+.construction-health-columns > section > div > span {
+  color: #bcd7e2 !important;
+}
+
+.construction-health-columns > section > div > small,
+.construction-health-columns > section > p {
+  color: #d5e8ef !important;
+}
+
+.construction-workforce-card > header button,
+.construction-loss-card > header button {
+  border: 1px solid rgba(158, 231, 243, 0.2) !important;
+  border-radius: 999px !important;
+  color: #dff8fc !important;
+  background: rgba(56, 200, 227, 0.1) !important;
+}
+
+.construction-workforce-main {
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.construction-workforce-main > div:first-child strong,
+.construction-workforce-main > div:nth-child(2) > span strong {
+  color: #ffffff !important;
+}
+
+.construction-workforce-main span,
+.construction-workforce-main small {
+  color: #bcd7e2 !important;
+}
+
+.construction-workforce-main b {
+  background: rgba(255, 255, 255, 0.13) !important;
+}
+
+.construction-workforce-main b i {
+  background: linear-gradient(90deg, #2ab2df 0%, #43d3c0 100%) !important;
+}
+
+.construction-workforce-kpis {
+  gap: 10px;
+}
+
+.construction-workforce-kpis > div {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.065) !important;
+}
+
+.construction-workforce-kpis small,
+.construction-workforce-kpis span {
+  color: #a9cedd !important;
+}
+
+.construction-workforce-kpis strong {
+  color: #ffffff !important;
+}
+
+.construction-hours-balance > div {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.065) !important;
+}
+
+.construction-hours-balance > div.positive {
+  border-color: rgba(83, 224, 174, 0.28) !important;
+  background: rgba(49, 208, 154, 0.1) !important;
+}
+
+.construction-hours-balance > div.negative {
+  border-color: rgba(255, 136, 132, 0.28) !important;
+  background: rgba(255, 107, 103, 0.1) !important;
+}
+
+.construction-hours-balance small,
+.construction-hours-balance span {
+  color: #bcd7e2 !important;
+}
+
+.construction-hours-balance strong {
+  color: #ffffff !important;
+}
+
+.construction-loss-causes > div {
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.construction-loss-causes strong,
+.construction-loss-causes em {
+  color: #ffffff !important;
+}
+
+.construction-loss-causes small,
+.construction-loss-causes p {
+  color: #bcd7e2 !important;
+}
+
+.construction-loss-causes b {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.construction-loss-causes b i {
+  background: linear-gradient(90deg, #ff706b 0%, #f2b33c 100%) !important;
+}
+
+.construction-loss-card > footer {
+  border-top-color: rgba(255, 255, 255, 0.12) !important;
+  color: #a9cedd !important;
 }
 
 @media (max-width: 1180px) {
@@ -420,8 +680,8 @@
 
 @media (max-width: 700px) {
   .construction-dashboard-v56 {
-    padding: 14px;
-    border-radius: 16px;
+    padding: 15px;
+    border-radius: 18px;
   }
 
   .construction-dashboard-heading-v56 {
@@ -438,6 +698,10 @@
   }
 
   .construction-stage-card-v56 h3 {
-    font-size: 22px;
+    font-size: 24px;
+  }
+
+  .construction-budget-card-v56 h3 {
+    font-size: 29px;
   }
 }
