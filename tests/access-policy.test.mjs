@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("public page identifies read-only mode without exposing the administrator", async () => {
+test("public page renders a safe loading shell without exposing the administrator", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("access-test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
@@ -24,8 +24,7 @@ test("public page identifies read-only mode without exposing the administrator",
 
   const html = await response.text();
   assert.equal(response.status, 200);
-  assert.match(html, /Modo público de demonstração/i);
-  assert.match(html, /Entrar como administrador/i);
+  assert.match(html, /Carregando a central de gestão/i);
   assert.doesNotMatch(html, /scolarisamuel@gmail\.com/i);
   assert.doesNotMatch(html, /Samuel Scolari/i);
 });
@@ -121,6 +120,10 @@ test("mutation routes keep server-side authorization and integrity guards", asyn
     new URL("../app/api/records/route.ts", import.meta.url),
     "utf8",
   );
+  const recordsV52Route = await readFile(
+    new URL("../app/api/records-v52/route.ts", import.meta.url),
+    "utf8",
+  );
   const taxRoute = await readFile(
     new URL("../app/api/tax-profile/route.ts", import.meta.url),
     "utf8",
@@ -142,6 +145,11 @@ test("mutation routes keep server-side authorization and integrity guards", asyn
     (recordsRoute.match(/requireSoleAdmin\(request\)/g) || []).length,
     3,
     "POST, PUT and DELETE must all enforce the administrator",
+  );
+  assert.equal(
+    (recordsV52Route.match(/requireSoleAdmin\(request\)/g) || []).length,
+    3,
+    "The v52 document-validation route must authorize before validating",
   );
   assert.match(taxRoute, /requireSoleAdmin\(request\)/);
   assert.match(payrollRoute, /requireSoleAdmin\(request\)/);
