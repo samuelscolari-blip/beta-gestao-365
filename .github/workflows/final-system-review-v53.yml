@@ -59,10 +59,14 @@ jobs:
           test -f app/components/BetaApp.tsx
           test -f app/components/BetaAppV52.tsx
           test -f app/api/records/route.ts
+          test -f app/lib/modules.ts
           test -f tests/final-system-review.test.mjs
           grep -q 'Contas a pagar' app/components/BetaApp.tsx
           grep -q 'Aprovados' app/components/BetaApp.tsx
           grep -q 'Aguardando validação' app/components/BetaAppV52.tsx
+          grep -q 'const statusFinanceiro' app/lib/modules.ts
+          grep -q '"Aguardando validação"' app/lib/modules.ts
+          grep -q 'const pendingStatusBackfills' db/records.ts
           grep -q 'normalizeRecordForWrite' app/api/records/route.ts
           grep -q 'construction-capacity-compact' app/components/BetaApp.tsx
 
@@ -73,6 +77,6 @@ jobs:
           rm .github/workflows/final-system-review-v53.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/components/BetaApp.tsx app/components/BetaAppV52.tsx app/api/records/route.ts app/globals.css db/demo-records.ts db/records.ts tests/final-system-review.test.mjs scripts/apply_final_system_review.py scripts/prepare_final_review_script.py .github/workflows/final-system-review-v53.yml
+          git add app/components/BetaApp.tsx app/components/BetaAppV52.tsx app/api/records/route.ts app/lib/modules.ts app/globals.css db/demo-records.ts db/records.ts tests/final-system-review.test.mjs scripts/apply_final_system_review.py scripts/prepare_final_review_script.py .github/workflows/final-system-review-v53.yml
           git commit -m "Aplicar revisão executiva e fluxo financeiro V53"
           git push origin HEAD:final-system-review-v53
