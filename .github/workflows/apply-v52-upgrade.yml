@@ -7,6 +7,13 @@ on:
     paths:
       - scripts/apply-v52-upgrade.mjs
       - .github/workflows/apply-v52-upgrade.yml
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
