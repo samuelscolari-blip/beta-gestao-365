@@ -2974,181 +2974,195 @@ function ConstructionExecutivePanel({
         </div>
       </section>
 
-      <section className={`construction-project-command ${riskTone}`}>
-        <div className="construction-project-progress">
-          <div
-            className="construction-project-progress-gauge"
-            style={
-              {
-                "--project-progress": `${physicalProgress * 3.6}deg`,
-              } as CSSProperties
-            }
-            aria-label={`${decimalNumber(physicalProgress)}% da obra concluída`}
-          >
-            <span>
-              <strong>{decimalNumber(physicalProgress)}%</strong>
-              <small>obra concluída</small>
-            </span>
-          </div>
+      <section
+        className="construction-dashboard-v56"
+        aria-label="Resumo executivo da obra"
+      >
+        <header className="construction-dashboard-heading-v56">
           <div>
-            <small>AVANÇO TOTAL DA OBRA</small>
-            <h3>{decimalNumber(physicalProgress)}% executado</h3>
-            <p>
-              {hasPlannedProgress
-                ? `O planejamento previa ${decimalNumber(plannedProgress)}% até hoje.`
-                : "A linha de base do avanço ainda não foi informada."}
-            </p>
-            <span className={scheduleDelta < 0 ? "negative" : "positive"}>
-              {scheduleDelta < 0
-                ? `${decimalNumber(progressGapPoints)} p.p. abaixo • ${executiveQuantity(scheduleDelayDays, "dia de atraso", "dias de atraso")}`
-                : scheduleDelta > 0
-                  ? `${decimalNumber(scheduleDelta)} p.p. acima do previsto`
-                  : "Executado alinhado ao planejado"}
-            </span>
-            <div className={`construction-operation-summary ${operationTone}`}>
-              <b>{decimalNumber(operationCapacity)}%</b>
-              <span>
-                <strong>{operationStatus}</strong>
-                <small>
-                  Limitada por {capacityConstraint.label} em{" "}
-                  {decimalNumber(capacityConstraint.value)}%
-                </small>
-              </span>
-            </div>
+            <span className="eyebrow">PAINEL EXECUTIVO DA OBRA</span>
+            <h3>Avanço, capacidade e custo para decisão</h3>
           </div>
-        </div>
-
-        <div className="construction-stage-highlight">
-          <header>
-            <span>ETAPA E PROCESSO ATUAL</span>
-            <b>
-              {currentStagePosition
-                ? `Etapa ${currentStagePosition} de ${constructionStages.length}`
-                : "Etapa fora do fluxo padrão"}
-            </b>
-          </header>
-          <h3>{currentStage}</h3>
-          <p>{currentProcess}</p>
-          <div className="construction-current-stage-progress">
-            <span>
-              <small>Avanço dentro da etapa</small>
-              <strong>{decimalNumber(currentStageProgress)}%</strong>
-            </span>
-            <b><i style={{ width: `${currentStageProgress}%` }} /></b>
-          </div>
-          <footer>
-            <span>
-              <small>Próximo marco</small>
-              <strong>{nextMilestone}</strong>
-              <b>{formatExecutiveDate(selectedWork.payload.nextMilestoneDate)}</b>
-            </span>
-            <span>
-              <small>Responsáveis</small>
-              <strong>
-                {String(selectedWork.payload.manager || "Gestor não informado")}
-              </strong>
-              <b>
-                {String(
-                  selectedWork.payload.foreman ||
-                    "Encarregado não informado",
-                )}
-              </b>
-            </span>
-          </footer>
-        </div>
-
-        <div
-          className={`construction-cost-to-complete construction-finance-summary ${
-            projectedBudgetVariance > 0 ? "over" : "within"
-          }`}
-        >
-          <header>
-            <span><Icon name="expenses" size={19} /></span>
+          <details className="construction-index-chip-v56">
+            <summary>
+              Índice geral <strong>{decimalNumber(overallIndex)}%</strong>
+            </summary>
             <div>
-              <small>ORÇAMENTO & CUSTOS</small>
-              <strong>
-                {projectedBudgetVariance > 0
-                  ? "Alerta de estouro"
-                  : projectBudget > 0
-                    ? "Dentro do orçamento"
-                    : "Cadastro financeiro incompleto"}
-              </strong>
-            </div>
-          </header>
-          <div className="construction-finance-pair">
-            <span>
-              <small>Orçamento aprovado</small>
-              <strong>{currency.format(projectBudget)}</strong>
-            </span>
-            <span>
-              <small>Custo final projetado</small>
-              <strong>{currency.format(projectedFinalCost)}</strong>
-            </span>
-          </div>
-          <div className="construction-finance-needed">
-            <small>NECESSÁRIO PARA CONCLUIR</small>
-            <strong>{currency.format(estimatedCostToComplete)}</strong>
-            <span>
-              Inclui {currency.format(projectOpenCommitments)} comprometidos e {currency.format(uncommittedCostToComplete)} ainda a contratar ou executar.
-            </span>
-          </div>
-          <footer>
-            <span>Custo realizado</span>
-            <strong>{currency.format(projectRealizedCost)}</strong>
-            <b>
-              {projectedBudgetVariance > 0
-                ? `${currency.format(projectedBudgetVariance)} acima do orçamento`
-                : `${currency.format(Math.abs(projectedBudgetVariance))} de margem prevista`}
-            </b>
-          </footer>
-        </div>
-      </section>
-
-      <section className="construction-capacity-section construction-capacity-compact">
-        <header className="construction-capacity-compact-header">
-          <div>
-            <span className="eyebrow">ÍNDICES DE PRODUÇÃO</span>
-            <h3>Capacidade e desempenho da obra</h3>
-          </div>
-          <details className="construction-index-help">
-            <summary aria-label="Entenda o Índice Geral">?</summary>
-            <div>
-              <strong>Como funciona o Índice Geral</strong>
-              <p>
-                Nota gerencial ponderada que considera avanço físico, prazo,
-                equipe, máquinas, produtividade e orçamento. Não representa
-                isoladamente a porcentagem concluída da obra.
-              </p>
+              O índice combina avanço físico, prazo, equipe, máquinas,
+              produtividade e orçamento. Ele não representa isoladamente a
+              porcentagem concluída da obra.
             </div>
           </details>
         </header>
-        <div className="construction-capacity-grid construction-capacity-grid-compact">
-          <article className={`construction-kpi-card overall ${overallTone}`}>
-            <span><Icon name="dashboard" size={19} /></span>
-            <div><small>ÍNDICE GERAL</small><strong>{decimalNumber(overallIndex)}%</strong><p>{overallStatus} • resultado ponderado</p></div>
+
+        <div className="construction-kpi-row-v56">
+          <article
+            className={`construction-kpi-v56 ${
+              scheduleDelta < 0 ? "danger" : "success"
+            }`}
+          >
+            <small>AVANÇO DA OBRA</small>
+            <strong>{decimalNumber(physicalProgress)}%</strong>
+            <p>
+              {hasPlannedProgress
+                ? `Meta: ${decimalNumber(plannedProgress)}% até hoje`
+                : "Meta do período ainda não informada"}
+            </p>
+            <span>
+              {scheduleDelta < 0
+                ? `-${decimalNumber(progressGapPoints)} p.p. • ${executiveQuantity(
+                    scheduleDelayDays,
+                    "dia de atraso",
+                    "dias de atraso",
+                  )}`
+                : scheduleDelta > 0
+                  ? `+${decimalNumber(scheduleDelta)} p.p. acima da meta`
+                  : "Avanço alinhado ao planejamento"}
+            </span>
           </article>
-          <article className={`construction-kpi-card ${operationCapacity < 60 ? "negative" : operationCapacity < 90 ? "warning" : "positive"}`}>
-            <span><Icon name="works" size={18} /></span>
-            <div><small>CAPACIDADE OPERACIONAL</small><strong>{decimalNumber(operationCapacity)}%</strong><p>Limitada por {capacityConstraint.label} em {decimalNumber(capacityConstraint.value)}%</p></div>
+
+          <article
+            className={`construction-kpi-v56 ${
+              operationCapacity < 60
+                ? "danger"
+                : operationCapacity < 90
+                  ? "warning"
+                  : "success"
+            }`}
+          >
+            <small>CAPACIDADE OPERACIONAL</small>
+            <strong>{decimalNumber(operationCapacity)}%</strong>
+            <p>
+              Limitada por {capacityConstraint.label} em{" "}
+              {decimalNumber(capacityConstraint.value)}%
+            </p>
+            <span>{operationStatus}</span>
           </article>
-          <article className={`construction-kpi-card ${ownWorkforceCapacity < 100 ? "warning" : "positive"}`}>
-            <span><Icon name="people" size={18} /></span>
-            <div><small>EQUIPE DISPONÍVEL</small><strong>{decimalNumber(ownWorkforceCapacity)}%</strong><p>{ownTeamCount} mobilizados de {requiredOwnTeamCount || "—"}</p></div>
+
+          <article
+            className={`construction-kpi-v56 ${
+              ownWorkforceCapacity >= 90 ? "success" : "warning"
+            }`}
+          >
+            <small>EQUIPE MOBILIZADA</small>
+            <strong>{decimalNumber(ownWorkforceCapacity)}%</strong>
+            <p>
+              {ownTeamCount} de {requiredOwnTeamCount || "—"} pessoas necessárias
+            </p>
+            <span>
+              {ownWorkforceCapacity >= 100
+                ? "Equipe completa"
+                : "Mobilização abaixo da necessidade"}
+            </span>
           </article>
-          <article className={`construction-kpi-card ${machineAvailability < 100 ? "negative" : "positive"}`}>
-            <span><Icon name="assets" size={18} /></span>
-            <div><small>MÁQUINAS PRODUZINDO</small><strong>{decimalNumber(machineAvailability)}%</strong><p>{activeMachines} ativas de {machineRows.length} • {unavailableMachines} indisponíveis</p></div>
+
+          <article
+            className={`construction-kpi-v56 ${
+              projectedBudgetVariance > 0 ? "danger" : "success"
+            }`}
+          >
+            <small>CUSTO FINAL PROJETADO</small>
+            <strong>{currency.format(projectedFinalCost)}</strong>
+            <p>Orçamento aprovado: {currency.format(projectBudget)}</p>
+            <span>
+              {projectedBudgetVariance > 0
+                ? `+${currency.format(projectedBudgetVariance)} acima do limite`
+                : `${currency.format(Math.abs(projectedBudgetVariance))} de margem prevista`}
+            </span>
           </article>
-          <article className={`construction-kpi-card ${utilizationPercent < 80 ? "warning" : "positive"}`}>
-            <span><Icon name="worklogs" size={18} /></span>
-            <div><small>HORAS PRODUTIVAS</small><strong>{decimalNumber(utilizationPercent)}%</strong><p>{decimalNumber(productiveHours)} h produtivas • {decimalNumber(lostHours)} h perdidas</p></div>
+        </div>
+
+        <div className="construction-main-grid-v56">
+          <article className="construction-stage-card-v56">
+            <header>
+              <small>ETAPA E PROCESSO ATUAL</small>
+              <span>
+                {currentStagePosition
+                  ? `Etapa ${currentStagePosition} de ${constructionStages.length}`
+                  : "Etapa fora do fluxo padrão"}
+              </span>
+            </header>
+            <h3>{currentStage}</h3>
+            <p>{currentProcess}</p>
+
+            <div className="construction-stage-progress-v56">
+              <span>
+                Avanço dentro da etapa
+                <strong>{decimalNumber(currentStageProgress)}%</strong>
+              </span>
+              <b>
+                <i style={{ width: `${currentStageProgress}%` }} />
+              </b>
+            </div>
+
+            <div className="construction-stage-meta-v56">
+              <div>
+                <small>PRÓXIMO MARCO</small>
+                <strong>{nextMilestone}</strong>
+                <span>
+                  {formatExecutiveDate(selectedWork.payload.nextMilestoneDate)}
+                </span>
+              </div>
+              <div>
+                <small>RESPONSÁVEIS</small>
+                <strong>
+                  {String(
+                    selectedWork.payload.manager || "Gestor não informado",
+                  )}
+                </strong>
+                <span>
+                  {String(
+                    selectedWork.payload.foreman ||
+                      "Encarregado não informado",
+                  )}
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            className={`construction-budget-card-v56 ${
+              projectedBudgetVariance > 0 ? "over" : "within"
+            }`}
+          >
+            <header>
+              <small>ORÇAMENTO E CUSTOS</small>
+              <span>
+                {projectedBudgetVariance > 0
+                  ? "Acima do orçamento"
+                  : "Dentro do orçamento"}
+              </span>
+            </header>
+            <h3>{currency.format(estimatedCostToComplete)}</h3>
+            <p>Necessário para concluir a obra</p>
+
+            <div className="construction-budget-lines-v56">
+              <div>
+                <span>Orçamento aprovado</span>
+                <strong>{currency.format(projectBudget)}</strong>
+              </div>
+              <div>
+                <span>Custo realizado</span>
+                <strong>{currency.format(projectRealizedCost)}</strong>
+              </div>
+              <div>
+                <span>Compromissos em aberto</span>
+                <strong>{currency.format(projectOpenCommitments)}</strong>
+              </div>
+              <div>
+                <span>A contratar ou executar</span>
+                <strong>{currency.format(uncommittedCostToComplete)}</strong>
+              </div>
+            </div>
+
+            <div className="construction-budget-alert-v56">
+              {projectedBudgetVariance > 0
+                ? `${currency.format(projectedBudgetVariance)} acima do orçamento aprovado.`
+                : `${currency.format(Math.abs(projectedBudgetVariance))} de margem prevista no encerramento.`}
+            </div>
           </article>
         </div>
       </section>
-
-
-
-
 
       <div className="construction-decision-grid">
         <article className="construction-priority-board">

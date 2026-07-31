@@ -211,7 +211,7 @@ replacement = '''      <section
 '''
 
 updated = source[:start] + replacement + source[end:]
-if updated.count("construction-dashboard-v56") != 2:
+if updated.count("construction-dashboard-v56") != 1:
     raise RuntimeError("O novo dashboard não foi inserido com a estrutura esperada.")
 if "construction-project-command" in updated[start:end + len(replacement)]:
     raise RuntimeError("O bloco visual antigo ainda permaneceu no intervalo substituído.")
