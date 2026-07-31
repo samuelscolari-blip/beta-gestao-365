@@ -1,0 +1,429 @@
+/*
+ * Execução da Obra — revisão cromática V55
+ * Camada final, carregada depois da V54, para garantir contraste, cor e legibilidade.
+ */
+
+section.construction-executive.construction-executive-v2 {
+  --v55-navy: #0b2f46;
+  --v55-navy-deep: #071f31;
+  --v55-cyan: #22c1d6;
+  --v55-teal: #23b99b;
+  --v55-blue-soft: #e9f8fc;
+  --v55-orange: #f59e0b;
+  --v55-red: #df4d4d;
+  --v55-ink: #102d42;
+  --v55-muted: #587183;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-command {
+  display: grid !important;
+  grid-template-columns: minmax(300px, 0.95fr) minmax(390px, 1.25fr) minmax(330px, 1.05fr) !important;
+  gap: 18px !important;
+  align-items: stretch !important;
+  padding: 18px !important;
+  border: 1px solid #bfd2dc !important;
+  border-radius: 22px !important;
+  background:
+    linear-gradient(135deg, rgba(27, 175, 200, 0.08), transparent 38%),
+    linear-gradient(180deg, #e7f0f4 0%, #dfeaf0 100%) !important;
+  box-shadow: 0 18px 40px rgba(12, 52, 75, 0.13) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-command::before {
+  height: 5px !important;
+  background: linear-gradient(90deg, #22c1d6 0%, #23b99b 55%, #f59e0b 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-command > div {
+  min-width: 0 !important;
+  min-height: 285px !important;
+  padding: 24px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 12px 28px rgba(8, 42, 61, 0.13) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* AVANÇO TOTAL */
+section.construction-executive.construction-executive-v2 .construction-project-progress {
+  display: grid !important;
+  grid-template-columns: 132px minmax(0, 1fr) !important;
+  gap: 22px !important;
+  align-items: center !important;
+  color: #ffffff !important;
+  border: 1px solid #0f506d !important;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(34, 193, 214, 0.26), transparent 32%),
+    linear-gradient(145deg, #0e4964 0%, #0a3047 52%, #071f31 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress-gauge {
+  width: 132px !important;
+  height: 132px !important;
+  flex-basis: 132px !important;
+  background:
+    radial-gradient(circle at center, #0b2f46 0 54%, transparent 55%),
+    conic-gradient(#36d4e6 0 var(--project-progress), rgba(255, 255, 255, 0.18) var(--project-progress) 360deg) !important;
+  box-shadow: 0 10px 25px rgba(0, 15, 26, 0.34) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress-gauge > span {
+  width: 90px !important;
+  height: 90px !important;
+  color: #ffffff !important;
+  background: #08283b !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 18px rgba(0, 15, 27, 0.25) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress-gauge strong {
+  color: #ffffff !important;
+  font-size: 31px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress-gauge small {
+  color: #c8f8ff !important;
+  font-size: 10px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress > div:last-child > small {
+  color: #6fe5f2 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress > div:last-child > h3 {
+  display: none !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress > div:last-child > p {
+  margin: 14px 0 12px !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress > div:last-child > span.negative {
+  color: #ffd9d5 !important;
+  border: 1px solid rgba(255, 166, 158, 0.5) !important;
+  background: rgba(186, 51, 51, 0.34) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-project-progress > div:last-child > span.positive {
+  color: #d8fff0 !important;
+  border: 1px solid rgba(112, 235, 190, 0.45) !important;
+  background: rgba(20, 132, 94, 0.3) !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-operation-summary {
+  margin-top: 16px !important;
+  padding: 13px 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-operation-summary > b {
+  color: #ffb3aa !important;
+  font-size: 26px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-operation-summary strong {
+  color: #ffffff !important;
+  font-size: 13px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-operation-summary small {
+  color: #c9dce6 !important;
+  font-size: 12px !important;
+}
+
+/* ETAPA ATUAL */
+section.construction-executive.construction-executive-v2 .construction-stage-highlight {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  border: 1px solid #9edbe6 !important;
+  border-top: 6px solid #20bcd0 !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(32, 188, 208, 0.18), transparent 34%),
+    linear-gradient(145deg, #f7fdff 0%, #eaf8fb 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > header {
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid #bfe3ea !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > header > span {
+  color: #087f97 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > header > b {
+  color: #075d70 !important;
+  background: #d7f2f7 !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > h3 {
+  margin: 18px 0 7px !important;
+  color: #0b334a !important;
+  font-size: clamp(25px, 1.8vw, 32px) !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > p {
+  color: #294e62 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-current-stage-progress {
+  margin-top: 18px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-current-stage-progress small {
+  color: #4a7184 !important;
+  font-size: 12px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-current-stage-progress strong {
+  color: #047c91 !important;
+  font-size: 15px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-current-stage-progress > b {
+  height: 10px !important;
+  background: #cce4ea !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-current-stage-progress > b > i {
+  background: linear-gradient(90deg, #18b8cf 0%, #24c59d 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > footer {
+  gap: 12px !important;
+  margin-top: auto !important;
+  padding-top: 18px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > footer > span {
+  padding: 13px 14px !important;
+  border: 1px solid #b9dfe7 !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > footer small {
+  color: #527487 !important;
+  font-size: 10px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > footer strong {
+  color: #0e344a !important;
+  font-size: 13px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-stage-highlight > footer b {
+  color: #087f97 !important;
+  font-size: 11px !important;
+}
+
+/* ORÇAMENTO */
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 15px !important;
+  border: 1px solid #f1c889 !important;
+  border-top: 6px solid #f59e0b !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.16), transparent 35%),
+    linear-gradient(145deg, #fffdf8 0%, #fff5e7 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete.over {
+  border-color: #efb0a7 !important;
+  border-top-color: #df4d4d !important;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(223, 77, 77, 0.14), transparent 35%),
+    linear-gradient(145deg, #fffdfb 0%, #fff1ed 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > header > span {
+  color: #a94735 !important;
+  background: #ffe0d9 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > header small {
+  color: #7c341f !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > header strong {
+  color: #c43f37 !important;
+  font-size: 12px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-pair {
+  gap: 11px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-pair > span {
+  padding: 13px !important;
+  border: 1px solid #edcf9d !important;
+  background: rgba(255, 255, 255, 0.83) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-pair small {
+  color: #786047 !important;
+  font-size: 10px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-pair strong {
+  color: #402818 !important;
+  font-size: clamp(17px, 1.3vw, 22px) !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-needed {
+  padding: 16px !important;
+  border: 1px solid #e8b96e !important;
+  background: linear-gradient(135deg, #ffe9bf 0%, #fff5dd 100%) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-needed > small {
+  color: #88500b !important;
+  font-size: 11px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-needed > strong {
+  color: #5b3305 !important;
+  font-size: clamp(27px, 2vw, 35px) !important;
+  font-weight: 950 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-finance-needed > span {
+  color: #66471f !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > footer {
+  margin-top: auto !important;
+  border-top: 1px solid #e7c996 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > footer > span {
+  color: #775b39 !important;
+  font-size: 10px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > footer > strong {
+  color: #412819 !important;
+  font-size: 18px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-cost-to-complete > footer > b {
+  color: #a12626 !important;
+  background: #ffd9d2 !important;
+  font-size: 10px !important;
+}
+
+/* INDICADORES */
+section.construction-executive.construction-executive-v2 .construction-capacity-section {
+  margin-top: 24px !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-capacity-compact-header h3 {
+  color: #0d344c !important;
+  font-size: 23px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card {
+  min-height: 112px !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 21px rgba(10, 45, 65, 0.1) !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card strong {
+  color: #0d334a !important;
+  font-size: 25px !important;
+  font-weight: 900 !important;
+}
+
+section.construction-executive.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card p {
+  color: #526d7e !important;
+  font-size: 11px !important;
+}
+
+@media (max-width: 1260px) {
+  section.construction-executive.construction-executive-v2 .construction-project-command {
+    grid-template-columns: minmax(280px, 0.9fr) minmax(340px, 1.15fr) minmax(300px, 1fr) !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-command > div {
+    min-height: 300px !important;
+    padding: 20px !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-progress {
+    grid-template-columns: 112px minmax(0, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-progress-gauge {
+    width: 112px !important;
+    height: 112px !important;
+    flex-basis: 112px !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-progress-gauge > span {
+    width: 76px !important;
+    height: 76px !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-progress-gauge strong {
+    font-size: 25px !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  section.construction-executive.construction-executive-v2 .construction-project-command {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-cost-to-complete {
+    grid-column: 1 / -1 !important;
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 760px) {
+  section.construction-executive.construction-executive-v2 .construction-project-command {
+    grid-template-columns: 1fr !important;
+    padding: 12px !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-command > div,
+  section.construction-executive.construction-executive-v2 .construction-cost-to-complete {
+    grid-column: auto !important;
+    min-height: auto !important;
+  }
+
+  section.construction-executive.construction-executive-v2 .construction-project-progress {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+}
