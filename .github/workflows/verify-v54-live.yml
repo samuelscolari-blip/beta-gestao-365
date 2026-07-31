@@ -1,0 +1,129 @@
+name: Verificar V54 publicada
+
+on:
+  push:
+    branches:
+      - verify-v54-live-published
+
+permissions:
+  contents: read
+
+jobs:
+  live-visual-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Instalar Selenium
+        run: python -m pip install --disable-pip-version-check selenium
+
+      - name: Confirmar V54 no site oficial
+        shell: python
+        run: |
+          import json
+          import shutil
+          import time
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+          from selenium.webdriver.common.by import By
+          from selenium.webdriver.support.ui import WebDriverWait
+
+          base = "https://beta-gestao-365.scolarisamuel.workers.dev"
+          chrome = shutil.which("google-chrome") or shutil.which("google-chrome-stable") or shutil.which("chromium")
+          if not chrome:
+              raise RuntimeError("Chrome/Chromium não encontrado no runner.")
+
+          options = Options()
+          options.binary_location = chrome
+          options.add_argument("--headless=new")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-gpu")
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--disable-extensions")
+          options.add_argument("--window-size=1700,1100")
+
+          driver = webdriver.Chrome(options=options)
+          wait = WebDriverWait(driver, 70)
+
+          def click_sidebar(label):
+              return driver.execute_script(
+                  """
+                  const wanted = arguments[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                  const button = [...document.querySelectorAll('.sidebar nav button')].find((item) =>
+                    (item.textContent || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(wanted)
+                  );
+                  if (!button) return false;
+                  button.click();
+                  return true;
+                  """,
+                  label,
+              )
+
+          def read_state():
+              return driver.execute_script(
+                  """
+                  const command = document.querySelector('.construction-executive-v2 .construction-project-command');
+                  const cards = command ? [...command.children] : [];
+                  const gauge = document.querySelector('.construction-project-progress-gauge');
+                  const duplicate = document.querySelector('.construction-project-progress > div:last-child > h3');
+                  const stageTitle = document.querySelector('.construction-stage-highlight > h3');
+                  const needed = document.querySelector('.construction-finance-needed > strong');
+                  const spinner = document.querySelector('.page-area .loading-state');
+                  const style = (element) => element ? getComputedStyle(element) : null;
+                  return {
+                    ready: document.readyState,
+                    spinner: Boolean(spinner),
+                    command: Boolean(command),
+                    gridDisplay: style(command)?.display || '',
+                    gridColumns: style(command)?.gridTemplateColumns || '',
+                    commandBackground: style(command)?.backgroundImage || '',
+                    cardCount: cards.length,
+                    cardBackgrounds: cards.map((card) => style(card)?.backgroundColor || ''),
+                    cardMinHeights: cards.map((card) => style(card)?.minHeight || ''),
+                    gaugeWidth: style(gauge)?.width || '',
+                    duplicateDisplay: style(duplicate)?.display || '',
+                    stageTitleSize: style(stageTitle)?.fontSize || '',
+                    neededValueSize: style(needed)?.fontSize || '',
+                    pageText: document.querySelector('.page-area')?.textContent?.trim().slice(0, 400) || ''
+                  };
+                  """
+              )
+
+          last = None
+          try:
+              for attempt in range(1, 21):
+                  driver.get(f"{base}/?__v54={int(time.time() * 1000)}")
+                  wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".sidebar nav button"))
+                  wait.until(lambda d: not d.find_elements(By.CSS_SELECTOR, ".page-area .loading-state"))
+                  if not click_sidebar("Execução da Obra"):
+                      raise RuntimeError("A opção Execução da Obra não foi encontrada.")
+                  wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".construction-project-command"))
+                  time.sleep(1)
+                  last = read_state()
+                  stage_size = float(last["stageTitleSize"].replace("px", "") or 0)
+                  needed_size = float(last["neededValueSize"].replace("px", "") or 0)
+                  gauge_width = float(last["gaugeWidth"].replace("px", "") or 0)
+                  published = (
+                      not last["spinner"]
+                      and last["command"]
+                      and last["gridDisplay"] == "grid"
+                      and last["cardCount"] == 3
+                      and all(color == "rgb(255, 255, 255)" for color in last["cardBackgrounds"])
+                      and last["duplicateDisplay"] == "none"
+                      and gauge_width >= 115
+                      and stage_size >= 24
+                      and needed_size >= 25
+                  )
+                  print(f"Tentativa {attempt}/20: {json.dumps(last, ensure_ascii=False)}")
+                  if published:
+                      print("V54_PUBLICADA=SIM")
+                      print("CARREGAMENTO_INFINITO=NAO")
+                      print("CONTRASTE_E_HIERARQUIA=CONFIRMADOS")
+                      break
+                  if attempt == 20:
+                      raise RuntimeError(f"A V54 não apareceu no site oficial: {last}")
+                  time.sleep(15)
+          finally:
+              driver.quit()
