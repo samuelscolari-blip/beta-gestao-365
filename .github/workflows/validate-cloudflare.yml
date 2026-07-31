@@ -30,3 +30,9 @@ jobs:
 
       - name: Executar testes
         run: node --test tests/*.test.mjs
+
+      - name: Diagnosticar carregamento no navegador publicado
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
+          DIAGNOSTIC_WAIT_MS: "35000"
+        run: node scripts/live-browser-diagnostic.mjs
