@@ -200,11 +200,11 @@ export const demoRecords: DemoRecord[] = [
     expectedAmount: 12850.4, approval: "Pendente", status: "Aguardando aprovação",
     invoiceUrl: docs("nf-pag-001"), responsible: "Financeiro Teste",
   }),
-  demo("expenses", "Locação mensal fictícia de escavadeira", "TST-PAG-002", "Vence em 7 dias", "2026-08-02", 18400, {
+  demo("expenses", "Locação mensal fictícia de escavadeira", "TST-PAG-002", "Pendente", "2026-08-02", 18400, {
     accountId: "TST-PAG-002", supplierCode: "TST-FOR-002", supplier: "Locadora Exemplo Equipamentos Ltda. — TESTE",
     work: "Galpão Industrial Modelo — Obra Teste", costCenter: "CC-TESTE-002", category: "Locação",
     description: "Locação mensal fictícia de escavadeira", issueDate: "2026-07-25", dueDate: "2026-08-02",
-    expectedAmount: 18400, approval: "Aprovada", status: "Vence em 7 dias",
+    expectedAmount: 18400, approval: "Aprovada", status: "Pendente",
     invoiceUrl: docs("nf-pag-002"), responsible: "Financeiro Teste",
   }),
   demo("expenses", "Internet do alojamento — lançamento fictício", "TST-PAG-003", "Pago", "2026-07-20", 189.9, {
@@ -479,10 +479,10 @@ export const demoRecords: DemoRecord[] = [
     responsible: "Encarregado Teste 03",
   }),
 
-  demo("taxes", "INSS — obrigação fictícia", "TST-IMP-001", "Vence em 7 dias", "2026-08-20", 18450.75, {
+  demo("taxes", "INSS — obrigação fictícia", "TST-IMP-001", "Pendente", "2026-08-20", 18450.75, {
     taxId: "TST-IMP-001", tax: "INSS — obrigação fictícia", entity: "00.000.000/0001-00",
     period: "2026-07-01", dueDate: "2026-08-20", expectedAmount: 18450.75,
-    guideReceived: "Sim", guideUrl: docs("guia-imposto-001"), status: "Vence em 7 dias",
+    guideReceived: "Sim", guideUrl: docs("guia-imposto-001"), status: "Pendente",
     responsible: "Fiscal Teste",
   }),
 

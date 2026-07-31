@@ -757,7 +757,13 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
       if (quick && nextModule === "dashboard") quick.hidden = true;
 
       const topTitle = document.querySelector<HTMLElement>(".topbar-left strong");
-      if (topTitle && nextModule === "dashboard") topTitle.textContent = "Visão Executiva Geral";
+      if (
+        topTitle &&
+        nextModule === "dashboard" &&
+        topTitle.textContent !== "Visão Executiva Geral"
+      ) {
+        topTitle.textContent = "Visão Executiva Geral";
+      }
 
       const indexSection = document.querySelector<HTMLElement>(".construction-capacity-section");
       if (indexSection && !indexSection.querySelector(".v52-index-guide")) {
@@ -820,10 +826,41 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
       }
     };
 
-    enhance();
-    const observer = new MutationObserver(enhance);
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+    let animationFrame: number | null = null;
+    let disposed = false;
+
+    const scheduleEnhancement = () => {
+      if (disposed || animationFrame !== null) return;
+
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        if (disposed) return;
+
+        observer.disconnect();
+        try {
+          enhance();
+        } finally {
+          if (!disposed) {
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true,
+            });
+          }
+        }
+      });
+    };
+
+    const observer = new MutationObserver(scheduleEnhancement);
+    scheduleEnhancement();
+
+    return () => {
+      disposed = true;
+      observer.disconnect();
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+    };
   }, [records, activeModule]);
 
   const refresh = () => {
