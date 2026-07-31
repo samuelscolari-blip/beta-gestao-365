@@ -1,0 +1,58 @@
+name: Aplicar fonte limpa V52
+
+on:
+  push:
+    branches: [harden-live-browser-diagnostic]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar branch
+        uses: actions/checkout@v4
+        with:
+          ref: harden-live-browser-diagnostic
+          fetch-depth: 0
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Aplicar correções diretamente na fonte
+        run: node scripts/normalize-pending-status.mjs
+
+      - name: Remover remendo de compilação
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const path = 'package.json';
+          const pkg = JSON.parse(await readFile(path, 'utf8'));
+          pkg.scripts.build = 'bash scripts/build-verified.sh';
+          await writeFile(path, `${JSON.stringify(pkg, null, 2)}\n`, 'utf8');
+          NODE
+          rm scripts/normalize-pending-status.mjs
+          rm .github/workflows/apply-clean-v52-source.yml
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Compilar versão final
+        run: npm run build
+
+      - name: Executar testes
+        run: node --test tests/*.test.mjs
+
+      - name: Registrar fonte limpa
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/components/BetaAppV52.tsx app/lib/modules.ts db/demo-records.ts db/records.ts package.json scripts/live-browser-diagnostic.mjs tests .github/workflows
+          git commit -m "Gravar correção definitiva da V52 na fonte"
+          git push origin HEAD:harden-live-browser-diagnostic
