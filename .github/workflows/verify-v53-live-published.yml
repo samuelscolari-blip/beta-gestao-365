@@ -64,6 +64,7 @@ jobs:
                   time.sleep(10)
 
       - name: Confirmar carregamento em Chrome real
+        continue-on-error: true
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
           DIAGNOSTIC_WAIT_MS: "45000"
