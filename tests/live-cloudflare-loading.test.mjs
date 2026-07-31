@@ -133,8 +133,11 @@ test("build normalizes the actual V52 observer and pending status", async () => 
   const records = await readFile("db/records.ts", "utf8");
 
   assert.match(v52, /topTitle\.textContent\s*!==\s*"Visão Executiva Geral"/);
-  assert.match(v52, /new MutationObserver\(scheduleEnhance\)/);
-  assert.match(v52, /if \(animationFrame !== null\) return/);
+  assert.match(v52, /new MutationObserver\(scheduleEnhancement\)/);
+  assert.match(v52, /if \(disposed \|\| animationFrame !== null\) return/);
+  assert.match(v52, /observer\.disconnect\(\);\s*try \{\s*enhance\(\);\s*\} finally/);
+  assert.match(v52, /disposed = true/);
+  assert.match(v52, /cancelAnimationFrame\(animationFrame\)/);
   assert.doesNotMatch(modules, /"Vence em 7 dias",/);
   assert.doesNotMatch(demo, /"Vence em 7 dias"/);
   assert.match(records, /const pendingStatusBackfills/);
