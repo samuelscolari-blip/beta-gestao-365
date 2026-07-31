@@ -74,6 +74,33 @@ function securedInput(input: RequestInfo | URL): RequestInfo | URL {
   return input;
 }
 
+function normalizeText(value: unknown) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function sidebarButton(label: string) {
+  return Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".sidebar nav button"),
+  ).find((button) =>
+    normalizeText(button.textContent).includes(normalizeText(label)),
+  );
+}
+
+function openSupplierModule(create: boolean) {
+  sidebarButton("Fornecedores")?.click();
+  if (create) {
+    window.setTimeout(() => {
+      document
+        .querySelector<HTMLButtonElement>(".module-heading .button.primary")
+        ?.click();
+    }, 100);
+  }
+}
+
 export default function SecureBetaAppV52(props: Props) {
   useEffect(() => {
     const previousFetch = window.fetch.bind(window);
@@ -125,17 +152,57 @@ export default function SecureBetaAppV52(props: Props) {
       }
     };
 
-    const moveLayer = () => {
+    const enhanceInterface = () => {
       const layer = document.querySelector<HTMLElement>(".v52-floating-layer");
       const pageArea = document.querySelector<HTMLElement>(".page-area");
+      if (layer) layer.removeAttribute("aria-hidden");
       if (layer && pageArea && layer.parentElement !== pageArea) pageArea.prepend(layer);
+
+      const management = document.querySelector<HTMLElement>(".management-center");
+      if (management) {
+        const title = management.querySelector<HTMLElement>(".management-heading h2");
+        const description = management.querySelector<HTMLElement>(".management-heading p");
+        if (title) title.textContent = "Documentos para decisão da gerência";
+        if (description) {
+          description.textContent =
+            "Compras, pagamentos, cartões e aluguéis documentados para a gerência conferir e decidir. O sistema não recomenda aprovação ou reprovação.";
+        }
+      }
+
+      const activeText = normalizeText(
+        document.querySelector<HTMLButtonElement>(".sidebar nav button.active")
+          ?.textContent,
+      );
+      const strip = document.querySelector<HTMLElement>(".v52-module-strip");
+      if (
+        activeText.includes("financeiro") &&
+        strip &&
+        !strip.querySelector(".v52-financial-links")
+      ) {
+        const links = document.createElement("div");
+        links.className = "v52-financial-links";
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.textContent = "Abrir fornecedores";
+        openButton.onclick = () => openSupplierModule(false);
+        const newButton = document.createElement("button");
+        newButton.type = "button";
+        newButton.textContent = "Cadastrar fornecedor";
+        newButton.onclick = () => openSupplierModule(true);
+        links.append(openButton, newButton);
+        strip.append(links);
+      }
     };
 
-    moveLayer();
-    const observer = new MutationObserver(moveLayer);
+    enhanceInterface();
+    const observer = new MutationObserver(enhanceInterface);
     observer.observe(document.body, { childList: true, subtree: true });
     const refreshTimer = window.setTimeout(() => {
-      document.querySelector<HTMLButtonElement>('.topbar button[aria-label="Atualizar dados"]')?.click();
+      document
+        .querySelector<HTMLButtonElement>(
+          '.topbar button[aria-label="Atualizar dados"]',
+        )
+        ?.click();
     }, 250);
 
     return () => {
