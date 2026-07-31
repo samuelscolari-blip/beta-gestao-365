@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import BetaApp from "./components/BetaApp";
+import BetaAppV52 from "./components/BetaAppV52";
 import { SOLE_ADMIN_EMAIL } from "./lib/server-access";
 
 export const dynamic = "force-dynamic";
@@ -17,5 +17,7 @@ export default async function Home() {
 
   const isAdmin = email?.trim().toLowerCase() === SOLE_ADMIN_EMAIL;
 
-  return <BetaApp userName={fullName} userEmail={email} isAdmin={isAdmin} />;
+  return (
+    <BetaAppV52 userName={fullName} userEmail={email} isAdmin={isAdmin} />
+  );
 }
