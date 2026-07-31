@@ -1,0 +1,115 @@
+name: Verificar V53 publicada
+
+on:
+  push:
+    branches:
+      - verify-v53-live-published
+
+permissions:
+  contents: read
+
+jobs:
+  live-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Baixar código integrado
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+
+      - name: Aguardar e confirmar artefatos e dados da V53
+        shell: python
+        run: |
+          import json
+          import re
+          import time
+          import urllib.parse
+          import urllib.request
+
+          base = "https://beta-gestao-365.scolarisamuel.workers.dev"
+          allowed = {"Aguardando validação", "Reprovado", "Pago"}
+          markers = [
+              "financial-center-tabs",
+              "construction-capacity-compact",
+              "construction-finance-summary",
+              "Aprovados",
+          ]
+
+          def fetch(url):
+              request = urllib.request.Request(
+                  url,
+                  headers={
+                      "User-Agent": "Beta-Gestao-V53-Verification/1.0",
+                      "Cache-Control": "no-cache",
+                  },
+              )
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return response.read(), response.status
+
+          last_error = None
+          for attempt in range(1, 41):
+              nonce = int(time.time() * 1000)
+              try:
+                  api_bytes, api_status = fetch(
+                      f"{base}/api/records?module=expenses&__v53={nonce}"
+                  )
+                  payload = json.loads(api_bytes.decode("utf-8"))
+                  records = payload.get("records", [])
+                  statuses = {str(record.get("status", "")) for record in records}
+                  invalid = sorted(statuses - allowed)
+                  if not records:
+                      raise RuntimeError("A API não retornou registros de Contas a Pagar.")
+                  if invalid:
+                      raise RuntimeError(f"Status antigos ainda publicados: {invalid}")
+
+                  html_bytes, root_status = fetch(f"{base}/?__v53={nonce}")
+                  html = html_bytes.decode("utf-8", errors="replace")
+                  asset_paths = set(
+                      re.findall(
+                          r'''(?:src|href)=["']([^"']+\.(?:js|mjs)(?:\?[^"']*)?)["']''',
+                          html,
+                          flags=re.IGNORECASE,
+                      )
+                  )
+                  published = html
+                  for path in sorted(asset_paths):
+                      url = urllib.parse.urljoin(base + "/", path)
+                      try:
+                          body, _ = fetch(url)
+                          published += "\n" + body.decode("utf-8", errors="replace")
+                      except Exception as asset_error:
+                          print(f"Aviso ao baixar {url}: {asset_error}")
+
+                  missing = [marker for marker in markers if marker not in published]
+                  if missing:
+                      raise RuntimeError(
+                          f"Bundle publicado ainda não contém os marcadores V53: {missing}"
+                      )
+
+                  print("V53_PUBLICADA=SIM")
+                  print(f"ROOT_STATUS={root_status}")
+                  print(f"API_STATUS={api_status}")
+                  print(f"REGISTROS_FINANCEIROS={len(records)}")
+                  print(f"STATUS_PUBLICADOS={sorted(statuses)}")
+                  print(f"ASSETS_ANALISADOS={len(asset_paths)}")
+                  print(f"MARCADORES_CONFIRMADOS={markers}")
+                  break
+              except Exception as error:
+                  last_error = error
+                  print(f"Tentativa {attempt}/40 ainda não confirmou a V53: {error}")
+                  if attempt == 40:
+                      raise
+                  time.sleep(15)
+          else:
+              raise RuntimeError(str(last_error or "A V53 não foi confirmada."))
+
+      - name: Abrir o endereço oficial em Chrome real
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
+          DIAGNOSTIC_WAIT_MS: "45000"
+          DIAGNOSTIC_PROBE_TIMEOUT_MS: "15000"
+        run: node scripts/live-browser-diagnostic.mjs
