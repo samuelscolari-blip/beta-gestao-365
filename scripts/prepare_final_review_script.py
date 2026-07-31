@@ -104,7 +104,7 @@ if financial_name_count != 3:
 text = text.replace("financialStatusBackfills", "pendingStatusBackfills")
 
 section_marker = "# ---------------------------------------------------------------------------\n# 4. Central Financeira e painel executivo de obras\n# ---------------------------------------------------------------------------"
-modules_block = r'''# ---------------------------------------------------------------------------
+modules_block = r"""# ---------------------------------------------------------------------------
 # 4. Opções-base do fluxo financeiro
 # ---------------------------------------------------------------------------
 modules_path = "app/lib/modules.ts"
@@ -132,7 +132,7 @@ write(modules_path, modules)
 
 # ---------------------------------------------------------------------------
 # 5. Central Financeira e painel executivo de obras
-# ---------------------------------------------------------------------------'''
+# ---------------------------------------------------------------------------"""
 text = replace_exact(
     text,
     section_marker,
