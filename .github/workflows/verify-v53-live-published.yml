@@ -24,95 +24,122 @@ jobs:
         with:
           node-version: 22.19.0
 
-      - name: Aguardar e confirmar artefatos e dados da V53
+      - name: Confirmar API financeira publicada
         shell: python
         run: |
           import json
-          import re
           import time
-          import urllib.parse
           import urllib.request
 
           base = "https://beta-gestao-365.scolarisamuel.workers.dev"
           allowed = {"Aguardando validação", "Reprovado", "Pago"}
-          markers = [
-              "financial-center-tabs",
-              "construction-capacity-compact",
-              "construction-finance-summary",
-              "Aprovados",
-          ]
 
-          def fetch(url):
+          for attempt in range(1, 11):
+              nonce = int(time.time() * 1000)
               request = urllib.request.Request(
-                  url,
+                  f"{base}/api/records?module=expenses&__v53={nonce}",
                   headers={
-                      "User-Agent": "Beta-Gestao-V53-Verification/1.0",
+                      "User-Agent": "Beta-Gestao-V53-Verification/2.0",
                       "Cache-Control": "no-cache",
                   },
               )
-              with urllib.request.urlopen(request, timeout=30) as response:
-                  return response.read(), response.status
-
-          last_error = None
-          for attempt in range(1, 41):
-              nonce = int(time.time() * 1000)
               try:
-                  api_bytes, api_status = fetch(
-                      f"{base}/api/records?module=expenses&__v53={nonce}"
-                  )
-                  payload = json.loads(api_bytes.decode("utf-8"))
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      payload = json.loads(response.read().decode("utf-8"))
                   records = payload.get("records", [])
                   statuses = {str(record.get("status", "")) for record in records}
                   invalid = sorted(statuses - allowed)
                   if not records:
-                      raise RuntimeError("A API não retornou registros de Contas a Pagar.")
+                      raise RuntimeError("A API não retornou registros financeiros.")
                   if invalid:
                       raise RuntimeError(f"Status antigos ainda publicados: {invalid}")
-
-                  html_bytes, root_status = fetch(f"{base}/?__v53={nonce}")
-                  html = html_bytes.decode("utf-8", errors="replace")
-                  asset_paths = set(
-                      re.findall(
-                          r'''(?:src|href)=["']([^"']+\.(?:js|mjs)(?:\?[^"']*)?)["']''',
-                          html,
-                          flags=re.IGNORECASE,
-                      )
-                  )
-                  published = html
-                  for path in sorted(asset_paths):
-                      url = urllib.parse.urljoin(base + "/", path)
-                      try:
-                          body, _ = fetch(url)
-                          published += "\n" + body.decode("utf-8", errors="replace")
-                      except Exception as asset_error:
-                          print(f"Aviso ao baixar {url}: {asset_error}")
-
-                  missing = [marker for marker in markers if marker not in published]
-                  if missing:
-                      raise RuntimeError(
-                          f"Bundle publicado ainda não contém os marcadores V53: {missing}"
-                      )
-
-                  print("V53_PUBLICADA=SIM")
-                  print(f"ROOT_STATUS={root_status}")
-                  print(f"API_STATUS={api_status}")
-                  print(f"REGISTROS_FINANCEIROS={len(records)}")
-                  print(f"STATUS_PUBLICADOS={sorted(statuses)}")
-                  print(f"ASSETS_ANALISADOS={len(asset_paths)}")
-                  print(f"MARCADORES_CONFIRMADOS={markers}")
+                  print("API_V53=SIM")
+                  print(f"REGISTROS={len(records)}")
+                  print(f"STATUS={sorted(statuses)}")
                   break
               except Exception as error:
-                  last_error = error
-                  print(f"Tentativa {attempt}/40 ainda não confirmou a V53: {error}")
-                  if attempt == 40:
+                  print(f"Tentativa {attempt}/10: {error}")
+                  if attempt == 10:
                       raise
-                  time.sleep(15)
-          else:
-              raise RuntimeError(str(last_error or "A V53 não foi confirmada."))
+                  time.sleep(10)
 
-      - name: Abrir o endereço oficial em Chrome real
+      - name: Confirmar carregamento em Chrome real
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
           DIAGNOSTIC_WAIT_MS: "45000"
           DIAGNOSTIC_PROBE_TIMEOUT_MS: "15000"
         run: node scripts/live-browser-diagnostic.mjs
+
+      - name: Instalar Selenium
+        run: python -m pip install --disable-pip-version-check selenium
+
+      - name: Confirmar telas V53 no DOM real
+        shell: python
+        run: |
+          import shutil
+          import time
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+          from selenium.webdriver.common.by import By
+          from selenium.webdriver.support.ui import WebDriverWait
+
+          base = "https://beta-gestao-365.scolarisamuel.workers.dev"
+          chrome = shutil.which("google-chrome") or shutil.which("google-chrome-stable") or shutil.which("chromium")
+          if not chrome:
+              raise RuntimeError("Chrome/Chromium não encontrado no runner.")
+
+          options = Options()
+          options.binary_location = chrome
+          options.add_argument("--headless=new")
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-gpu")
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("--disable-extensions")
+          options.add_argument("--window-size=1600,1000")
+
+          driver = webdriver.Chrome(options=options)
+          wait = WebDriverWait(driver, 60)
+
+          def no_spinner(d):
+              return not d.find_elements(By.CSS_SELECTOR, ".page-area .loading-state")
+
+          def click_sidebar(label):
+              clicked = driver.execute_script(
+                  """
+                  const wanted = arguments[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                  const button = [...document.querySelectorAll('.sidebar nav button')].find((item) =>
+                    (item.textContent || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(wanted)
+                  );
+                  if (!button) return false;
+                  button.click();
+                  return true;
+                  """,
+                  label,
+              )
+              if not clicked:
+                  raise RuntimeError(f"Botão lateral não encontrado: {label}")
+
+          try:
+              driver.get(f"{base}/?__v53_dom={int(time.time() * 1000)}")
+              wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".sidebar nav button"))
+              wait.until(no_spinner)
+
+              click_sidebar("Financeiro")
+              wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".financial-center-tabs"))
+              wait.until(no_spinner)
+              tabs = [item.text.strip() for item in driver.find_elements(By.CSS_SELECTOR, ".financial-center-tabs button")]
+              expected_tabs = ["Contas a pagar", "Fornecedores", "Aprovados"]
+              if tabs != expected_tabs:
+                  raise RuntimeError(f"Abas financeiras divergentes: {tabs}")
+
+              click_sidebar("Execução da Obra")
+              wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".construction-capacity-compact"))
+              wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".construction-finance-summary"))
+              wait.until(no_spinner)
+
+              print("V53_DOM=SIM")
+              print(f"ABAS_FINANCEIRAS={tabs}")
+              print("PAINEL_OBRAS_COMPACTO=SIM")
+              print("CARREGAMENTO_INFINITO=NAO")
+          finally:
+              driver.quit()
