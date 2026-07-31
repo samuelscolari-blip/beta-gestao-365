@@ -1,7 +1,17 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import BetaAppV52 from "./BetaAppV52Ready";
+
+const BetaAppV52 = dynamic(() => import("./BetaAppV52Ready"), {
+  ssr: false,
+  loading: () => (
+    <div className="loading-state">
+      <span className="loading-mark" />
+      <p>Carregando a central de gestão…</p>
+    </div>
+  ),
+});
 
 type Props = {
   userName?: string | null;
