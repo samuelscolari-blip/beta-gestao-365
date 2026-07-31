@@ -105,27 +105,15 @@ text = text.replace("financialStatusBackfills", "pendingStatusBackfills")
 
 section_marker = "# ---------------------------------------------------------------------------\n# 4. Central Financeira e painel executivo de obras\n# ---------------------------------------------------------------------------"
 modules_block = r"""# ---------------------------------------------------------------------------
-# 4. Opções-base do fluxo financeiro
+# 4. Opções específicas do fluxo de Contas a Pagar
 # ---------------------------------------------------------------------------
 modules_path = "app/lib/modules.ts"
 modules = read(modules_path)
 modules = replace_once(
     modules,
-    r'''const statusFinanceiro = [
-  "Pendente",
-  "Aguardando aprovação",
-  "Aprovado",
-  "Vencido",
-  "Pago",
-  "Reprovado",
-  "Cancelado",
-];''',
-    r'''const statusFinanceiro = [
-  "Aguardando validação",
-  "Reprovado",
-  "Pago",
-];''',
-    "Opções-base do status financeiro",
+    r'''{ key: "status", label: "Status do pagamento", type: "select", required: true, options: statusFinanceiro, aliases: ["Status pagamento"] },''',
+    r'''{ key: "status", label: "Status do pagamento", type: "select", required: true, options: ["Aguardando validação", "Reprovado", "Pago"], aliases: ["Status pagamento"] },''',
+    "Opções específicas do status de Contas a Pagar",
 )
 write(modules_path, modules)
 
@@ -137,7 +125,7 @@ text = replace_exact(
     text,
     section_marker,
     modules_block,
-    "Inserção da configuração-base financeira",
+    "Inserção da configuração específica de Contas a Pagar",
 )
 
 path.write_text(text, encoding="utf-8")
