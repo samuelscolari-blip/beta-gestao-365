@@ -7,6 +7,7 @@ const v52 = await readFile("app/components/BetaAppV52.tsx", "utf8");
 const route = await readFile("app/api/records/route.ts", "utf8");
 const records = await readFile("db/records.ts", "utf8");
 const css = await readFile("app/globals.css", "utf8");
+const constructionCss = await readFile("app/construction-v56.css", "utf8");
 
 test("financial center has the three requested tabs", () => {
   assert.match(app, /Contas a pagar/);
@@ -25,11 +26,18 @@ test("expenses only expose the requested statuses", () => {
 
 test("construction dashboard is compact and has no repeated finance section", () => {
   const roadmap = app.indexOf('className="construction-stage-roadmap"');
-  const command = app.indexOf('className={`construction-project-command');
-  assert.ok(roadmap >= 0 && command >= 0 && roadmap < command);
-  assert.match(app, /construction-capacity-compact/);
-  assert.match(app, /construction-finance-summary/);
+  const dashboard = app.indexOf('className="construction-dashboard-v56"');
+  assert.ok(roadmap >= 0 && dashboard >= 0 && roadmap < dashboard);
+  assert.match(app, /construction-kpi-row-v56/);
+  assert.match(app, /construction-main-grid-v56/);
+  assert.match(app, /construction-stage-card-v56/);
+  assert.match(app, /construction-budget-card-v56/);
+  assert.doesNotMatch(app, /className={`construction-project-command/);
+  assert.doesNotMatch(app, /construction-capacity-compact/);
+  assert.doesNotMatch(app, /construction-finance-summary/);
   assert.doesNotMatch(app, /className={`construction-project-finance/);
+  assert.match(constructionCss, /grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
+  assert.match(constructionCss, /grid-template-columns: minmax\(0, 2fr\) minmax\(320px, 1fr\)/);
   assert.match(css, /Revisão executiva V53/);
 });
 
