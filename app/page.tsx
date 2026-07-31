@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import BetaApp from "./components/BetaApp";
+import SecureBetaAppV52 from "./components/SecureBetaAppV52";
 import { SOLE_ADMIN_EMAIL } from "./lib/server-access";
 
 export const dynamic = "force-dynamic";
@@ -17,5 +17,11 @@ export default async function Home() {
 
   const isAdmin = email?.trim().toLowerCase() === SOLE_ADMIN_EMAIL;
 
-  return <BetaApp userName={fullName} userEmail={email} isAdmin={isAdmin} />;
+  return (
+    <SecureBetaAppV52
+      userName={fullName}
+      userEmail={email}
+      isAdmin={isAdmin}
+    />
+  );
 }
