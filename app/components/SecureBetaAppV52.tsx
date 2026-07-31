@@ -2,9 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import "./v52-module-corrections";
 
-const BetaAppV52 = dynamic(() => import("./BetaAppV52"), {
+const BetaAppV52 = dynamic(() => import("./BetaAppV52Ready"), {
   ssr: false,
   loading: () => (
     <div className="loading-state">

@@ -4,6 +4,7 @@ import {
   POST as recordsPost,
   PUT as recordsPut,
 } from "../records/route";
+import { requireSoleAdmin } from "../../lib/server-access";
 
 type RecordInput = {
   module?: unknown;
@@ -92,6 +93,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const denied = requireSoleAdmin(request);
+  if (denied) return denied;
+
   try {
     const body = (await request.clone().json()) as {
       record?: RecordInput;
@@ -110,6 +114,9 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  const denied = requireSoleAdmin(request);
+  if (denied) return denied;
+
   try {
     const body = (await request.clone().json()) as {
       record?: RecordInput;
@@ -123,5 +130,8 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  const denied = requireSoleAdmin(request);
+  if (denied) return denied;
+
   return recordsDelete(forwardRequest(request));
 }

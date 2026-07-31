@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "beta-gestao-365",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-07-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "DEPLOYMENT_PLATFORM": "cloudflare"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "beta-gestao-365-db",
+      "database_id": "c8f423c5-d793-47ba-a685-d0cf42339288"
+    }
+  ]
+}

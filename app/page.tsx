@@ -1,12 +1,15 @@
 import { headers } from "next/headers";
 import SecureBetaAppV52 from "./components/SecureBetaAppV52";
-import { SOLE_ADMIN_EMAIL } from "./lib/server-access";
+import {
+  authenticatedEmailFromHeaders,
+  SOLE_ADMIN_EMAIL,
+} from "./lib/server-access";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
+  const email = authenticatedEmailFromHeaders(requestHeaders);
   const encodedName = requestHeaders.get("oai-authenticated-user-full-name");
   const fullName =
     encodedName &&
@@ -15,7 +18,7 @@ export default async function Home() {
       ? decodeURIComponent(encodedName)
       : null;
 
-  const isAdmin = email?.trim().toLowerCase() === SOLE_ADMIN_EMAIL;
+  const isAdmin = email === SOLE_ADMIN_EMAIL;
 
   return (
     <SecureBetaAppV52
