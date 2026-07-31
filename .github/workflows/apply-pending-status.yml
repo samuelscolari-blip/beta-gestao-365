@@ -1,0 +1,167 @@
+name: Aplicar status pendente
+
+on:
+  push:
+    branches: [fix-status-pendente]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          ref: fix-status-pendente
+          fetch-depth: 0
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Aplicar padronização para Pendente
+        shell: python
+        run: |
+          from pathlib import Path
+
+          modules = Path("app/lib/modules.ts")
+          modules_text = modules.read_text(encoding="utf-8")
+          option_line = '  "Vence em 7 dias",\n'
+          if modules_text.count(option_line) != 1:
+              raise SystemExit("A opção antiga não foi encontrada exatamente uma vez em modules.ts")
+          modules.write_text(modules_text.replace(option_line, ""), encoding="utf-8")
+
+          demo = Path("db/demo-records.ts")
+          demo_text = demo.read_text(encoding="utf-8")
+          old_count = demo_text.count('"Vence em 7 dias"')
+          if old_count < 2:
+              raise SystemExit("Os registros fictícios antigos não foram encontrados")
+          demo.write_text(
+              demo_text.replace('"Vence em 7 dias"', '"Pendente"'),
+              encoding="utf-8",
+          )
+
+          records = Path("db/records.ts")
+          records_text = records.read_text(encoding="utf-8")
+
+          select_old = "SELECT id, module, reference, payload, source FROM records"
+          select_new = "SELECT id, module, reference, status, payload, source FROM records"
+          if records_text.count(select_old) != 1:
+              raise SystemExit("Consulta de registros fictícios não encontrada")
+          records_text = records_text.replace(select_old, select_new, 1)
+
+          type_old = '''      reference: string;
+      payload: string;
+      source: string;
+'''
+          type_new = '''      reference: string;
+      status: string;
+      payload: string;
+      source: string;
+'''
+          if records_text.count(type_old) != 1:
+              raise SystemExit("Tipo da consulta de demonstração não encontrado")
+          records_text = records_text.replace(type_old, type_new, 1)
+
+          marker = '''    }>();
+
+  const demoWorkerCounts = new Map(
+'''
+          migration = '''    }>();
+
+  const pendingStatusBackfills = (existing.results || []).flatMap((row) => {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    const topLevelUsesLegacyStatus = row.status === "Vence em 7 dias";
+    const payloadUsesLegacyStatus =
+      String(payload.status || "") === "Vence em 7 dias";
+    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];
+    return [{
+      id: row.id,
+      module: row.module,
+      payload: { ...payload, status: "Pendente" },
+    }];
+  });
+
+  if (pendingStatusBackfills.length) {
+    const updatedAt = new Date().toISOString();
+    await db.batch(
+      pendingStatusBackfills.map((record) =>
+        db
+          .prepare(
+            `UPDATE records
+             SET status = ?, payload = ?, updated_at = ?
+             WHERE tenant_id = ? AND id = ? AND source = ?`,
+          )
+          .bind(
+            "Pendente",
+            JSON.stringify(record.payload),
+            updatedAt,
+            DEFAULT_TENANT_ID,
+            record.id,
+            DEMO_SOURCE,
+          ),
+      ),
+    );
+    for (const record of pendingStatusBackfills) {
+      await audit(
+        "DEMO_REFRESH",
+        record.module,
+        record.id,
+        "Situação fictícia padronizada como Pendente",
+        "Sistema",
+      );
+    }
+  }
+
+  const demoWorkerCounts = new Map(
+'''
+          if records_text.count(marker) != 1:
+              raise SystemExit("Ponto de inserção da migração não encontrado")
+          records_text = records_text.replace(marker, migration, 1)
+          records.write_text(records_text, encoding="utf-8")
+
+          test = Path("tests/pending-status.test.mjs")
+          test.write_text('''import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+test("financial status uses Pendente instead of the legacy seven-day label", async () => {
+  const modules = await readFile("app/lib/modules.ts", "utf8");
+  const demo = await readFile("db/demo-records.ts", "utf8");
+  const records = await readFile("db/records.ts", "utf8");
+
+  assert.doesNotMatch(modules, /"Vence em 7 dias",/);
+  assert.doesNotMatch(demo, /Vence em 7 dias/);
+  assert.match(records, /topLevelUsesLegacyStatus/);
+  assert.match(records, /Situação fictícia padronizada como Pendente/);
+});
+''', encoding="utf-8")
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Compilar versão final
+        run: npm run build
+
+      - name: Executar testes
+        run: node --test tests/*.test.mjs
+
+      - name: Registrar correção na branch
+        run: |
+          rm .github/workflows/apply-pending-status.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/lib/modules.ts db/demo-records.ts db/records.ts tests/pending-status.test.mjs .github/workflows/apply-pending-status.yml
+          git commit -m "Padronizar vencimentos como pendentes"
+          git push origin HEAD:fix-status-pendente
