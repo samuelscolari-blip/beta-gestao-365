@@ -4,6 +4,9 @@
   "main": "./worker/index.ts",
   "compatibility_date": "2026-07-31",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "DEPLOYMENT_PLATFORM": "cloudflare"
+  },
   "d1_databases": [
     {
       "binding": "DB",
