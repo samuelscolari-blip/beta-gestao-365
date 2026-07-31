@@ -76,5 +76,22 @@ text = replace_exact(
     "Marcador específico do ícone financeiro",
 )
 
+old_d1_end = r'''    }
+  }
+
+  const demoWorkerCounts = new Map(''',
+    "Normalização dos status no D1",
+)'''
+new_d1_end = r'''    }
+  }''',
+    "Normalização dos status no D1",
+)'''
+text = replace_exact(
+    text,
+    old_d1_end,
+    new_d1_end,
+    "Delimitador final da normalização do D1",
+)
+
 path.write_text(text, encoding="utf-8")
 print("Transformação principal ajustada com marcadores específicos.")
