@@ -37,7 +37,8 @@ test("construction dashboard is compact and has no repeated finance section", ()
   assert.doesNotMatch(app, /construction-finance-summary/);
   assert.doesNotMatch(app, /className={`construction-project-finance/);
   assert.match(constructionCss, /grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
-  assert.match(constructionCss, /grid-template-columns: minmax\(0, 2fr\) minmax\(320px, 1fr\)/);
+  assert.match(constructionCss, /grid-template-columns: minmax\(0, 2fr\) minmax\(340px, 1fr\)/);
+  assert.match(constructionCss, /linear-gradient\(145deg, #062642 0%, #082f50 52%, #0d4267 100%\)/);
   assert.match(css, /Revisão executiva V53/);
 });
 
