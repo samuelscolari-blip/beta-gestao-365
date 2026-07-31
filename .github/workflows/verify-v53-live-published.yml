@@ -128,10 +128,11 @@ jobs:
               click_sidebar("Financeiro")
               wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".financial-center-tabs"))
               wait.until(no_spinner)
-              tabs = [item.text.strip() for item in driver.find_elements(By.CSS_SELECTOR, ".financial-center-tabs button")]
+              raw_tabs = [item.text.strip() for item in driver.find_elements(By.CSS_SELECTOR, ".financial-center-tabs button")]
+              tabs = [text.splitlines()[0].strip() for text in raw_tabs]
               expected_tabs = ["Contas a pagar", "Fornecedores", "Aprovados"]
               if tabs != expected_tabs:
-                  raise RuntimeError(f"Abas financeiras divergentes: {tabs}")
+                  raise RuntimeError(f"Abas financeiras divergentes: {raw_tabs}")
 
               click_sidebar("Execução da Obra")
               wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".construction-capacity-compact"))
@@ -139,7 +140,7 @@ jobs:
               wait.until(no_spinner)
 
               print("V53_DOM=SIM")
-              print(f"ABAS_FINANCEIRAS={tabs}")
+              print(f"ABAS_FINANCEIRAS={raw_tabs}")
               print("PAINEL_OBRAS_COMPACTO=SIM")
               print("CARREGAMENTO_INFINITO=NAO")
           finally:
