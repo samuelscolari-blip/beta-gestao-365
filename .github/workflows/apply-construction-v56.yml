@@ -29,6 +29,19 @@ jobs:
           node-version: 22.19.0
           cache: npm
 
+      - name: Corrigir conferência do transformador
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path("scripts/apply-construction-v56.py")
+          source = path.read_text(encoding="utf-8")
+          old = 'if updated.count("construction-dashboard-v56") != 2:'
+          new = 'if updated.count("construction-dashboard-v56") != 1:'
+          if old not in source:
+              raise RuntimeError("A conferência antiga não foi encontrada.")
+          path.write_text(source.replace(old, new, 1), encoding="utf-8")
+          PY
+
       - name: Validar e aplicar transformação
         run: |
           python -m py_compile scripts/apply-construction-v56.py
@@ -51,7 +64,7 @@ jobs:
         run: |
           git config user.name "samuelscolari-blip"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/components/BetaApp.tsx app/layout.tsx app/construction-v56.css app/construction-v55.css
+          git add app/components/BetaApp.tsx app/layout.tsx app/construction-v56.css app/construction-v55.css scripts/apply-construction-v56.py
           if git diff --cached --quiet; then
             echo "Nenhuma alteração nova para gravar."
           else
