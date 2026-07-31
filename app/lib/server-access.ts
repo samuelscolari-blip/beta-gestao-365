@@ -1,10 +1,20 @@
 export const SOLE_ADMIN_EMAIL = "scolarisamuel@gmail.com";
 
-export function authenticatedEmail(request: Request) {
-  return request.headers
-    .get("oai-authenticated-user-email")
+export type HeaderReader = {
+  get(name: string): string | null;
+};
+
+export function authenticatedEmailFromHeaders(headers: HeaderReader) {
+  return (
+    headers.get("x-beta-authenticated-email") ||
+    headers.get("oai-authenticated-user-email")
+  )
     ?.trim()
     .toLowerCase() || null;
+}
+
+export function authenticatedEmail(request: Request) {
+  return authenticatedEmailFromHeaders(request.headers);
 }
 
 export function isSoleAdmin(request: Request) {
