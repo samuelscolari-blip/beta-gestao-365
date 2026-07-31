@@ -1,0 +1,1 @@
+Arquivo temporário para executar build e testes da V57. Não integrar este Pull Request.
