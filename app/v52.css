@@ -1,0 +1,554 @@
+/* Beta Gestão 365 — padrão executivo V52 */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.page-area {
+  font-size: 0.96rem;
+}
+
+.page-area p {
+  font-size: 0.91rem !important;
+  line-height: 1.62 !important;
+}
+
+.page-area small {
+  font-size: 0.77rem !important;
+  line-height: 1.45 !important;
+}
+
+.page-area label > span,
+.form-field > span {
+  font-size: 0.84rem !important;
+  font-weight: 720 !important;
+}
+
+.page-area input,
+.page-area select,
+.page-area textarea,
+.page-area button {
+  font-size: 0.87rem;
+}
+
+.module-heading {
+  min-height: 132px;
+  padding: 26px 28px !important;
+  border: 1px solid #d6e3e9 !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(37, 99, 235, 0.1), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f4f8fa) !important;
+  box-shadow: 0 18px 48px rgba(21, 49, 67, 0.09) !important;
+}
+
+.module-heading h1 {
+  margin-top: 4px !important;
+  font-size: clamp(1.75rem, 2.4vw, 2.35rem) !important;
+  letter-spacing: -0.035em;
+}
+
+.module-heading p {
+  max-width: 880px;
+  color: #5c707d !important;
+}
+
+.module-big-icon {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 16px !important;
+}
+
+.eyebrow {
+  font-size: 0.72rem !important;
+  font-weight: 820 !important;
+  letter-spacing: 0.105em !important;
+}
+
+.nav-group > span {
+  margin-top: 15px !important;
+  color: #a8bbc6 !important;
+  font-size: 0.72rem !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.09em !important;
+}
+
+.sidebar nav button {
+  min-height: 45px;
+  font-size: 0.88rem !important;
+}
+
+.sidebar nav button > span {
+  font-size: 0.88rem !important;
+}
+
+.topbar-left strong {
+  font-size: 1.02rem !important;
+}
+
+.table-card {
+  overflow: hidden;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 42px rgba(20, 47, 63, 0.07) !important;
+}
+
+.table-toolbar {
+  padding: 16px 18px !important;
+  background: linear-gradient(180deg, #fff, #f8fafb);
+}
+
+.table-wrap th {
+  padding: 13px 14px !important;
+  font-size: 0.73rem !important;
+  letter-spacing: 0.045em;
+}
+
+.table-wrap td {
+  padding: 14px !important;
+  font-size: 0.86rem !important;
+}
+
+.table-wrap tbody tr {
+  transition: background 0.16s ease, transform 0.16s ease;
+}
+
+.table-wrap tbody tr:hover {
+  background: #f2f7f9 !important;
+  transform: translateY(-1px);
+}
+
+.mini-kpis {
+  gap: 14px !important;
+}
+
+.mini-kpis article {
+  min-height: 104px;
+  padding: 19px !important;
+  border-radius: 17px !important;
+  box-shadow: 0 10px 30px rgba(20, 47, 63, 0.05);
+}
+
+.mini-kpis strong {
+  font-size: 1.65rem !important;
+}
+
+.module-guide {
+  padding: 16px 18px !important;
+  border-radius: 16px !important;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  min-height: 44px;
+  font-size: 0.9rem !important;
+}
+
+.form-grid textarea {
+  min-height: 92px;
+}
+
+.modal-header h2 {
+  font-size: 1.65rem !important;
+}
+
+.detail-panel {
+  font-size: 0.94rem;
+}
+
+.detail-data-grid strong {
+  font-size: 0.9rem !important;
+}
+
+.cost-monitor-progress,
+.management-training,
+.management-overview .missing,
+.management-tabs button[hidden],
+.action-center[hidden] {
+  display: none !important;
+}
+
+.management-center {
+  border-radius: 22px !important;
+  box-shadow: 0 18px 44px rgba(20, 47, 63, 0.08) !important;
+}
+
+.management-heading h2 {
+  font-size: 1.65rem !important;
+}
+
+.v52-floating-layer {
+  display: grid;
+  gap: 18px;
+  order: -1;
+  width: 100%;
+}
+
+.page-area > .v52-floating-layer:empty {
+  display: none;
+}
+
+.v52-module-strip,
+.v52-administrative-actions,
+.v52-rental-management {
+  padding: 24px;
+  border: 1px solid #d8e5ea;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 96% 0, rgba(14, 116, 144, 0.12), transparent 30%),
+    linear-gradient(135deg, #f9fcfd, #fff 68%);
+  box-shadow: 0 16px 44px rgba(20, 47, 63, 0.07);
+  pointer-events: auto;
+}
+
+.v52-module-strip-copy > span,
+.v52-administrative-actions header span,
+.v52-rental-management header span {
+  color: #317086;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.v52-module-strip h2,
+.v52-administrative-actions h2,
+.v52-rental-management h3 {
+  margin: 5px 0 4px;
+  color: #183b4d;
+  font-size: 1.55rem;
+  letter-spacing: -0.025em;
+}
+
+.v52-module-strip p,
+.v52-administrative-actions p,
+.v52-rental-management p {
+  margin: 0;
+  color: #657b87;
+}
+
+.v52-module-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.v52-module-kpis article {
+  padding: 16px;
+  border: 1px solid #dfe9ed;
+  border-radius: 15px;
+  background: #fff;
+}
+
+.v52-module-kpis small,
+.v52-module-kpis strong,
+.v52-module-kpis span {
+  display: block;
+}
+
+.v52-module-kpis small {
+  color: #6c838e;
+  font-weight: 800;
+}
+
+.v52-module-kpis strong {
+  margin: 5px 0 2px;
+  color: #173f58;
+  font-size: 1.55rem;
+}
+
+.v52-module-kpis article.warning {
+  border-color: #f1d19a;
+  background: #fffaf0;
+}
+
+.v52-module-kpis article.success {
+  border-color: #bfe2d2;
+  background: #f4fbf8;
+}
+
+.v52-module-kpis article.primary {
+  border-color: #bad7e6;
+  background: #f1f8fb;
+}
+
+.v52-administrative-actions header,
+.v52-rental-management > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.v52-administrative-actions header > strong {
+  padding: 8px 11px;
+  border-radius: 999px;
+  color: #12664f;
+  background: #e7f7f0;
+  font-size: 0.75rem;
+}
+
+.v52-administrative-actions > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.v52-administrative-actions > div > button {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 11px;
+  min-height: 76px;
+  padding: 13px;
+  border: 1px solid #dfe8ec;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.v52-administrative-actions > div > button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(20, 47, 63, 0.08);
+}
+
+.v52-administrative-actions button i {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--action-color);
+  background: var(--action-bg);
+  font-style: normal;
+  font-weight: 850;
+}
+
+.v52-administrative-actions button strong,
+.v52-administrative-actions button small {
+  display: block;
+}
+
+.v52-administrative-actions button strong {
+  color: #294957;
+  font-size: 0.86rem;
+}
+
+.v52-administrative-actions button small {
+  margin-top: 3px;
+  color: #7a8e97;
+}
+
+.v52-administrative-actions button b {
+  color: #7d929c;
+  font-size: 1.3rem;
+}
+
+.v52-rental-management > header > strong {
+  display: grid;
+  min-width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 14px;
+  color: #9a4c13;
+  background: #fff1e6;
+  font-size: 1.35rem;
+}
+
+.v52-rental-management > div {
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid #dfe8ec;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.v52-rental-management article {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid #edf2f4;
+}
+
+.v52-rental-management article:first-child {
+  border-top: 0;
+}
+
+.v52-rental-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 11px;
+  color: #b45309;
+  background: #fff4e5;
+  font-size: 1.15rem;
+}
+
+.v52-rental-main strong,
+.v52-rental-main small,
+.v52-rental-main p {
+  display: block;
+}
+
+.v52-rental-main strong {
+  color: #294957;
+}
+
+.v52-rental-main small {
+  margin-top: 2px;
+  color: #758a94;
+}
+
+.v52-rental-main p {
+  margin-top: 5px !important;
+  font-size: 0.76rem !important;
+}
+
+.v52-rental-management article > a {
+  padding: 7px 10px;
+  border: 1px solid #cfe0e7;
+  border-radius: 9px;
+  color: #1f6076;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.v52-rental-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.v52-rental-actions button {
+  padding: 7px 9px;
+  border: 1px solid #bad7c9;
+  border-radius: 9px;
+  color: #12664f;
+  background: #eef9f4;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.v52-rental-actions button:last-child {
+  border-color: #edc5c5;
+  color: #a63737;
+  background: #fff4f4;
+}
+
+.v52-inline-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #cfe0e7;
+  border-radius: 10px;
+  color: #1f5b70;
+  background: #f2f8fa;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.v52-inline-detail:hover {
+  border-color: #8eb8c9;
+  background: #e8f3f7;
+}
+
+.v52-landlord-link {
+  max-width: 260px;
+  font-weight: 750;
+}
+
+.v52-index-guide {
+  margin: 0 20px 18px;
+  padding: 14px 16px;
+  border: 1px solid #d7e4ea;
+  border-radius: 14px;
+  background: #f6fafb;
+}
+
+.v52-index-guide strong {
+  color: #214b5c;
+  font-size: 0.85rem;
+}
+
+.v52-index-guide p {
+  margin: 4px 0 0 !important;
+  font-size: 0.79rem !important;
+}
+
+.module-purchases .module-heading,
+body:has(.sidebar button.active span:nth-child(2)) .module-heading {
+  background:
+    radial-gradient(circle at 92% 10%, rgba(3, 105, 161, 0.12), transparent 34%),
+    linear-gradient(135deg, #fff, #f5fafc) !important;
+}
+
+@media (max-width: 1200px) {
+  .v52-administrative-actions > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v52-rental-management article {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+  }
+
+  .v52-rental-management article > .status-pill,
+  .v52-rental-actions {
+    grid-column: 2 / -1;
+  }
+}
+
+@media (max-width: 1000px) {
+  .v52-module-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  html {
+    font-size: 15px;
+  }
+
+  .module-heading,
+  .v52-module-strip,
+  .v52-administrative-actions,
+  .v52-rental-management {
+    padding: 18px !important;
+    border-radius: 17px !important;
+  }
+
+  .v52-module-kpis,
+  .v52-administrative-actions > div {
+    grid-template-columns: 1fr;
+  }
+
+  .v52-administrative-actions header,
+  .v52-rental-management > header {
+    display: grid;
+  }
+
+  .v52-rental-management article {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .v52-rental-management article > a,
+  .v52-rental-management article > .status-pill,
+  .v52-rental-actions {
+    grid-column: 2;
+  }
+
+  .table-wrap th,
+  .table-wrap td {
+    white-space: nowrap;
+  }
+}
