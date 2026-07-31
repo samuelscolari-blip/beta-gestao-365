@@ -1,0 +1,35 @@
+name: Validar Cloudflare
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm run install:ci
+
+      - name: Verificar código
+        run: npm run lint
+
+      - name: Compilar aplicação
+        run: npm run build
+
+      - name: Executar testes
+        run: node --test tests/*.test.mjs
