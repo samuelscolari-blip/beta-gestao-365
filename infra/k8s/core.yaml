@@ -1,0 +1,194 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: beta-erp
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: beta-erp-core-config
+  namespace: beta-erp
+data:
+  NODE_ENV: production
+  PORT: "8080"
+  DATABASE_POOL_SIZE: "20"
+  ERP_SERVICE_CLIENT_ID: beta-gestao-365
+  ERP_ALLOWED_ORIGINS: https://beta-gestao-365.scolarisamuel.chatgpt.site
+  CERTIFICATE_PROVIDER: DISABLED
+  PAYROLL_WORKER_CONCURRENCY: "4"
+  FISCAL_WORKER_CONCURRENCY: "2"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: beta-erp-core-migrate
+  namespace: beta-erp
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app: beta-erp-core-migrate
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: REGISTRY/beta-erp-core:VERSION
+          command: ["node", "dist/services/erp-core/src/migrate.js"]
+          envFrom:
+            - configMapRef:
+                name: beta-erp-core-config
+            - secretRef:
+                name: beta-erp-core-secrets
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beta-erp-core-api
+  namespace: beta-erp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beta-erp-core-api
+  template:
+    metadata:
+      labels:
+        app: beta-erp-core-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: REGISTRY/beta-erp-core:VERSION
+          command: ["node", "dist/services/erp-core/src/main.js"]
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: beta-erp-core-config
+            - secretRef:
+                name: beta-erp-core-secrets
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beta-erp-core-api
+  namespace: beta-erp
+spec:
+  selector:
+    app: beta-erp-core-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beta-erp-core-worker
+  namespace: beta-erp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: beta-erp-core-worker
+  template:
+    metadata:
+      labels:
+        app: beta-erp-core-worker
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: worker
+          image: REGISTRY/beta-erp-core:VERSION
+          command: ["node", "dist/services/erp-core/src/worker.js"]
+          envFrom:
+            - configMapRef:
+                name: beta-erp-core-config
+            - secretRef:
+                name: beta-erp-core-secrets
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: beta-erp-core-api
+  namespace: beta-erp
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: beta-erp-core-api
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: beta-erp-core-worker
+  namespace: beta-erp
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: beta-erp-core-worker
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: beta-erp-core-api
+  namespace: beta-erp
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: beta-erp-core-api
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 65

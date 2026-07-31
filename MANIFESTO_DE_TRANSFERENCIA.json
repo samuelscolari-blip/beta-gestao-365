@@ -1,0 +1,41 @@
+{
+  "sistema": "Beta Gestão 365",
+  "organizacao": "Beta Construtora",
+  "coordenador": "Samuel Scolari",
+  "data_da_entrega": "2026-07-30",
+  "site": {
+    "titulo": "Beta Gestão 365",
+    "slug": "beta-gestao-365",
+    "url": "https://beta-gestao-365.scolarisamuel.chatgpt.site",
+    "project_id": "appgprj_6a67cdc58ee8819180fe477f9299edf7",
+    "versao_publicada": 51,
+    "commit": "e304021c25cdf5be679daa441c085cad5aa4269d",
+    "d1_binding": "DB"
+  },
+  "incluido": [
+    "codigo-fonte",
+    "lockfiles",
+    "migrations",
+    "testes",
+    "infraestrutura opcional",
+    "documentacao de continuidade e publicacao"
+  ],
+  "excluido_por_seguranca": [
+    "credenciais",
+    "tokens",
+    "cookies",
+    "certificados",
+    "arquivos .env reais",
+    "dados do banco de producao",
+    "node_modules",
+    "builds e caches",
+    "historico interno do Git"
+  ],
+  "publicacao_exige": [
+    "sessao autenticada de proprietario ou editor",
+    "edicao do projeto existente",
+    "preservacao do binding DB",
+    "lint, build e testes aprovados",
+    "confirmacao final da implantacao"
+  ]
+}

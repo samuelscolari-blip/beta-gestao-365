@@ -1,0 +1,46 @@
+{
+  "name": "@beta/erp-core",
+  "version": "0.2.0",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "db:migrate": "tsx src/migrate.ts",
+    "start:api": "node dist/services/erp-core/src/main.js",
+    "start:worker": "node dist/services/erp-core/src/worker.js",
+    "test": "npm run build && node --test dist/services/erp-core/tests/*.spec.js",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.8.11",
+    "@nestjs/bullmq": "^11.0.4",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@nestjs/schedule": "^6.0.0",
+    "bullmq": "^5.58.5",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "drizzle-orm": "^0.45.2",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.7.0",
+    "node-forge": "^1.3.1",
+    "postgres": "^3.4.7",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "xml-crypto": "^6.1.2",
+    "xpath": "^0.0.34"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.19.19",
+    "@types/node-forge": "^1.3.14",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

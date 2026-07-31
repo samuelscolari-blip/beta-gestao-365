@@ -1,0 +1,79 @@
+name: beta-erp-core
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-beta_erp}
+      POSTGRES_USER: ${POSTGRES_USER:-erp_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-erp_app} -d ${POSTGRES_DB:-beta_erp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - beta-postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - beta-redis-data:/data
+    restart: unless-stopped
+
+  migrate:
+    build:
+      context: ..
+      dockerfile: services/erp-core/Dockerfile
+    command: ["node", "dist/services/erp-core/src/migrate.js"]
+    env_file:
+      - ../services/erp-core/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    build:
+      context: ..
+      dockerfile: services/erp-core/Dockerfile
+    command: ["node", "dist/services/erp-core/src/main.js"]
+    env_file:
+      - ../services/erp-core/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ..
+      dockerfile: services/erp-core/Dockerfile
+    command: ["node", "dist/services/erp-core/src/worker.js"]
+    env_file:
+      - ../services/erp-core/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  beta-postgres-data:
+  beta-redis-data:

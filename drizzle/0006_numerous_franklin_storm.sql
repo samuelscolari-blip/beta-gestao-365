@@ -1,0 +1,1 @@
+ALTER TABLE `fiscal_documents` ADD `due_date` text DEFAULT '' NOT NULL;
