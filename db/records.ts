@@ -241,7 +241,7 @@ export async function ensureDemoRecords() {
   const db = await database();
   const existing = await db
     .prepare(
-      `SELECT id, module, reference, payload, source FROM records
+      `SELECT id, module, reference, status, payload, source FROM records
        WHERE tenant_id = ? AND TRIM(reference) <> ''`,
     )
     .bind(DEFAULT_TENANT_ID)
@@ -249,9 +249,59 @@ export async function ensureDemoRecords() {
       id: number;
       module: string;
       reference: string;
+      status: string;
       payload: string;
       source: string;
     }>();
+
+  const pendingStatusBackfills = (existing.results || []).flatMap((row) => {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    const topLevelUsesLegacyStatus = row.status === "Vence em 7 dias";
+    const payloadUsesLegacyStatus =
+      String(payload.status || "") === "Vence em 7 dias";
+    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];
+    return [{
+      id: row.id,
+      module: row.module,
+      payload: { ...payload, status: "Pendente" },
+    }];
+  });
+
+  if (pendingStatusBackfills.length) {
+    const updatedAt = new Date().toISOString();
+    await db.batch(
+      pendingStatusBackfills.map((record) =>
+        db
+          .prepare(
+            `UPDATE records
+             SET status = ?, payload = ?, updated_at = ?
+             WHERE tenant_id = ? AND id = ? AND source = ?`,
+          )
+          .bind(
+            "Pendente",
+            JSON.stringify(record.payload),
+            updatedAt,
+            DEFAULT_TENANT_ID,
+            record.id,
+            DEMO_SOURCE,
+          ),
+      ),
+    );
+    for (const record of pendingStatusBackfills) {
+      await audit(
+        "DEMO_REFRESH",
+        record.module,
+        record.id,
+        "Situação fictícia padronizada como Pendente",
+        "Sistema",
+      );
+    }
+  }
 
   const demoWorkerCounts = new Map(
     demoRecords

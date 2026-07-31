@@ -42,7 +42,6 @@ const statusFinanceiro = [
   "Pendente",
   "Aguardando aprovação",
   "Aprovado",
-  "Vence em 7 dias",
   "Vencido",
   "Pago",
   "Reprovado",
