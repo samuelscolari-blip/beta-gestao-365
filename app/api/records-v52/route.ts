@@ -66,9 +66,14 @@ function securedUrl(request: Request) {
 }
 
 function forwardRequest(request: Request, body?: unknown) {
+  const headers = new Headers(request.headers);
+  headers.delete("content-length");
+  if (body !== undefined) {
+    headers.set("content-type", "application/json; charset=utf-8");
+  }
   return new Request(securedUrl(request), {
     method: request.method,
-    headers: request.headers,
+    headers,
     body: body === undefined ? undefined : JSON.stringify(body),
   });
 }
