@@ -1,0 +1,30 @@
+.v52-financial-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #dfe9ed;
+}
+
+.v52-financial-links button {
+  padding: 9px 13px;
+  border: 1px solid #bdd5df;
+  border-radius: 10px;
+  color: #1e5b70;
+  background: #f2f8fa;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 760;
+}
+
+.v52-financial-links button:last-child {
+  color: #fff;
+  border-color: #173f58;
+  background: #173f58;
+}
+
+.v52-financial-links button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(20, 47, 63, 0.09);
+}
