@@ -22,11 +22,8 @@ jobs:
           node-version: 22.19.0
           cache: npm
 
-      - name: Preparar scripts do projeto
-        run: chmod +x scripts/*.sh
-
-      - name: Instalar dependências
-        run: npm run install:ci
+      - name: Instalar dependências como o Cloudflare
+        run: npm ci
 
       - name: Compilar versão final para Cloudflare
         run: npm run build
