@@ -1,0 +1,672 @@
+/*
+ * Execução da Obra — revisão visual V54
+ * Escopo isolado para não alterar os demais módulos do sistema.
+ */
+
+.construction-executive-v2 {
+  --v54-ink: #123047;
+  --v54-ink-strong: #09283d;
+  --v54-muted: #5c7384;
+  --v54-border: #d7e2e9;
+  --v54-soft: #f4f8fa;
+  --v54-soft-blue: #eaf7fb;
+  --v54-cyan: #18b9cc;
+  --v54-cyan-dark: #087f97;
+  --v54-green: #1d9b72;
+  --v54-orange: #d97706;
+  --v54-red: #d64545;
+  --v54-red-soft: #fff1f0;
+  --v54-shadow: 0 12px 34px rgba(16, 48, 70, 0.09);
+  color: var(--v54-ink);
+}
+
+/* Elimina o aspecto esmaecido causado pela combinação antiga de cores. */
+.construction-executive-v2 .construction-project-command,
+.construction-executive-v2 .construction-project-command * {
+  opacity: 1;
+  filter: none;
+}
+
+.construction-executive-v2 .construction-project-command {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.92fr) minmax(380px, 1.26fr) minmax(330px, 1.02fr);
+  gap: 18px;
+  align-items: stretch;
+  padding: 18px;
+  margin-top: 22px;
+  border: 1px solid var(--v54-border);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #f8fbfc 0%, #f2f7f9 100%);
+  box-shadow: 0 16px 42px rgba(22, 58, 78, 0.08);
+}
+
+.construction-executive-v2 .construction-project-command > div {
+  min-width: 0;
+  min-height: 330px;
+  padding: 26px;
+  border: 1px solid var(--v54-border);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: var(--v54-shadow);
+}
+
+/* =========================
+   CARD 1 — AVANÇO DA OBRA
+   ========================= */
+
+.construction-executive-v2 .construction-project-progress {
+  display: grid;
+  grid-template-columns: 142px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+}
+
+.construction-executive-v2 .construction-project-progress-gauge {
+  position: relative;
+  width: 138px;
+  height: 138px;
+  flex: 0 0 138px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #ffffff 0 56%, transparent 57%),
+    conic-gradient(
+      from 0deg,
+      var(--v54-cyan) 0 var(--project-progress),
+      #dfe9ee var(--project-progress) 360deg
+    );
+  box-shadow: 0 10px 25px rgba(8, 65, 87, 0.16);
+}
+
+.construction-executive-v2 .construction-project-progress-gauge::before,
+.construction-executive-v2 .construction-project-progress-gauge::after {
+  box-shadow: none;
+}
+
+.construction-executive-v2 .construction-project-progress-gauge > span {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: linear-gradient(150deg, #123d57 0%, #08283c 100%);
+  text-align: center;
+  box-shadow: 0 7px 18px rgba(8, 40, 60, 0.2);
+}
+
+.construction-executive-v2 .construction-project-progress-gauge strong {
+  display: block;
+  color: #ffffff;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -1.2px;
+}
+
+.construction-executive-v2 .construction-project-progress-gauge small {
+  margin-top: 8px;
+  color: #dff8fc;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child > small {
+  color: var(--v54-cyan-dark);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+/* O percentual já está no mostrador. Retirar a repetição deixa a leitura mais limpa. */
+.construction-executive-v2 .construction-project-progress > div:last-child > h3 {
+  display: none;
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child > p {
+  max-width: 30ch;
+  margin: 15px 0 12px;
+  color: var(--v54-ink);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.48;
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child > span.negative,
+.construction-executive-v2 .construction-project-progress > div:last-child > span.positive {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child > span.negative {
+  color: #a92828;
+  border: 1px solid #f2c4c0;
+  background: var(--v54-red-soft);
+}
+
+.construction-executive-v2 .construction-project-progress > div:last-child > span.positive {
+  color: #126c50;
+  border: 1px solid #bce8d7;
+  background: #ecfbf5;
+}
+
+.construction-executive-v2 .construction-operation-summary {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px 15px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #cfe0e8;
+  border-radius: 13px;
+  background: #f3f8fa;
+}
+
+.construction-executive-v2 .construction-operation-summary > b {
+  color: var(--v54-red);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.construction-executive-v2 .construction-operation-summary > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.construction-executive-v2 .construction-operation-summary strong {
+  color: var(--v54-ink-strong);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.construction-executive-v2 .construction-operation-summary small {
+  overflow: visible;
+  color: var(--v54-muted);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: initial;
+  white-space: normal;
+}
+
+/* =========================
+   CARD 2 — ETAPA ATUAL
+   ========================= */
+
+.construction-executive-v2 .construction-stage-highlight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.construction-executive-v2 .construction-stage-highlight > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e4ebef;
+}
+
+.construction-executive-v2 .construction-stage-highlight > header > span {
+  color: var(--v54-cyan-dark);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-stage-highlight > header > b {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #28627a;
+  background: #eaf5f8;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.construction-executive-v2 .construction-stage-highlight > h3 {
+  margin: 20px 0 6px;
+  color: var(--v54-ink-strong);
+  font-size: clamp(24px, 1.75vw, 31px);
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: -0.65px;
+}
+
+.construction-executive-v2 .construction-stage-highlight > p {
+  max-width: 56ch;
+  margin: 0;
+  color: #3e596b;
+  font-size: 16px;
+  font-weight: 550;
+  line-height: 1.55;
+}
+
+.construction-executive-v2 .construction-current-stage-progress {
+  margin-top: 22px;
+}
+
+.construction-executive-v2 .construction-current-stage-progress > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.construction-executive-v2 .construction-current-stage-progress small {
+  color: var(--v54-muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.construction-executive-v2 .construction-current-stage-progress strong {
+  color: var(--v54-cyan-dark);
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.construction-executive-v2 .construction-current-stage-progress > b {
+  display: block;
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce8ed;
+}
+
+.construction-executive-v2 .construction-current-stage-progress > b > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #17b3ca 0%, #2ac59f 100%);
+  box-shadow: none;
+}
+
+.construction-executive-v2 .construction-stage-highlight > footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.construction-executive-v2 .construction-stage-highlight > footer > span {
+  min-width: 0;
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid #dfe8ed;
+  border-radius: 13px;
+  background: #f8fafb;
+}
+
+.construction-executive-v2 .construction-stage-highlight > footer small {
+  color: #678091;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-stage-highlight > footer strong {
+  overflow: visible;
+  color: var(--v54-ink-strong);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+  text-overflow: initial;
+  white-space: normal;
+}
+
+.construction-executive-v2 .construction-stage-highlight > footer b {
+  color: var(--v54-cyan-dark);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+/* =========================
+   CARD 3 — FINANCEIRO
+   ========================= */
+
+.construction-executive-v2 .construction-cost-to-complete {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  border-top: 4px solid var(--v54-orange);
+}
+
+.construction-executive-v2 .construction-cost-to-complete.within {
+  border-top-color: var(--v54-green);
+}
+
+.construction-executive-v2 .construction-cost-to-complete.over {
+  border-top-color: var(--v54-red);
+}
+
+.construction-executive-v2 .construction-cost-to-complete > header {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > header > span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #b64f3f;
+  background: #ffe9e5;
+}
+
+.construction-executive-v2 .construction-cost-to-complete.within > header > span {
+  color: #187b5c;
+  background: #e7f8f1;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > header > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > header small {
+  color: var(--v54-ink-strong);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > header strong {
+  color: var(--v54-red);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.construction-executive-v2 .construction-cost-to-complete.within > header strong {
+  color: var(--v54-green);
+}
+
+.construction-executive-v2 .construction-finance-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.construction-executive-v2 .construction-finance-pair > span {
+  min-width: 0;
+  padding: 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #dfe8ed;
+  border-radius: 12px;
+  background: #fafcfd;
+}
+
+.construction-executive-v2 .construction-finance-pair small {
+  color: #60798b;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-finance-pair strong {
+  overflow: visible;
+  color: var(--v54-ink-strong);
+  font-size: clamp(16px, 1.25vw, 21px);
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: -0.35px;
+  text-overflow: initial;
+  white-space: normal;
+}
+
+.construction-executive-v2 .construction-finance-needed {
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #cfe0e8;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eef7fa 0%, #f7fbfc 100%);
+}
+
+.construction-executive-v2 .construction-finance-needed > small {
+  color: #5c7485;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.85px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-finance-needed > strong {
+  color: var(--v54-ink-strong);
+  font-size: clamp(25px, 2vw, 34px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -1px;
+}
+
+.construction-executive-v2 .construction-finance-needed > span {
+  color: #405d70;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px 12px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #e1e8ec;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > footer > span {
+  color: #667f90;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > footer > strong {
+  grid-row: 2;
+  color: var(--v54-ink-strong);
+  font-size: 17px;
+  font-weight: 850;
+}
+
+.construction-executive-v2 .construction-cost-to-complete > footer > b {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  max-width: 145px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  color: #a72c2c;
+  background: #ffe5e2;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.construction-executive-v2 .construction-cost-to-complete.within > footer > b {
+  color: #176a50;
+  background: #e6f7f0;
+}
+
+/* =========================
+   ÍNDICES LOGO ABAIXO
+   ========================= */
+
+.construction-executive-v2 .construction-capacity-section {
+  margin-top: 26px;
+}
+
+.construction-executive-v2 .construction-capacity-compact-header {
+  margin-bottom: 13px;
+}
+
+.construction-executive-v2 .construction-capacity-compact-header h3 {
+  color: var(--v54-ink-strong);
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.construction-executive-v2 .construction-capacity-grid-compact {
+  gap: 12px;
+}
+
+.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card {
+  min-height: 112px;
+  border: 1px solid var(--v54-border);
+  border-left-width: 4px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(16, 48, 70, 0.07);
+}
+
+.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card small {
+  color: #5a7182;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card strong {
+  color: var(--v54-ink-strong);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.construction-executive-v2 .construction-capacity-grid-compact .construction-kpi-card p {
+  color: #5b7181;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* =========================
+   RESPONSIVIDADE
+   ========================= */
+
+@media (max-width: 1320px) {
+  .construction-executive-v2 .construction-project-command {
+    grid-template-columns: minmax(290px, 0.9fr) minmax(350px, 1.15fr) minmax(310px, 1fr);
+  }
+
+  .construction-executive-v2 .construction-project-command > div {
+    padding: 22px;
+  }
+
+  .construction-executive-v2 .construction-project-progress {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .construction-executive-v2 .construction-project-progress-gauge {
+    width: 118px;
+    height: 118px;
+    flex-basis: 118px;
+  }
+
+  .construction-executive-v2 .construction-project-progress-gauge > span {
+    width: 82px;
+    height: 82px;
+  }
+
+  .construction-executive-v2 .construction-project-progress-gauge strong {
+    font-size: 27px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .construction-executive-v2 .construction-project-command {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .construction-executive-v2 .construction-cost-to-complete {
+    grid-column: 1 / -1;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .construction-executive-v2 .construction-project-command {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    border-radius: 18px;
+  }
+
+  .construction-executive-v2 .construction-project-command > div,
+  .construction-executive-v2 .construction-cost-to-complete {
+    grid-column: auto;
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .construction-executive-v2 .construction-project-progress {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .construction-executive-v2 .construction-project-progress > div:last-child {
+    align-items: center;
+  }
+
+  .construction-executive-v2 .construction-project-progress > div:last-child > p {
+    max-width: none;
+  }
+
+  .construction-executive-v2 .construction-stage-highlight > footer,
+  .construction-executive-v2 .construction-finance-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-cost-to-complete > footer {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-cost-to-complete > footer > b {
+    grid-row: auto;
+    grid-column: auto;
+    max-width: none;
+    text-align: left;
+  }
+}
