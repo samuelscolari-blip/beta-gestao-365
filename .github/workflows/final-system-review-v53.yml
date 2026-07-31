@@ -1,0 +1,61 @@
+name: Revisão final segura V53
+
+on:
+  push:
+    branches:
+      - final-system-review-v53
+
+permissions:
+  contents: write
+
+jobs:
+  apply-build-test:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Baixar a branch de revisão
+        uses: actions/checkout@v4
+        with:
+          ref: final-system-review-v53
+          fetch-depth: 0
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Validar sintaxe da transformação
+        run: python -m py_compile scripts/apply_final_system_review.py
+
+      - name: Aplicar melhorias com marcadores obrigatórios
+        run: python scripts/apply_final_system_review.py
+
+      - name: Instalar dependências bloqueadas
+        run: npm ci
+
+      - name: Compilar artefato Cloudflare
+        run: npm run build
+
+      - name: Executar todos os testes
+        run: node --test tests/*.test.mjs
+
+      - name: Conferir ausência de arquivos gerados indevidos
+        run: |
+          git status --short
+          test -f app/components/BetaApp.tsx
+          test -f app/components/BetaAppV52.tsx
+          test -f app/api/records/route.ts
+          test -f tests/final-system-review.test.mjs
+
+      - name: Registrar somente a versão aprovada
+        run: |
+          rm scripts/apply_final_system_review.py
+          rm .github/workflows/final-system-review-v53.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/components/BetaApp.tsx app/components/BetaAppV52.tsx app/api/records/route.ts app/globals.css db/demo-records.ts db/records.ts tests/final-system-review.test.mjs scripts/apply_final_system_review.py .github/workflows/final-system-review-v53.yml
+          git commit -m "Aplicar revisão executiva e fluxo financeiro V53"
+          git push origin HEAD:final-system-review-v53
