@@ -6,6 +6,7 @@ import "./v52.css";
 import "./v52-integrations.css";
 import "./construction-v54.css";
 import "./construction-v56.css";
+import "./cost-map-readability-v58.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
