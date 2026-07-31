@@ -45,14 +45,14 @@ const currency = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
-function patchField(module: ModuleDefinition, patch: FieldPatch) {
-  const field = module.fields.find((candidate) => candidate.key === patch.key);
+function patchField(moduleDefinition: ModuleDefinition, patch: FieldPatch) {
+  const field = moduleDefinition.fields.find((candidate) => candidate.key === patch.key);
   if (field) Object.assign(field, patch);
 }
 
-function keepFields(module: ModuleDefinition, keys: string[]) {
+function keepFields(moduleDefinition: ModuleDefinition, keys: string[]) {
   const positions = new Map(keys.map((key, index) => [key, index]));
-  module.fields = module.fields
+  moduleDefinition.fields = moduleDefinition.fields
     .filter((field) => positions.has(field.key))
     .sort(
       (left, right) =>
@@ -493,8 +493,8 @@ function findSidebarButton(text: string) {
 }
 
 function navigateAndCreate(moduleId: string) {
-  const module = moduleMap[moduleId];
-  const navButton = findSidebarButton(module?.shortLabel || moduleId);
+  const moduleDefinition = moduleMap[moduleId];
+  const navButton = findSidebarButton(moduleDefinition?.shortLabel || moduleId);
   navButton?.click();
   window.setTimeout(() => {
     document
