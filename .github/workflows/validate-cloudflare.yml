@@ -1,20 +1,22 @@
-name: Validar Cloudflare
+name: Validar e aplicar status pendente
 
 on:
   pull_request:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  build-and-test:
+  patch-build-and-test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Baixar código
+      - name: Baixar branch da correção
         uses: actions/checkout@v4
+        with:
+          ref: fix-status-pendente
+          fetch-depth: 0
 
       - name: Preparar Node.js
         uses: actions/setup-node@v4
@@ -22,11 +24,172 @@ jobs:
           node-version: 22.19.0
           cache: npm
 
-      - name: Instalar dependências como o Cloudflare
+      - name: Aplicar Pendente no código e na migração do D1
+        shell: python
+        run: |
+          from pathlib import Path
+
+          modules = Path("app/lib/modules.ts")
+          text = modules.read_text(encoding="utf-8")
+          old_option = '  "Vence em 7 dias",\n'
+          if old_option not in text:
+              raise SystemExit("Opção antiga não encontrada em app/lib/modules.ts")
+          modules.write_text(text.replace(old_option, "", 1), encoding="utf-8")
+
+          demo = Path("db/demo-records.ts")
+          text = demo.read_text(encoding="utf-8")
+          count = text.count('"Vence em 7 dias"')
+          if count < 2:
+              raise SystemExit("Registros fictícios antigos não encontrados")
+          demo.write_text(text.replace('"Vence em 7 dias"', '"Pendente"'), encoding="utf-8")
+
+          records = Path("db/records.ts")
+          text = records.read_text(encoding="utf-8")
+
+          old_select = "SELECT id, module, reference, payload, source FROM records"
+          new_select = "SELECT id, module, reference, status, payload, source FROM records"
+          if old_select not in text:
+              raise SystemExit("Consulta da base fictícia não encontrada")
+          text = text.replace(old_select, new_select, 1)
+
+          old_type = '''      reference: string;
+      payload: string;
+      source: string;
+'''
+          new_type = '''      reference: string;
+      status: string;
+      payload: string;
+      source: string;
+'''
+          if old_type not in text:
+              raise SystemExit("Tipo da consulta fictícia não encontrado")
+          text = text.replace(old_type, new_type, 1)
+
+          marker = '''    }>();
+
+  const demoWorkerCounts = new Map(
+'''
+          insertion = '''    }>();
+
+  const pendingStatusBackfills = (existing.results || []).flatMap((row) => {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    const topLevelUsesLegacyStatus = row.status === "Vence em 7 dias";
+    const payloadUsesLegacyStatus =
+      String(payload.status || "") === "Vence em 7 dias";
+    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];
+    return [{
+      id: row.id,
+      module: row.module,
+      payload: { ...payload, status: "Pendente" },
+    }];
+  });
+
+  if (pendingStatusBackfills.length) {
+    const updatedAt = new Date().toISOString();
+    await db.batch(
+      pendingStatusBackfills.map((record) =>
+        db
+          .prepare(
+            `UPDATE records
+             SET status = ?, payload = ?, updated_at = ?
+             WHERE tenant_id = ? AND id = ? AND source = ?`,
+          )
+          .bind(
+            "Pendente",
+            JSON.stringify(record.payload),
+            updatedAt,
+            DEFAULT_TENANT_ID,
+            record.id,
+            DEMO_SOURCE,
+          ),
+      ),
+    );
+    for (const record of pendingStatusBackfills) {
+      await audit(
+        "DEMO_REFRESH",
+        record.module,
+        record.id,
+        "Situação fictícia padronizada como Pendente",
+        "Sistema",
+      );
+    }
+  }
+
+  const demoWorkerCounts = new Map(
+'''
+          if marker not in text:
+              raise SystemExit("Ponto de inserção da migração não encontrado")
+          records.write_text(text.replace(marker, insertion, 1), encoding="utf-8")
+
+          test = Path("tests/pending-status.test.mjs")
+          test.write_text('''import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import test from "node:test";
+
+test("uses Pendente instead of the legacy seven-day status", async () => {
+  const modules = await readFile("app/lib/modules.ts", "utf8");
+  const demo = await readFile("db/demo-records.ts", "utf8");
+  const records = await readFile("db/records.ts", "utf8");
+  assert.doesNotMatch(modules, /"Vence em 7 dias",/);
+  assert.doesNotMatch(demo, /Vence em 7 dias/);
+  assert.match(records, /topLevelUsesLegacyStatus/);
+  assert.match(records, /Situação fictícia padronizada como Pendente/);
+});
+''', encoding="utf-8")
+
+      - name: Instalar dependências
         run: npm ci
 
-      - name: Compilar versão final para Cloudflare
+      - name: Compilar versão final
         run: npm run build
 
       - name: Executar testes
         run: node --test tests/*.test.mjs
+
+      - name: Restaurar workflow normal e registrar a correção
+        run: |
+          cat > .github/workflows/validate-cloudflare.yml <<'EOF'
+          name: Validar Cloudflare
+
+          on:
+            pull_request:
+              branches: [main]
+            workflow_dispatch:
+
+          permissions:
+            contents: read
+
+          jobs:
+            build-and-test:
+              runs-on: ubuntu-latest
+              timeout-minutes: 20
+              steps:
+                - name: Baixar código
+                  uses: actions/checkout@v4
+
+                - name: Preparar Node.js
+                  uses: actions/setup-node@v4
+                  with:
+                    node-version: 22.19.0
+                    cache: npm
+
+                - name: Instalar dependências como o Cloudflare
+                  run: npm ci
+
+                - name: Compilar versão final para Cloudflare
+                  run: npm run build
+
+                - name: Executar testes
+                  run: node --test tests/*.test.mjs
+          EOF
+          rm -f .github/workflows/apply-pending-status.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/lib/modules.ts db/demo-records.ts db/records.ts tests/pending-status.test.mjs .github/workflows/validate-cloudflare.yml .github/workflows/apply-pending-status.yml
+          git commit -m "Padronizar vencimentos como pendentes"
+          git push origin HEAD:fix-status-pendente
