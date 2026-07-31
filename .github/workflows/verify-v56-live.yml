@@ -1,12 +1,9 @@
-name: Verificar V56 publicada
+name: Verificar V57 publicada
 
 on:
   push:
     branches:
       - verify-v56-live-published
-  pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -22,7 +19,7 @@ jobs:
       - name: Instalar Selenium
         run: python -m pip install --disable-pip-version-check selenium
 
-      - name: Confirmar V56 no site oficial
+      - name: Confirmar identidade visual V57 no site oficial
         shell: python
         run: |
           import json
@@ -45,7 +42,7 @@ jobs:
           options.add_argument("--disable-gpu")
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("--disable-extensions")
-          options.add_argument("--window-size=1700,1100")
+          options.add_argument("--window-size=1700,1200")
 
           driver = webdriver.Chrome(options=options)
           wait = WebDriverWait(driver, 70)
@@ -67,43 +64,45 @@ jobs:
           def state():
               return driver.execute_script(
                   """
-                  const dashboard = document.querySelector('.construction-dashboard-v56');
-                  const kpiRow = document.querySelector('.construction-kpi-row-v56');
-                  const kpis = [...document.querySelectorAll('.construction-kpi-row-v56 > article')];
-                  const mainGrid = document.querySelector('.construction-main-grid-v56');
-                  const stage = document.querySelector('.construction-stage-card-v56');
-                  const budget = document.querySelector('.construction-budget-card-v56');
-                  const priority = document.querySelector('.construction-priority-board');
-                  const health = document.querySelector('.construction-health-board');
-                  const spinner = document.querySelector('.page-area .loading-state');
-                  const oldBlock = document.querySelector('.construction-project-command');
-                  const style = (el) => el ? getComputedStyle(el) : null;
+                  const pick = (selector) => document.querySelector(selector);
+                  const all = (selector) => [...document.querySelectorAll(selector)];
+                  const style = (element) => element ? getComputedStyle(element) : null;
+                  const dashboard = pick('.construction-dashboard-v56');
+                  const kpis = all('.construction-kpi-row-v56 > article');
+                  const stage = pick('.construction-stage-card-v56');
+                  const budget = pick('.construction-budget-card-v56');
+                  const priority = pick('.construction-priority-board');
+                  const health = pick('.construction-health-board');
+                  const workforce = pick('.construction-workforce-card');
+                  const loss = pick('.construction-loss-card');
+                  const spinner = pick('.page-area .loading-state');
                   return {
                     dashboard: Boolean(dashboard),
                     spinner: Boolean(spinner),
-                    oldBlock: Boolean(oldBlock),
                     kpiCount: kpis.length,
-                    kpiDisplay: style(kpiRow)?.display || '',
-                    kpiColumns: style(kpiRow)?.gridTemplateColumns || '',
-                    kpiValues: kpis.map((item) => item.querySelector(':scope > strong')?.textContent?.trim() || ''),
-                    kpiBackgrounds: kpis.map((item) => style(item)?.backgroundColor || ''),
-                    mainDisplay: style(mainGrid)?.display || '',
-                    mainColumns: style(mainGrid)?.gridTemplateColumns || '',
-                    stageTitleSize: style(stage?.querySelector('h3'))?.fontSize || '',
-                    budgetValueSize: style(budget?.querySelector('h3'))?.fontSize || '',
-                    stageBorder: style(stage)?.borderLeftWidth || '',
-                    budgetBorder: style(budget)?.borderLeftWidth || '',
-                    priority: Boolean(priority),
-                    health: Boolean(health),
-                    text: dashboard?.textContent?.replace(/\s+/g, ' ').trim().slice(0, 500) || ''
+                    dashboardBackground: style(dashboard)?.backgroundImage || '',
+                    dashboardTitleColor: style(pick('.construction-dashboard-heading-v56 h3'))?.color || '',
+                    kpiBackgrounds: kpis.map((item) => style(item)?.backgroundImage || ''),
+                    kpiValueColors: kpis.map((item) => style(item.querySelector(':scope > strong'))?.color || ''),
+                    stageBackground: style(stage)?.backgroundImage || '',
+                    stageTitleColor: style(stage?.querySelector('h3'))?.color || '',
+                    budgetBackground: style(budget)?.backgroundImage || '',
+                    budgetValueColor: style(budget?.querySelector('h3'))?.color || '',
+                    priorityBackground: style(priority)?.backgroundImage || '',
+                    healthBackground: style(health)?.backgroundImage || '',
+                    workforceBackground: style(workforce)?.backgroundImage || '',
+                    lossBackground: style(loss)?.backgroundImage || '',
+                    workforceTitleColor: style(workforce?.querySelector('h3'))?.color || '',
+                    lossTitleColor: style(loss?.querySelector('h3'))?.color || '',
+                    text: dashboard?.textContent?.replace(/\s+/g, ' ').trim().slice(0, 360) || ''
                   };
                   """
               )
 
           last = None
           try:
-              for attempt in range(1, 21):
-                  driver.get(f"{base}/?__v56={int(time.time() * 1000)}")
+              for attempt in range(1, 25):
+                  driver.get(f"{base}/?__v57={int(time.time() * 1000)}")
                   wait.until(lambda d: d.find_elements(By.CSS_SELECTOR, ".sidebar nav button"))
                   wait.until(lambda d: not d.find_elements(By.CSS_SELECTOR, ".page-area .loading-state"))
                   if not click_sidebar("Execução da Obra"):
@@ -112,35 +111,43 @@ jobs:
                   wait.until(lambda d: not d.find_elements(By.CSS_SELECTOR, ".page-area .loading-state"))
                   time.sleep(1)
                   last = state()
-                  stage_size = float(last["stageTitleSize"].replace("px", "") or 0)
-                  budget_size = float(last["budgetValueSize"].replace("px", "") or 0)
+                  gradients = [
+                      last["dashboardBackground"],
+                      last["stageBackground"],
+                      last["budgetBackground"],
+                      last["priorityBackground"],
+                      last["healthBackground"],
+                      last["workforceBackground"],
+                      last["lossBackground"],
+                  ]
+                  white_text = [
+                      last["dashboardTitleColor"],
+                      last["stageTitleColor"],
+                      last["budgetValueColor"],
+                      last["workforceTitleColor"],
+                      last["lossTitleColor"],
+                  ]
                   published = (
                       last["dashboard"]
                       and not last["spinner"]
-                      and not last["oldBlock"]
                       and last["kpiCount"] == 4
-                      and last["kpiDisplay"] == "grid"
-                      and last["mainDisplay"] == "grid"
-                      and all(value for value in last["kpiValues"])
-                      and all(color == "rgb(255, 255, 255)" for color in last["kpiBackgrounds"])
-                      and stage_size >= 22
-                      and budget_size >= 28
-                      and last["stageBorder"] == "5px"
-                      and last["budgetBorder"] == "5px"
-                      and last["priority"]
-                      and last["health"]
+                      and all("gradient" in value for value in gradients)
+                      and all("gradient" in value for value in last["kpiBackgrounds"])
+                      and all(value == "rgb(255, 255, 255)" for value in last["kpiValueColors"])
+                      and all(value == "rgb(255, 255, 255)" for value in white_text)
                   )
-                  print(f"Tentativa {attempt}/20: {json.dumps(last, ensure_ascii=False)}")
+                  print(f"Tentativa {attempt}/24: {json.dumps(last, ensure_ascii=False)}")
                   if published:
-                      print("V56_PUBLICADA=SIM")
-                      print("QUATRO_KPIS=SIM")
-                      print("GRID_EXECUTIVO=SIM")
-                      print("CORES_E_CONTRASTE=SIM")
-                      print("BLOCO_ANTIGO=NAO")
+                      print("V57_PUBLICADA=SIM")
+                      print("AZUL_EXECUTIVO=SIM")
+                      print("QUATRO_KPIS_COM_CONTRASTE=SIM")
+                      print("ETAPA_E_ORCAMENTO_ESCURECIDOS=SIM")
+                      print("PRIORIDADES_E_LEITURA_UNIFICADAS=SIM")
+                      print("OPERACAO_E_PRODUTIVIDADE_UNIFICADAS=SIM")
                       print("CARREGAMENTO_INFINITO=NAO")
                       break
-                  if attempt == 20:
-                      raise RuntimeError(f"A V56 não foi confirmada no site oficial: {last}")
+                  if attempt == 24:
+                      raise RuntimeError(f"A V57 não foi confirmada no site oficial: {last}")
                   time.sleep(15)
           finally:
               driver.quit()
