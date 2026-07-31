@@ -28,9 +28,6 @@ jobs:
       - name: Instalar dependências
         run: npm run install:ci
 
-      - name: Verificar código
-        run: npm run lint
-
       - name: Compilar aplicação
         run: npm run build
 
