@@ -22,11 +22,11 @@ const evidenceByModule: Record<string, string> = {
   purchases: "documentsUrl",
 };
 
-const partyDocumentsByModule: Record<string, string[]> = {
-  expenses: ["supplierDocument", "supplierCode"],
-  cards: ["merchantDocument", "cardEnding"],
-  food: ["supplierDocument", "supplierCode"],
-  rentals: ["landlordDocument", "work"],
+const partyDocumentByModule: Record<string, string> = {
+  expenses: "supplierDocument",
+  cards: "merchantDocument",
+  food: "supplierDocument",
+  rentals: "landlordDocument",
 };
 
 function hasValue(value: unknown) {
@@ -47,12 +47,8 @@ function validateRecord(record: RecordInput) {
     );
   }
 
-  const partyKeys = partyDocumentsByModule[moduleId] || [];
-  if (
-    amount > 0 &&
-    partyKeys.length > 0 &&
-    !partyKeys.some((key) => hasValue(payload[key]))
-  ) {
+  const partyKey = partyDocumentByModule[moduleId];
+  if (amount > 0 && partyKey && !hasValue(payload[partyKey])) {
     throw new Error(
       "Lançamento bloqueado: informe o CPF ou CNPJ do fornecedor, estabelecimento ou locador.",
     );
