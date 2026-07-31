@@ -25,6 +25,10 @@ type ApiRecord = {
   [key: string]: unknown;
 };
 
+const MANAGEMENT_TITLE = "Documentos para decisão da gerência";
+const MANAGEMENT_DESCRIPTION =
+  "Compras, pagamentos, cartões e aluguéis documentados para a gerência conferir e decidir. O sistema não recomenda aprovação ou reprovação.";
+
 function addVisibleFields(record: ApiRecord): ApiRecord {
   const payload = { ...(record.payload || {}) };
   const moduleId = String(record.module || "");
@@ -173,7 +177,9 @@ export default function SecureBetaAppV52(props: Props) {
     const enhanceInterface = () => {
       const layer = document.querySelector<HTMLElement>(".v52-floating-layer");
       const pageArea = document.querySelector<HTMLElement>(".page-area");
-      if (layer) layer.removeAttribute("aria-hidden");
+      if (layer?.hasAttribute("aria-hidden")) {
+        layer.removeAttribute("aria-hidden");
+      }
       if (layer && pageArea && layer.parentElement !== pageArea) {
         pageArea.prepend(layer);
       }
@@ -182,10 +188,14 @@ export default function SecureBetaAppV52(props: Props) {
       if (management) {
         const title = management.querySelector<HTMLElement>(".management-heading h2");
         const description = management.querySelector<HTMLElement>(".management-heading p");
-        if (title) title.textContent = "Documentos para decisão da gerência";
-        if (description) {
-          description.textContent =
-            "Compras, pagamentos, cartões e aluguéis documentados para a gerência conferir e decidir. O sistema não recomenda aprovação ou reprovação.";
+        if (title && title.textContent !== MANAGEMENT_TITLE) {
+          title.textContent = MANAGEMENT_TITLE;
+        }
+        if (
+          description &&
+          description.textContent !== MANAGEMENT_DESCRIPTION
+        ) {
+          description.textContent = MANAGEMENT_DESCRIPTION;
         }
       }
 
@@ -214,11 +224,23 @@ export default function SecureBetaAppV52(props: Props) {
       }
     };
 
-    enhanceInterface();
-    const observer = new MutationObserver(enhanceInterface);
+    let animationFrame: number | null = null;
+    const scheduleEnhancement = () => {
+      if (animationFrame !== null) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        enhanceInterface();
+      });
+    };
+
+    scheduleEnhancement();
+    const observer = new MutationObserver(scheduleEnhancement);
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
       observer.disconnect();
       window.fetch = previousFetch;
     };
