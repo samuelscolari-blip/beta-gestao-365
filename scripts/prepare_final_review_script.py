@@ -97,9 +97,9 @@ text = replace_exact(
 )
 
 financial_name_count = text.count("financialStatusBackfills")
-if financial_name_count != 3:
+if financial_name_count != 5:
     raise RuntimeError(
-        f"Nome do backfill financeiro: esperado 3 usos, encontrado {financial_name_count}."
+        f"Nome do backfill financeiro: esperado 5 usos, encontrado {financial_name_count}."
     )
 text = text.replace("financialStatusBackfills", "pendingStatusBackfills")
 
