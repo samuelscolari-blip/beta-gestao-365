@@ -96,5 +96,49 @@ text = replace_exact(
     "Delimitador final da normalização do D1",
 )
 
+financial_name_count = text.count("financialStatusBackfills")
+if financial_name_count != 3:
+    raise RuntimeError(
+        f"Nome do backfill financeiro: esperado 3 usos, encontrado {financial_name_count}."
+    )
+text = text.replace("financialStatusBackfills", "pendingStatusBackfills")
+
+section_marker = "# ---------------------------------------------------------------------------\n# 4. Central Financeira e painel executivo de obras\n# ---------------------------------------------------------------------------"
+modules_block = r'''# ---------------------------------------------------------------------------
+# 4. Opções-base do fluxo financeiro
+# ---------------------------------------------------------------------------
+modules_path = "app/lib/modules.ts"
+modules = read(modules_path)
+modules = replace_once(
+    modules,
+    r'''const statusFinanceiro = [
+  "Pendente",
+  "Aguardando aprovação",
+  "Aprovado",
+  "Vencido",
+  "Pago",
+  "Reprovado",
+  "Cancelado",
+];''',
+    r'''const statusFinanceiro = [
+  "Aguardando validação",
+  "Reprovado",
+  "Pago",
+];''',
+    "Opções-base do status financeiro",
+)
+write(modules_path, modules)
+
+
+# ---------------------------------------------------------------------------
+# 5. Central Financeira e painel executivo de obras
+# ---------------------------------------------------------------------------'''
+text = replace_exact(
+    text,
+    section_marker,
+    modules_block,
+    "Inserção da configuração-base financeira",
+)
+
 path.write_text(text, encoding="utf-8")
-print("Transformação principal ajustada com marcadores específicos.")
+print("Transformação principal ajustada com validações e compatibilidade.")
