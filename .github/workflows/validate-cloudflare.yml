@@ -22,6 +22,11 @@ jobs:
           node-version: 22.19.0
           cache: npm
 
+      - name: Confirmar WebSocket nativo e sintaxe do diagnóstico
+        run: |
+          node -e "if (typeof WebSocket !== 'function') throw new Error('WebSocket global indisponível')"
+          node --check scripts/live-browser-diagnostic.mjs
+
       - name: Instalar dependências como o Cloudflare
         run: npm ci
 
