@@ -1,0 +1,54 @@
+name: Aplicar correção dos status de demonstração
+
+on:
+  push:
+    branches:
+      - fix-demo-records-validation
+
+permissions:
+  contents: write
+
+jobs:
+  fix-demo-statuses:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+        with:
+          ref: fix-demo-records-validation
+          fetch-depth: 0
+
+      - name: Corrigir status incompatíveis
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('db/demo-records.ts')
+          text = path.read_text(encoding='utf-8')
+          replacements = [
+              ('"TST-CMP-001", "Em cotação"', '"TST-CMP-001", "Aguardando análise"'),
+              ('status: "Em cotação", documentsUrl: docs("compra-001")', 'status: "Aguardando análise", documentsUrl: docs("compra-001")'),
+              ('"TST-CMP-002", "Aguardando aprovação"', '"TST-CMP-002", "Aguardando análise"'),
+              ('status: "Aguardando aprovação", documentsUrl: docs("compra-002")', 'status: "Aguardando análise", documentsUrl: docs("compra-002")'),
+              ('"TST-CMP-003", "Recebida"', '"TST-CMP-003", "Aprovado"'),
+              ('receivedQty: 10000, status: "Recebida", documentsUrl: docs("compra-003")', 'receivedQty: 10000, status: "Aprovado", documentsUrl: docs("compra-003")'),
+          ]
+
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'Esperava exatamente 1 ocorrência de {old!r}, encontrei {count}.')
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Confirmar e enviar correção
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add db/demo-records.ts
+          git diff --cached --check
+          git commit -m "Corrigir status dos registros fictícios de compras"
+          git push origin HEAD:fix-demo-records-validation
