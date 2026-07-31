@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - verify-v56-live-published
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
