@@ -1,0 +1,47 @@
+name: Corrigir nome reservado module
+
+on:
+  push:
+    branches: [cloudflare-deploy]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-module-name:
+    if: ${{ !contains(github.event.head_commit.message, '[module-name-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cloudflare-deploy
+
+      - name: Renomear variável reservada
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('app/components/BetaAppV52.tsx')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              'function patchField(module: ModuleDefinition, patch: FieldPatch) {\n  const field = module.fields.find',
+              'function patchField(moduleDefinition: ModuleDefinition, patch: FieldPatch) {\n  const field = moduleDefinition.fields.find',
+          )
+          text = text.replace(
+              'function keepFields(module: ModuleDefinition, keys: string[]) {\n  const positions = new Map(keys.map((key, index) => [key, index]));\n  module.fields = module.fields',
+              'function keepFields(moduleDefinition: ModuleDefinition, keys: string[]) {\n  const positions = new Map(keys.map((key, index) => [key, index]));\n  moduleDefinition.fields = moduleDefinition.fields',
+          )
+          text = text.replace(
+              '  const module = moduleMap[moduleId];\n  const navButton = findSidebarButton(module?.shortLabel || moduleId);',
+              '  const moduleDefinition = moduleMap[moduleId];\n  const navButton = findSidebarButton(moduleDefinition?.shortLabel || moduleId);',
+          )
+          path.write_text(text, encoding='utf-8')
+          PY
+          rm .github/workflows/apply-module-name-fix.yml
+
+      - name: Salvar correção
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/components/BetaAppV52.tsx .github/workflows/apply-module-name-fix.yml
+          git commit -m "Renomear variável reservada da interface [module-name-fix]"
+          git push origin HEAD:cloudflare-deploy
