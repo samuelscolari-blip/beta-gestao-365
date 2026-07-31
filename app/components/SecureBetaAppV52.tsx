@@ -1,17 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect } from "react";
-
-const BetaAppV52 = dynamic(() => import("./BetaAppV52Ready"), {
-  ssr: false,
-  loading: () => (
-    <div className="loading-state">
-      <span className="loading-mark" />
-      <p>Carregando a central de gestão…</p>
-    </div>
-  ),
-});
+import BetaAppV52 from "./BetaAppV52Ready";
 
 type Props = {
   userName?: string | null;
@@ -28,26 +18,38 @@ type ApiRecord = {
 function addVisibleFields(record: ApiRecord): ApiRecord {
   const payload = { ...(record.payload || {}) };
   const moduleId = String(record.module || "");
-  if (moduleId === "expenses") payload.supplierDocument ||= payload.supplierCode || "";
+  if (moduleId === "expenses") {
+    payload.supplierDocument ||= payload.supplierCode || "";
+  }
   if (moduleId === "cards") {
     payload.cardName ||= payload.holder || "";
     payload.merchantDocument ||= payload.cardEnding || "";
   }
-  if (moduleId === "food") payload.supplierDocument ||= payload.supplierCode || "";
-  if (moduleId === "rentals") payload.landlordDocument ||= payload.work || "";
+  if (moduleId === "food") {
+    payload.supplierDocument ||= payload.supplierCode || "";
+  }
+  if (moduleId === "rentals") {
+    payload.landlordDocument ||= payload.work || "";
+  }
   return { ...record, payload };
 }
 
 function addLegacyAliases(record: ApiRecord): ApiRecord {
   const payload = { ...(record.payload || {}) };
   const moduleId = String(record.module || "");
-  if (moduleId === "expenses") payload.supplierCode = payload.supplierDocument || "";
+  if (moduleId === "expenses") {
+    payload.supplierCode = payload.supplierDocument || "";
+  }
   if (moduleId === "cards") {
     payload.holder = payload.cardName || "";
     payload.cardEnding = payload.merchantDocument || "";
   }
-  if (moduleId === "food") payload.supplierCode = payload.supplierDocument || "";
-  if (moduleId === "rentals") payload.work = payload.landlordDocument || "";
+  if (moduleId === "food") {
+    payload.supplierCode = payload.supplierDocument || "";
+  }
+  if (moduleId === "rentals") {
+    payload.work = payload.landlordDocument || "";
+  }
   return { ...record, payload };
 }
 
@@ -133,12 +135,19 @@ export default function SecureBetaAppV52(props: Props) {
       );
 
       if (!isRecordsUrl(input) || method !== "GET") return response;
+
       try {
-        const body = (await response.clone().json()) as {
+        const body = (await response.json()) as {
           records?: ApiRecord[];
           [key: string]: unknown;
         };
-        if (!Array.isArray(body.records)) return response;
+        if (!Array.isArray(body.records)) {
+          return new Response(JSON.stringify(body), {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers,
+          });
+        }
         const headers = new Headers(response.headers);
         headers.delete("content-length");
         headers.set("content-type", "application/json; charset=utf-8");
@@ -155,7 +164,9 @@ export default function SecureBetaAppV52(props: Props) {
       const layer = document.querySelector<HTMLElement>(".v52-floating-layer");
       const pageArea = document.querySelector<HTMLElement>(".page-area");
       if (layer) layer.removeAttribute("aria-hidden");
-      if (layer && pageArea && layer.parentElement !== pageArea) pageArea.prepend(layer);
+      if (layer && pageArea && layer.parentElement !== pageArea) {
+        pageArea.prepend(layer);
+      }
 
       const management = document.querySelector<HTMLElement>(".management-center");
       if (management) {
@@ -196,16 +207,8 @@ export default function SecureBetaAppV52(props: Props) {
     enhanceInterface();
     const observer = new MutationObserver(enhanceInterface);
     observer.observe(document.body, { childList: true, subtree: true });
-    const refreshTimer = window.setTimeout(() => {
-      document
-        .querySelector<HTMLButtonElement>(
-          '.topbar button[aria-label="Atualizar dados"]',
-        )
-        ?.click();
-    }, 250);
 
     return () => {
-      window.clearTimeout(refreshTimer);
       observer.disconnect();
       window.fetch = previousFetch;
     };
