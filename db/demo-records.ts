@@ -533,27 +533,27 @@ export const demoRecords: DemoRecord[] = [
     responsible: "Fiscal Teste",
   }),
 
-  demo("purchases", "Cimento CP-II — solicitação fictícia", "TST-CMP-001", "Em cotação", "2026-07-27", 9800, {
+  demo("purchases", "Cimento CP-II — solicitação fictícia", "TST-CMP-001", "Aguardando análise", "2026-07-27", 9800, {
     requestId: "TST-CMP-001", requestDate: "2026-07-27", work: "Residencial Horizonte — Obra Teste",
     requester: "Encarregado Teste 01", material: "Cimento CP-II — solicitação fictícia",
     quantity: 200, unit: "saco", neededDate: "2026-08-03", priority: "Alta",
     minimumQuotes: 3, quotesReceived: 2, supplier: "Em definição", totalAmount: 9800,
-    approval: "Pendente", status: "Em cotação", documentsUrl: docs("compra-001"),
+    approval: "Pendente", status: "Aguardando análise", documentsUrl: docs("compra-001"),
   }),
-  demo("purchases", "Cabos elétricos — solicitação fictícia", "TST-CMP-002", "Aguardando aprovação", "2026-07-25", 7240.5, {
+  demo("purchases", "Cabos elétricos — solicitação fictícia", "TST-CMP-002", "Aguardando análise", "2026-07-25", 7240.5, {
     requestId: "TST-CMP-002", requestDate: "2026-07-25", work: "Galpão Industrial Modelo — Obra Teste",
     requester: "Encarregado Teste 02", material: "Cabos elétricos — solicitação fictícia",
     quantity: 850, unit: "metro", neededDate: "2026-08-05", priority: "Média",
     minimumQuotes: 3, quotesReceived: 3, supplier: "Elétrica Exemplo", totalAmount: 7240.5,
-    approval: "Pendente", status: "Aguardando aprovação", documentsUrl: docs("compra-002"),
+    approval: "Pendente", status: "Aguardando análise", documentsUrl: docs("compra-002"),
   }),
-  demo("purchases", "Tijolos cerâmicos — compra fictícia", "TST-CMP-003", "Recebida", "2026-07-18", 11600, {
+  demo("purchases", "Tijolos cerâmicos — compra fictícia", "TST-CMP-003", "Aprovado", "2026-07-18", 11600, {
     requestId: "TST-CMP-003", requestDate: "2026-07-18", work: "Reforma Administrativa — Obra Teste",
     requester: "Encarregado Teste 03", material: "Tijolos cerâmicos — compra fictícia",
     quantity: 10000, unit: "unidade", neededDate: "2026-07-24", priority: "Alta",
     minimumQuotes: 3, quotesReceived: 3, supplier: "Materiais Exemplo Ltda.", totalAmount: 11600,
     approval: "Aprovada", orderNumber: "PED-TST-003", receivedDate: "2026-07-24",
-    receivedQty: 10000, status: "Recebida", documentsUrl: docs("compra-003"),
+    receivedQty: 10000, status: "Aprovado", documentsUrl: docs("compra-003"),
   }),
 
   demo("compliance", "Remuneração mensal — lote fictício", "TST-ESOC-S1200-001", "Validado internamente", "2026-07-01", 0, {
