@@ -4,70 +4,181 @@ async function read(path) {
   return readFile(path, "utf8");
 }
 
-async function writeWhenChanged(path, previous, next) {
-  if (previous === next) return false;
-  await writeFile(path, next, "utf8");
-  console.log(`Atualizado: ${path}`);
+async function writeIfChanged(path, before, after) {
+  if (before === after) return false;
+  await writeFile(path, after, "utf8");
+  console.log(`Normalizado: ${path}`);
   return true;
 }
 
-function replaceOnce(text, search, replacement, description) {
-  const occurrences = text.split(search).length - 1;
-  if (occurrences !== 1) {
-    throw new Error(
-      `${description}: esperado exatamente 1 ponto de alteração, encontrado ${occurrences}.`,
-    );
+function replaceRequired(text, oldText, newText, label) {
+  if (text.includes(newText)) return text;
+  const count = text.split(oldText).length - 1;
+  if (count !== 1) {
+    throw new Error(`${label}: esperado 1 trecho antigo, encontrado ${count}.`);
   }
-  return text.replace(search, replacement);
+  return text.replace(oldText, newText);
 }
 
 let changed = false;
 
+// 1. Impede que o MutationObserver da V52 reescreva o mesmo título e
+// bloqueie a thread principal do navegador.
+const v52Path = "app/components/BetaAppV52.tsx";
+const v52Before = await read(v52Path);
+let v52After = v52Before;
+
+v52After = replaceRequired(
+  v52After,
+  `      const topTitle = document.querySelector<HTMLElement>(".topbar-left strong");
+      if (topTitle && nextModule === "dashboard") topTitle.textContent = "Visão Executiva Geral";`,
+  `      const topTitle = document.querySelector<HTMLElement>(".topbar-left strong");
+      if (
+        topTitle &&
+        nextModule === "dashboard" &&
+        topTitle.textContent !== "Visão Executiva Geral"
+      ) {
+        topTitle.textContent = "Visão Executiva Geral";
+      }`,
+  "Proteção do título executivo",
+);
+
+v52After = replaceRequired(
+  v52After,
+  `    enhance();
+    const observer = new MutationObserver(enhance);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();`,
+  `    let animationFrame: number | null = null;
+    const scheduleEnhance = () => {
+      if (animationFrame !== null) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        enhance();
+      });
+    };
+
+    enhance();
+    const observer = new MutationObserver(scheduleEnhance);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };`,
+  "Agendamento seguro do observador V52",
+);
+
+changed = (await writeIfChanged(v52Path, v52Before, v52After)) || changed;
+
+// 2. Remove a nomenclatura antiga dos formulários.
 const modulesPath = "app/lib/modules.ts";
-const modulesSource = await read(modulesPath);
-const legacyOption = '  "Vence em 7 dias",\n';
-const modulesNext = modulesSource.includes(legacyOption)
-  ? modulesSource.replace(legacyOption, "")
-  : modulesSource;
-changed = (await writeWhenChanged(modulesPath, modulesSource, modulesNext)) || changed;
+const modulesBefore = await read(modulesPath);
+const modulesAfter = modulesBefore.replace('  "Vence em 7 dias",\n', "");
+changed =
+  (await writeIfChanged(modulesPath, modulesBefore, modulesAfter)) || changed;
 
+// 3. Cria os dados fictícios novos diretamente como Pendente.
 const demoPath = "db/demo-records.ts";
-const demoSource = await read(demoPath);
-const demoNext = demoSource.replaceAll('"Vence em 7 dias"', '"Pendente"');
-changed = (await writeWhenChanged(demoPath, demoSource, demoNext)) || changed;
+const demoBefore = await read(demoPath);
+const demoAfter = demoBefore.replaceAll('"Vence em 7 dias"', '"Pendente"');
+changed = (await writeIfChanged(demoPath, demoBefore, demoAfter)) || changed;
 
+// 4. Atualiza automaticamente no D1 somente os registros fictícios antigos.
 const recordsPath = "db/records.ts";
-const recordsSource = await read(recordsPath);
-let recordsNext = recordsSource;
+const recordsBefore = await read(recordsPath);
+let recordsAfter = recordsBefore;
 
-if (!recordsNext.includes("const pendingStatusBackfills")) {
-  recordsNext = replaceOnce(
-    recordsNext,
+if (!recordsAfter.includes("const pendingStatusBackfills")) {
+  recordsAfter = replaceRequired(
+    recordsAfter,
     "SELECT id, module, reference, payload, source FROM records",
     "SELECT id, module, reference, status, payload, source FROM records",
-    "Consulta dos registros de demonstração",
+    "Consulta de demonstração com status",
   );
 
-  recordsNext = replaceOnce(
-    recordsNext,
-    `      reference: string;\n      payload: string;\n      source: string;\n`,
-    `      reference: string;\n      status: string;\n      payload: string;\n      source: string;\n`,
-    "Tipo dos registros de demonstração",
+  recordsAfter = replaceRequired(
+    recordsAfter,
+    `      reference: string;
+      payload: string;
+      source: string;`,
+    `      reference: string;
+      status: string;
+      payload: string;
+      source: string;`,
+    "Tipo do status de demonstração",
   );
 
-  const marker = `    }>();\n\n  const demoWorkerCounts = new Map(\n`;
-  const migration = `    }>();\n\n  const pendingStatusBackfills = (existing.results || []).flatMap((row) => {\n    let payload: Record<string, unknown> = {};\n    try {\n      payload = JSON.parse(row.payload || \"{}\") as Record<string, unknown>;\n    } catch {\n      payload = {};\n    }\n    const topLevelUsesLegacyStatus = row.status === \"Vence em 7 dias\";\n    const payloadUsesLegacyStatus =\n      String(payload.status || \"\") === \"Vence em 7 dias\";\n    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];\n    return [{\n      id: row.id,\n      module: row.module,\n      payload: { ...payload, status: \"Pendente\" },\n    }];\n  });\n\n  if (pendingStatusBackfills.length) {\n    const updatedAt = new Date().toISOString();\n    await db.batch(\n      pendingStatusBackfills.map((record) =>\n        db\n          .prepare(\n            \\`UPDATE records\n             SET status = ?, payload = ?, updated_at = ?\n             WHERE tenant_id = ? AND id = ? AND source = ?\\`,\n          )\n          .bind(\n            \"Pendente\",\n            JSON.stringify(record.payload),\n            updatedAt,\n            DEFAULT_TENANT_ID,\n            record.id,\n            DEMO_SOURCE,\n          ),\n      ),\n    );\n    for (const record of pendingStatusBackfills) {\n      await audit(\n        \"DEMO_REFRESH\",\n        record.module,\n        record.id,\n        \"Situação fictícia padronizada como Pendente\",\n        \"Sistema\",\n      );\n    }\n  }\n\n  const demoWorkerCounts = new Map(\n`;
+  const marker = `    }>();
 
-  recordsNext = replaceOnce(
-    recordsNext,
+  const demoWorkerCounts = new Map(`;
+  const migration = [
+    "    }>();",
+    "",
+    "  const pendingStatusBackfills = (existing.results || []).flatMap((row) => {",
+    "    let payload: Record<string, unknown> = {};",
+    "    try {",
+    "      payload = JSON.parse(row.payload || \"{}\") as Record<string, unknown>;",
+    "    } catch {",
+    "      payload = {};",
+    "    }",
+    "    const topLevelUsesLegacyStatus = row.status === \"Vence em 7 dias\";",
+    "    const payloadUsesLegacyStatus =",
+    "      String(payload.status || \"\") === \"Vence em 7 dias\";",
+    "    if (!topLevelUsesLegacyStatus && !payloadUsesLegacyStatus) return [];",
+    "    return [{",
+    "      id: row.id,",
+    "      module: row.module,",
+    "      payload: { ...payload, status: \"Pendente\" },",
+    "    }];",
+    "  });",
+    "",
+    "  if (pendingStatusBackfills.length) {",
+    "    const updatedAt = new Date().toISOString();",
+    "    await db.batch(",
+    "      pendingStatusBackfills.map((record) =>",
+    "        db",
+    "          .prepare(",
+    "            `UPDATE records",
+    "             SET status = ?, payload = ?, updated_at = ?",
+    "             WHERE tenant_id = ? AND id = ? AND source = ?`,",
+    "          )",
+    "          .bind(",
+    "            \"Pendente\",",
+    "            JSON.stringify(record.payload),",
+    "            updatedAt,",
+    "            DEFAULT_TENANT_ID,",
+    "            record.id,",
+    "            DEMO_SOURCE,",
+    "          ),",
+    "      ),",
+    "    );",
+    "    for (const record of pendingStatusBackfills) {",
+    "      await audit(",
+    "        \"DEMO_REFRESH\",",
+    "        record.module,",
+    "        record.id,",
+    "        \"Situação fictícia padronizada como Pendente\",",
+    "        \"Sistema\",",
+    "      );",
+    "    }",
+    "  }",
+    "",
+    "  const demoWorkerCounts = new Map(",
+  ].join("\n");
+
+  recordsAfter = replaceRequired(
+    recordsAfter,
     marker,
     migration,
-    "Migração automática do status pendente",
+    "Migração automática do status Pendente",
   );
 }
 
-changed = (await writeWhenChanged(recordsPath, recordsSource, recordsNext)) || changed;
+changed =
+  (await writeIfChanged(recordsPath, recordsBefore, recordsAfter)) || changed;
 
 if (!changed) {
-  console.log("Situação Pendente já está normalizada.");
+  console.log("Frontend e status já estão normalizados.");
 }
