@@ -4,13 +4,16 @@ on:
   push:
     branches:
       - corrigir-cores-execucao-v55
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   apply-build-test:
-    if: github.event.head_commit.message != 'Aplicar dashboard executivo V56'
+    if: github.event_name == 'pull_request' || github.event.head_commit.message != 'Aplicar dashboard executivo V56'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -49,5 +52,9 @@ jobs:
           git config user.name "samuelscolari-blip"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add app/components/BetaApp.tsx app/layout.tsx app/construction-v56.css app/construction-v55.css
-          git commit -m "Aplicar dashboard executivo V56"
-          git push origin HEAD:corrigir-cores-execucao-v55
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração nova para gravar."
+          else
+            git commit -m "Aplicar dashboard executivo V56"
+            git push origin HEAD:corrigir-cores-execucao-v55
+          fi
