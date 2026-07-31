@@ -50,21 +50,38 @@ v52After = replaceRequired(
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();`,
   `    let animationFrame: number | null = null;
-    const scheduleEnhance = () => {
-      if (animationFrame !== null) return;
+    let disposed = false;
+
+    const scheduleEnhancement = () => {
+      if (disposed || animationFrame !== null) return;
+
       animationFrame = window.requestAnimationFrame(() => {
         animationFrame = null;
-        enhance();
+        if (disposed) return;
+
+        observer.disconnect();
+        try {
+          enhance();
+        } finally {
+          if (!disposed) {
+            observer.observe(document.body, {
+              childList: true,
+              subtree: true,
+            });
+          }
+        }
       });
     };
 
-    enhance();
-    const observer = new MutationObserver(scheduleEnhance);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const observer = new MutationObserver(scheduleEnhancement);
+    scheduleEnhancement();
+
     return () => {
+      disposed = true;
       observer.disconnect();
       if (animationFrame !== null) {
         window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
       }
     };`,
   "Agendamento seguro do observador V52",
