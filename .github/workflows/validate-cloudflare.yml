@@ -28,7 +28,7 @@ jobs:
       - name: Instalar dependências
         run: npm run install:ci
 
-      - name: Compilar aplicação Cloudflare
+      - name: Compilar versão final para Cloudflare
         run: npm run build
 
       - name: Executar testes
