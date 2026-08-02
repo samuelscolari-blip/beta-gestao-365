@@ -8,12 +8,23 @@ const service = await readFile("worker/imports/import.service.ts", "utf8");
 const parser = await readFile("worker/imports/csv-stream.ts", "utf8");
 const repository = await readFile("worker/imports/obra.repository.ts", "utf8");
 const types = await readFile("worker/imports/types.ts", "utf8");
+const wrangler = await readFile("wrangler.jsonc", "utf8");
 
 test("V62 conecta produtor e consumidor sem substituir o Worker principal", () => {
   assert.match(worker, /handleImportRequest/);
   assert.match(worker, /processImportQueue/);
   assert.match(worker, /handler\.fetch\(authenticatedRequest, env, ctx\)/);
   assert.match(worker, /async queue\(/);
+});
+
+test("V62 mantém os bindings persistentes no Wrangler", () => {
+  assert.match(wrangler, /"binding": "STORAGE_BUCKET"/);
+  assert.match(wrangler, /"bucket_name": "beta-gestao-365-importacoes"/);
+  assert.match(wrangler, /"binding": "IMPORT_QUEUE"/);
+  assert.match(wrangler, /"queue": "beta-gestao-365-importacoes"/);
+  assert.match(wrangler, /"max_batch_size": 1/);
+  assert.match(wrangler, /"max_retries": 3/);
+  assert.match(wrangler, /"binding": "DB"/);
 });
 
 test("V62 exige identidade confiável e bindings antes de receber arquivos", () => {
