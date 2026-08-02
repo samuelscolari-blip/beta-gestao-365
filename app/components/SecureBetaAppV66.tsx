@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import SecureBetaAppV65 from "./SecureBetaAppV65";
@@ -14,6 +15,45 @@ type Props = {
   userEmail?: string | null;
   isAdmin: boolean;
 };
+
+type GoogleCredentialResponse = {
+  credential?: string;
+  select_by?: string;
+};
+
+type GoogleIdentityApi = {
+  accounts: {
+    id: {
+      initialize(config: {
+        client_id: string;
+        callback(response: GoogleCredentialResponse): void;
+        ux_mode?: "popup" | "redirect";
+        auto_select?: boolean;
+        cancel_on_tap_outside?: boolean;
+      }): void;
+      renderButton(
+        parent: HTMLElement,
+        options: {
+          type?: "standard" | "icon";
+          theme?: "outline" | "filled_blue" | "filled_black";
+          size?: "large" | "medium" | "small";
+          text?: "signin_with" | "signup_with" | "continue_with" | "signin";
+          shape?: "rectangular" | "pill" | "circle" | "square";
+          logo_alignment?: "left" | "center";
+          locale?: string;
+          width?: number;
+        },
+      ): void;
+      cancel(): void;
+    };
+  };
+};
+
+declare global {
+  interface Window {
+    google?: GoogleIdentityApi;
+  }
+}
 
 type RecordView = {
   id: number;
@@ -33,6 +73,9 @@ type PortalTargets = {
   overview: HTMLElement | null;
   tabs: HTMLElement | null;
 };
+
+const GOOGLE_CLIENT_ID =
+  "1029361062935-9kd7sr8srn91vu9r4ekt0fjudfqbv1pk.apps.googleusercontent.com";
 
 const decisionModules = new Set([
   "purchases",
@@ -130,6 +173,53 @@ function decisionDate(record: RecordView) {
 
 function AdminAccessControl({ isAdmin, userEmail }: Props) {
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+
+  const handleCredential = useCallback(
+    async (credentialResponse: GoogleCredentialResponse) => {
+      const credential = String(credentialResponse.credential || "").trim();
+      if (!credential) {
+        setMessage("O Google não retornou uma credencial válida.");
+        return;
+      }
+
+      setIsLoading(true);
+      setMessage("Validando sua conta Google...");
+
+      try {
+        const response = await fetch("/admin-google-login", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ credential }),
+        });
+
+        let body: { message?: string } = {};
+        try {
+          body = (await response.json()) as { message?: string };
+        } catch {
+          body = {};
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            body.message || "Não foi possível concluir o acesso administrativo.",
+          );
+        }
+
+        window.location.assign("/?admin=ativo");
+      } catch (error) {
+        setMessage(
+          error instanceof Error
+            ? error.message
+            : "Não foi possível concluir o login com Google.",
+        );
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const state = new URLSearchParams(window.location.search).get("admin");
@@ -138,11 +228,73 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
     } else if (state === "nao-autorizado") {
       setMessage("Esta conta Google não possui acesso administrativo.");
     } else if (state === "configuracao-pendente") {
-      setMessage("O login seguro ainda precisa ser concluído na Cloudflare.");
+      setMessage("O acesso foi atualizado. Entre novamente com Google abaixo.");
     } else if (state === "expirado") {
       setMessage("Sua sessão administrativa expirou. Entre novamente.");
     }
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) return;
+
+    let disposed = false;
+    const scriptSelector = 'script[data-beta-google-identity="true"]';
+
+    const renderGoogleButton = () => {
+      if (disposed || !googleButtonRef.current || !window.google) return;
+
+      googleButtonRef.current.replaceChildren();
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredential,
+        ux_mode: "popup",
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      window.google.accounts.id.renderButton(googleButtonRef.current, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "rectangular",
+        logo_alignment: "left",
+        locale: "pt_BR",
+        width: 190,
+      });
+    };
+
+    const existingScript = document.querySelector<HTMLScriptElement>(scriptSelector);
+    const handleScriptError = () => {
+      if (!disposed) {
+        setMessage("Não foi possível carregar o login do Google.");
+      }
+    };
+
+    if (existingScript) {
+      if (window.google) {
+        renderGoogleButton();
+      } else {
+        existingScript.addEventListener("load", renderGoogleButton, { once: true });
+        existingScript.addEventListener("error", handleScriptError, { once: true });
+      }
+    } else {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client?hl=pt-BR";
+      script.async = true;
+      script.defer = true;
+      script.dataset.betaGoogleIdentity = "true";
+      script.addEventListener("load", renderGoogleButton, { once: true });
+      script.addEventListener("error", handleScriptError, { once: true });
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      disposed = true;
+      existingScript?.removeEventListener("load", renderGoogleButton);
+      existingScript?.removeEventListener("error", handleScriptError);
+      window.google?.accounts.id.cancel();
+    };
+  }, [handleCredential, isAdmin]);
 
   return (
     <aside
@@ -153,7 +305,7 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
       <div className="v66-admin-access-icon" aria-hidden="true">
         {isAdmin ? "✓" : "G"}
       </div>
-      <div className="v66-admin-access-copy">
+      <div className="v66-admin-access-copy" aria-live="polite">
         <strong>{isAdmin ? "Administrador ativo" : "Acesso do administrador"}</strong>
         <small>
           {isAdmin
@@ -167,9 +319,10 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
           Sair
         </a>
       ) : (
-        <a href="/admin-login" className="v66-admin-access-action primary">
-          Entrar com Google
-        </a>
+        <div className="v68-google-login" aria-busy={isLoading}>
+          <div ref={googleButtonRef} aria-label="Entrar com Google" />
+          {isLoading ? <span>Validando...</span> : null}
+        </div>
       )}
     </aside>
   );
