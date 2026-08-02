@@ -8,6 +8,7 @@ on:
       - scripts/apply-v60.mjs
       - scripts/run-v60-fixed.mjs
       - scripts/prepatch-v60.mjs
+      - scripts/postpatch-v60.mjs
       - .github/workflows/apply-v60.yml
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
       - scripts/apply-v60.mjs
       - scripts/run-v60-fixed.mjs
       - scripts/prepatch-v60.mjs
+      - scripts/postpatch-v60.mjs
       - .github/workflows/apply-v60.yml
 
 permissions:
@@ -43,7 +45,8 @@ jobs:
         run: |
           node scripts/prepatch-v60.mjs
           node scripts/run-v60-fixed.mjs
-          rm -f scripts/prepatch-v60.mjs
+          node scripts/postpatch-v60.mjs
+          rm -f scripts/prepatch-v60.mjs scripts/postpatch-v60.mjs
 
       - name: Instalar dependências
         run: npm ci
