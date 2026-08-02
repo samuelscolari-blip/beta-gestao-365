@@ -107,6 +107,74 @@ function numberValue(payload: Record<string, unknown>, key: string) {
   return Number.isFinite(value) ? value : 0;
 }
 
+type PaymentEvidenceRule = {
+  statusKey: string;
+  dateKey: string;
+  amountKey: string;
+  proofKey: string;
+  expectedKeys: string[];
+};
+
+const paymentEvidenceRules: Record<string, PaymentEvidenceRule> = {
+  expenses: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["expectedAmount"] },
+  taxes: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["expectedAmount"] },
+  purchases: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["totalAmount"] },
+  cards: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["amount"] },
+  contractors: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["netAmount", "measuredAmount"] },
+  assets: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["monthlyCost"] },
+  asset_events: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["maintenanceCost"] },
+};
+
+function normalizedStatus(value: unknown) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function validatePaymentEvidence(
+  definition: ModuleDefinition,
+  payload: Record<string, unknown>,
+): RecordValidationIssue[] {
+  const rule = paymentEvidenceRules[definition.id];
+  if (!rule) return [];
+  const status = normalizedStatus(payload[rule.statusKey]);
+  if (!["pago", "paga"].includes(status)) return [];
+
+  const issues: RecordValidationIssue[] = [];
+  const paidAmount = numberValue(payload, rule.amountKey);
+  const expectedAmount = rule.expectedKeys
+    .map((key) => numberValue(payload, key))
+    .find((value) => value > 0) || 0;
+
+  if (isBlank(payload[rule.dateKey])) {
+    issues.push({
+      field: rule.dateKey,
+      message: "Informe a data do pagamento antes de marcar o item como Pago.",
+    });
+  }
+  if (paidAmount <= 0) {
+    issues.push({
+      field: rule.amountKey,
+      message: "Informe o valor efetivamente pago antes de marcar o item como Pago.",
+    });
+  }
+  if (isBlank(payload[rule.proofKey])) {
+    issues.push({
+      field: rule.proofKey,
+      message: "Anexe ou informe o link do comprovante antes de marcar o item como Pago.",
+    });
+  }
+  if (expectedAmount > 0 && paidAmount > expectedAmount + 0.01) {
+    issues.push({
+      field: rule.amountKey,
+      message: "O valor pago não pode superar o valor previsto sem uma correção do lançamento.",
+    });
+  }
+  return issues;
+}
+
 function validateBusinessRules(
   definition: ModuleDefinition,
   payload: Record<string, unknown>,
@@ -498,17 +566,6 @@ function validateBusinessRules(
   }
 
   if (
-    ["expenses", "taxes"].includes(definition.id) &&
-    String(payload.status ?? "").toLowerCase() === "pago" &&
-    isBlank(payload.paymentDate)
-  ) {
-    issues.push({
-      field: "paymentDate",
-      message: "Informe a data de pagamento para um item com status Pago.",
-    });
-  }
-
-  if (
     definition.id === "payroll" &&
     numberValue(payload, "netAmount") >
       numberValue(payload, "grossAmount")
@@ -616,6 +673,8 @@ function validateBusinessRules(
       });
     }
   }
+
+  issues.push(...validatePaymentEvidence(definition, payload));
 
   return issues;
 }

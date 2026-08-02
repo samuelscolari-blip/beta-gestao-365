@@ -3246,55 +3246,6 @@ function ConstructionExecutivePanel({
       </div>
 
       <div className="construction-operational-detail-grid">
-        <article className="construction-workforce-card">
-          <header>
-            <div>
-              <span className="eyebrow">OPERAÇÃO PRÓPRIA</span>
-              <h3>Equipe mobilizada para a etapa</h3>
-            </div>
-            <button onClick={() => onOpenRecord(selectedWork)}>
-              Ajustar necessidade <Icon name="arrow" size={14} />
-            </button>
-          </header>
-          <div className="construction-workforce-main">
-            <div>
-              <strong>{ownTeamCount}</strong>
-              <span>pessoas próprias mobilizadas</span>
-            </div>
-            <div>
-              <span>
-                Capacidade atual
-                <strong>{decimalNumber(ownWorkforceCapacity)}%</strong>
-              </span>
-              <b><i style={{ width: `${ownWorkforceCapacity}%` }} /></b>
-              <small>
-                Base necessária: {requiredOwnTeamCount || "não informada"} pessoas
-              </small>
-            </div>
-          </div>
-          <div className="construction-workforce-kpis">
-            <div>
-              <small>DÉFICIT NA ETAPA</small>
-              <strong>{ownWorkforceGap}</strong>
-              <span>postos próprios a recompor</span>
-            </div>
-            <div>
-              <small>EXECUÇÃO PRÓPRIA</small>
-              <strong>{decimalNumber(ownTeamProgress)}%</strong>
-              <span>avanço das frentes internas</span>
-            </div>
-            <div>
-              <small>ÚLTIMO APONTAMENTO</small>
-              <strong>
-                {formatExecutiveDate(
-                  latestLog?.payload.date || latestLog?.recordDate,
-                )}
-              </strong>
-              <span>{String(latestLog?.payload.responsible || "Sem responsável")}</span>
-            </div>
-          </div>
-        </article>
-
         <article className="construction-loss-card">
           <header>
             <div>
@@ -5320,14 +5271,24 @@ function ModulePage({
   const statuses = Array.from(
     new Set(records.map(recordStatusLabel).filter(Boolean)),
   );
+  const peopleStatusCounts = {
+    active: records.filter((record) => recordStatusLabel(record) === "Ativo").length,
+    vacation: records.filter((record) => recordStatusLabel(record) === "Férias").length,
+    inactive: records.filter((record) =>
+      ["Em desligamento", "Desligado"].includes(recordStatusLabel(record)),
+    ).length,
+  };
   const visibleRecords = records.filter((record) => {
     const haystack = `${record.title} ${record.reference} ${JSON.stringify(
       record.payload,
     )}`.toLowerCase();
-    return (
-      (!search || haystack.includes(search.toLowerCase())) &&
-      (!status || recordStatusLabel(record) === status)
-    );
+    const displayedStatus = recordStatusLabel(record);
+    const matchesStatus =
+      !status ||
+      (module.id === "people" && status === "__inactive__"
+        ? ["Em desligamento", "Desligado"].includes(displayedStatus)
+        : displayedStatus === status);
+    return (!search || haystack.includes(search.toLowerCase())) && matchesStatus;
   });
   const total = records.reduce(
     (sum, record) =>
@@ -5386,6 +5347,44 @@ function ModulePage({
 
       {topNavigation}
 
+      {module.id === "people" ? (
+        <nav className="people-status-tabs" aria-label="Situação dos colaboradores">
+          {[
+            ["Ativos", "Ativo", peopleStatusCounts.active],
+            ["Férias", "Férias", peopleStatusCounts.vacation],
+            ["Inativos", "__inactive__", peopleStatusCounts.inactive],
+          ].map(([label, value, count]) => (
+            <button
+              key={String(value)}
+              type="button"
+              className={status === value ? "active" : ""}
+              onClick={() => setStatus(status === value ? "" : String(value))}
+            >
+              <span>{label}</span>
+              <strong>{String(count)}</strong>
+            </button>
+          ))}
+          <p>O status é reutilizado na seleção da folha e dos cálculos. Férias não usam uma data padrão: cada colaborador mantém seu próprio período aquisitivo.</p>
+        </nav>
+      ) : null}
+
+      {module.id === "rules" ? (
+        <aside className="rule-engine-explainer">
+          <div>
+            <strong>O que o Motor de Regras faz hoje</strong>
+            <p>Versiona fontes, vigências e parâmetros homologados usados pelos cálculos e validações do sistema.</p>
+          </div>
+          <div>
+            <strong>O que ele não faz sozinho</strong>
+            <p>Uma regra cadastrada não executa código automaticamente. Ela precisa estar ligada a uma validação ou cálculo testado.</p>
+          </div>
+          <div>
+            <strong>Como melhorar com segurança</strong>
+            <p>Definir condição, ação, prioridade, vigência, responsável, cenário de teste e aprovação antes de ativar.</p>
+          </div>
+        </aside>
+      ) : null}
+
       {module.id === "emails" ? (
         <aside className="info-strip microsoft">
           <span className="info-logo">M</span>
@@ -5439,16 +5438,18 @@ function ModulePage({
               placeholder={`Buscar em ${module.shortLabel.toLowerCase()}…`}
             />
           </label>
-          <select
-            className="filter-select"
-            value={status}
-            onChange={(event) => setStatus(event.target.value)}
-          >
-            <option value="">Todos os status</option>
-            {statuses.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
+          {module.id !== "people" ? (
+            <select
+              className="filter-select"
+              value={status}
+              onChange={(event) => setStatus(event.target.value)}
+            >
+              <option value="">Todos os status</option>
+              {statuses.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          ) : null}
           {canEdit && module.spreadsheetSheets.length ? (
             <button className="button secondary compact-button" onClick={onImport}>
               <Icon name="upload" size={17} /> Importar
@@ -8195,35 +8196,56 @@ export default function BetaApp({
   async function handleImport(file?: File) {
     if (!file || !hasEditingAccess()) return;
     try {
-      setToast({ kind: "success", text: "Lendo e validando a planilha…" });
+      setToast({ kind: "success", text: "Lendo, identificando e validando a planilha…" });
       const imported = await importWorkbook(file, importTarget);
       if (!imported.records.length) {
+        const unmatched = imported.unmatchedSheets.length
+          ? " Abas não reconhecidas: " + imported.unmatchedSheets.join(", ") + "."
+          : "";
         throw new Error(
-          "Nenhum registro válido foi encontrado. Verifique se o arquivo é a Central Operacional da Beta e se contém dados reais.",
+          "Nenhum registro válido foi encontrado." + unmatched + " Revise os cabeçalhos e os campos obrigatórios.",
         );
       }
-      const response = await fetch("/api/records", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ records: imported.records }),
-      });
-      const result = (await response.json()) as {
-        result?: { count: number };
-        error?: string;
-      };
-      if (!response.ok) throw new Error(result.error);
+
+      const preview = imported.report
+        .map((item) =>
+          item.sheet + " → " + item.module + ": " + item.imported + " válidos, " + item.invalid + " inválidos, " + item.duplicates + " duplicados, " + item.skipped + " ignorados",
+        )
+        .join("\n");
+      const confirmed = window.confirm(
+        "Prévia da importação\n\n" + preview + "\n\nTotal pronto para importar: " + imported.records.length + ".\n\nConfirma a gravação?",
+      );
+      if (!confirmed) {
+        setToast({ kind: "success", text: "Importação revisada e cancelada sem gravar dados." });
+        return;
+      }
+
+      let importedCount = 0;
+      const batchSize = 250;
+      for (let index = 0; index < imported.records.length; index += batchSize) {
+        const batch = imported.records.slice(index, index + batchSize);
+        const response = await fetch("/api/records", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ records: batch }),
+        });
+        const result = (await response.json()) as {
+          result?: { count: number };
+          error?: string;
+        };
+        if (!response.ok) throw new Error(result.error || "Falha ao gravar um lote da planilha.");
+        importedCount += result.result?.count || batch.length;
+      }
+
       await loadRecords();
       setToast({
         kind: "success",
-        text: `${result.result?.count || imported.records.length} registros importados. Linhas de exemplo foram ignoradas.`,
+        text: importedCount + " registros importados após detecção, validação e conferência.",
       });
     } catch (error) {
       setToast({
         kind: "error",
-        text:
-          error instanceof Error
-            ? error.message
-            : "Não foi possível importar a planilha.",
+        text: error instanceof Error ? error.message : "Não foi possível importar a planilha.",
       });
     } finally {
       if (fileInput.current) fileInput.current.value = "";
