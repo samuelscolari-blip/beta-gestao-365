@@ -129,7 +129,13 @@ async function inspect(attempt) {
       return true;
     };
 
-    const peopleClicked = await clickNavigation(["cadastros", "pessoas", "colaboradores"]);
+    const peopleClicked = await clickNavigation([
+      "cadastro de funcionarios",
+      "funcionarios",
+      "cadastros",
+      "pessoas",
+      "colaboradores",
+    ]);
     const people = await evaluate(`(() => ({
       tabs: [...document.querySelectorAll('.people-status-tabs button')]
         .map((item) => item.textContent.replace(/\\s+/g, ' ').trim()),
@@ -148,6 +154,7 @@ async function inspect(attempt) {
     const construction = await evaluate(`(() => {
       const title = document.querySelector('.construction-dashboard-heading-v56 h3');
       const roadmapTitle = document.querySelector('.construction-stage-roadmap h3');
+      const operationalGrid = document.querySelector('.construction-operational-detail-grid');
       return {
         loading: Boolean(document.querySelector('.page-area .loading-state')),
         dashboard: Boolean(document.querySelector('.construction-dashboard-v56')),
@@ -157,7 +164,7 @@ async function inspect(attempt) {
         hasOperationOwnText: (document.querySelector('.construction-executive-v2')?.textContent || '').includes('OPERAÇÃO PRÓPRIA'),
         titleSize: Number.parseFloat(title ? getComputedStyle(title).fontSize : '0'),
         roadmapTitleSize: Number.parseFloat(roadmapTitle ? getComputedStyle(roadmapTitle).fontSize : '0'),
-        operationalColumns: getComputedStyle(document.querySelector('.construction-operational-detail-grid')).gridTemplateColumns,
+        operationalColumns: operationalGrid ? getComputedStyle(operationalGrid).gridTemplateColumns : '',
       };
     })()`);
 
