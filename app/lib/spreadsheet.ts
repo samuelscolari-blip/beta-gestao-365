@@ -14,6 +14,18 @@ import {
 } from "./modules";
 import { validateRecordPayload } from "./record-validation";
 import { buildImportDeduplicationKey } from "./import-deduplication.mjs";
+import {
+  expandSpreadsheetDateMatrix,
+  spreadsheetDateValue,
+  transposeSpreadsheetRows,
+} from "./spreadsheet-layout.mjs";
+import { findSemanticHeaderIndex } from "./spreadsheet-semantic.mjs";
+import {
+  allowedImportModuleIds,
+  importFamilyForModule,
+  importScopeDescription,
+  isImportableModule,
+} from "./import-policy";
 
 export type ImportRecord = {
   module: string;
@@ -26,26 +38,41 @@ export type ImportRecord = {
   source: string;
 };
 
+type ImportLayout =
+  | "Tabela vertical"
+  | "Tabela horizontal"
+  | "Matriz de datas";
+
+type ParsedImportRecord = ImportRecord & {
+  importLocation: string;
+};
+
+type ParsedSheet = {
+  records: ParsedImportRecord[];
+  skipped: number;
+  matched: boolean;
+  layout: ImportLayout;
+};
+
 function toDateValue(value: unknown) {
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString().slice(0, 10);
-  }
+  const parsed = spreadsheetDateValue(value);
+  if (parsed) return parsed;
   const text = String(value ?? "").trim();
   if (!text) return "";
-  const iso = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
-  const br = text.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-  if (br) return `${br[3]}-${br[2]}-${br[1]}`;
+  const isoWithTime = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoWithTime) return `${isoWithTime[1]}-${isoWithTime[2]}-${isoWithTime[3]}`;
   return text;
 }
 
 function cleanCell(value: unknown, type: string) {
   if (type === "date") return toDateValue(value);
   if (type === "number" || type === "currency") {
-    if (typeof value === "number") return value;
-    const normalized = String(value ?? "")
+    if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+    const text = String(value ?? "").trim();
+    if (!text) return 0;
+    const normalized = text
       .replace(/\s/g, "")
-      .replace(/^R\$/, "")
+      .replace(/^R\$/i, "")
       .replace(/\.(?=\d{3}(?:[,.]|$))/g, "")
       .replace(",", ".");
     const number = Number(normalized);
@@ -58,28 +85,57 @@ function cleanCell(value: unknown, type: string) {
 function headerAliases(module: ModuleDefinition) {
   return module.fields.map((field) => ({
     field,
-    normalized: [field.label, ...(field.aliases || [])].map(normalizeHeader),
+    aliases: [field.label, ...(field.aliases || [])],
   }));
 }
 
-export function parseModuleSheet(
+function resolveFieldColumns(module: ModuleDefinition, header: unknown[]) {
+  const usedIndexes = new Set<number>();
+  return headerAliases(module)
+    .map(({ field, aliases }) => {
+      const index = findSemanticHeaderIndex(header, aliases, usedIndexes);
+      if (index >= 0) usedIndexes.add(index);
+      return {
+        key: field.key,
+        type: field.type,
+        index,
+      };
+    })
+    .filter((column) => column.index >= 0);
+}
+
+function createParsedRecord(
+  module: ModuleDefinition,
+  payload: Record<string, unknown>,
+  sourceName: string,
+  importLocation: string,
+): ParsedImportRecord | null {
+  const title = String(payload[module.titleField] || "").trim();
+  if (!title) return null;
+  return {
+    module: module.id,
+    title,
+    reference: String(payload[module.referenceField] || "").trim(),
+    status: String(payload[module.statusField] || "").trim(),
+    recordDate: String(payload[module.dateField] || "").trim(),
+    amount: amountForPayload(module, payload),
+    payload,
+    source: `Planilha: ${sourceName}`,
+    importLocation,
+  };
+}
+
+function parseConventionalTable(
   module: ModuleDefinition,
   rows: unknown[][],
   sourceName: string,
-) {
-  const aliases = headerAliases(module);
+  layout: ImportLayout,
+): ParsedSheet {
   let headerIndex = -1;
   let fieldColumns: Array<{ key: string; type: string; index: number }> = [];
 
   for (let rowIndex = 0; rowIndex < Math.min(rows.length, 25); rowIndex += 1) {
-    const normalizedRow = rows[rowIndex].map(normalizeHeader);
-    const columns = aliases
-      .map(({ field, normalized }) => ({
-        key: field.key,
-        type: field.type,
-        index: normalizedRow.findIndex((header) => normalized.includes(header)),
-      }))
-      .filter((column) => column.index >= 0);
+    const columns = resolveFieldColumns(module, rows[rowIndex] || []);
     if (columns.length >= 2) {
       headerIndex = rowIndex;
       fieldColumns = columns;
@@ -88,12 +144,13 @@ export function parseModuleSheet(
   }
 
   if (headerIndex < 0) {
-    return { records: [] as ImportRecord[], skipped: 0, matched: false };
+    return { records: [], skipped: 0, matched: false, layout };
   }
 
-  const records: ImportRecord[] = [];
+  const records: ParsedImportRecord[] = [];
   let skipped = 0;
-  for (const row of rows.slice(headerIndex + 1)) {
+  for (let index = headerIndex + 1; index < rows.length; index += 1) {
+    const row = rows[index] || [];
     const visible = row.map((cell) => String(cell ?? "").trim());
     if (!visible.some(Boolean)) continue;
     if (visible.some((cell) => cell.toUpperCase().includes("EXEMPLO - APAGAR"))) {
@@ -105,76 +162,187 @@ export function parseModuleSheet(
     for (const column of fieldColumns) {
       payload[column.key] = cleanCell(row[column.index], column.type);
     }
-    const title = String(payload[module.titleField] || "").trim();
-    if (!title) {
+    const record = createParsedRecord(
+      module,
+      payload,
+      sourceName,
+      layout === "Tabela horizontal"
+        ? `registro horizontal ${index - headerIndex}`
+        : `linha ${index + 1}`,
+    );
+    if (!record) {
       skipped += 1;
       continue;
     }
-    records.push({
-      module: module.id,
-      title,
-      reference: String(payload[module.referenceField] || "").trim(),
-      status: String(payload[module.statusField] || "").trim(),
-      recordDate: String(payload[module.dateField] || "").trim(),
-      amount: amountForPayload(module, payload),
-      payload,
-      source: `Planilha: ${sourceName}`,
-    });
+    records.push(record);
   }
-  return { records, skipped, matched: true };
+
+  return { records, skipped, matched: true, layout };
 }
 
-function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
-  const aliases = headerAliases(module);
+function parseDateMatrix(
+  module: ModuleDefinition,
+  rows: unknown[][],
+  sourceName: string,
+): ParsedSheet {
+  const expanded = expandSpreadsheetDateMatrix(rows, {
+    titleField: module.titleField,
+    dateField: module.dateField,
+    amountField: module.amountField,
+    fields: module.fields,
+  });
+
+  if (!expanded.matched) {
+    return {
+      records: [],
+      skipped: 0,
+      matched: false,
+      layout: "Matriz de datas",
+    };
+  }
+
+  const fieldTypeByKey = new Map(
+    module.fields.map((field) => [field.key, field.type]),
+  );
+  const records: ParsedImportRecord[] = [];
+  let skipped = 0;
+
+  for (const expandedRow of expanded.payloadRows) {
+    const payload = Object.fromEntries(
+      Object.entries(expandedRow.payload).map(([key, value]) => [
+        key,
+        cleanCell(value, fieldTypeByKey.get(key) || "text"),
+      ]),
+    );
+    const record = createParsedRecord(
+      module,
+      payload,
+      sourceName,
+      `linha ${expandedRow.rowNumber}, coluna ${expandedRow.columnNumber}`,
+    );
+    if (!record) {
+      skipped += 1;
+      continue;
+    }
+    records.push(record);
+  }
+
+  return {
+    records,
+    skipped,
+    matched: true,
+    layout: "Matriz de datas",
+  };
+}
+
+export function parseModuleSheet(
+  module: ModuleDefinition,
+  rows: unknown[][],
+  sourceName: string,
+): ParsedSheet {
+  const matrix = parseDateMatrix(module, rows, sourceName);
+  if (matrix.matched && matrix.records.length) return matrix;
+
+  const vertical = parseConventionalTable(
+    module,
+    rows,
+    sourceName,
+    "Tabela vertical",
+  );
+  if (vertical.matched && vertical.records.length) return vertical;
+
+  const horizontal = parseConventionalTable(
+    module,
+    transposeSpreadsheetRows(rows),
+    sourceName,
+    "Tabela horizontal",
+  );
+  if (horizontal.matched && horizontal.records.length) return horizontal;
+
+  if (matrix.matched) return matrix;
+  if (vertical.matched) return vertical;
+  return horizontal;
+}
+
+function bestHeaderScore(module: ModuleDefinition, rows: unknown[][]) {
   let best = 0;
   for (const row of rows.slice(0, 25)) {
-    const normalized = row.map(normalizeHeader);
-    const score = aliases.filter(({ normalized: fieldAliases }) =>
-      normalized.some((header) => fieldAliases.includes(header)),
-    ).length;
-    best = Math.max(best, score);
+    best = Math.max(best, resolveFieldColumns(module, row).length);
   }
   return best;
 }
 
+function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
+  const vertical = bestHeaderScore(module, rows);
+  const horizontal = bestHeaderScore(module, transposeSpreadsheetRows(rows));
+  const matrix = expandSpreadsheetDateMatrix(rows, {
+    titleField: module.titleField,
+    dateField: module.dateField,
+    amountField: module.amountField,
+    fields: module.fields,
+  });
+  const matrixScore = matrix.matched ? 4 : 0;
+  return Math.max(vertical, horizontal, matrixScore);
+}
+
 export async function importWorkbook(file: File, targetModuleId?: string) {
   if (!/\.xlsx$/i.test(file.name)) {
-    throw new Error("Selecione uma planilha Excel no formato .xlsx. Arquivos .xls antigos devem ser salvos novamente como .xlsx.");
+    throw new Error(
+      "Selecione uma planilha Excel no formato .xlsx. Arquivos .xls antigos devem ser salvos novamente como .xlsx.",
+    );
   }
   if (file.size > 15 * 1024 * 1024) {
-    throw new Error("A planilha ultrapassa 15 MB. Divida o arquivo em partes menores.");
+    throw new Error(
+      "A planilha ultrapassa 15 MB. Divida o arquivo em partes menores.",
+    );
+  }
+  if (targetModuleId && !isImportableModule(targetModuleId)) {
+    throw new Error(
+      `Este módulo não aceita importação automática. O importador bônus recebe somente ${importScopeDescription}`,
+    );
   }
 
   const sheets = await readXlsxFile(file);
   const candidates = targetModuleId
     ? moduleDefinitions.filter((module) => module.id === targetModuleId)
-    : moduleDefinitions.filter((module) => module.spreadsheetSheets.length);
-  if (!candidates.length) throw new Error("O módulo escolhido não aceita importação por planilha.");
+    : moduleDefinitions.filter((module) =>
+        allowedImportModuleIds.has(module.id),
+      );
+  if (!candidates.length) {
+    throw new Error(
+      `Nenhum módulo permitido foi selecionado. O importador aceita somente ${importScopeDescription}`,
+    );
+  }
 
   const accepted: ImportRecord[] = [];
   const seen = new Set<string>();
   const report: Array<{
+    family: string;
     module: string;
     sheet: string;
+    layout: ImportLayout;
     imported: number;
     skipped: number;
     invalid: number;
     duplicates: number;
     confidence: number;
     detected: boolean;
+    invalidExamples: string[];
   }> = [];
   const unmatchedSheets: string[] = [];
 
   for (const sheet of sheets) {
+    const sheetRows = sheet.data as unknown[][];
     const direct = candidates.find((module) =>
       module.spreadsheetSheets.some(
         (name) => normalizeHeader(name) === normalizeHeader(sheet.sheet),
       ),
     );
     const scored = candidates
-      .map((module) => ({ module, score: sheetScore(module, sheet.data as unknown[][]) }))
+      .map((module) => ({ module, score: sheetScore(module, sheetRows) }))
       .sort((a, b) => b.score - a.score);
-    const selected = direct || (scored[0]?.score >= 2 ? scored[0].module : undefined);
+    const selected =
+      direct || (scored[0]?.score >= 2 ? scored[0].module : undefined);
     if (!selected) {
       unmatchedSheets.push(sheet.sheet);
       continue;
@@ -182,18 +350,29 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
 
     const parsed = parseModuleSheet(
       selected,
-      sheet.data as unknown[][],
-      file.name + " / " + sheet.sheet,
+      sheetRows,
+      `${file.name} / ${sheet.sheet}`,
     );
     let invalid = 0;
     let duplicates = 0;
     let imported = 0;
-    for (const record of parsed.records) {
+    const invalidExamples: string[] = [];
+
+    for (const parsedRecord of parsed.records) {
+      const { importLocation, ...record } = parsedRecord;
       const issues = validateRecordPayload(record.module, record.payload);
       if (issues.length) {
         invalid += 1;
+        if (invalidExamples.length < 8) {
+          invalidExamples.push(
+            `${importLocation}: ${issues
+              .map((issue) => `${issue.field}: ${issue.message}`)
+              .join("; ")}`,
+          );
+        }
         continue;
       }
+
       const key = buildImportDeduplicationKey(record);
       if (seen.has(key)) {
         duplicates += 1;
@@ -203,26 +382,37 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
       accepted.push(record);
       imported += 1;
       if (accepted.length > 10_000) {
-        throw new Error("A importação ultrapassa 10.000 registros. Divida a planilha em arquivos menores.");
+        throw new Error(
+          "A importação ultrapassa 10.000 registros. Divida a planilha em arquivos menores.",
+        );
       }
     }
 
-    const bestScore = direct ? Math.max(2, sheetScore(selected, sheet.data as unknown[][])) : scored[0]?.score || 0;
-    const confidence = Math.min(100, Math.round((bestScore / Math.max(2, selected.fields.length)) * 300));
+    const bestScore = direct
+      ? Math.max(2, sheetScore(selected, sheetRows))
+      : scored[0]?.score || 0;
+    const confidence = Math.min(
+      100,
+      Math.round((bestScore / Math.max(2, Math.min(6, selected.fields.length))) * 100),
+    );
     report.push({
+      family: importFamilyForModule(selected.id)?.label || "Não classificado",
       module: selected.label,
       sheet: sheet.sheet,
+      layout: parsed.layout,
       imported,
       skipped: parsed.skipped,
       invalid,
       duplicates,
       confidence,
       detected: !direct,
+      invalidExamples,
     });
   }
 
   return { records: accepted, report, unmatchedSheets };
 }
+
 function excelCell(value: unknown, fieldType: string) {
   if (fieldType === "currency") {
     return {
