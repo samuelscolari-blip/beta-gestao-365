@@ -1,0 +1,537 @@
+/*
+ * V64 — acabamento executivo e responsividade pela área útil.
+ *
+ * Esta camada é carregada por último para resolver conflitos visuais acumulados
+ * entre as versões anteriores sem alterar componentes, dados ou regras de negócio.
+ */
+
+/* O mapa financeiro e o painel da obra passam a usar a mesma largura editorial. */
+.executive-priority-grid {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.consolidated-card,
+.deadline-card,
+.construction-executive-v2,
+.cost-composition-card {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.consolidated-card,
+.deadline-card {
+  border-radius: 22px;
+}
+
+.cost-composition-card {
+  container-name: cost-map;
+  container-type: inline-size;
+  gap: 22px !important;
+  padding: clamp(20px, 2.4vw, 30px) !important;
+}
+
+.cost-bar-heading > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.cost-total-highlight {
+  width: min(100%, 320px);
+  min-width: 0 !important;
+  flex: 0 1 320px;
+}
+
+.cost-chart-heading .cost-total-highlight strong,
+.cost-payable-cta strong,
+.cost-paid-row strong {
+  overflow: visible;
+  max-width: 100%;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.cost-bar-legend,
+.cost-bar-row {
+  grid-template-columns:
+    minmax(170px, 0.92fr)
+    minmax(180px, 1.45fr)
+    minmax(130px, 0.58fr)
+    20px !important;
+  gap: 18px !important;
+}
+
+.cost-bar-label b,
+.cost-bar-label small {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.cost-chart-footer {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.cost-payable-cta,
+.cost-paid-row {
+  min-width: 0;
+  min-height: 98px;
+  height: 100%;
+  border-radius: 14px;
+}
+
+.cost-paid-row {
+  align-content: center;
+  padding: 16px 18px;
+}
+
+.cost-paid-row span,
+.cost-paid-row small,
+.cost-payable-cta small,
+.cost-payable-cta em {
+  line-height: 1.45;
+}
+
+@container cost-map (max-width: 760px) {
+  .cost-bar-heading {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+  }
+
+  .cost-total-highlight {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .cost-bar-legend {
+    display: none;
+  }
+
+  .cost-bar-row {
+    min-height: 100px !important;
+    grid-template-columns: minmax(0, 1fr) minmax(112px, auto) 20px !important;
+    grid-template-rows: auto auto;
+    gap: 12px !important;
+  }
+
+  .cost-bar-label {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cost-bar-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .cost-bar-value {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .cost-bar-row > svg {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .cost-chart-footer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* O painel responde à largura disponível depois da barra lateral, não ao viewport. */
+.construction-executive-v2 {
+  container-name: construction-executive;
+  container-type: inline-size;
+}
+
+.construction-executive-v2 :is(
+  .construction-dashboard-v56,
+  .construction-kpi-row-v56,
+  .construction-main-grid-v56,
+  .construction-decision-grid,
+  .construction-operational-detail-grid,
+  .construction-fleet-v2,
+  .construction-machine-table,
+  .construction-machine-row
+) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.construction-executive-v2 .construction-dashboard-v56 {
+  width: 100%;
+  overflow: hidden;
+}
+
+.construction-executive-v2 .construction-kpi-row-v56 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.construction-executive-v2 .construction-kpi-v56 {
+  min-width: 0;
+  min-height: 174px;
+  height: 100%;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > strong,
+.construction-executive-v2 .construction-budget-card-v56 h3,
+.construction-executive-v2 .construction-budget-lines-v56 strong,
+.construction-executive-v2 .construction-priority-value strong,
+.construction-executive-v2 .construction-health-columns strong {
+  max-width: 100%;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-main-grid-v56 {
+  grid-template-columns: minmax(0, 1.65fr) minmax(360px, 0.85fr);
+  align-items: stretch;
+}
+
+.construction-executive-v2 :is(
+  .construction-stage-card-v56,
+  .construction-budget-card-v56
+) {
+  height: 100%;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 > div {
+  flex-wrap: wrap;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 strong {
+  max-width: 62%;
+  text-align: right;
+}
+
+/* Frota: fundo e texto pertencem ao mesmo tema, com contraste real e sem cortes. */
+.construction-executive-v2 .construction-machine-table {
+  padding: 12px;
+  border-color: rgba(166, 220, 232, 0.2);
+  background-color: #092f4b;
+  background-image: linear-gradient(180deg, #0a3451 0%, #082c47 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.construction-executive-v2 .construction-machine-table-head,
+.construction-executive-v2 .construction-machine-row {
+  grid-template-columns:
+    minmax(175px, 1fr)
+    minmax(220px, 1.42fr)
+    minmax(125px, 0.74fr)
+    minmax(130px, 0.8fr)
+    minmax(86px, 0.46fr)
+    18px;
+  gap: 14px;
+}
+
+.construction-executive-v2 .construction-machine-table-head {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #c6e5ee;
+  background: rgba(255, 255, 255, 0.075);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.construction-executive-v2 .construction-machine-row {
+  min-height: 118px;
+  align-items: center;
+  padding: 17px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-bottom-color: rgba(255, 255, 255, 0.11);
+  border-radius: 14px;
+  background-color: #0d3a58;
+  background-image: linear-gradient(145deg, #0e3d5c 0%, #0a324f 100%);
+  box-shadow: 0 8px 22px rgba(1, 21, 37, 0.14);
+}
+
+.construction-executive-v2 .construction-machine-row + .construction-machine-row {
+  margin-top: 9px;
+}
+
+.construction-executive-v2 .construction-machine-row.maintenance {
+  background-color: #133c54;
+  background-image: linear-gradient(90deg, rgba(217, 145, 35, 0.16), transparent 24%);
+}
+
+.construction-executive-v2 .construction-machine-row.idle {
+  background-color: #14384f;
+  background-image: linear-gradient(90deg, rgba(220, 82, 82, 0.15), transparent 24%);
+}
+
+.construction-executive-v2 .construction-machine-row:hover {
+  transform: translateY(-1px);
+  border-color: rgba(126, 226, 241, 0.42);
+  background-color: #124664;
+  background-image: linear-gradient(145deg, #124664 0%, #0c3855 100%);
+  box-shadow: 0 12px 26px rgba(1, 21, 37, 0.24);
+}
+
+.construction-executive-v2 .construction-machine-main {
+  align-items: flex-start;
+}
+
+.construction-executive-v2 .construction-machine-main > i {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(126, 226, 241, 0.2);
+  color: #85e3f1;
+  background: rgba(56, 200, 227, 0.14);
+}
+
+.construction-executive-v2 .construction-machine-row.maintenance .construction-machine-main > i {
+  color: #ffd889;
+  background: rgba(242, 179, 60, 0.15);
+}
+
+.construction-executive-v2 .construction-machine-row.idle .construction-machine-main > i {
+  color: #ffc3c0;
+  background: rgba(255, 107, 103, 0.14);
+}
+
+.construction-executive-v2 .construction-machine-main strong {
+  overflow: visible;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.4;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-machine-main small {
+  margin-top: 5px;
+  color: #b9d8e3;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.construction-executive-v2 .construction-machine-operation > strong {
+  overflow: visible;
+  margin-top: 8px;
+  color: #f7fcfe;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-machine-operation > small {
+  display: block;
+  overflow: visible;
+  margin-top: 5px;
+  color: #bed8e2;
+  font-size: 11px;
+  line-height: 1.45;
+  -webkit-line-clamp: unset;
+}
+
+.construction-executive-v2 .construction-machine-status {
+  width: fit-content;
+  min-height: 28px;
+  padding: 6px 9px;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.construction-executive-v2 .construction-machine-stop > strong,
+.construction-executive-v2 .construction-machine-total-impact > strong {
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.construction-executive-v2 .construction-machine-row:is(.maintenance, .idle)
+  :is(.construction-machine-stop, .construction-machine-total-impact) > strong {
+  color: #ffaaa6;
+}
+
+.construction-executive-v2 .construction-machine-stop > small,
+.construction-executive-v2 .construction-machine-total-impact > small {
+  margin-top: 5px;
+  color: #c2dce5;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.construction-executive-v2 .construction-machine-stop > em,
+.construction-executive-v2 .construction-machine-total-impact > em {
+  margin-top: 4px;
+  color: #9ebfcb;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.construction-executive-v2 .construction-machine-priority {
+  min-height: 28px;
+  align-items: center;
+  padding: 7px 10px;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.construction-executive-v2 .construction-machine-row > svg {
+  color: #8bd9e6;
+}
+
+@container construction-executive (max-width: 1080px) {
+  .construction-executive-v2 .construction-kpi-row-v56 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .construction-executive-v2 .construction-main-grid-v56,
+  .construction-executive-v2 .construction-decision-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 strong {
+    max-width: 70%;
+  }
+}
+
+@container construction-executive (max-width: 900px) {
+  .construction-executive-v2 .construction-machine-table-head {
+    display: none;
+  }
+
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-areas:
+      "machine-main machine-priority machine-arrow"
+      "machine-operation machine-operation machine-operation"
+      "machine-stop machine-impact machine-impact";
+    grid-template-columns: minmax(0, 1fr) minmax(120px, auto) 18px;
+    gap: 16px;
+    align-items: start;
+    padding: 18px;
+  }
+
+  .construction-executive-v2 .construction-machine-main {
+    grid-area: machine-main;
+  }
+
+  .construction-executive-v2 .construction-machine-operation {
+    grid-area: machine-operation;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .construction-executive-v2 .construction-machine-stop {
+    grid-area: machine-stop;
+    text-align: left;
+  }
+
+  .construction-executive-v2 .construction-machine-total-impact {
+    grid-area: machine-impact;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    grid-area: machine-priority;
+  }
+
+  .construction-executive-v2 .construction-machine-row > svg {
+    grid-area: machine-arrow;
+  }
+
+  .construction-executive-v2 :is(
+    .construction-machine-operation,
+    .construction-machine-stop,
+    .construction-machine-total-impact
+  )::before {
+    display: block;
+    margin-bottom: 7px;
+    color: #8fc8d7;
+    font-size: 9px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .construction-executive-v2 .construction-machine-operation::before {
+    content: "Status e uso atual";
+  }
+
+  .construction-executive-v2 .construction-machine-stop::before {
+    content: "Parada e retorno";
+  }
+
+  .construction-executive-v2 .construction-machine-total-impact::before {
+    content: "Impacto da ocorrência";
+  }
+}
+
+@container construction-executive (max-width: 620px) {
+  .construction-executive-v2 .construction-kpi-row-v56,
+  .construction-executive-v2 .construction-stage-meta-v56,
+  .construction-executive-v2 .construction-health-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-dashboard-v56 {
+    padding: 16px;
+  }
+
+  .construction-executive-v2 .construction-dashboard-heading-v56 {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .construction-executive-v2 .construction-kpi-v56 {
+    min-height: 0;
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 > div {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 strong {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-areas:
+      "machine-main machine-arrow"
+      "machine-priority machine-priority"
+      "machine-operation machine-operation"
+      "machine-stop machine-stop"
+      "machine-impact machine-impact";
+    grid-template-columns: minmax(0, 1fr) 18px;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    justify-self: start;
+  }
+
+  .construction-executive-v2 .construction-machine-total-impact {
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
+  }
+}
+
+@media (max-width: 650px) {
+  .consolidated-heading {
+    gap: 16px;
+  }
+
+  .cost-monitor-grid {
+    grid-template-columns: 1fr;
+  }
+}

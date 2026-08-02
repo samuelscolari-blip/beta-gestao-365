@@ -320,6 +320,12 @@ try {
   await command("Runtime.enable");
   await command("Network.enable", { maxTotalBufferSize: 20_000_000 });
   await command("Page.enable");
+  await command("Emulation.setDeviceMetricsOverride", {
+    width: 1366,
+    height: 900,
+    deviceScaleFactor: 1,
+    mobile: false,
+  });
   await command("Page.navigate", { url: targetUrl.href });
 
   const deadline = Date.now() + WAIT_MS;
@@ -332,7 +338,44 @@ try {
       const result = await command(
         "Runtime.evaluate",
         {
-          expression: `(() => ({
+          expression: `(() => {
+            const rect = (selector) => {
+              const element = document.querySelector(selector);
+              if (!element) return null;
+              const bounds = element.getBoundingClientRect();
+              return {
+                width: Math.round(bounds.width),
+                clientWidth: element.clientWidth,
+                scrollWidth: element.scrollWidth,
+              };
+            };
+            const rgb = (value) => (value.match(/[\\d.]+/g) || []).slice(0, 3).map(Number);
+            const luminance = (value) => {
+              const channels = rgb(value).map((channel) => {
+                const normalized = channel / 255;
+                return normalized <= 0.03928
+                  ? normalized / 12.92
+                  : ((normalized + 0.055) / 1.055) ** 2.4;
+              });
+              return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+            };
+            const contrast = (foreground, background) => {
+              const lighter = Math.max(luminance(foreground), luminance(background));
+              const darker = Math.min(luminance(foreground), luminance(background));
+              return Number(((lighter + 0.05) / (darker + 0.05)).toFixed(2));
+            };
+            const construction = rect('.construction-executive');
+            const cost = rect('.cost-composition-card');
+            const fleetRowElement = document.querySelector('.construction-machine-row');
+            const fleetTextElement = fleetRowElement?.querySelector('.construction-machine-main strong');
+            const fleetRowStyle = fleetRowElement ? getComputedStyle(fleetRowElement) : null;
+            const fleetTextStyle = fleetTextElement ? getComputedStyle(fleetTextElement) : null;
+            const kpiColumns = getComputedStyle(
+              document.querySelector('.construction-kpi-row-v56') || document.body,
+            ).gridTemplateColumns.split(/\\s+/).filter(Boolean).length;
+            const footerItems = Array.from(document.querySelectorAll('.cost-chart-footer > *'))
+              .map((element) => Math.round(element.getBoundingClientRect().width));
+            return ({
             href: location.href,
             readyState: document.readyState,
             loading: Boolean(document.querySelector('.page-area .loading-state')),
@@ -340,6 +383,29 @@ try {
             dashboard: Boolean(document.querySelector('.dashboard-grid, .construction-executive, .page-stack')),
             sidebar: Boolean(document.querySelector('.sidebar')),
             pageText: document.querySelector('.page-area')?.textContent?.trim().slice(0, 500) || '',
+            layout: {
+              viewportWidth: innerWidth,
+              documentClientWidth: document.documentElement.clientWidth,
+              documentScrollWidth: document.documentElement.scrollWidth,
+              horizontalOverflow: Math.max(
+                0,
+                document.documentElement.scrollWidth - document.documentElement.clientWidth,
+              ),
+              cost,
+              construction,
+              costToConstructionRatio: cost && construction
+                ? Number((cost.width / construction.width).toFixed(2))
+                : 0,
+              kpiColumns,
+              fleetRow: rect('.construction-machine-row'),
+              fleetContrast: fleetRowStyle && fleetTextStyle
+                ? contrast(fleetTextStyle.color, fleetRowStyle.backgroundColor)
+                : 0,
+              costFooterWidths: footerItems,
+              costFooterRatio: footerItems.length === 2
+                ? Number((Math.max(...footerItems) / Math.max(1, Math.min(...footerItems))).toFixed(2))
+                : 0,
+            },
             resources: performance.getEntriesByType('resource').map(r => ({
               name: r.name,
               duration: Math.round(r.duration),
@@ -348,7 +414,8 @@ try {
               decodedBodySize: r.decodedBodySize,
               initiatorType: r.initiatorType,
             })).filter(r => r.name.includes('/api/') || r.name.includes('/assets/'))
-          }))()`,
+          });
+          })()`,
           returnByValue: true,
         },
         8_000,
@@ -447,6 +514,24 @@ try {
   }
   if (!state.dashboard || !state.sidebar) {
     throw new Error(`Painel não apareceu: ${clipped(state)}`);
+  }
+  if (state.layout?.horizontalOverflow > 1) {
+    throw new Error(`Layout criou rolagem horizontal: ${clipped(state.layout)}`);
+  }
+  if (state.layout?.costToConstructionRatio < 0.9) {
+    throw new Error(`Painéis executivos ficaram desalinhados: ${clipped(state.layout)}`);
+  }
+  if (state.layout?.kpiColumns > 2) {
+    throw new Error(`KPIs não responderam à área útil: ${clipped(state.layout)}`);
+  }
+  if (state.layout?.fleetRow?.scrollWidth > state.layout?.fleetRow?.clientWidth + 1) {
+    throw new Error(`Linha da frota foi cortada: ${clipped(state.layout)}`);
+  }
+  if (state.layout?.fleetContrast < 4.5) {
+    throw new Error(`Contraste da frota insuficiente: ${clipped(state.layout)}`);
+  }
+  if (state.layout?.costFooterRatio > 1.12) {
+    throw new Error(`Rodapé financeiro ficou desproporcional: ${clipped(state.layout)}`);
   }
 } finally {
   rejectWaiters(new Error("Diagnóstico encerrado."));
