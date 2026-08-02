@@ -1,0 +1,74 @@
+name: Publicar no Cloudflare
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beta-gestao-365-production
+  cancel-in-progress: false
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: https://beta-gestao-365.scolarisamuel.workers.dev/
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Confirmar credenciais protegidas
+        shell: bash
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+
+      - name: Instalar dependências travadas
+        run: npm ci
+
+      - name: Verificar qualidade do código
+        run: npm run lint
+
+      - name: Compilar e executar testes
+        run: npm test
+
+      - name: Aplicar migrations aditivas no D1
+        run: npm run db:migrate:remote
+
+      - name: Publicar o Worker de produção
+        run: npm run deploy:cloudflare
+
+      - name: Verificar endereço publicado
+        shell: bash
+        run: |
+          for attempt in 1 2 3 4 5; do
+            status="$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' --max-time 30 'https://beta-gestao-365.scolarisamuel.workers.dev/')"
+            if [[ "$status" == "200" ]]; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "O Worker não respondeu HTTP 200 após a publicação." >&2
+          exit 1
+
+      - name: Confirmar interface em navegador real
+        run: npm run diagnose:live
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
+          DIAGNOSTIC_WAIT_MS: "45000"

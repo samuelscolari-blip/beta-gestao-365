@@ -18,7 +18,17 @@ const synonymGroups = [
   ["valor", "vlr", "custo", "montante", "total", "preco"],
   ["data", "dt", "dia", "prazo", "previsao", "vencimento"],
   ["descricao", "desc", "historico", "atividade", "servico", "tarefa"],
-  ["responsavel", "gestor", "encarregado", "titular", "colaborador", "funcionario", "pessoa"],
+  [
+    "responsavel",
+    "gestor",
+    "encarregado",
+    "lider",
+    "coordenador",
+    "titular",
+    "colaborador",
+    "funcionario",
+    "pessoa",
+  ],
   ["obra", "projeto", "centro custo", "centro de custo"],
   ["codigo", "cod", "id", "identificador", "matricula"],
 ];
@@ -102,6 +112,46 @@ export function findSemanticHeaderIndex(headers, aliases, usedIndexes = new Set(
   }
 
   return bestScore >= 0.8 ? bestIndex : -1;
+}
+
+/**
+ * Normaliza um cabeçalho completo para as chaves reais do módulo. Colunas sem
+ * correspondência segura permanecem nulas e são ignoradas pelo importador.
+ */
+export function normalizeSemanticHeaders(headers, fields) {
+  const normalized = Array.from({ length: headers.length }, () => null);
+  const usedIndexes = new Set();
+  const matchedFields = new Set();
+
+  // Reserva primeiro todas as correspondências exatas. Isso impede, por
+  // exemplo, que “Matrícula” (alias exato do gestor) seja capturada antes por
+  // uma aproximação com “Matrícula CEI anterior”.
+  for (const field of fields) {
+    const aliases = [field.label, ...(field.aliases || [])].map(normalizeHeader);
+    const index = headers.findIndex(
+      (header, headerIndex) =>
+        !usedIndexes.has(headerIndex) &&
+        aliases.includes(normalizeHeader(header)),
+    );
+    if (index < 0) continue;
+    normalized[index] = field.key;
+    usedIndexes.add(index);
+    matchedFields.add(field.key);
+  }
+
+  for (const field of fields) {
+    if (matchedFields.has(field.key)) continue;
+    const index = findSemanticHeaderIndex(
+      headers,
+      [field.label, ...(field.aliases || [])],
+      usedIndexes,
+    );
+    if (index < 0) continue;
+    normalized[index] = field.key;
+    usedIndexes.add(index);
+  }
+
+  return normalized;
 }
 
 export { normalizeHeader as normalizeSemanticHeader };

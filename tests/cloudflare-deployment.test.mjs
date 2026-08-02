@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function source(path) {
@@ -30,6 +30,25 @@ test("Vite uses Wrangler as the deployment source of truth", async () => {
   assert.match(vite, /cloudflare\(\{/);
 });
 
+test("production deploy runs only through GitHub Actions and workers.dev", async () => {
+  const workflow = await source(".github/workflows/deploy-cloudflare.yml");
+  assert.match(workflow, /branches: \[main\]/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
+  assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
+  assert.match(workflow, /npm run db:migrate:remote/);
+  assert.match(workflow, /npm run deploy:cloudflare/);
+  assert.match(
+    workflow,
+    /https:\/\/beta-gestao-365\.scolarisamuel\.workers\.dev\//,
+  );
+  assert.doesNotMatch(workflow, /chatgpt\.site/i);
+
+  await assert.rejects(
+    access(new URL("../.openai/hosting.json", import.meta.url)),
+    (error) => error?.code === "ENOENT",
+  );
+});
+
 test("Cloudflare identity is verified before becoming administrator identity", async () => {
   const worker = await source("worker/index.ts");
   const access = await source("app/lib/server-access.ts");
@@ -40,4 +59,5 @@ test("Cloudflare identity is verified before becoming administrator identity", a
   assert.match(worker, /headers\.delete\("oai-authenticated-user-email"\)/);
   assert.match(worker, /headers\.set\("x-beta-authenticated-email", email\)/);
   assert.match(access, /x-beta-authenticated-email/);
+  assert.doesNotMatch(access, /oai-authenticated-user-email/);
 });

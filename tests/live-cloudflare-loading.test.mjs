@@ -145,7 +145,13 @@ test("build normalizes the actual V52 observer and pending status", async () => 
 
 test(
   "published Cloudflare page leaves the loading state in a real browser",
-  { timeout: 240_000 },
+  {
+    timeout: 240_000,
+    skip:
+      process.env.RUN_LIVE_BROWSER_TEST === "1"
+        ? false
+        : "verificação ao vivo executada somente após a publicação",
+  },
   async () => {
     const chromePath = findChrome();
     assert.ok(chromePath, "Chrome/Chromium não está disponível no runner");

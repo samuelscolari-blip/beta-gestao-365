@@ -1,5 +1,7 @@
 import { validateRecordPayload } from "../app/lib/record-validation";
+import { buildImportDeduplicationKey } from "../app/lib/import-deduplication.mjs";
 import { isImportableModule } from "../app/lib/import-policy";
+import { moduleMap } from "../app/lib/modules";
 
 export type StoredRecord = {
   id: number;
@@ -56,6 +58,55 @@ export type RecordQuery = {
   page?: number;
   pageSize?: number;
   excludeSettings?: boolean;
+};
+
+export type ImportFailureInput = {
+  module?: unknown;
+  sheet?: unknown;
+  location?: unknown;
+  reason?: unknown;
+  payload?: unknown;
+};
+
+export type ImportReportInput = {
+  id?: unknown;
+  fileName?: unknown;
+  storageUrl?: unknown;
+  targetModule?: unknown;
+  status?: unknown;
+  totalRows?: unknown;
+  inserted?: unknown;
+  updated?: unknown;
+  skipped?: unknown;
+  failures?: ImportFailureInput[];
+  startedAt?: unknown;
+  finishedAt?: unknown;
+};
+
+export type ImportRun = {
+  id: string;
+  fileName: string;
+  storageUrl: string;
+  targetModule: string;
+  status: string;
+  totalRows: number;
+  totalSuccess: number;
+  totalUpdated: number;
+  totalSkipped: number;
+  totalErrors: number;
+  actor: string;
+  startedAt: string;
+  finishedAt: string;
+  createdAt: string;
+  errors: Array<{
+    id: string;
+    rowNumber: number;
+    sheet: string;
+    module: string;
+    payload: Record<string, unknown>;
+    reason: string;
+    resolved: boolean;
+  }>;
 };
 
 const allowedModules = new Set([
@@ -130,9 +181,46 @@ export async function ensureSchema() {
         amount_cents INTEGER NOT NULL DEFAULT 0,
         payload TEXT NOT NULL DEFAULT '{}',
         source TEXT NOT NULL DEFAULT 'system',
+        import_key TEXT NOT NULL DEFAULT '',
         created_by TEXT NOT NULL DEFAULT '',
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    `),
+    db.prepare(`
+      CREATE TABLE IF NOT EXISTS importacoes (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'beta-construtora',
+        nome_arquivo TEXT NOT NULL,
+        url_arquivo TEXT NOT NULL DEFAULT '',
+        modulo_destino TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'Pendente',
+        total_linhas INTEGER NOT NULL DEFAULT 0,
+        total_sucesso INTEGER NOT NULL DEFAULT 0,
+        total_atualizados INTEGER NOT NULL DEFAULT 0,
+        total_ignorados INTEGER NOT NULL DEFAULT 0,
+        total_erros INTEGER NOT NULL DEFAULT 0,
+        responsavel TEXT NOT NULL DEFAULT '',
+        iniciado_em TEXT NOT NULL DEFAULT '',
+        finalizado_em TEXT NOT NULL DEFAULT '',
+        criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    `),
+    db.prepare(`
+      CREATE TABLE IF NOT EXISTS importacao_erros (
+        id TEXT PRIMARY KEY,
+        tenant_id TEXT NOT NULL DEFAULT 'beta-construtora',
+        importacao_id TEXT NOT NULL,
+        linha INTEGER NOT NULL,
+        aba TEXT NOT NULL DEFAULT '',
+        modulo TEXT NOT NULL DEFAULT '',
+        payload TEXT NOT NULL DEFAULT '{}',
+        motivo TEXT NOT NULL,
+        resolvido INTEGER NOT NULL DEFAULT 0,
+        resolvido_por TEXT NOT NULL DEFAULT '',
+        resolvido_em TEXT NOT NULL DEFAULT '',
+        criado_em TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (importacao_id) REFERENCES importacoes(id) ON DELETE CASCADE
       )
     `),
     db.prepare(`
@@ -177,6 +265,17 @@ export async function ensureSchema() {
     db.prepare(
       "CREATE INDEX IF NOT EXISTS audit_logs_record_idx ON audit_logs (record_id, created_at)",
     ),
+    db.prepare(
+      "CREATE INDEX IF NOT EXISTS importacoes_tenant_data_idx ON importacoes (tenant_id, criado_em)",
+    ),
+    db.prepare(
+      "CREATE INDEX IF NOT EXISTS importacoes_tenant_status_idx ON importacoes (tenant_id, status)",
+    ),
+    db.prepare(
+      `CREATE INDEX IF NOT EXISTS importacao_erros_busca
+       ON importacao_erros (tenant_id, importacao_id)
+       WHERE resolvido = 0`,
+    ),
   ]);
 
   await ensureColumn(
@@ -184,6 +283,12 @@ export async function ensureSchema() {
     "records",
     "tenant_id",
     "tenant_id TEXT NOT NULL DEFAULT 'beta-construtora'",
+  );
+  await ensureColumn(
+    db,
+    "records",
+    "import_key",
+    "import_key TEXT NOT NULL DEFAULT ''",
   );
   await ensureColumn(
     db,
@@ -210,6 +315,11 @@ export async function ensureSchema() {
       `CREATE UNIQUE INDEX IF NOT EXISTS records_tenant_module_reference_unique
        ON records (tenant_id, module, LOWER(TRIM(reference)))
        WHERE TRIM(reference) <> ''`,
+    ),
+    db.prepare(
+      `CREATE UNIQUE INDEX IF NOT EXISTS records_tenant_module_import_key_unique
+       ON records (tenant_id, module, import_key)
+       WHERE TRIM(import_key) <> ''`,
     ),
     db.prepare(
       "CREATE INDEX IF NOT EXISTS records_tenant_module_idx ON records (tenant_id, module)",
@@ -643,7 +753,18 @@ function normalizeInput(input: Partial<RecordInput>): RecordInput {
       403,
     );
   }
-  const issues = validateRecordPayload(moduleId, payload);
+  let issues = validateRecordPayload(moduleId, payload);
+  if (moduleId === "works" && source.startsWith("Planilha:") && input.reference) {
+    issues = issues.filter(
+      (issue) => !["name", "status"].includes(issue.field),
+    );
+    if (!cleanText(payload.manager, 240)) {
+      issues.push({
+        field: "manager",
+        message: "O gestor responsável é obrigatório na importação de obras.",
+      });
+    }
+  }
   if (issues.length) {
     throw new RecordStoreError(
       issues
@@ -1022,66 +1143,563 @@ export async function createMany(
   actor: string,
 ) {
   await ensureSchema();
-  const hydrated = await Promise.all(
-    inputs.slice(0, 1000).map(hydrateNewAssetEvent),
+  if (inputs.length > 250) {
+    throw new RecordStoreError(
+      "Cada lote pode conter no máximo 250 registros no Cloudflare D1.",
+      "IMPORT_BATCH_TOO_LARGE",
+      413,
+    );
+  }
+  const normalized: RecordInput[] = [];
+  const failures: Array<{
+    index: number;
+    reason: string;
+    payload: Record<string, unknown>;
+  }> = [];
+  const hydrationResults = await Promise.allSettled(
+    inputs.map(hydrateNewAssetEvent),
   );
-  const normalized = hydrated.map(normalizeInput);
-  if (!normalized.length) return [];
+  hydrationResults.forEach((result, index) => {
+    try {
+      if (result.status === "rejected") throw result.reason;
+      normalized.push(normalizeInput(result.value));
+    } catch (error) {
+      failures.push({
+        index,
+        reason:
+          error instanceof Error
+            ? error.message
+            : "A linha foi rejeitada pelas regras do servidor.",
+        payload: importFailurePayload(inputs[index]?.payload || inputs[index]),
+      });
+    }
+  });
+  if (!normalized.length) {
+    return { count: 0, inserted: 0, updated: 0, skipped: 0, failures };
+  }
   const db = await database();
-  const existingResult = await db
-    .prepare(
-      `SELECT module, reference FROM records
-       WHERE tenant_id = ? AND TRIM(reference) <> ''`,
-    )
-    .bind(DEFAULT_TENANT_ID)
-    .all<{ module: string; reference: string }>();
-  const seenReferences = new Set(
-    (existingResult.results || []).map(
-      (row) => `${row.module}::${row.reference.trim().toLowerCase()}`,
-    ),
+  const withImportKeys = await Promise.all(
+    normalized.map(async (input) => ({
+      input,
+      importKey: input.source.startsWith("Planilha:")
+        ? await sha256(buildImportDeduplicationKey(input))
+        : "",
+    })),
   );
-  for (const input of normalized) {
-    if (!input.reference) continue;
-    const key = `${input.module}::${input.reference.toLowerCase()}`;
-    if (seenReferences.has(key)) {
-      throw new RecordStoreError(
-        `A referência "${input.reference}" já existe no módulo ${input.module}. A importação foi cancelada para evitar duplicidade.`,
-        "DUPLICATE_REFERENCE",
-        409,
+  type ExistingImportRow = {
+    id: number;
+    module: string;
+    title: string;
+    reference: string;
+    status: string;
+    record_date: string;
+    amount_cents: number;
+    payload: string;
+    source: string;
+    import_key: string;
+  };
+  const selectColumns = `id, module, title, reference, status, record_date,
+    amount_cents, payload, source, import_key`;
+  const selectStatements: ReturnType<typeof db.prepare>[] = [];
+  const byModule = new Map<string, typeof withImportKeys>();
+  for (const entry of withImportKeys) {
+    const entries = byModule.get(entry.input.module) || [];
+    entries.push(entry);
+    byModule.set(entry.input.module, entries);
+  }
+  const chunks = <T,>(values: T[], size = 75) =>
+    Array.from(
+      { length: Math.ceil(values.length / size) },
+      (_, index) => values.slice(index * size, (index + 1) * size),
+    );
+  for (const [moduleId, entries] of byModule) {
+    const references = [
+      ...new Set(
+        entries
+          .map(({ input }) => input.reference.trim().toLowerCase())
+          .filter(Boolean),
+      ),
+    ];
+    for (const referenceChunk of chunks(references)) {
+      selectStatements.push(
+        db
+          .prepare(
+            `SELECT ${selectColumns} FROM records
+             WHERE tenant_id = ? AND module = ?
+               AND LOWER(TRIM(reference)) IN (${referenceChunk.map(() => "?").join(", ")})`,
+          )
+          .bind(DEFAULT_TENANT_ID, moduleId, ...referenceChunk),
       );
     }
-    seenReferences.add(key);
-  }
-  const statements = normalized.map((input) =>
-    db
-      .prepare(
-        `INSERT INTO records
-          (tenant_id, module, title, reference, status, record_date, amount, amount_cents, payload, source, created_by)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      )
-      .bind(
-        DEFAULT_TENANT_ID,
-        input.module,
-        input.title,
-        input.reference,
-        input.status,
-        input.recordDate,
-        input.amount,
-        Math.round(input.amount * 100),
-        JSON.stringify(input.payload),
-        input.source,
-        actor,
+    const importKeys = [
+      ...new Set(
+        entries
+          .filter(({ input }) => !input.reference)
+          .map(({ importKey }) => importKey)
+          .filter(Boolean),
       ),
+    ];
+    for (const keyChunk of chunks(importKeys)) {
+      selectStatements.push(
+        db
+          .prepare(
+            `SELECT ${selectColumns} FROM records
+             WHERE tenant_id = ? AND module = ?
+               AND TRIM(import_key) <> ''
+               AND import_key IN (${keyChunk.map(() => "?").join(", ")})`,
+          )
+          .bind(DEFAULT_TENANT_ID, moduleId, ...keyChunk),
+      );
+    }
+  }
+  const existingResults = (selectStatements.length
+    ? await db.batch(selectStatements)
+    : []) as Array<{ results?: ExistingImportRow[] }>;
+  const existingRows: ExistingImportRow[] = [
+    ...new Map<number, ExistingImportRow>(
+      existingResults
+        .flatMap((result) => result.results || [])
+        .map((row) => [row.id, row] as const),
+    ).values(),
+  ];
+  const existingByReference = new Map<string, ExistingImportRow>(
+    existingRows
+      .filter((row) => row.reference.trim())
+      .map((row) => [
+        `${row.module}::${row.reference.trim().toLowerCase()}`,
+        row,
+      ]),
   );
-  await db.batch(statements);
+  const existingByImportKey = new Map<string, ExistingImportRow>(
+    existingRows
+      .filter((row) => row.import_key.trim())
+      .map((row) => [`${row.module}::${row.import_key}`, row]),
+  );
+
+  const seenBatchKeys = new Set<string>();
+  const statements: ReturnType<typeof db.prepare>[] = [];
+  let inserted = 0;
+  let updated = 0;
+  let skipped = 0;
+
+  for (const { input, importKey } of withImportKeys) {
+    const batchKey = importKey
+      ? `${input.module}::${importKey}`
+      : input.reference
+        ? `${input.module}::ref::${input.reference.toLowerCase()}`
+        : "";
+    if (batchKey && seenBatchKeys.has(batchKey)) {
+      skipped += 1;
+      continue;
+    }
+    if (batchKey) seenBatchKeys.add(batchKey);
+
+    const referenceKey = input.reference
+      ? `${input.module}::${input.reference.toLowerCase()}`
+      : "";
+    const existing =
+      (importKey && existingByImportKey.get(`${input.module}::${importKey}`)) ||
+      (referenceKey && existingByReference.get(referenceKey));
+
+    if (existing) {
+      if (!input.source.startsWith("Planilha:")) {
+        throw new RecordStoreError(
+          `A referência "${input.reference}" já existe no módulo ${input.module}.`,
+          "DUPLICATE_REFERENCE",
+          409,
+        );
+      }
+      let previousPayload: Record<string, unknown> = {};
+      try {
+        previousPayload = JSON.parse(existing.payload || "{}") as Record<string, unknown>;
+      } catch {
+        previousPayload = {};
+      }
+      const mergedPayload = { ...previousPayload, ...input.payload };
+      if (
+        input.module === "works" &&
+        input.title === input.reference &&
+        existing.title &&
+        existing.title !== existing.reference
+      ) {
+        mergedPayload.name = previousPayload.name || existing.title;
+      }
+      const title =
+        input.module === "works" && input.title === input.reference
+          ? existing.title || input.title
+          : input.title;
+      const status = input.status || existing.status;
+      const recordDate = input.recordDate || existing.record_date;
+      const amountField = moduleMap[input.module]?.amountField;
+      const amountWasSupplied = Boolean(
+        amountField &&
+          Object.prototype.hasOwnProperty.call(input.payload, amountField),
+      );
+      const amountCents = amountWasSupplied
+        ? Math.round(input.amount * 100)
+        : Number(existing.amount_cents || 0);
+      const amount = amountCents / 100;
+      const serializedPayload = JSON.stringify(mergedPayload);
+      const unchanged =
+        title === existing.title &&
+        input.reference === existing.reference &&
+        status === existing.status &&
+        recordDate === existing.record_date &&
+        amountCents === Number(existing.amount_cents || 0) &&
+        serializedPayload === existing.payload &&
+        input.source === existing.source &&
+        (!importKey || importKey === existing.import_key);
+      if (unchanged) {
+        skipped += 1;
+        continue;
+      }
+      statements.push(
+        db
+          .prepare(
+            `UPDATE records
+             SET title = ?, reference = ?, status = ?, record_date = ?,
+                 amount = ?, amount_cents = ?, payload = ?, source = ?,
+                 import_key = ?, updated_at = ?
+             WHERE tenant_id = ? AND id = ?`,
+          )
+          .bind(
+            title,
+            input.reference,
+            status,
+            recordDate,
+            amount,
+            amountCents,
+            serializedPayload,
+            input.source,
+            importKey || existing.import_key,
+            new Date().toISOString(),
+            DEFAULT_TENANT_ID,
+            existing.id,
+          ),
+      );
+      updated += 1;
+      continue;
+    }
+
+    const insertStatus =
+      input.status || (input.module === "works" ? "Planejada" : "");
+    const insertPayload = input.module === "works"
+      ? {
+          ...input.payload,
+          name: input.payload.name || input.title,
+          status: input.payload.status || insertStatus,
+        }
+      : input.payload;
+    statements.push(
+      db
+        .prepare(
+          `INSERT INTO records
+            (tenant_id, module, title, reference, status, record_date,
+             amount, amount_cents, payload, source, import_key, created_by)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        )
+        .bind(
+          DEFAULT_TENANT_ID,
+          input.module,
+          input.title,
+          input.reference,
+          insertStatus,
+          input.recordDate,
+          input.amount,
+          Math.round(input.amount * 100),
+          JSON.stringify(insertPayload),
+          input.source,
+          importKey,
+          actor,
+        ),
+    );
+    inserted += 1;
+  }
+
+  if (statements.length) await db.batch(statements);
   await audit(
     "IMPORT",
     normalized[0].module,
     null,
-    `${normalized.length} registros importados`,
+    `${inserted} incluídos, ${updated} atualizados, ${skipped} ignorados e ${failures.length} rejeitados`,
     actor,
   );
-  return { count: normalized.length };
+  return {
+    count: inserted + updated,
+    inserted,
+    updated,
+    skipped,
+    failures,
+  };
+}
+
+function nonNegativeInteger(value: unknown, maximum = 1_000_000) {
+  const parsed = Math.floor(Number(value) || 0);
+  return Math.min(maximum, Math.max(0, parsed));
+}
+
+function importFailurePayload(value: unknown) {
+  try {
+    return normalizePayload(value);
+  } catch {
+    return { raw: cleanText(value, 2_000) };
+  }
+}
+
+export async function saveImportReport(
+  rawInput: ImportReportInput,
+  actor: string,
+) {
+  await ensureSchema();
+  const id = cleanText(rawInput.id || crypto.randomUUID(), 64);
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+    throw new RecordStoreError(
+      "O identificador da importação é inválido.",
+      "INVALID_IMPORT_ID",
+    );
+  }
+  const fileName = cleanText(rawInput.fileName, 255);
+  if (!fileName) {
+    throw new RecordStoreError(
+      "O nome do arquivo importado é obrigatório.",
+      "IMPORT_FILE_REQUIRED",
+    );
+  }
+  const failures = Array.isArray(rawInput.failures)
+    ? rawInput.failures.slice(0, 2_000)
+    : [];
+  const inserted = nonNegativeInteger(rawInput.inserted);
+  const updated = nonNegativeInteger(rawInput.updated);
+  const skipped = nonNegativeInteger(rawInput.skipped);
+  const totalRows = Math.max(
+    inserted + updated + skipped + failures.length,
+    nonNegativeInteger(rawInput.totalRows),
+  );
+  const requestedStatus = cleanText(rawInput.status || "Concluída", 50);
+  const status = ["Pendente", "Processando", "Falha"].includes(requestedStatus)
+    ? requestedStatus
+    : failures.length
+      ? "Concluída com pendências"
+      : "Concluída";
+  const startedAt = cleanText(rawInput.startedAt, 40);
+  const finishedAt = status === "Pendente" || status === "Processando"
+    ? cleanText(rawInput.finishedAt, 40)
+    : cleanText(rawInput.finishedAt || new Date().toISOString(), 40);
+  const db = await database();
+
+  await db
+    .prepare(
+      `INSERT INTO importacoes
+        (id, tenant_id, nome_arquivo, url_arquivo, modulo_destino, status,
+         total_linhas, total_sucesso, total_atualizados, total_ignorados,
+         total_erros, responsavel, iniciado_em, finalizado_em)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(id) DO UPDATE SET
+         nome_arquivo = excluded.nome_arquivo,
+         url_arquivo = excluded.url_arquivo,
+         modulo_destino = excluded.modulo_destino,
+         status = excluded.status,
+         total_linhas = excluded.total_linhas,
+         total_sucesso = excluded.total_sucesso,
+         total_atualizados = excluded.total_atualizados,
+         total_ignorados = excluded.total_ignorados,
+         total_erros = excluded.total_erros,
+         responsavel = excluded.responsavel,
+         iniciado_em = excluded.iniciado_em,
+         finalizado_em = excluded.finalizado_em`,
+    )
+    .bind(
+      id,
+      DEFAULT_TENANT_ID,
+      fileName,
+      cleanText(rawInput.storageUrl, 2_000),
+      cleanText(rawInput.targetModule, 40),
+      status,
+      totalRows,
+      inserted,
+      updated,
+      skipped,
+      failures.length,
+      cleanText(actor, 240),
+      startedAt,
+      finishedAt,
+    )
+    .run();
+
+  if (failures.length) {
+    const errorStatements = failures.map((failure, index) => {
+      const location = cleanText(failure.location, 120);
+      const rowNumber = nonNegativeInteger(
+        location.match(/\d+/)?.[0] || index + 2,
+      );
+      return db
+        .prepare(
+          `INSERT INTO importacao_erros
+            (id, tenant_id, importacao_id, linha, aba, modulo, payload, motivo)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET
+             linha = excluded.linha,
+             aba = excluded.aba,
+             modulo = excluded.modulo,
+             payload = excluded.payload,
+             motivo = excluded.motivo`,
+        )
+        .bind(
+          `${id}:${String(index + 1).padStart(5, "0")}`,
+          DEFAULT_TENANT_ID,
+          id,
+          rowNumber,
+          cleanText(failure.sheet, 120),
+          cleanText(failure.module, 40),
+          JSON.stringify(importFailurePayload(failure.payload)),
+          cleanText(failure.reason || "Falha de validação", 2_000),
+        );
+    });
+    for (let index = 0; index < errorStatements.length; index += 250) {
+      await db.batch(errorStatements.slice(index, index + 250));
+    }
+  }
+
+  await audit(
+    "IMPORT_REPORT",
+    cleanText(rawInput.targetModule, 40) || "system",
+    null,
+    `${fileName}: ${inserted} incluídos, ${updated} atualizados, ${skipped} ignorados e ${failures.length} pendências`,
+    actor,
+  );
+  return { id, status, errors: failures.length };
+}
+
+export async function listImportRuns(): Promise<ImportRun[]> {
+  await ensureSchema();
+  const db = await database();
+  const runsResult = await db
+    .prepare(
+      `SELECT * FROM importacoes
+       WHERE tenant_id = ?
+       ORDER BY criado_em DESC LIMIT 25`,
+    )
+    .bind(DEFAULT_TENANT_ID)
+    .all<Record<string, unknown>>();
+  const errorsResult = await db
+    .prepare(
+      `SELECT * FROM importacao_erros
+       WHERE tenant_id = ? AND resolvido = 0
+       ORDER BY criado_em DESC LIMIT 2000`,
+    )
+    .bind(DEFAULT_TENANT_ID)
+    .all<Record<string, unknown>>();
+  const errorsByImport = new Map<string, ImportRun["errors"]>();
+  for (const row of errorsResult.results || []) {
+    const importId = String(row.importacao_id || "");
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(String(row.payload || "{}")) as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    const errors = errorsByImport.get(importId) || [];
+    errors.push({
+      id: String(row.id || ""),
+      rowNumber: Number(row.linha || 0),
+      sheet: String(row.aba || ""),
+      module: String(row.modulo || ""),
+      payload,
+      reason: String(row.motivo || ""),
+      resolved: Boolean(row.resolvido),
+    });
+    errorsByImport.set(importId, errors);
+  }
+  return (runsResult.results || []).map((row) => {
+    const id = String(row.id || "");
+    return {
+      id,
+      fileName: String(row.nome_arquivo || ""),
+      storageUrl: String(row.url_arquivo || ""),
+      targetModule: String(row.modulo_destino || ""),
+      status: String(row.status || ""),
+      totalRows: Number(row.total_linhas || 0),
+      totalSuccess: Number(row.total_sucesso || 0),
+      totalUpdated: Number(row.total_atualizados || 0),
+      totalSkipped: Number(row.total_ignorados || 0),
+      totalErrors: Number(row.total_erros || 0),
+      actor: String(row.responsavel || ""),
+      startedAt: String(row.iniciado_em || ""),
+      finishedAt: String(row.finalizado_em || ""),
+      createdAt: String(row.criado_em || ""),
+      errors: errorsByImport.get(id) || [],
+    };
+  });
+}
+
+export async function resolveImportError(id: string, actor: string) {
+  await ensureSchema();
+  const normalizedId = cleanText(id, 80);
+  if (!normalizedId) {
+    throw new RecordStoreError(
+      "Identificador do erro obrigatório.",
+      "IMPORT_ERROR_ID_REQUIRED",
+    );
+  }
+  const db = await database();
+  const pendingError = await db
+    .prepare(
+      `SELECT importacao_id FROM importacao_erros
+       WHERE tenant_id = ? AND id = ? AND resolvido = 0`,
+    )
+    .bind(DEFAULT_TENANT_ID, normalizedId)
+    .first<{ importacao_id: string }>();
+  if (!pendingError) {
+    throw new RecordStoreError(
+      "Pendência de importação não encontrada.",
+      "IMPORT_ERROR_NOT_FOUND",
+      404,
+    );
+  }
+  const result = await db
+    .prepare(
+      `UPDATE importacao_erros
+       SET resolvido = 1, resolvido_por = ?, resolvido_em = ?
+       WHERE tenant_id = ? AND id = ? AND resolvido = 0`,
+    )
+    .bind(
+      cleanText(actor, 240),
+      new Date().toISOString(),
+      DEFAULT_TENANT_ID,
+      normalizedId,
+    )
+    .run();
+  if (!result.meta.changes) {
+    throw new RecordStoreError(
+      "Pendência de importação não encontrada.",
+      "IMPORT_ERROR_NOT_FOUND",
+      404,
+    );
+  }
+  const remaining = await db
+    .prepare(
+      `SELECT COUNT(*) AS total FROM importacao_erros
+       WHERE tenant_id = ? AND importacao_id = ? AND resolvido = 0`,
+    )
+    .bind(DEFAULT_TENANT_ID, pendingError.importacao_id)
+    .first<{ total: number }>();
+  if (!Number(remaining?.total || 0)) {
+    await db
+      .prepare(
+        `UPDATE importacoes SET status = 'Concluída'
+         WHERE tenant_id = ? AND id = ?`,
+      )
+      .bind(DEFAULT_TENANT_ID, pendingError.importacao_id)
+      .run();
+  }
+  await audit(
+    "IMPORT_ERROR_RESOLVED",
+    "system",
+    null,
+    `Pendência ${normalizedId} marcada como resolvida`,
+    actor,
+  );
+  return { id: normalizedId, resolved: true };
 }
 
 export async function updateRecord(

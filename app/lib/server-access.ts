@@ -5,12 +5,7 @@ export type HeaderReader = {
 };
 
 export function authenticatedEmailFromHeaders(headers: HeaderReader) {
-  return (
-    headers.get("x-beta-authenticated-email") ||
-    headers.get("oai-authenticated-user-email")
-  )
-    ?.trim()
-    .toLowerCase() || null;
+  return headers.get("x-beta-authenticated-email")?.trim().toLowerCase() || null;
 }
 
 export function authenticatedEmail(request: Request) {

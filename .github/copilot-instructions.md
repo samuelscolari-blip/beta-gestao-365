@@ -1,7 +1,7 @@
 # Beta Gestão 365
 
-Follow the repository root `AGENTS.md`. This package targets the existing
-production project and D1 database. Do not propose creating a replacement Site,
-changing `.openai/hosting.json`, storing secrets, applying destructive
-migrations, or publishing without the complete validation checklist.
-
+Siga o `AGENTS.md` da raiz. O destino exclusivo é o Cloudflare Worker
+`beta-gestao-365`, com D1 `beta-gestao-365-db` no binding `DB`. O domínio
+`chatgpt.site` está aposentado. Não recrie `.openai/hosting.json`, não inclua
+segredos no código e não aplique migrations destrutivas. Execute
+`npm run lint` e `npm test` antes de publicar pela branch `main`.

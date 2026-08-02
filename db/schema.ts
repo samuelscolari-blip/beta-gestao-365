@@ -30,6 +30,7 @@ export const records = sqliteTable(
     amountCents: integer("amount_cents").notNull().default(0),
     payload: text("payload").notNull().default("{}"),
     source: text("source").notNull().default("system"),
+    importKey: text("import_key").notNull().default(""),
     createdBy: text("created_by").notNull().default(""),
     createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
     updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
@@ -42,6 +43,59 @@ export const records = sqliteTable(
     index("records_module_date_idx").on(table.module, table.recordDate),
     index("records_reference_idx").on(table.reference),
     index("records_record_date_idx").on(table.recordDate),
+    uniqueIndex("records_tenant_module_import_key_unique")
+      .on(table.tenantId, table.module, table.importKey)
+      .where(sql`TRIM(${table.importKey}) <> ''`),
+  ],
+);
+
+export const importRuns = sqliteTable(
+  "importacoes",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id").notNull().default("beta-construtora"),
+    fileName: text("nome_arquivo").notNull(),
+    storageUrl: text("url_arquivo").notNull().default(""),
+    targetModule: text("modulo_destino").notNull().default(""),
+    status: text("status").notNull().default("Pendente"),
+    totalRows: integer("total_linhas").notNull().default(0),
+    totalSuccess: integer("total_sucesso").notNull().default(0),
+    totalUpdated: integer("total_atualizados").notNull().default(0),
+    totalSkipped: integer("total_ignorados").notNull().default(0),
+    totalErrors: integer("total_erros").notNull().default(0),
+    actor: text("responsavel").notNull().default(""),
+    startedAt: text("iniciado_em").notNull().default(""),
+    finishedAt: text("finalizado_em").notNull().default(""),
+    createdAt: text("criado_em").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("importacoes_tenant_data_idx").on(table.tenantId, table.createdAt),
+    index("importacoes_tenant_status_idx").on(table.tenantId, table.status),
+  ],
+);
+
+export const importErrors = sqliteTable(
+  "importacao_erros",
+  {
+    id: text("id").primaryKey(),
+    tenantId: text("tenant_id").notNull().default("beta-construtora"),
+    importId: text("importacao_id")
+      .notNull()
+      .references(() => importRuns.id, { onDelete: "cascade" }),
+    rowNumber: integer("linha").notNull(),
+    sheet: text("aba").notNull().default(""),
+    module: text("modulo").notNull().default(""),
+    payload: text("payload").notNull().default("{}"),
+    reason: text("motivo").notNull(),
+    resolved: integer("resolvido", { mode: "boolean" }).notNull().default(false),
+    resolvedBy: text("resolvido_por").notNull().default(""),
+    resolvedAt: text("resolvido_em").notNull().default(""),
+    createdAt: text("criado_em").notNull().default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [
+    index("importacao_erros_busca")
+      .on(table.tenantId, table.importId)
+      .where(sql`${table.resolved} = 0`),
   ],
 );
 

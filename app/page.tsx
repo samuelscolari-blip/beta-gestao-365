@@ -10,15 +10,8 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const requestHeaders = await headers();
   const email = authenticatedEmailFromHeaders(requestHeaders);
-  const encodedName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedName)
-      : null;
-
   const isAdmin = email === SOLE_ADMIN_EMAIL;
+  const fullName = isAdmin ? "Samuel Scolari" : null;
 
   return (
     <SecureBetaAppV52

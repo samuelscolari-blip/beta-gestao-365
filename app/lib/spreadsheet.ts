@@ -14,12 +14,13 @@ import {
 } from "./modules";
 import { validateRecordPayload } from "./record-validation";
 import { buildImportDeduplicationKey } from "./import-deduplication.mjs";
+import { parseCsvRows } from "./spreadsheet-csv.mjs";
 import {
   expandSpreadsheetDateMatrix,
-  spreadsheetDateValue,
   transposeSpreadsheetRows,
 } from "./spreadsheet-layout.mjs";
-import { findSemanticHeaderIndex } from "./spreadsheet-semantic.mjs";
+import { normalizeSemanticHeaders } from "./spreadsheet-semantic.mjs";
+import { sanitizeSpreadsheetCell } from "./spreadsheet-sanitizer.mjs";
 import {
   allowedImportModuleIds,
   importFamilyForModule,
@@ -36,6 +37,8 @@ export type ImportRecord = {
   amount: number;
   payload: Record<string, unknown>;
   source: string;
+  importLocation?: string;
+  importSheet?: string;
 };
 
 type ImportLayout =
@@ -47,61 +50,41 @@ type ParsedImportRecord = ImportRecord & {
   importLocation: string;
 };
 
+export type ImportFailure = {
+  module: string;
+  sheet: string;
+  location: string;
+  reason: string;
+  payload: Record<string, unknown>;
+};
+
+type ParsedFailure = Omit<ImportFailure, "module" | "sheet">;
+
 type ParsedSheet = {
   records: ParsedImportRecord[];
   skipped: number;
   matched: boolean;
   layout: ImportLayout;
+  failures: ParsedFailure[];
 };
 
-function toDateValue(value: unknown) {
-  const parsed = spreadsheetDateValue(value);
-  if (parsed) return parsed;
-  const text = String(value ?? "").trim();
-  if (!text) return "";
-  const isoWithTime = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (isoWithTime) return `${isoWithTime[1]}-${isoWithTime[2]}-${isoWithTime[3]}`;
-  return text;
-}
-
 function cleanCell(value: unknown, type: string) {
-  if (type === "date") return toDateValue(value);
-  if (type === "number" || type === "currency") {
-    if (typeof value === "number") return Number.isFinite(value) ? value : 0;
-    const text = String(value ?? "").trim();
-    if (!text) return 0;
-    const normalized = text
-      .replace(/\s/g, "")
-      .replace(/^R\$/i, "")
-      .replace(/\.(?=\d{3}(?:[,.]|$))/g, "")
-      .replace(",", ".");
-    const number = Number(normalized);
-    return Number.isFinite(number) ? number : 0;
-  }
-  if (typeof value === "boolean") return value ? "Sim" : "Não";
-  return String(value ?? "").trim();
+  return sanitizeSpreadsheetCell(value, type);
 }
 
-function headerAliases(module: ModuleDefinition) {
-  return module.fields.map((field) => ({
-    field,
-    aliases: [field.label, ...(field.aliases || [])],
-  }));
+function hasSpreadsheetValue(value: unknown) {
+  return value !== null && value !== undefined && String(value).trim() !== "";
 }
 
 function resolveFieldColumns(module: ModuleDefinition, header: unknown[]) {
-  const usedIndexes = new Set<number>();
-  return headerAliases(module)
-    .map(({ field, aliases }) => {
-      const index = findSemanticHeaderIndex(header, aliases, usedIndexes);
-      if (index >= 0) usedIndexes.add(index);
-      return {
-        key: field.key,
-        type: field.type,
-        index,
-      };
-    })
-    .filter((column) => column.index >= 0);
+  const fieldByKey = new Map(module.fields.map((field) => [field.key, field]));
+  return normalizeSemanticHeaders(header, module.fields).flatMap(
+    (key: string | null, index: number) => {
+      if (!key) return [];
+      const field = fieldByKey.get(key);
+      return field ? [{ key, type: field.type, index }] : [];
+    },
+  );
 }
 
 function createParsedRecord(
@@ -110,7 +93,11 @@ function createParsedRecord(
   sourceName: string,
   importLocation: string,
 ): ParsedImportRecord | null {
-  const title = String(payload[module.titleField] || "").trim();
+  const title = String(
+    payload[module.titleField] ||
+      (module.id === "works" ? payload.code : "") ||
+      "",
+  ).trim();
   if (!title) return null;
   return {
     module: module.id,
@@ -122,7 +109,23 @@ function createParsedRecord(
     payload,
     source: `Planilha: ${sourceName}`,
     importLocation,
+    importSheet: sourceName.split(" / ").at(-1) || sourceName,
   };
+}
+
+function rawRowPayload(header: unknown[], row: unknown[]) {
+  return Object.fromEntries(
+    header.map((value, index) => [
+      String(value || `coluna_${index + 1}`).slice(0, 120),
+      row[index] ?? "",
+    ]),
+  );
+}
+
+function failureReason(error: unknown) {
+  return error instanceof Error
+    ? error.message
+    : "A linha não pôde ser sanitizada.";
 }
 
 function parseConventionalTable(
@@ -144,10 +147,11 @@ function parseConventionalTable(
   }
 
   if (headerIndex < 0) {
-    return { records: [], skipped: 0, matched: false, layout };
+    return { records: [], skipped: 0, matched: false, layout, failures: [] };
   }
 
   const records: ParsedImportRecord[] = [];
+  const failures: ParsedFailure[] = [];
   let skipped = 0;
   for (let index = headerIndex + 1; index < rows.length; index += 1) {
     const row = rows[index] || [];
@@ -158,26 +162,42 @@ function parseConventionalTable(
       continue;
     }
 
-    const payload: Record<string, unknown> = {};
-    for (const column of fieldColumns) {
-      payload[column.key] = cleanCell(row[column.index], column.type);
+    const importLocation = layout === "Tabela horizontal"
+      ? `registro horizontal ${index - headerIndex}`
+      : `linha ${index + 1}`;
+    const rawPayload = rawRowPayload(rows[headerIndex] || [], row);
+    try {
+      const payload: Record<string, unknown> = {};
+      for (const column of fieldColumns) {
+        const rawValue = row[column.index];
+        if (!hasSpreadsheetValue(rawValue)) continue;
+        payload[column.key] = cleanCell(rawValue, column.type);
+      }
+      const record = createParsedRecord(
+        module,
+        payload,
+        sourceName,
+        importLocation,
+      );
+      if (!record) {
+        failures.push({
+          location: importLocation,
+          reason: `O campo “${module.fields.find((field) => field.key === module.titleField)?.label || "título"}” não foi identificado.`,
+          payload: rawPayload,
+        });
+        continue;
+      }
+      records.push(record);
+    } catch (error) {
+      failures.push({
+        location: importLocation,
+        reason: failureReason(error),
+        payload: rawPayload,
+      });
     }
-    const record = createParsedRecord(
-      module,
-      payload,
-      sourceName,
-      layout === "Tabela horizontal"
-        ? `registro horizontal ${index - headerIndex}`
-        : `linha ${index + 1}`,
-    );
-    if (!record) {
-      skipped += 1;
-      continue;
-    }
-    records.push(record);
   }
 
-  return { records, skipped, matched: true, layout };
+  return { records, skipped, matched: true, layout, failures };
 }
 
 function parseDateMatrix(
@@ -198,6 +218,7 @@ function parseDateMatrix(
       skipped: 0,
       matched: false,
       layout: "Matriz de datas",
+      failures: [],
     };
   }
 
@@ -205,26 +226,42 @@ function parseDateMatrix(
     module.fields.map((field) => [field.key, field.type]),
   );
   const records: ParsedImportRecord[] = [];
-  let skipped = 0;
+  const failures: ParsedFailure[] = [];
+  const skipped = 0;
 
   for (const expandedRow of expanded.payloadRows) {
-    const payload = Object.fromEntries(
-      Object.entries(expandedRow.payload).map(([key, value]) => [
-        key,
-        cleanCell(value, fieldTypeByKey.get(key) || "text"),
-      ]),
-    );
-    const record = createParsedRecord(
-      module,
-      payload,
-      sourceName,
-      `linha ${expandedRow.rowNumber}, coluna ${expandedRow.columnNumber}`,
-    );
-    if (!record) {
-      skipped += 1;
-      continue;
+    const importLocation =
+      `linha ${expandedRow.rowNumber}, coluna ${expandedRow.columnNumber}`;
+    try {
+      const payload = Object.fromEntries(
+        Object.entries(expandedRow.payload).flatMap(([key, value]) =>
+          hasSpreadsheetValue(value)
+            ? [[key, cleanCell(value, fieldTypeByKey.get(key) || "text")]]
+            : [],
+        ),
+      );
+      const record = createParsedRecord(
+        module,
+        payload,
+        sourceName,
+        importLocation,
+      );
+      if (!record) {
+        failures.push({
+          location: importLocation,
+          reason: `O campo “${module.fields.find((field) => field.key === module.titleField)?.label || "título"}” não foi identificado.`,
+          payload: expandedRow.payload,
+        });
+        continue;
+      }
+      records.push(record);
+    } catch (error) {
+      failures.push({
+        location: importLocation,
+        reason: failureReason(error),
+        payload: expandedRow.payload,
+      });
     }
-    records.push(record);
   }
 
   return {
@@ -232,6 +269,7 @@ function parseDateMatrix(
     skipped,
     matched: true,
     layout: "Matriz de datas",
+    failures,
   };
 }
 
@@ -286,9 +324,9 @@ function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
 }
 
 export async function importWorkbook(file: File, targetModuleId?: string) {
-  if (!/\.xlsx$/i.test(file.name)) {
+  if (!/\.(?:xlsx|csv)$/i.test(file.name)) {
     throw new Error(
-      "Selecione uma planilha Excel no formato .xlsx. Arquivos .xls antigos devem ser salvos novamente como .xlsx.",
+      "Selecione uma planilha .xlsx ou .csv. Arquivos .xls antigos devem ser salvos novamente como .xlsx.",
     );
   }
   if (file.size > 15 * 1024 * 1024) {
@@ -302,7 +340,17 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
     );
   }
 
-  const sheets = await readXlsxFile(file);
+  const sheets: Array<{ sheet: string; data: unknown[][] }> = /\.csv$/i.test(file.name)
+    ? [
+        {
+          sheet: file.name.replace(/\.csv$/i, "").slice(0, 31) || "CSV",
+          data: parseCsvRows(await file.text()),
+        },
+      ]
+    : (await readXlsxFile(file)) as Array<{
+        sheet: string;
+        data: unknown[][];
+      }>;
   const candidates = targetModuleId
     ? moduleDefinitions.filter((module) => module.id === targetModuleId)
     : moduleDefinitions.filter((module) =>
@@ -330,6 +378,7 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
     invalidExamples: string[];
   }> = [];
   const unmatchedSheets: string[] = [];
+  const failures: ImportFailure[] = [];
 
   for (const sheet of sheets) {
     const sheetRows = sheet.data as unknown[][];
@@ -353,23 +402,49 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
       sheetRows,
       `${file.name} / ${sheet.sheet}`,
     );
-    let invalid = 0;
+    let invalid = parsed.failures.length;
     let duplicates = 0;
     let imported = 0;
-    const invalidExamples: string[] = [];
+    const invalidExamples: string[] = parsed.failures
+      .slice(0, 8)
+      .map((failure) => `${failure.location}: ${failure.reason}`);
+    failures.push(
+      ...parsed.failures.map((failure) => ({
+        module: selected.id,
+        sheet: sheet.sheet,
+        ...failure,
+      })),
+    );
 
-    for (const parsedRecord of parsed.records) {
-      const { importLocation, ...record } = parsedRecord;
-      const issues = validateRecordPayload(record.module, record.payload);
+    for (const record of parsed.records) {
+      const importLocation = record.importLocation || "registro sem posição";
+      let issues = validateRecordPayload(record.module, record.payload);
+      if (record.module === "works" && record.reference) {
+        issues = issues.filter(
+          (issue) => !["name", "status"].includes(issue.field),
+        );
+      }
+      if (record.module === "works" && !String(record.payload.manager || "").trim()) {
+        issues.push({
+          field: "manager",
+          message: "O gestor responsável é obrigatório na importação de obras.",
+        });
+      }
       if (issues.length) {
         invalid += 1;
+        const reason = issues
+          .map((issue) => `${issue.field}: ${issue.message}`)
+          .join("; ");
         if (invalidExamples.length < 8) {
-          invalidExamples.push(
-            `${importLocation}: ${issues
-              .map((issue) => `${issue.field}: ${issue.message}`)
-              .join("; ")}`,
-          );
+          invalidExamples.push(`${importLocation}: ${reason}`);
         }
+        failures.push({
+          module: selected.id,
+          sheet: sheet.sheet,
+          location: importLocation,
+          reason,
+          payload: record.payload,
+        });
         continue;
       }
 
@@ -410,7 +485,12 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
     });
   }
 
-  return { records: accepted, report, unmatchedSheets };
+  return {
+    records: accepted,
+    report,
+    unmatchedSheets,
+    failures: failures.slice(0, 2_000),
+  };
 }
 
 function excelCell(value: unknown, fieldType: string) {

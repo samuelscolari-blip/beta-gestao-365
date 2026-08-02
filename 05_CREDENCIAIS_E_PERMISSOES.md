@@ -1,69 +1,37 @@
 # Credenciais e permissões
 
-## O que já existe
+## Publicação
 
-- O Site está publicado para consulta pública.
-- A propriedade e a edição do projeto são controladas separadamente.
-- Samuel Scolari é o proprietário do projeto.
-- O banco D1 é injetado pela plataforma através do binding `DB`.
-- O administrador operacional do sistema é validado no servidor pelo arquivo
-  `app/lib/server-access.ts`.
+O GitHub Actions publica no Cloudflare usando dois segredos criptografados do
+repositório:
 
-Publicar o Site e administrar registros dentro do sistema são permissões
-diferentes.
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
 
-## O que outra IA precisa para publicar
+O token deve ter, no mínimo, acesso de edição aos Workers Scripts e ao D1 da
+conta correta, além de leitura das configurações da conta. O valor nunca deve
+ser exibido em conversa, commit, arquivo ou log.
 
-1. O código-fonte deste pacote.
-2. Uma sessão autenticada de proprietário ou editor do Site.
-3. Acesso às ferramentas de edição e publicação do ChatGPT Sites.
-4. O projeto e o binding preservados em `.openai/hosting.json`.
-5. Autorização do proprietário para a publicação em produção.
+## Banco
 
-A solicitação que originou este pacote registra a autorização de continuidade,
-mas a plataforma pode pedir uma confirmação adicional em uma nova sessão.
+O Worker recebe o D1 pelo binding `DB` definido em `wrangler.jsonc`. O ID do
+banco não é uma senha, mas não substitui o token de implantação.
 
-## Como conceder acesso a outra pessoa
+## Administração do portal
 
-O proprietário deve adicionar a conta humana do responsável como editora do
-Site. Essa conta precisa pertencer ao mesmo workspace compatível. A IA trabalhará
-dentro da sessão autenticada desse editor.
+Publicar o Worker e administrar registros dentro do sistema são permissões
+diferentes. As gravações do portal exigem uma identidade validada no servidor.
+Quando Cloudflare Access estiver habilitado, `TEAM_DOMAIN` e `POLICY_AUD` devem
+ser configurados como segredos do Worker, nunca no Git.
 
-Não é possível adicionar uma "IA genérica" como editora sem uma conta humana
-autenticada. Também não é seguro fornecer a senha de Samuel para outra pessoa
-ou ferramenta.
+## Itens proibidos no repositório
 
-## Itens que nunca devem ser colocados no ZIP
+- tokens e chaves de API;
+- senhas e cookies;
+- certificados A1/A3 e respectivas senhas;
+- conexões reais do PostgreSQL ou Redis;
+- backups e exportações de dados reais;
+- arquivos `.env` de produção.
 
-- senha do ChatGPT;
-- cookies de sessão;
-- token temporário do repositório;
-- tokens de implantação;
-- chaves de API;
-- segredo HMAC;
-- chave de criptografia;
-- conexão real do PostgreSQL;
-- conexão real do Redis;
-- certificado A1, senha do certificado ou material de A3/HSM;
-- backup ou exportação de dados reais.
-
-## Variáveis opcionais
-
-O portal pode trabalhar apenas com D1. A integração opcional com o ERP Core usa:
-
-- `ERP_CORE_BASE_URL`
-- `ERP_CORE_CLIENT_ID`
-- `ERP_CORE_HMAC_SECRET`
-- `ERP_CORE_TENANT_ID`
-
-O ERP Core usa as variáveis documentadas em
-`services/erp-core/.env.example`. Valores reais devem ser cadastrados
-diretamente no ambiente de hospedagem ou cofre, nunca gravados neste pacote.
-
-## Permissões mínimas recomendadas
-
-Para outra pessoa ajudar, conceda somente o papel de editor do Site. Não
-transfira a propriedade e não amplie o acesso administrativo do sistema. A
-remoção do editor deve ser feita ao final do trabalho, se o acesso deixar de ser
-necessário.
-
+Um token exposto deve ser revogado imediatamente, substituído no cofre e nunca
+reutilizado.

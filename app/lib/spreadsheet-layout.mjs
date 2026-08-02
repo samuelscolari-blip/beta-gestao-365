@@ -1,14 +1,5 @@
 import { findSemanticHeaderIndex } from "./spreadsheet-semantic.mjs";
 
-function normalizeLayoutText(value) {
-  return String(value ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .replace(/\s+/g, " ")
-    .toLowerCase();
-}
-
 export function spreadsheetDateValue(value) {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString().slice(0, 10);

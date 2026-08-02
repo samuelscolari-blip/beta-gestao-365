@@ -1,55 +1,47 @@
-# Checklist de publicação no Site existente
+# Checklist de publicação no Cloudflare
 
-## Antes de alterar
+## Preparação
 
-- [ ] Confirmar que o Site é Beta Gestão 365.
-- [ ] Confirmar o projeto `appgprj_6a67cdc58ee8819180fe477f9299edf7`.
-- [ ] Confirmar o endereço público atual.
-- [ ] Confirmar `.openai/hosting.json` com o binding D1 `DB`.
-- [ ] Abrir o projeto existente; não criar outro Site.
-- [ ] Ler o pedido completo e os arquivos afetados.
-- [ ] Confirmar que a sessão pertence ao proprietário ou a um editor autorizado.
+- [ ] Confirmar repositório `samuelscolari-blip/beta-gestao-365`.
+- [ ] Confirmar Worker `beta-gestao-365`.
+- [ ] Confirmar D1 `beta-gestao-365-db` com binding `DB`.
+- [ ] Confirmar que `.openai/hosting.json` não existe.
+- [ ] Confirmar ausência de referências ao domínio `chatgpt.site`.
+- [ ] Trabalhar em branch separada.
 
-## Durante a implementação
+## Implementação
 
-- [ ] Preservar dados e compatibilidade com registros históricos.
-- [ ] Não alterar o administrador operacional sem solicitação.
-- [ ] Não inserir senhas, tokens, certificados ou dados reais no código.
-- [ ] Não editar migrations já aplicadas.
-- [ ] Criar migration nova e aditiva quando o esquema realmente precisar mudar.
-- [ ] Manter o módulo de Terceiros operacional oculto.
-- [ ] Manter códigos internos ocultos por padrão.
-- [ ] Manter o Passo a passo da obra.
-- [ ] Manter os três estados oficiais de Compras.
-- [ ] Separar exemplos fictícios de registros reais.
+- [ ] Preservar dados e compatibilidade histórica.
+- [ ] Não editar migrations aplicadas.
+- [ ] Criar migration nova e aditiva quando necessário.
+- [ ] Manter autorização de mutações no servidor.
+- [ ] Não inserir senhas, tokens ou dados reais no Git.
+- [ ] Preservar as regras funcionais documentadas em `AGENTS.md`.
 
-## Validação obrigatória
+## Validação
 
 - [ ] Executar `npm run lint`.
 - [ ] Executar `npm test`.
-- [ ] Confirmar build e validação do artefato.
-- [ ] Conferir que todos os testes passaram.
-- [ ] Verificar visualmente desktop e celular nas telas alteradas.
-- [ ] Testar visitante sem gravação.
-- [ ] Testar administrador nas ações modificadas.
-- [ ] Conferir que o banco e os registros existentes continuam acessíveis.
-- [ ] Revisar a alteração para impedir vazamento de credenciais e dados.
+- [ ] Validar o artefato Cloudflare e o binding D1.
+- [ ] Verificar visualmente desktop e celular.
+- [ ] Testar visitante somente leitura.
+- [ ] Testar ações administrativas em ambiente autorizado.
+- [ ] Revisar a migration antes de aplicá-la.
 
 ## Publicação
 
-- [ ] Registrar resumidamente o que foi alterado.
-- [ ] Salvar uma nova versão imutável do mesmo projeto.
-- [ ] Publicar somente a versão validada.
-- [ ] Acompanhar a publicação até `succeeded`.
-- [ ] Confirmar a URL retornada pela plataforma.
+- [ ] Abrir PR para `main`.
+- [ ] Confirmar o CI da PR.
+- [ ] Integrar somente a versão validada.
+- [ ] Acompanhar `Publicar no Cloudflare` até sucesso.
+- [ ] Confirmar a migration remota.
+- [ ] Confirmar HTTP 200 em
+  `https://beta-gestao-365.scolarisamuel.workers.dev/`.
+- [ ] Confirmar que nenhuma publicação ocorreu no domínio aposentado.
 
-## Depois da publicação
+## Falha e retorno
 
-- [ ] Abrir `https://beta-gestao-365.scolarisamuel.chatgpt.site`.
-- [ ] Conferir as funções alteradas.
-- [ ] Confirmar que não surgiu novamente nenhum código interno.
-- [ ] Confirmar que Terceiros permanece oculto.
-- [ ] Confirmar que Compras mantém apenas os três estados definidos.
-- [ ] Registrar o número da nova versão e o resultado dos testes.
-- [ ] Se houver erro, não apagar dados; corrigir ou voltar para versão anterior.
-
+- [ ] Não apagar dados.
+- [ ] Não recriar o D1.
+- [ ] Registrar o erro e corrigir em novo commit.
+- [ ] Reverter o Worker para commit validado quando necessário.

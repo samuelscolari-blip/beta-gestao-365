@@ -5,21 +5,25 @@ import {
   spreadsheetDateValue,
   expandSpreadsheetDateMatrix,
 } from "../app/lib/spreadsheet-layout.mjs";
-import { findSemanticHeaderIndex } from "../app/lib/spreadsheet-semantic.mjs";
+import {
+  findSemanticHeaderIndex,
+  normalizeSemanticHeaders,
+} from "../app/lib/spreadsheet-semantic.mjs";
 
 const spreadsheet = await readFile("app/lib/spreadsheet.ts", "utf8");
 const policy = await readFile("app/lib/import-policy.ts", "utf8");
 const app = await readFile("app/components/BetaApp.tsx", "utf8");
 const recordsStore = await readFile("db/records.ts", "utf8");
 
-test("V61 restringe a importação a Custos, Máquinas e Funcionários", () => {
+test("V61 restringe a importação a Obras, Custos, Máquinas e Funcionários", () => {
+  assert.match(policy, /id: "works"/);
   assert.match(policy, /id: "costs"/);
   assert.match(policy, /id: "machines"/);
   assert.match(policy, /id: "employees"/);
   assert.match(policy, /"expenses"/);
   assert.match(policy, /"assets"/);
   assert.match(policy, /"people"/);
-  assert.doesNotMatch(policy, /modules: \[[^\]]*"works"/s);
+  assert.match(policy, /modules: \["works"\]/);
   assert.doesNotMatch(policy, /modules: \[[^\]]*"compliance"/s);
   assert.doesNotMatch(policy, /modules: \[[^\]]*"rules"/s);
 });
@@ -27,7 +31,7 @@ test("V61 restringe a importação a Custos, Máquinas e Funcionários", () => {
 test("V61 protege o importador na interface e na camada de leitura", () => {
   assert.match(app, /isImportableModule\(module\.id\)/);
   assert.match(app, /Este módulo não aceita importação automática/);
-  assert.match(app, /Importar Custos, Máquinas ou Funcionários/);
+  assert.match(app, /Importar Obras, Custos, Máquinas ou Funcionários/);
   assert.match(spreadsheet, /allowedImportModuleIds\.has\(module\.id\)/);
   assert.match(spreadsheet, /targetModuleId && !isImportableModule\(targetModuleId\)/);
 });
@@ -72,6 +76,61 @@ test("V61 faz mapeamento semântico conservador de cabeçalhos", () => {
   );
 });
 
+test("V61 traduz o cabeçalho de obras enviado para os campos reais", () => {
+  const fields = [
+    { key: "code", label: "Código da obra", aliases: ["Cod", "Projeto"] },
+    { key: "cei", label: "Matrícula CEI anterior", aliases: ["CEI"] },
+    {
+      key: "manager",
+      label: "Gestor responsável",
+      aliases: ["Responsável", "Matrícula"],
+    },
+    {
+      key: "endDate",
+      label: "Previsão de término",
+      aliases: ["Dt. previsão", "Data limite"],
+    },
+    {
+      key: "budget",
+      label: "Orçamento de referência",
+      aliases: ["Vlr", "Valor total"],
+    },
+    {
+      key: "currentProcess",
+      label: "Processo em execução agora",
+      aliases: ["Serviço", "Atividade"],
+    },
+  ];
+  assert.deepEqual(
+    normalizeSemanticHeaders(
+      ["Projeto", "Matrícula", "Data limite", "Vlr", "Atividade"],
+      fields,
+    ),
+    ["code", "manager", "endDate", "budget", "currentProcess"],
+  );
+});
+
+test("V61 prioriza alias exato antes de aproximação semântica", () => {
+  assert.deepEqual(
+    normalizeSemanticHeaders(
+      ["Matrícula", "CEI"],
+      [
+        {
+          key: "cei",
+          label: "Matrícula CEI anterior",
+          aliases: ["CEI"],
+        },
+        {
+          key: "manager",
+          label: "Gestor responsável",
+          aliases: ["Matrícula"],
+        },
+      ],
+    ),
+    ["manager", "cei"],
+  );
+});
+
 test("V61 expande matriz de três dias em três lançamentos", () => {
   const rows = [
     ["Descrição", "Pessoa", "03/08/2026", "04/08/2026", "05/08/2026"],
@@ -97,4 +156,10 @@ test("V61 expande matriz de três dias em três lançamentos", () => {
 test("V61 não usa Prisma, PostgreSQL, AWS SDK ou Cloudflare Pages", () => {
   assert.doesNotMatch(spreadsheet, /PrismaClient|@aws-sdk|postgresql|pages-action/);
   assert.doesNotMatch(app, /PrismaClient|@aws-sdk|pages-action/);
+});
+
+test("V61 recebe Excel e CSV sem usar fs no runtime Cloudflare", () => {
+  assert.match(spreadsheet, /xlsx\|csv/);
+  assert.match(spreadsheet, /parseCsvRows/);
+  assert.doesNotMatch(spreadsheet, /from ["']fs["']|createReadStream|csv-parse/);
 });

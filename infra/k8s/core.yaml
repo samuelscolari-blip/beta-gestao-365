@@ -13,7 +13,7 @@ data:
   PORT: "8080"
   DATABASE_POOL_SIZE: "20"
   ERP_SERVICE_CLIENT_ID: beta-gestao-365
-  ERP_ALLOWED_ORIGINS: https://beta-gestao-365.scolarisamuel.chatgpt.site
+  ERP_ALLOWED_ORIGINS: https://beta-gestao-365.scolarisamuel.workers.dev
   CERTIFICATE_PROVIDER: DISABLED
   PAYROLL_WORKER_CONCURRENCY: "4"
   FISCAL_WORKER_CONCURRENCY: "2"

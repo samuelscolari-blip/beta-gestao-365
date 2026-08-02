@@ -1,47 +1,43 @@
-# Instructions for coding agents
+# Instruções para agentes de desenvolvimento
 
-Read `00_LEIA-ME_PRIMEIRO.md` and
-`01_GUIA_PARA_OUTRA_IA_PUBLICAR.md` before taking any project action.
+Leia `00_LEIA-ME_PRIMEIRO.md` e `01_GUIA_PARA_OUTRA_IA_PUBLICAR.md` antes de
+alterar ou publicar o projeto.
 
-## Existing production target
+## Produção oficial
 
-- Project: `appgprj_6a67cdc58ee8819180fe477f9299edf7`
-- Slug: `beta-gestao-365`
-- URL: `https://beta-gestao-365.scolarisamuel.chatgpt.site`
-- D1 binding: `DB`
-- Baseline: version 51, commit
-  `e304021c25cdf5be679daa441c085cad5aa4269d`
+- Repositório: `samuelscolari-blip/beta-gestao-365`
+- Branch de produção: `main`
+- Worker: `beta-gestao-365`
+- URL única: `https://beta-gestao-365.scolarisamuel.workers.dev/`
+- Banco: Cloudflare D1 `beta-gestao-365-db`
+- Binding: `DB`
 
-Never create a replacement Site. Preserve `.openai/hosting.json`, the project
-identity, the production URL, the `DB` binding, all migrations and historical
-data.
+O domínio `chatgpt.site` e o ChatGPT Sites foram aposentados por decisão
+expressa de Samuel Scolari. Não recrie `.openai/hosting.json`, não use o antigo
+projeto Sites e não publique versões naquele domínio.
 
-## Required workflow
+## Fluxo obrigatório
 
-1. Open/edit the existing Site using its persisted project identity.
-2. Inspect only the files relevant to the request.
-3. Preserve unrelated user changes.
-4. Implement server-side permission checks for every mutation.
-5. Keep secrets outside files and source control.
-6. Run `npm run lint` and `npm test`.
-7. Perform visual and interaction QA on affected screens.
-8. Save an immutable version and deploy it to the same Site only from an
-   authenticated owner/editor session.
-9. Verify the deployment reaches a terminal success state before reporting it.
+1. Trabalhe em branch separada e preserve alterações não relacionadas.
+2. Implemente autorização no servidor para toda mutação.
+3. Mantenha segredos fora do código e dos commits.
+4. Evolua o D1 somente com migrations aditivas; nunca apague ou recrie o banco.
+5. Execute `npm run lint` e `npm test`.
+6. Revise visualmente as telas alteradas.
+7. Abra PR para `main`; a publicação ocorre pelo GitHub Actions.
+8. O workflow aplica migrations e publica somente no Worker oficial.
+9. Confirme HTTP 200 no endereço `workers.dev` antes de informar sucesso.
 
-## Product rules
+## Regras do produto
 
-- Internal record codes remain hidden by default.
-- Operational Terceiros remains hidden without deleting history.
-- Passo a passo da obra remains present.
-- The holistic work index remains distinct from physical progress.
-- Purchase statuses are only `Aguardando análise`, `Aprovado`, `Reprovado`.
-- Fictional decision examples never enter real queues, totals or actions.
-- Visitors are read-only; privileged writes are server-authorized.
-- IBS/CBS is not a payroll deduction.
-- Termination calculations are previews and do not transmit official eSocial
-  events.
+- Códigos internos permanecem ocultos por padrão.
+- Terceiros operacional permanece oculto sem apagar o histórico.
+- Passo a passo da obra permanece presente.
+- Índice geral da obra permanece distinto do avanço físico.
+- Compras usa somente `Aguardando análise`, `Aprovado` e `Reprovado`.
+- Exemplos fictícios nunca entram em filas, totais ou decisões reais.
+- Visitantes são somente leitura; gravações exigem autorização no servidor.
+- IBS/CBS não é desconto de folha.
+- Rescisões são prévias e não transmitem eventos oficiais ao eSocial.
 
-Do not weaken these rules unless Samuel Scolari explicitly changes the
-requirement.
-
+Não enfraqueça essas regras sem solicitação expressa de Samuel Scolari.
