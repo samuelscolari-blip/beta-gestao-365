@@ -44,6 +44,7 @@ type GoogleIdentityApi = {
           width?: number;
         },
       ): void;
+      prompt(): void;
       cancel(): void;
     };
   };
@@ -76,6 +77,8 @@ type PortalTargets = {
 
 const GOOGLE_CLIENT_ID =
   "1029361062935-9kd7sr8srn91vu9r4ekt0fjudfqbv1pk.apps.googleusercontent.com";
+const REMEMBERED_ADMIN_KEY = "beta-admin-device-v69";
+const ADMIN_REQUIRED_EVENT = "beta:admin-required";
 
 const decisionModules = new Set([
   "purchases",
@@ -171,10 +174,16 @@ function decisionDate(record: RecordView) {
     : new Intl.DateTimeFormat("pt-BR").format(date);
 }
 
-function AdminAccessControl({ isAdmin, userEmail }: Props) {
+function AdminAccessControl({ isAdmin }: Props) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const googleButtonRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
+
+  const openLogin = useCallback(() => {
+    if (!isAdmin) setIsOpen(true);
+  }, [isAdmin]);
 
   const handleCredential = useCallback(
     async (credentialResponse: GoogleCredentialResponse) => {
@@ -208,7 +217,8 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
           );
         }
 
-        window.location.assign("/?admin=ativo");
+        window.localStorage.setItem(REMEMBERED_ADMIN_KEY, "1");
+        window.location.replace("/");
       } catch (error) {
         setMessage(
           error instanceof Error
@@ -221,60 +231,144 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
     [],
   );
 
+  const initializeGoogle = useCallback(
+    (attemptAutomaticLogin = false) => {
+      if (!window.google) return;
+
+      if (!initializedRef.current) {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredential,
+          ux_mode: "popup",
+          auto_select: true,
+          cancel_on_tap_outside: true,
+        });
+        initializedRef.current = true;
+      }
+
+      if (googleButtonRef.current) {
+        googleButtonRef.current.replaceChildren();
+        window.google.accounts.id.renderButton(googleButtonRef.current, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "signin_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          locale: "pt_BR",
+          width: 260,
+        });
+      }
+
+      if (attemptAutomaticLogin) {
+        window.google.accounts.id.prompt();
+      }
+    },
+    [handleCredential],
+  );
+
   useEffect(() => {
-    const state = new URLSearchParams(window.location.search).get("admin");
-    if (state === "ativo") {
-      setMessage("Sessão administrativa ativada neste navegador.");
+    const url = new URL(window.location.href);
+    const state = url.searchParams.get("admin");
+
+    if (isAdmin) {
+      window.localStorage.setItem(REMEMBERED_ADMIN_KEY, "1");
+    } else if (state === "expirado") {
+      window.localStorage.removeItem(REMEMBERED_ADMIN_KEY);
+      setMessage("O acesso administrativo foi encerrado neste navegador.");
     } else if (state === "nao-autorizado") {
       setMessage("Esta conta Google não possui acesso administrativo.");
+      setIsOpen(true);
     } else if (state === "configuracao-pendente") {
-      setMessage("O acesso foi atualizado. Entre novamente com Google abaixo.");
-    } else if (state === "expirado") {
-      setMessage("Sua sessão administrativa expirou. Entre novamente.");
+      setMessage("Entre novamente com a conta Google autorizada.");
+      setIsOpen(true);
     }
-  }, []);
+
+    if (state) {
+      url.searchParams.delete("admin");
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    }
+  }, [isAdmin]);
+
+  useEffect(() => {
+    const decorateAvatar = () => {
+      const avatar = document.querySelector<HTMLElement>(".top-avatar");
+      if (!avatar) return;
+
+      avatar.dataset.adminEntry = isAdmin ? "active" : "login";
+      avatar.title = isAdmin
+        ? "Administrador autenticado"
+        : "Entrar como administrador";
+
+      if (isAdmin) {
+        avatar.removeAttribute("role");
+        avatar.removeAttribute("tabindex");
+      } else {
+        avatar.setAttribute("role", "button");
+        avatar.setAttribute("tabindex", "0");
+        avatar.setAttribute("aria-label", "Entrar como administrador");
+      }
+    };
+
+    const handleClick = (event: Event) => {
+      const target = event.target as Element | null;
+      if (!isAdmin && target?.closest(".top-avatar")) openLogin();
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as Element | null;
+      if (
+        !isAdmin &&
+        target?.closest(".top-avatar") &&
+        (event.key === "Enter" || event.key === " ")
+      ) {
+        event.preventDefault();
+        openLogin();
+      }
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    const handleAdminRequired = () => openLogin();
+
+    decorateAvatar();
+    const observer = new MutationObserver(decorateAvatar);
+    observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", handleClick);
+    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener(ADMIN_REQUIRED_EVENT, handleAdminRequired);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("click", handleClick);
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener(ADMIN_REQUIRED_EVENT, handleAdminRequired);
+    };
+  }, [isAdmin, openLogin]);
 
   useEffect(() => {
     if (isAdmin) return;
 
     let disposed = false;
     const scriptSelector = 'script[data-beta-google-identity="true"]';
+    const shouldAttemptAutomaticLogin =
+      window.localStorage.getItem(REMEMBERED_ADMIN_KEY) === "1";
 
-    const renderGoogleButton = () => {
-      if (disposed || !googleButtonRef.current || !window.google) return;
-
-      googleButtonRef.current.replaceChildren();
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredential,
-        ux_mode: "popup",
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-      window.google.accounts.id.renderButton(googleButtonRef.current, {
-        type: "standard",
-        theme: "outline",
-        size: "large",
-        text: "signin_with",
-        shape: "rectangular",
-        logo_alignment: "left",
-        locale: "pt_BR",
-        width: 190,
-      });
+    const handleScriptReady = () => {
+      if (!disposed) initializeGoogle(shouldAttemptAutomaticLogin);
     };
-
-    const existingScript = document.querySelector<HTMLScriptElement>(scriptSelector);
     const handleScriptError = () => {
       if (!disposed) {
         setMessage("Não foi possível carregar o login do Google.");
       }
     };
 
+    const existingScript =
+      document.querySelector<HTMLScriptElement>(scriptSelector);
     if (existingScript) {
       if (window.google) {
-        renderGoogleButton();
+        handleScriptReady();
       } else {
-        existingScript.addEventListener("load", renderGoogleButton, { once: true });
+        existingScript.addEventListener("load", handleScriptReady, { once: true });
         existingScript.addEventListener("error", handleScriptError, { once: true });
       }
     } else {
@@ -283,48 +377,79 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
       script.async = true;
       script.defer = true;
       script.dataset.betaGoogleIdentity = "true";
-      script.addEventListener("load", renderGoogleButton, { once: true });
+      script.addEventListener("load", handleScriptReady, { once: true });
       script.addEventListener("error", handleScriptError, { once: true });
       document.head.appendChild(script);
     }
 
     return () => {
       disposed = true;
-      existingScript?.removeEventListener("load", renderGoogleButton);
+      existingScript?.removeEventListener("load", handleScriptReady);
       existingScript?.removeEventListener("error", handleScriptError);
       window.google?.accounts.id.cancel();
     };
-  }, [handleCredential, isAdmin]);
+  }, [initializeGoogle, isAdmin]);
 
-  return (
-    <aside
-      className={`v66-admin-access ${isAdmin ? "active" : "public"}`}
-      aria-label="Acesso administrativo"
-      data-v66-admin-access={isAdmin ? "active" : "public"}
+  useEffect(() => {
+    if (!isOpen || isAdmin) return;
+    initializeGoogle(false);
+  }, [initializeGoogle, isAdmin, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  if (isAdmin || !isOpen) return null;
+
+  return createPortal(
+    <div
+      className="v69-admin-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="v69-admin-title"
+      data-v69-admin-login="open"
     >
-      <div className="v66-admin-access-icon" aria-hidden="true">
-        {isAdmin ? "✓" : "G"}
-      </div>
-      <div className="v66-admin-access-copy" aria-live="polite">
-        <strong>{isAdmin ? "Administrador ativo" : "Acesso do administrador"}</strong>
-        <small>
-          {isAdmin
-            ? userEmail || "Conta administrativa autenticada"
-            : "Somente a conta Google autorizada"}
-        </small>
-        {message ? <em>{message}</em> : null}
-      </div>
-      {isAdmin ? (
-        <a href="/admin-logout" className="v66-admin-access-action secondary">
-          Sair
-        </a>
-      ) : (
-        <div className="v68-google-login" aria-busy={isLoading}>
-          <div ref={googleButtonRef} aria-label="Entrar com Google" />
-          {isLoading ? <span>Validando...</span> : null}
+      <button
+        type="button"
+        className="v69-admin-backdrop"
+        aria-label="Fechar acesso administrativo"
+        onClick={() => setIsOpen(false)}
+      />
+      <section className="v69-admin-card">
+        <button
+          type="button"
+          className="v69-admin-close"
+          aria-label="Fechar"
+          onClick={() => setIsOpen(false)}
+        >
+          ×
+        </button>
+        <span className="v69-admin-icon" aria-hidden="true">G</span>
+        <div className="v69-admin-copy">
+          <small>ÁREA RESTRITA</small>
+          <h2 id="v69-admin-title">Acesso administrativo</h2>
+          <p>
+            Entre com a conta Google autorizada. Este navegador ficará
+            reconhecido por 30 dias, sem exibir avisos permanentes na tela.
+          </p>
         </div>
-      )}
-    </aside>
+        <div className="v69-google-login" aria-busy={isLoading}>
+          <div ref={googleButtonRef} aria-label="Entrar com Google" />
+          {isLoading ? <span>Validando sua conta...</span> : null}
+        </div>
+        {message ? <p className="v69-admin-message">{message}</p> : null}
+        <small className="v69-admin-security">
+          O acesso continua protegido e liberado somente para a conta
+          administrativa cadastrada.
+        </small>
+      </section>
+    </div>,
+    document.body,
   );
 }
 
