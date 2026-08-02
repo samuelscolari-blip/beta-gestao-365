@@ -100,3 +100,10 @@ test("V65 preserva a remoção de Operação Própria e o acabamento executivo",
   assert.match(professionalCss, /container-name: construction-executive/);
   assert.match(professionalCss, /construction-machine-row/);
 });
+
+test("V65 respeita as regras estáticas do React e do Next", () => {
+  assert.doesNotMatch(secure, /ReactChangeEvent/);
+  assert.match(secure, /window\.setTimeout\(refresh, 0\)/);
+  assert.match(secure, /clearFileInput\(pendingImport\?\.input \|\| null\)/);
+  assert.doesNotMatch(enhancements, /const module =/);
+});

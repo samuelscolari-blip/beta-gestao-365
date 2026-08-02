@@ -5,24 +5,29 @@ import {
   type ModuleField,
 } from "./modules";
 
-function appendField(module: ModuleDefinition | undefined, field: ModuleField) {
-  if (!module || module.fields.some((item) => item.key === field.key)) return;
-  module.fields.push(field);
+function appendField(
+  definition: ModuleDefinition | undefined,
+  field: ModuleField,
+) {
+  if (!definition || definition.fields.some((item) => item.key === field.key)) {
+    return;
+  }
+  definition.fields.push(field);
 }
 
-function appendColumn(module: ModuleDefinition | undefined, key: string) {
-  if (!module || module.tableColumns.includes(key)) return;
-  const statusIndex = module.tableColumns.indexOf("status");
-  if (statusIndex >= 0) module.tableColumns.splice(statusIndex, 0, key);
-  else module.tableColumns.push(key);
+function appendColumn(definition: ModuleDefinition | undefined, key: string) {
+  if (!definition || definition.tableColumns.includes(key)) return;
+  const statusIndex = definition.tableColumns.indexOf("status");
+  if (statusIndex >= 0) definition.tableColumns.splice(statusIndex, 0, key);
+  else definition.tableColumns.push(key);
 }
 
 function applyPaymentFields(
   moduleId: "rentals" | "food",
   expectedLabel: string,
 ) {
-  const module = moduleMap[moduleId];
-  appendField(module, {
+  const definition = moduleMap[moduleId];
+  appendField(definition, {
     key: "paymentStatus",
     label: "Situação do pagamento",
     type: "select",
@@ -30,27 +35,27 @@ function applyPaymentFields(
     aliases: ["Status pagamento", "Situação pagamento"],
     help: `Use Pago somente depois de registrar data, valor e comprovante do ${expectedLabel}.`,
   });
-  appendField(module, {
+  appendField(definition, {
     key: "paymentDate",
     label: "Data do pagamento",
     type: "date",
     aliases: ["Data pagamento"],
   });
-  appendField(module, {
+  appendField(definition, {
     key: "paidAmount",
     label: "Valor efetivamente pago",
     type: "currency",
     aliases: ["Valor pago"],
   });
-  appendField(module, {
+  appendField(definition, {
     key: "receiptUrl",
     label: "Comprovante de pagamento",
     type: "url",
     placeholder: "Cole o link do comprovante",
     aliases: ["Link comprovante", "Comprovante"],
   });
-  appendColumn(module, "paymentStatus");
-  appendColumn(module, "receiptUrl");
+  appendColumn(definition, "paymentStatus");
+  appendColumn(definition, "receiptUrl");
 }
 
 const marker = moduleMap as typeof moduleMap & { __v65Applied?: boolean };
