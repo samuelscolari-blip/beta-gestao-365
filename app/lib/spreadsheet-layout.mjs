@@ -1,3 +1,5 @@
+import { findSemanticHeaderIndex } from "./spreadsheet-semantic.mjs";
+
 function normalizeLayoutText(value) {
   return String(value ?? "")
     .normalize("NFD")
@@ -10,6 +12,12 @@ function normalizeLayoutText(value) {
 export function spreadsheetDateValue(value) {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString().slice(0, 10);
+  }
+
+  if (typeof value === "number" && Number.isFinite(value) && value > 1) {
+    const timestamp = Math.round((value - 25569) * 86_400_000);
+    const date = new Date(timestamp);
+    if (!Number.isNaN(date.getTime())) return date.toISOString().slice(0, 10);
   }
 
   const text = String(value ?? "").trim();
@@ -40,7 +48,7 @@ export function transposeSpreadsheetRows(rows) {
 function fieldAliases(fields) {
   return fields.map((field) => ({
     key: field.key,
-    aliases: [field.label, ...(field.aliases || [])].map(normalizeLayoutText),
+    aliases: [field.label, ...(field.aliases || [])],
   }));
 }
 
@@ -68,14 +76,15 @@ export function expandSpreadsheetDateMatrix(rows, config) {
 
     if (dateColumns.length < 2) continue;
 
-    const baseColumns = header
-      .map((value, index) => {
-        if (dateColumns.some((dateColumn) => dateColumn.index === index)) return null;
-        const normalized = normalizeLayoutText(value);
-        const field = aliases.find((candidate) => candidate.aliases.includes(normalized));
-        return field ? { key: field.key, index } : null;
-      })
-      .filter(Boolean);
+    const usedIndexes = new Set(dateColumns.map((column) => column.index));
+    const baseColumns = [];
+    for (const field of aliases) {
+      const index = findSemanticHeaderIndex(header, field.aliases, usedIndexes);
+      if (index >= 0) {
+        baseColumns.push({ key: field.key, index });
+        usedIndexes.add(index);
+      }
+    }
 
     if (!baseColumns.some((column) => column.key === config.titleField)) continue;
 
