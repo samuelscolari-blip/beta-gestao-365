@@ -276,6 +276,9 @@
 
 /* Painel da obra: mesma largura dos demais e densidade adequada ao ecrã. */
 .construction-executive-v2 .construction-dashboard-v56 {
+  width: calc(100% - 46px);
+  max-width: calc(100% - 46px);
+  margin-inline: auto;
   padding: 18px !important;
   border-radius: 20px;
 }
@@ -783,5 +786,12 @@
 
   .deadline-date {
     padding-right: 9px;
+  }
+}
+
+@container construction-executive (max-width: 700px) {
+  .construction-executive-v2 .construction-dashboard-v56 {
+    width: 100%;
+    max-width: 100%;
   }
 }

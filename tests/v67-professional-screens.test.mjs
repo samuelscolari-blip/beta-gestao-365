@@ -24,6 +24,10 @@ test("V67 aligns executive panels and prevents financial agenda overlap", async 
 
   assert.match(layout, /import "\.\/v65\.css";\s*import "\.\/v67\.css";/);
   assert.match(css, /--v67-editorial-width:\s*1200px/);
+  assert.match(
+    css,
+    /\.construction-executive-v2 \.construction-dashboard-v56\s*\{[\s\S]*?width:\s*calc\(100% - 46px\)/,
+  );
   assert.match(css, /\.management-overview \.missing\s*\{\s*display:\s*grid !important/);
   assert.match(css, /repeat\(auto-fit, minmax\(210px, 1fr\)\)/);
   assert.match(
@@ -33,4 +37,3 @@ test("V67 aligns executive panels and prevents financial agenda overlap", async 
   assert.match(css, /\.deadline-date[\s\S]*?border-right:\s*1px solid/);
   assert.match(css, /container-name:\s*deadline-v67/);
 });
-
