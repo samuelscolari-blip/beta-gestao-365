@@ -16,7 +16,6 @@ import type {
 
 interface Env extends ImportWorkerEnv {
   ASSETS: Fetcher;
-  ADMIN_SESSION_SECRET?: string;
   IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -34,38 +33,39 @@ interface ExecutionContext {
   passThroughOnException(): void;
 }
 
-type AccessJwtHeader = {
+type GoogleJwtHeader = {
   alg?: string;
   kid?: string;
+  typ?: string;
 };
 
-type AccessJwtPayload = {
+type GoogleJwtPayload = {
   aud?: string | string[];
   email?: string;
+  email_verified?: boolean;
   exp?: number;
+  iat?: number;
   iss?: string;
   nbf?: number;
+  sub?: string;
 };
 
-type AccessJwk = JsonWebKey & {
+type GoogleJwk = JsonWebKey & {
+  alg?: string;
   kid?: string;
+  use?: string;
 };
 
-type AdminSessionPayload = {
-  email: string;
-  exp: number;
-  iat: number;
-};
-
+const GOOGLE_CLIENT_ID =
+  "1029361062935-9kd7sr8srn91vu9r4ekt0fjudfqbv1pk.apps.googleusercontent.com";
+const GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs";
 const ADMIN_EMAIL = "scolarisamuel@gmail.com";
-const ADMIN_SESSION_COOKIE = "__Host-beta_admin_session";
-const ADMIN_SESSION_SECONDS = 8 * 60 * 60;
+const ADMIN_SESSION_COOKIE = "__Host-beta_google_admin";
 
-let cachedKeys:
+let cachedGoogleKeys:
   | {
-      url: string;
       expiresAt: number;
-      keys: AccessJwk[];
+      keys: GoogleJwk[];
     }
   | undefined;
 
@@ -85,25 +85,6 @@ function decodeBase64UrlJson<T>(value: string): T {
   ) as T;
 }
 
-function encodeBase64UrlBytes(value: Uint8Array) {
-  let binary = "";
-  for (const byte of value) binary += String.fromCharCode(byte);
-  return btoa(binary)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/g, "");
-}
-
-function encodeBase64UrlText(value: string) {
-  return encodeBase64UrlBytes(new TextEncoder().encode(value));
-}
-
-function normalizeTeamDomain(value: string) {
-  const trimmed = value.trim().replace(/\/+$/, "");
-  if (!trimmed) return "";
-  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-}
-
 function requestCookie(request: Request, name: string) {
   const cookieHeader = request.headers.get("cookie") || "";
   for (const part of cookieHeader.split(";")) {
@@ -115,118 +96,74 @@ function requestCookie(request: Request, name: string) {
   return "";
 }
 
-async function hmacKey(secret: string) {
-  return crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign", "verify"],
-  );
+function cacheMaxAge(response: Response) {
+  const cacheControl = response.headers.get("cache-control") || "";
+  const match = cacheControl.match(/(?:^|,)\s*max-age=(\d+)/i);
+  const seconds = match ? Number(match[1]) : 3600;
+  return Number.isFinite(seconds) && seconds > 0 ? seconds : 3600;
 }
 
-async function createAdminSession(secret: string) {
-  const now = Math.floor(Date.now() / 1000);
-  const payload: AdminSessionPayload = {
-    email: ADMIN_EMAIL,
-    iat: now,
-    exp: now + ADMIN_SESSION_SECONDS,
-  };
-  const encodedPayload = encodeBase64UrlText(JSON.stringify(payload));
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    await hmacKey(secret),
-    new TextEncoder().encode(encodedPayload),
-  );
-  return `${encodedPayload}.${encodeBase64UrlBytes(new Uint8Array(signature))}`;
-}
-
-async function verifiedAdminSessionEmail(request: Request, env: Env) {
-  const secret = String(env.ADMIN_SESSION_SECRET || "");
-  const token = requestCookie(request, ADMIN_SESSION_COOKIE);
-  if (secret.length < 32 || !token) return null;
-
-  try {
-    const [encodedPayload, encodedSignature, extra] = token.split(".");
-    if (!encodedPayload || !encodedSignature || extra) return null;
-
-    const valid = await crypto.subtle.verify(
-      "HMAC",
-      await hmacKey(secret),
-      decodeBase64UrlBytes(encodedSignature),
-      new TextEncoder().encode(encodedPayload),
-    );
-    if (!valid) return null;
-
-    const payload = decodeBase64UrlJson<AdminSessionPayload>(encodedPayload);
-    const now = Math.floor(Date.now() / 1000);
-    if (payload.email !== ADMIN_EMAIL || payload.exp <= now || payload.iat > now + 30) {
-      return null;
-    }
-    return payload.email;
-  } catch {
-    return null;
-  }
-}
-
-async function accessKeys(teamDomain: string) {
-  const url = `${teamDomain}/cdn-cgi/access/certs`;
-  if (cachedKeys && cachedKeys.url === url && cachedKeys.expiresAt > Date.now()) {
-    return cachedKeys.keys;
+async function googleKeys() {
+  if (cachedGoogleKeys && cachedGoogleKeys.expiresAt > Date.now()) {
+    return cachedGoogleKeys.keys;
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(GOOGLE_CERTS_URL, {
     headers: { accept: "application/json" },
   });
   if (!response.ok) {
-    throw new Error("Não foi possível carregar as chaves do Cloudflare Access.");
+    throw new Error("Não foi possível carregar as chaves públicas do Google.");
   }
 
-  const result = (await response.json()) as { keys?: AccessJwk[] };
+  const result = (await response.json()) as { keys?: GoogleJwk[] };
   const keys = Array.isArray(result.keys) ? result.keys : [];
   if (!keys.length) {
-    throw new Error("O Cloudflare Access não retornou chaves de validação.");
+    throw new Error("O Google não retornou chaves públicas de validação.");
   }
 
-  cachedKeys = {
-    url,
+  cachedGoogleKeys = {
     keys,
-    expiresAt: Date.now() + 60 * 60 * 1000,
+    expiresAt: Date.now() + cacheMaxAge(response) * 1000,
   };
   return keys;
 }
 
-async function verifiedCloudflareAccessEmail(request: Request, env: Env) {
-  const token = request.headers.get("cf-access-jwt-assertion");
-  const teamDomain = normalizeTeamDomain(env.TEAM_DOMAIN || "");
-  const audience = String(env.POLICY_AUD || "").trim();
-  if (!token || !teamDomain || !audience) return null;
+function audienceMatches(value: string | string[] | undefined) {
+  if (Array.isArray(value)) return value.includes(GOOGLE_CLIENT_ID);
+  return value === GOOGLE_CLIENT_ID;
+}
 
+async function verifiedGoogleToken(token: string) {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const [encodedHeader, encodedPayload, encodedSignature] = parts;
-    const header = decodeBase64UrlJson<AccessJwtHeader>(encodedHeader);
-    const payload = decodeBase64UrlJson<AccessJwtPayload>(encodedPayload);
+    const header = decodeBase64UrlJson<GoogleJwtHeader>(encodedHeader);
+    const payload = decodeBase64UrlJson<GoogleJwtPayload>(encodedPayload);
+
     if (header.alg !== "RS256" || !header.kid) return null;
-
-    const normalizedIssuer = String(payload.iss || "").replace(/\/+$/, "");
-    if (normalizedIssuer !== teamDomain) return null;
-
-    const tokenAudiences = Array.isArray(payload.aud)
-      ? payload.aud
-      : payload.aud
-        ? [payload.aud]
-        : [];
-    if (!tokenAudiences.includes(audience)) return null;
+    if (!audienceMatches(payload.aud)) return null;
+    if (
+      payload.iss !== "accounts.google.com" &&
+      payload.iss !== "https://accounts.google.com"
+    ) {
+      return null;
+    }
 
     const now = Math.floor(Date.now() / 1000);
-    if (typeof payload.exp !== "number" || payload.exp <= now - 30) return null;
+    if (typeof payload.exp !== "number" || payload.exp <= now) return null;
     if (typeof payload.nbf === "number" && payload.nbf > now + 30) return null;
+    if (typeof payload.iat === "number" && payload.iat > now + 30) return null;
+    if (payload.email_verified !== true) return null;
 
-    const keys = await accessKeys(teamDomain);
-    const jwk = keys.find((candidate) => candidate.kid === header.kid);
+    const keys = await googleKeys();
+    const jwk = keys.find(
+      (candidate) =>
+        candidate.kid === header.kid &&
+        (!candidate.alg || candidate.alg === "RS256") &&
+        (!candidate.use || candidate.use === "sig"),
+    );
     if (!jwk) return null;
 
     const publicKey = await crypto.subtle.importKey(
@@ -242,24 +179,49 @@ async function verifiedCloudflareAccessEmail(request: Request, env: Env) {
       decodeBase64UrlBytes(encodedSignature),
       new TextEncoder().encode(`${encodedHeader}.${encodedPayload}`),
     );
-    if (!verified) return null;
-
-    const email = String(payload.email || "").trim().toLowerCase();
-    return email || null;
+    return verified ? payload : null;
   } catch {
     return null;
   }
 }
 
+async function verifiedAdminSessionEmail(request: Request) {
+  const token = requestCookie(request, ADMIN_SESSION_COOKIE);
+  if (!token) return null;
+
+  const payload = await verifiedGoogleToken(token);
+  const email = String(payload?.email || "").trim().toLowerCase();
+  return email === ADMIN_EMAIL ? email : null;
+}
+
+function jsonResponse(
+  body: Record<string, unknown>,
+  status = 200,
+  extraHeaders?: HeadersInit,
+) {
+  const headers = new Headers(extraHeaders);
+  headers.set("content-type", "application/json; charset=utf-8");
+  headers.set("cache-control", "no-store");
+  return new Response(JSON.stringify(body), { status, headers });
+}
+
 function redirectHome(request: Request, state: string, cookie?: string) {
   const destination = new URL("/", request.url);
   destination.searchParams.set("admin", state);
-  const headers = new Headers({ location: destination.toString() });
+  const headers = new Headers({
+    location: destination.toString(),
+    "cache-control": "no-store",
+  });
   if (cookie) headers.append("set-cookie", cookie);
   return new Response(null, { status: 302, headers });
 }
 
-async function handleAdminAccessRequest(request: Request, env: Env) {
+function isSameOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  return origin === new URL(request.url).origin;
+}
+
+async function handleAdminAccessRequest(request: Request) {
   const url = new URL(request.url);
 
   if (url.pathname === "/admin-logout") {
@@ -270,25 +232,46 @@ async function handleAdminAccessRequest(request: Request, env: Env) {
     );
   }
 
-  if (url.pathname !== "/admin-login") return null;
+  if (url.pathname !== "/admin-google-login") return null;
 
-  const teamDomain = normalizeTeamDomain(env.TEAM_DOMAIN || "");
-  const audience = String(env.POLICY_AUD || "").trim();
-  const secret = String(env.ADMIN_SESSION_SECRET || "");
-  if (!teamDomain || !audience || secret.length < 32) {
-    return redirectHome(request, "configuracao-pendente");
+  if (request.method !== "POST") {
+    return jsonResponse({ message: "Método não permitido." }, 405, {
+      allow: "POST",
+    });
+  }
+  if (!isSameOrigin(request)) {
+    return jsonResponse({ message: "Origem de login inválida." }, 403);
   }
 
-  const email = await verifiedCloudflareAccessEmail(request, env);
+  let credential = "";
+  try {
+    const body = (await request.json()) as { credential?: unknown };
+    credential = String(body.credential || "").trim();
+  } catch {
+    return jsonResponse({ message: "Solicitação de login inválida." }, 400);
+  }
+
+  if (!credential || credential.length > 12_000) {
+    return jsonResponse({ message: "Credencial do Google inválida." }, 400);
+  }
+
+  const payload = await verifiedGoogleToken(credential);
+  const email = String(payload?.email || "").trim().toLowerCase();
   if (email !== ADMIN_EMAIL) {
-    return redirectHome(request, "nao-autorizado");
+    return jsonResponse(
+      { message: "Esta conta Google não possui acesso administrativo." },
+      403,
+    );
   }
 
-  const session = await createAdminSession(secret);
-  return redirectHome(
-    request,
-    "ativo",
-    `${ADMIN_SESSION_COOKIE}=${session}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${ADMIN_SESSION_SECONDS}`,
+  const now = Math.floor(Date.now() / 1000);
+  const maxAge = Math.max(1, Math.min(3600, Number(payload?.exp || now) - now));
+  return jsonResponse(
+    { ok: true, message: "Acesso administrativo autorizado." },
+    200,
+    {
+      "set-cookie": `${ADMIN_SESSION_COOKIE}=${credential}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${maxAge}`,
+    },
   );
 }
 
@@ -301,7 +284,7 @@ async function requestWithTrustedIdentity(request: Request, env: Env) {
   headers.delete("oai-authenticated-user-full-name");
   headers.delete("oai-authenticated-user-full-name-encoding");
 
-  const email = await verifiedAdminSessionEmail(request, env);
+  const email = await verifiedAdminSessionEmail(request);
   if (email) headers.set("x-beta-authenticated-email", email);
 
   return new Request(request, { headers });
@@ -315,7 +298,7 @@ const worker = {
   ): Promise<Response> {
     const url = new URL(request.url);
 
-    const adminResponse = await handleAdminAccessRequest(request, env);
+    const adminResponse = await handleAdminAccessRequest(request);
     if (adminResponse) return adminResponse;
 
     if (url.pathname === "/_vinext/image") {
