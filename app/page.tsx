@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import SecureBetaAppV52 from "./components/SecureBetaAppV52";
+import SecureBetaAppV65 from "./components/SecureBetaAppV65";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
@@ -14,7 +14,7 @@ export default async function Home() {
   const fullName = isAdmin ? "Samuel Scolari" : null;
 
   return (
-    <SecureBetaAppV52
+    <SecureBetaAppV65
       userName={fullName}
       userEmail={email}
       isAdmin={isAdmin}
