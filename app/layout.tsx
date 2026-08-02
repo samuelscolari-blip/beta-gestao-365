@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./ibs-cbs.css";
 import "./v52.css";
@@ -16,16 +15,7 @@ import "./v67.css";
 import "./v66.css";
 import "./v72-executive-panel.css";
 import "./v73-pr36-followup.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "./v74-production-audit.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
@@ -48,7 +38,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased"
+        style={{
+          fontFamily:
+            'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        }}
       >
         {children}
       </body>

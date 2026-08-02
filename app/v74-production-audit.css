@@ -1,0 +1,187 @@
+/*
+ * V74 — correções encontradas na auditoria da produção.
+ *
+ * A V72 corrigiu os cartões internos, mas o contêiner principal continuou
+ * herdando o fundo branco das versões antigas. Esta camada deixa a área da
+ * obra visualmente contínua, aproveita a largura útil e impede que valores
+ * financeiros sejam quebrados ou cortados.
+ */
+
+.construction-executive.construction-executive-v2 {
+  display: grid;
+  width: min(100%, 1200px);
+  max-width: 1200px;
+  margin-inline: auto;
+  gap: 16px;
+  padding: clamp(12px, 1.5vw, 18px);
+  border: 1px solid rgba(126, 226, 241, 0.18);
+  border-radius: 26px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 94% 2%, rgba(56, 200, 227, 0.13), transparent 26%),
+    linear-gradient(150deg, #062642 0%, #082f4b 52%, #0a3855 100%);
+  box-shadow: 0 20px 48px rgba(6, 38, 66, 0.2);
+}
+
+.construction-executive-v2 > :is(
+  .construction-executive-header,
+  .construction-stage-roadmap,
+  .construction-dashboard-v56,
+  .construction-decision-grid,
+  .construction-fleet-section
+) {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+
+.construction-executive-v2 > .construction-executive-header {
+  padding: 4px 6px 2px;
+  color: #ffffff;
+}
+
+.construction-executive-v2 > .construction-executive-header h2 {
+  color: #ffffff;
+}
+
+.construction-executive-v2 > .construction-executive-header p {
+  color: #c9e1e9;
+}
+
+.construction-executive-v2 :is(
+  .construction-stage-roadmap,
+  .construction-dashboard-v56,
+  .construction-priority-board,
+  .construction-fleet-v2
+) {
+  border: 1px solid rgba(166, 220, 232, 0.17);
+  box-shadow:
+    0 12px 30px rgba(2, 25, 43, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* A linha do tempo passa a preencher o painel em vez de criar uma faixa solta. */
+.construction-executive-v2 .construction-stage-track {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  overflow: visible;
+}
+
+.construction-executive-v2 .construction-stage-track article {
+  width: auto;
+  min-width: 0;
+  min-height: 112px;
+}
+
+.construction-executive-v2 .construction-stage-track article > strong,
+.construction-executive-v2 .construction-stage-track article > small {
+  overflow-wrap: anywhere;
+}
+
+/* Os quatro indicadores mantêm a leitura completa em desktop. */
+.construction-executive-v2 .construction-kpi-row-v56 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.construction-executive-v2 .construction-kpi-v56 {
+  container-type: inline-size;
+  min-width: 0;
+  min-height: 146px;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > strong {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  color: #ffffff;
+  font-size: clamp(24px, 11cqi, 35px) !important;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+.construction-executive-v2 .construction-kpi-v56:nth-child(4) > strong {
+  font-size: clamp(20px, 9.2cqi, 31px) !important;
+}
+
+.construction-executive-v2 .construction-budget-card-v56 h3,
+.construction-executive-v2 .construction-budget-lines-v56 strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+
+/* PR #32: contraste correto quando ainda não existem máquinas cadastradas. */
+.construction-executive-v2 .construction-machine-empty {
+  border-color: rgba(186, 220, 239, 0.22);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.construction-executive-v2 .construction-machine-empty > span {
+  color: #85e3f1;
+  background: rgba(56, 200, 227, 0.14);
+}
+
+.construction-executive-v2 .construction-machine-empty :is(strong, h3, h4) {
+  color: #ffffff;
+}
+
+.construction-executive-v2 .construction-machine-empty p,
+.construction-executive-v2 .construction-machine-empty div > span {
+  color: #b9d8e3;
+}
+
+.construction-executive-v2 .construction-machine-empty > button {
+  color: #e8f5fb;
+  border-color: rgba(186, 220, 239, 0.35);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.construction-executive-v2 .construction-machine-empty > button:hover {
+  border-color: rgba(186, 220, 239, 0.62);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.construction-executive-v2 .construction-machine-empty > button:focus-visible {
+  outline: 3px solid rgba(126, 226, 241, 0.42);
+  outline-offset: 2px;
+}
+
+@container construction-executive (max-width: 1080px) {
+  .construction-executive-v2 .construction-stage-track {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .construction-executive-v2 .construction-kpi-row-v56 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .construction-executive-v2 .construction-kpi-v56 > strong,
+  .construction-executive-v2 .construction-kpi-v56:nth-child(4) > strong {
+    font-size: clamp(25px, 10cqi, 35px) !important;
+  }
+}
+
+@container construction-executive (max-width: 620px) {
+  .construction-executive.construction-executive-v2 {
+    gap: 12px;
+    padding: 8px;
+    border-radius: 19px;
+  }
+
+  .construction-executive-v2 .construction-stage-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .construction-executive-v2 .construction-kpi-row-v56 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
