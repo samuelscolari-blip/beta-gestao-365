@@ -40,6 +40,7 @@ test("V60 importa Excel com detecção, prévia, validação e lotes", () => {
   assert.match(spreadsheet, /duplicates/);
   assert.match(app, /Prévia da importação/);
   assert.match(app, /batchSize = 250/);
+  assert.match(app, /finally \{[\s\S]*fileInput\.current\.value = "";[\s\S]*setImportTarget\(undefined\)/);
   assert.doesNotMatch(spreadsheet, /csv-parser|bullmq|createReadStream/);
 });
 

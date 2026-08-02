@@ -8247,6 +8247,9 @@ export default function BetaApp({
         kind: "error",
         text: error instanceof Error ? error.message : "Não foi possível importar a planilha.",
       });
+    } finally {
+      if (fileInput.current) fileInput.current.value = "";
+      setImportTarget(undefined);
     }
   }
 
