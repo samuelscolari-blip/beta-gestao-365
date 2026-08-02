@@ -1,0 +1,129 @@
+/* V66 — acesso administrativo em domínio público e correção visual de Aprovados. */
+
+.v66-admin-access {
+  position: fixed;
+  z-index: 9500;
+  right: 18px;
+  bottom: 18px;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  width: min(430px, calc(100vw - 36px));
+  padding: 11px 12px;
+  border: 1px solid #d8e4ea;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 18px 48px rgba(15, 43, 61, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.v66-admin-access.active {
+  border-color: #b8dfc5;
+  background: rgba(247, 253, 249, 0.98);
+}
+
+.v66-admin-access-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(145deg, #4285f4, #1a73e8);
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.v66-admin-access.active .v66-admin-access-icon {
+  background: linear-gradient(145deg, #16a34a, #15803d);
+}
+
+.v66-admin-access-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.v66-admin-access-copy strong {
+  color: #17324d;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.v66-admin-access-copy small,
+.v66-admin-access-copy em {
+  overflow: hidden;
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.4;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.v66-admin-access-copy em {
+  color: #166534;
+  font-weight: 700;
+}
+
+.v66-admin-access-action {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 13px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 850;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.v66-admin-access-action.primary {
+  color: #ffffff;
+  background: #173f58;
+}
+
+.v66-admin-access-action.primary:hover {
+  background: #0f3148;
+}
+
+.v66-admin-access-action.secondary {
+  color: #166534;
+  border-color: #bbdfc6;
+  background: #ffffff;
+}
+
+.v66-admin-access-action:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.22);
+  outline-offset: 2px;
+}
+
+.management-overview .v66-approved-overview {
+  display: flex;
+}
+
+.management-tabs .v66-approved-tab {
+  display: inline-flex;
+}
+
+@media (max-width: 640px) {
+  .v66-admin-access {
+    right: 10px;
+    bottom: 10px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    width: calc(100vw - 20px);
+  }
+
+  .v66-admin-access-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .v66-admin-access-action {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
