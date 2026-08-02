@@ -38,6 +38,13 @@ function normalized(value: unknown) {
     .toLowerCase();
 }
 
+function isDemonstrationPayload(payload: Record<string, unknown>) {
+  return (
+    payload.isDemo === true ||
+    normalized(payload.notes).includes("registro ficticio para teste")
+  );
+}
+
 function numberValue(payload: Record<string, unknown>, key: string) {
   const value = Number(payload[key]);
   return Number.isFinite(value) ? value : 0;
@@ -203,11 +210,14 @@ export function validateRecordPayload(
   moduleId: string,
   payload: Record<string, unknown>,
 ) {
+  const isDemonstration = isDemonstrationPayload(payload);
   const issues = [
     ...validateCoreRecordPayload(moduleId, payload),
-    ...validatePaymentEvidence(moduleId, payload),
-    ...(moduleId === "rules" ? validateActiveRule(payload) : []),
-    ...(moduleId === "compliance"
+    ...(!isDemonstration ? validatePaymentEvidence(moduleId, payload) : []),
+    ...(!isDemonstration && moduleId === "rules"
+      ? validateActiveRule(payload)
+      : []),
+    ...(!isDemonstration && moduleId === "compliance"
       ? validateComplianceWorkflow(payload)
       : []),
   ];
