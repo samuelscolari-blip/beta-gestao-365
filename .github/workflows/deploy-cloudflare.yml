@@ -48,6 +48,9 @@ jobs:
       - name: Compilar e executar testes
         run: npm test
 
+      - name: Reconhecer histórico do D1 já existente
+        run: node scripts/adopt-d1-migration-history.mjs
+
       - name: Aplicar migrations aditivas no D1
         run: npm run db:migrate:remote
 
