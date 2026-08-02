@@ -1,0 +1,50 @@
+name: Finalizar V60
+
+on:
+  push:
+    branches:
+      - v60-finance-rh-importer-construction
+    paths:
+      - scripts/fix-v60-import-finally.mjs
+      - .github/workflows/fix-v60-import-finally.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix-build-test:
+    if: github.actor != 'beta-gestao-365-bot'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Baixar branch V60
+        uses: actions/checkout@v4
+        with:
+          ref: v60-finance-rh-importer-construction
+          fetch-depth: 0
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+          cache: npm
+
+      - name: Restaurar limpeza do importador
+        run: node scripts/fix-v60-import-finally.mjs
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Compilar Worker Cloudflare
+        run: npm run build
+
+      - name: Executar todos os testes
+        run: node --test tests/*.test.mjs
+
+      - name: Gravar correção final
+        run: |
+          git config user.name "beta-gestao-365-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Restaurar limpeza segura do importador V60"
+          git push origin HEAD:v60-finance-rh-importer-construction
