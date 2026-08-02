@@ -14,7 +14,12 @@ export function spreadsheetDateValue(value) {
     return value.toISOString().slice(0, 10);
   }
 
-  if (typeof value === "number" && Number.isFinite(value) && value > 1) {
+  if (
+    typeof value === "number" &&
+    Number.isFinite(value) &&
+    value >= 20_000 &&
+    value <= 80_000
+  ) {
     const timestamp = Math.round((value - 25569) * 86_400_000);
     const date = new Date(timestamp);
     if (!Number.isNaN(date.getTime())) return date.toISOString().slice(0, 10);
