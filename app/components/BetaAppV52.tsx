@@ -94,6 +94,10 @@ function configureV52Modules() {
     "energy",
     "internet",
     "totalMonthly",
+    "paymentStatus",
+    "paymentDate",
+    "paidAmount",
+    "receiptUrl",
     "notes",
   ]);
   patchField(rentals, {
@@ -158,6 +162,10 @@ function configureV52Modules() {
     "billedTotal",
     "status",
     "invoiceUrl",
+    "paymentStatus",
+    "paymentDate",
+    "paidAmount",
+    "receiptUrl",
     "responsible",
     "notes",
   ]);
@@ -227,6 +235,9 @@ function configureV52Modules() {
     "documentUrl",
     "approval",
     "status",
+    "paymentDate",
+    "paidAmount",
+    "receiptUrl",
     "responsible",
     "notes",
   ]);

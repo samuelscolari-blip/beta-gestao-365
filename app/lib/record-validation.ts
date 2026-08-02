@@ -50,6 +50,28 @@ function numberValue(payload: Record<string, unknown>, key: string) {
   return Number.isFinite(value) ? value : 0;
 }
 
+function expectedPaymentAmount(
+  moduleId: string,
+  payload: Record<string, unknown>,
+  rule: PaymentEvidenceRule,
+) {
+  if (moduleId === "rentals") {
+    const declaredTotal = numberValue(payload, "totalMonthly");
+    if (declaredTotal > 0) return declaredTotal;
+    return (
+      numberValue(payload, "monthlyRent") +
+      numberValue(payload, "water") +
+      numberValue(payload, "energy") +
+      numberValue(payload, "internet")
+    );
+  }
+  return (
+    rule.expectedKeys
+      .map((key) => numberValue(payload, key))
+      .find((value) => value > 0) || 0
+  );
+}
+
 function validatePaymentEvidence(
   moduleId: string,
   payload: Record<string, unknown>,
@@ -64,10 +86,7 @@ function validatePaymentEvidence(
 
   const issues: RecordValidationIssue[] = [];
   const paidAmount = numberValue(payload, rule.amountKey);
-  const expectedAmount =
-    rule.expectedKeys
-      .map((key) => numberValue(payload, key))
-      .find((value) => value > 0) || 0;
+  const expectedAmount = expectedPaymentAmount(moduleId, payload, rule);
 
   if (isBlank(payload[rule.dateKey])) {
     issues.push({
@@ -91,6 +110,17 @@ function validatePaymentEvidence(
       message: isPaid
         ? "Anexe ou informe o link do comprovante antes de marcar o item como Pago."
         : "Anexe ou informe o link do comprovante do pagamento parcial.",
+    });
+  }
+  if (
+    isPaid &&
+    expectedAmount > 0 &&
+    paidAmount < expectedAmount - 0.01
+  ) {
+    issues.push({
+      field: rule.amountKey,
+      message:
+        "Para quitar integralmente, o valor pago não pode ser menor que o previsto. Use o status Parcial se houver saldo remanescente.",
     });
   }
   if (expectedAmount > 0 && paidAmount > expectedAmount + 0.01) {
@@ -158,9 +188,12 @@ function validateComplianceWorkflow(
   }
 
   if (
-    ["Pronto para transmissão", "Transmitido", "Em processamento"].includes(
-      status,
-    ) &&
+    [
+      "Pronto para transmissão",
+      "Transmitido",
+      "Em processamento",
+      "Processado com sucesso",
+    ].includes(status) &&
     ["", "Não configurado"].includes(String(payload.certificateType ?? ""))
   ) {
     issues.push({

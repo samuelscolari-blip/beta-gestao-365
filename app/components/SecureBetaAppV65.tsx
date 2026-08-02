@@ -9,6 +9,12 @@ import {
 } from "react";
 import SecureBetaAppV52 from "./SecureBetaAppV52";
 import {
+  approvedDecisionAmount,
+  approvedDecisionModuleLabels,
+  approvedDecisionModules,
+  isApprovedDecision,
+} from "../lib/approved-decisions";
+import {
   inspectImportFileV65,
   type ImportPreflightResult,
 } from "../lib/import-preflight-v65";
@@ -49,13 +55,8 @@ function clearFileInput(input: HTMLInputElement | null) {
   if (input) input.value = "";
 }
 
-const decisionModules = new Set(["purchases", "expenses", "cards"]);
-
-const moduleLabels: Record<string, string> = {
-  purchases: "Compras",
-  expenses: "Contas a pagar",
-  cards: "Cartão corporativo",
-};
+const decisionModules = approvedDecisionModules;
+const moduleLabels = approvedDecisionModuleLabels;
 
 function normalized(value: unknown) {
   return String(value ?? "")
@@ -77,28 +78,11 @@ function isRealRecord(record: RecordView) {
 }
 
 function isApproved(record: RecordView) {
-  return [
-    record.payload.managementDecision,
-    record.payload.approval,
-    record.status,
-  ].some((value) => {
-    const text = normalized(value);
-    return text.includes("aprov") || text === "pago" || text === "paga";
-  });
+  return isApprovedDecision(record);
 }
 
 function recordAmount(record: RecordView) {
-  const payload = record.payload;
-  const value =
-    record.module === "purchases"
-      ? payload.totalAmount
-      : record.module === "expenses"
-        ? payload.expectedAmount
-        : record.module === "cards"
-          ? payload.amount
-          : record.amount;
-  const amount = Number(value ?? record.amount ?? 0);
-  return Number.isFinite(amount) ? amount : 0;
+  return approvedDecisionAmount(record);
 }
 
 function evidenceUrl(record: RecordView) {

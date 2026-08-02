@@ -77,14 +77,6 @@ const protectedPeopleFields = new Set([
   "dependentDetails",
 ]);
 
-function normalizedWriteText(value: unknown) {
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
-}
-
 function requiredWriteField(
   payload: Record<string, unknown>,
   key: string,
@@ -121,11 +113,6 @@ function applyCanonicalAliases(
       payload.supplierDocument,
       payload.supplierCode,
     );
-  } else if (moduleId === "rentals") {
-    payload.work = firstNonBlank(
-      payload.landlordDocument,
-      payload.work,
-    );
   }
 }
 
@@ -154,14 +141,6 @@ function normalizeRecordForWrite(input: Record<string, unknown>) {
         "Lançamento bloqueado: informe o CPF ou CNPJ do fornecedor ou estabelecimento.",
       );
     }
-    const statusText = normalizedWriteText(input.status || payload.status);
-    const status = statusText.includes("pag")
-      ? "Pago"
-      : statusText.includes("reprov") || statusText.includes("rejeit")
-        ? "Reprovado"
-        : "Aguardando validação";
-    next.status = status;
-    payload.status = status;
   }
 
   if (moduleId === "cards" && amount > 0) {
@@ -198,7 +177,7 @@ function normalizeRecordForWrite(input: Record<string, unknown>) {
     );
     requiredWriteField(
       payload,
-      "work",
+      "landlordDocument",
       "Cadastro de aluguel bloqueado: informe o CPF ou CNPJ do locador.",
     );
   }

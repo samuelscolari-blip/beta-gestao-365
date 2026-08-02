@@ -29,6 +29,10 @@ const MANAGEMENT_TITLE = "Central de decisões gerenciais";
 const MANAGEMENT_DESCRIPTION =
   "Pedidos documentados, organizados por etapa e prontos para conferência. Cada decisão fica registrada com responsável, justificativa e histórico.";
 
+function looksLikeBrazilianDocument(value: unknown) {
+  return [11, 14].includes(String(value ?? "").replace(/\D/g, "").length);
+}
+
 function addVisibleFields(record: ApiRecord): ApiRecord {
   const payload = { ...(record.payload || {}) };
   const moduleId = String(record.module || "");
@@ -42,8 +46,13 @@ function addVisibleFields(record: ApiRecord): ApiRecord {
   if (moduleId === "food") {
     payload.supplierDocument ||= payload.supplierCode || "";
   }
-  if (moduleId === "rentals") {
-    payload.landlordDocument ||= payload.work || "";
+  if (
+    moduleId === "rentals" &&
+    !payload.landlordDocument &&
+    looksLikeBrazilianDocument(payload.work)
+  ) {
+    payload.landlordDocument = payload.work;
+    payload.work = "";
   }
   return { ...record, payload };
 }
@@ -60,9 +69,6 @@ function addLegacyAliases(record: ApiRecord): ApiRecord {
   }
   if (moduleId === "food") {
     payload.supplierCode = payload.supplierDocument || "";
-  }
-  if (moduleId === "rentals") {
-    payload.work = payload.landlordDocument || "";
   }
   return { ...record, payload };
 }

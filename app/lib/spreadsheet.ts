@@ -323,6 +323,97 @@ function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
   return Math.max(vertical, horizontal, matrixScore);
 }
 
+export type ImportSheetCandidate = {
+  module: ModuleDefinition;
+  score: number;
+  headerScore: number;
+  records: number;
+  invalid: number;
+  layout: ImportLayout;
+};
+
+export type ImportSheetResolution = {
+  direct?: ModuleDefinition;
+  selected?: ModuleDefinition;
+  ranked: ImportSheetCandidate[];
+  ambiguous: boolean;
+  reason?: string;
+};
+
+export function resolveImportSheet(
+  candidates: ModuleDefinition[],
+  rows: unknown[][],
+  sheetName: string,
+  sourceName: string,
+): ImportSheetResolution {
+  const direct = candidates.find((module) =>
+    module.spreadsheetSheets.some(
+      (name) => normalizeHeader(name) === normalizeHeader(sheetName),
+    ),
+  );
+  const ranked = candidates
+    .map((module) => {
+      const parsed = parseModuleSheet(module, rows, sourceName);
+      const headerScore = sheetScore(module, rows);
+      return {
+        module,
+        headerScore,
+        records: parsed.records.length,
+        invalid: parsed.failures.length,
+        layout: parsed.layout,
+        score: Math.max(
+          0,
+          headerScore * 2 +
+            Math.min(parsed.records.length, 20) * 6 +
+            (parsed.matched ? 4 : 0) -
+            Math.min(20, parsed.failures.length * 2),
+        ),
+      };
+    })
+    .sort((left, right) => right.score - left.score);
+  const viable = ranked.filter((candidate) => candidate.records > 0);
+  const directCandidate = direct
+    ? ranked.find((candidate) => candidate.module.id === direct.id)
+    : undefined;
+
+  if (direct && !directCandidate?.records && viable.length) {
+    return {
+      direct,
+      ranked,
+      ambiguous: true,
+      reason: `A aba “${sheetName}” tem nome de “${direct.label}”, mas o conteúdo corresponde a outro módulo. Selecione o destino manualmente.`,
+    };
+  }
+  if (directCandidate?.records) {
+    const competitor = viable.find(
+      (candidate) => candidate.module.id !== directCandidate.module.id,
+    );
+    if (competitor && competitor.score >= directCandidate.score * 0.82) {
+      return {
+        direct,
+        ranked,
+        ambiguous: true,
+        reason: `A aba “${sheetName}” pode ser “${direct.label}” ou “${competitor.module.label}”. Selecione o destino manualmente.`,
+      };
+    }
+    return { direct, selected: direct, ranked, ambiguous: false };
+  }
+  const first = viable[0];
+  const second = viable[1];
+  if (!first) {
+    return { direct, ranked, ambiguous: false, reason: `A aba “${sheetName}” não possui registros reconhecíveis.` };
+  }
+  if (second && second.score >= first.score * 0.82) {
+    return {
+      direct,
+      ranked,
+      ambiguous: true,
+      reason: `A aba “${sheetName}” pode ser “${first.module.label}” ou “${second.module.label}”. Selecione o destino manualmente.`,
+    };
+  }
+  return { direct, selected: first.module, ranked, ambiguous: false };
+}
+
 export async function importWorkbook(file: File, targetModuleId?: string) {
   if (!/\.(?:xlsx|csv)$/i.test(file.name)) {
     throw new Error(
@@ -378,20 +469,29 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
     invalidExamples: string[];
   }> = [];
   const unmatchedSheets: string[] = [];
+  const ambiguousSheets: string[] = [];
   const failures: ImportFailure[] = [];
 
   for (const sheet of sheets) {
     const sheetRows = sheet.data as unknown[][];
-    const direct = candidates.find((module) =>
-      module.spreadsheetSheets.some(
-        (name) => normalizeHeader(name) === normalizeHeader(sheet.sheet),
-      ),
+    const resolution = resolveImportSheet(
+      candidates,
+      sheetRows,
+      sheet.sheet,
+      `${file.name} / ${sheet.sheet}`,
     );
-    const scored = candidates
-      .map((module) => ({ module, score: sheetScore(module, sheetRows) }))
-      .sort((a, b) => b.score - a.score);
-    const selected =
-      direct || (scored[0]?.score >= 2 ? scored[0].module : undefined);
+    if (resolution.ambiguous) {
+      ambiguousSheets.push(sheet.sheet);
+      failures.push({
+        module: "",
+        sheet: sheet.sheet,
+        location: "identificação da aba",
+        reason: resolution.reason || "A estrutura da aba é ambígua.",
+        payload: {},
+      });
+      continue;
+    }
+    const selected = resolution.selected;
     if (!selected) {
       unmatchedSheets.push(sheet.sheet);
       continue;
@@ -463,9 +563,10 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
       }
     }
 
-    const bestScore = direct
-      ? Math.max(2, sheetScore(selected, sheetRows))
-      : scored[0]?.score || 0;
+    const selectedCandidate = resolution.ranked.find(
+      (candidate) => candidate.module.id === selected.id,
+    );
+    const bestScore = selectedCandidate?.headerScore || 0;
     const confidence = Math.min(
       100,
       Math.round((bestScore / Math.max(2, Math.min(6, selected.fields.length))) * 100),
@@ -480,7 +581,7 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
       invalid,
       duplicates,
       confidence,
-      detected: !direct,
+      detected: resolution.direct?.id !== selected.id,
       invalidExamples,
     });
   }
@@ -489,6 +590,7 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
     records: accepted,
     report,
     unmatchedSheets,
+    ambiguousSheets,
     failures: failures.slice(0, 2_000),
   };
 }

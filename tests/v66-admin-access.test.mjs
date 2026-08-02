@@ -46,14 +46,19 @@ test("o Worker valida assinatura e declarações do token Google", async () => {
 });
 
 test("Aprovados aparece também para visitantes e inclui aluguéis", async () => {
-  const component = await read("app/components/SecureBetaAppV66.tsx");
+  const [component, decisions] = await Promise.all([
+    read("app/components/SecureBetaAppV66.tsx"),
+    read("app/lib/approved-decisions.ts"),
+  ]);
 
   assert.match(component, /ApprovedDecisionFallback/);
   assert.match(component, /!props\.isAdmin \? <ApprovedDecisionFallback/);
   assert.match(component, /data-v66-approved="overview"/);
   assert.match(component, /data-v66-approved="tab"/);
-  assert.match(component, /"rentals"/);
-  assert.match(component, /Aluguéis/);
+  assert.match(component, /approvedDecisionModules/);
+  assert.match(decisions, /"rentals"/);
+  assert.match(decisions, /rentals: "Aluguéis"/);
+  assert.doesNotMatch(decisions, /"pago"|"paga"/);
 });
 
 test("cartão corporativo exibe os dados exigidos para pagamento", async () => {
