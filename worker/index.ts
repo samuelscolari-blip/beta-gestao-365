@@ -80,6 +80,18 @@ function normalizeTeamDomain(value: string) {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
+function requestCookie(request: Request, name: string) {
+  const cookies = request.headers.get("cookie") || "";
+  for (const part of cookies.split(";")) {
+    const separator = part.indexOf("=");
+    if (separator < 0) continue;
+    const key = part.slice(0, separator).trim();
+    if (key !== name) continue;
+    return part.slice(separator + 1).trim();
+  }
+  return "";
+}
+
 async function accessKeys(teamDomain: string) {
   const url = `${teamDomain}/cdn-cgi/access/certs`;
   if (cachedKeys && cachedKeys.url === url && cachedKeys.expiresAt > Date.now()) {
@@ -108,7 +120,10 @@ async function accessKeys(teamDomain: string) {
 }
 
 async function verifiedCloudflareAccessEmail(request: Request, env: Env) {
-  const token = request.headers.get("cf-access-jwt-assertion");
+  const token =
+    request.headers.get("cf-access-jwt-assertion") ||
+    request.headers.get("cf-access-token") ||
+    requestCookie(request, "CF_Authorization");
   const teamDomain = normalizeTeamDomain(env.TEAM_DOMAIN || "");
   const audience = String(env.POLICY_AUD || "").trim();
   if (!token || !teamDomain || !audience) return null;
