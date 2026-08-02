@@ -1,0 +1,52 @@
+name: Auditoria final da produção V74
+
+on:
+  push:
+    branches:
+      - agent/final-production-audit-v74
+
+permissions:
+  contents: read
+
+jobs:
+  production-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Baixar branch técnica
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.19.0
+
+      - name: Confirmar Chrome e sintaxe
+        run: |
+          google-chrome --version || google-chrome-stable --version
+          node --check scripts/live-browser-diagnostic.mjs
+          node --check scripts/visual-audit-v74.mjs
+
+      - name: Aguardar publicação da main
+        run: sleep 30
+
+      - name: Diagnosticar domínio principal
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
+          DIAGNOSTIC_WAIT_MS: 60000
+        run: node scripts/live-browser-diagnostic.mjs
+
+      - name: Auditar visual do domínio principal
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev
+        run: node scripts/visual-audit-v74.mjs
+
+      - name: Publicar evidências finais
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auditoria-final-producao-v74
+          path: |
+            audit-v74.json
+            audit-v74.png
+          if-no-files-found: warn
