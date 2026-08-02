@@ -1,4 +1,4 @@
-export type ImportFamilyId = "costs" | "machines" | "employees";
+export type ImportFamilyId = "costs" | "machines" | "employees" | "works";
 
 export type ImportFamilyDefinition = {
   id: ImportFamilyId;
@@ -8,6 +8,13 @@ export type ImportFamilyDefinition = {
 };
 
 export const importFamilies: ImportFamilyDefinition[] = [
+  {
+    id: "works",
+    label: "Obras",
+    description:
+      "Cadastro e atualização de obras pelo código único, gestor, previsão, etapa e indicadores executivos.",
+    modules: ["works"],
+  },
   {
     id: "costs",
     label: "Custos",

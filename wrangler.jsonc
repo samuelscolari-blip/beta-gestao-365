@@ -11,7 +11,8 @@
     {
       "binding": "DB",
       "database_name": "beta-gestao-365-db",
-      "database_id": "c8f423c5-d793-47ba-a685-d0cf42339288"
+      "database_id": "c8f423c5-d793-47ba-a685-d0cf42339288",
+      "migrations_dir": "drizzle"
     }
   ]
 }

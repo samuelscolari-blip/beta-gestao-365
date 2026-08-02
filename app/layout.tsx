@@ -9,6 +9,7 @@ import "./construction-v56.css";
 import "./cost-map-readability-v58.css";
 import "./construction-executive-v59.css";
 import "./v60.css";
+import "./v61.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -3,8 +3,8 @@ set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [[ "${SITES_ENV_READY:-}" != "1" ]]; then
-  exec "${script_dir}/sites-env.sh" -- "$0" "$@"
+if [[ "${CLOUDFLARE_ENV_READY:-}" != "1" ]]; then
+  exec "${script_dir}/cloudflare-env.sh" -- "$0" "$@"
 fi
 
 command -v flock >/dev/null || {
@@ -24,11 +24,11 @@ command -v sha256sum >/dev/null || {
   exit 69
 }
 
-runtime_root="${SITES_PROJECT_ROOT}/.sites-runtime"
+runtime_root="${CLOUDFLARE_PROJECT_ROOT}/.cloudflare-runtime"
 expected_home="${runtime_root}/home"
 expected_cache="${runtime_root}/npm-cache"
 
-echo "[sites] validating writable install environment"
+echo "[cloudflare] validating writable install environment"
 if [[ "${HOME}" != "${expected_home}" ]]; then
   echo "Expected HOME=${expected_home}, got HOME=${HOME}." >&2
   exit 78
@@ -38,14 +38,14 @@ if [[ "${actual_cache}" != "${expected_cache}" ]]; then
   echo "Expected npm cache ${expected_cache}, got ${actual_cache}." >&2
   exit 78
 fi
-touch "${HOME}/.sites-write-test" "${expected_cache}/.sites-write-test"
-rm -f "${HOME}/.sites-write-test" "${expected_cache}/.sites-write-test"
-echo "[sites] environment passed: HOME=${HOME}, cache=${expected_cache}"
+touch "${HOME}/.cloudflare-write-test" "${expected_cache}/.cloudflare-write-test"
+rm -f "${HOME}/.cloudflare-write-test" "${expected_cache}/.cloudflare-write-test"
+echo "[cloudflare] environment passed: HOME=${HOME}, cache=${expected_cache}"
 
 lock_file="${runtime_root}/install.lock"
 exec 9>"${lock_file}"
 if ! flock -n 9; then
-  echo "Another dependency install is already running for ${SITES_PROJECT_ROOT}." >&2
+  echo "Another dependency install is already running for ${CLOUDFLARE_PROJECT_ROOT}." >&2
   exit 75
 fi
 
@@ -55,30 +55,30 @@ for process in /proc/[0-9]*; do
   pid="${process##*/}"
   [[ "${pid}" != "$$" && "${pid}" != "${PPID}" ]] || continue
   process_cwd="$(readlink -f "${process}/cwd" 2>/dev/null || true)"
-  [[ "${process_cwd}" == "${SITES_PROJECT_ROOT}" ]] || continue
+  [[ "${process_cwd}" == "${CLOUDFLARE_PROJECT_ROOT}" ]] || continue
   process_command="$(tr '\0' ' ' <"${process}/cmdline" 2>/dev/null || true)"
   if [[ "${process_command}" == *"npm ci"* ]]; then
-    echo "Another npm ci is visible in ${SITES_PROJECT_ROOT}; refusing to overlap installs." >&2
+    echo "Another npm ci is visible in ${CLOUDFLARE_PROJECT_ROOT}; refusing to overlap installs." >&2
     exit 75
   fi
 done
 
-lockfile_sha256="$(sha256sum "${SITES_PROJECT_ROOT}/package-lock.json" | awk '{print $1}')"
+lockfile_sha256="$(sha256sum "${CLOUDFLARE_PROJECT_ROOT}/package-lock.json" | awk '{print $1}')"
 use_seeded_cache=0
-seed_cache="${SITES_NPM_CACHE_SEED:-}"
+seed_cache="${CLOUDFLARE_NPM_CACHE_SEED:-}"
 if [[ -n "${seed_cache}" && -d "${seed_cache}" ]]; then
-  seed_lockfile_sha256="$(cat "${seed_cache}/.sites-lockfile-sha256" 2>/dev/null || true)"
+  seed_lockfile_sha256="$(cat "${seed_cache}/.cloudflare-lockfile-sha256" 2>/dev/null || true)"
   if [[ "${seed_lockfile_sha256}" == "${lockfile_sha256}" ]]; then
-    echo "[sites] restoring image-seeded npm cache"
+    echo "[cloudflare] restoring image-seeded npm cache"
     cp -a "${seed_cache}/." "${expected_cache}/"
     use_seeded_cache=1
-    echo "[sites] image cache seed matched; registry fallback remains available"
+    echo "[cloudflare] image cache seed matched; registry fallback remains available"
   else
-    echo "[sites] image cache seed does not match this lockfile; using the network path"
+    echo "[cloudflare] image cache seed does not match this lockfile; using the network path"
   fi
 fi
 
-locked_vinext_output="$({ node --input-type=module - "${SITES_PROJECT_ROOT}/package-lock.json" <<'NODE'
+locked_vinext_output="$({ node --input-type=module - "${CLOUDFLARE_PROJECT_ROOT}/package-lock.json" <<'NODE'
 import { readFile } from "node:fs/promises";
 
 const lock = JSON.parse(await readFile(process.argv[2], "utf8"));
@@ -123,7 +123,7 @@ NODE
   preflight_tarball="${preflight_dir}/vinext.tgz"
   mkdir -p "${preflight_dir}"
 
-  echo "[sites] downloading the complete locked vinext tarball"
+  echo "[cloudflare] downloading the complete locked vinext tarball"
   curl \
     --fail \
     --location \
@@ -135,7 +135,7 @@ NODE
     --output "${preflight_tarball}" \
     "${preflight_url}"
 
-  echo "[sites] verifying locked vinext tarball integrity"
+  echo "[cloudflare] verifying locked vinext tarball integrity"
   node --input-type=module - "${preflight_tarball}" "${locked_integrity}" <<'NODE'
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -151,10 +151,10 @@ if (actual !== expected) {
   throw new Error(`vinext tarball integrity mismatch for ${algorithm}`);
 }
 NODE
-  echo "[sites] network and integrity preflight passed"
+  echo "[cloudflare] network and integrity preflight passed"
 fi
 
-echo "[sites] running exactly one bounded npm ci"
+echo "[cloudflare] running exactly one bounded npm ci"
 export NPM_CONFIG_MAXSOCKETS=1
 export NPM_CONFIG_FETCH_RETRIES=0
 export NPM_CONFIG_FETCH_TIMEOUT=30000
@@ -164,17 +164,17 @@ if [[ "${use_seeded_cache}" == "1" ]]; then
 fi
 timeout \
   --signal=TERM \
-  --kill-after="${SITES_INSTALL_KILL_AFTER:-15s}" \
-  "${SITES_INSTALL_TIMEOUT:-8m}" \
+  --kill-after="${CLOUDFLARE_INSTALL_KILL_AFTER:-15s}" \
+  "${CLOUDFLARE_INSTALL_TIMEOUT:-8m}" \
   npm "${npm_ci_args[@]}"
 
-vinext="${SITES_PROJECT_ROOT}/node_modules/.bin/vinext"
+vinext="${CLOUDFLARE_PROJECT_ROOT}/node_modules/.bin/vinext"
 if [[ ! -x "${vinext}" ]]; then
   echo "npm ci exited successfully but node_modules/.bin/vinext is unavailable." >&2
   exit 69
 fi
 
-node --input-type=module - "${SITES_PROJECT_ROOT}/node_modules/.sites-install.json" "${lockfile_sha256}" <<'NODE'
+node --input-type=module - "${CLOUDFLARE_PROJECT_ROOT}/node_modules/.cloudflare-install.json" "${lockfile_sha256}" <<'NODE'
 import { writeFile } from "node:fs/promises";
 
 await writeFile(
@@ -186,4 +186,4 @@ await writeFile(
   }, null, 2)}\n`,
 );
 NODE
-echo "[sites] npm ci passed and vinext is available"
+echo "[cloudflare] npm ci passed and vinext is available"

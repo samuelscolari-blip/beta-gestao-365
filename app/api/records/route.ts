@@ -3,10 +3,13 @@ import {
   createRecord,
   deleteRecord,
   ensureDemoRecords,
+  listImportRuns,
   listAuditLogs,
   listRecords,
   queryRecords,
   RecordStoreError,
+  resolveImportError,
+  saveImportReport,
   updateRecord,
 } from "../../../db/records";
 import {
@@ -276,6 +279,15 @@ export async function GET(request: Request) {
   try {
     await ensureDemoRecords();
     const url = new URL(request.url);
+    if (url.searchParams.get("view") === "imports") {
+      if (!isSoleAdmin(request)) {
+        return Response.json({ error: "Acesso restrito." }, { status: 403 });
+      }
+      return Response.json(
+        { imports: await listImportRuns() },
+        { headers: { "cache-control": "private, no-store" } },
+      );
+    }
     if (url.searchParams.get("view") === "audit") {
       if (!isSoleAdmin(request)) {
         return Response.json({ error: "Acesso restrito." }, { status: 403 });
@@ -353,14 +365,55 @@ export async function POST(request: Request) {
     const payload = (await request.json()) as {
       records?: Array<Record<string, unknown>>;
       record?: Record<string, unknown>;
+      importReport?: Record<string, unknown>;
     };
-    if (Array.isArray(payload.records)) {
+    if (payload.importReport) {
       return Response.json(
         {
-          result: await createMany(
-            payload.records.map((record) => normalizeRecordForWrite(record)),
+          importReport: await saveImportReport(
+            payload.importReport,
             actorFrom(request),
           ),
+        },
+        { status: 201 },
+      );
+    }
+    if (Array.isArray(payload.records)) {
+      const validRecords: Array<Record<string, unknown>> = [];
+      const originalIndexes: number[] = [];
+      const rejected: Array<{
+        index: number;
+        reason: string;
+        payload: Record<string, unknown>;
+      }> = [];
+      payload.records.forEach((record, index) => {
+        try {
+          validRecords.push(normalizeRecordForWrite(record));
+          originalIndexes.push(index);
+        } catch (error) {
+          rejected.push({
+            index,
+            reason:
+              error instanceof Error
+                ? error.message
+                : "A linha foi rejeitada pelas regras documentais.",
+            payload: record,
+          });
+        }
+      });
+      const imported = await createMany(validRecords, actorFrom(request));
+      const serverFailures = imported.failures.map((failure) => ({
+        ...failure,
+        index: originalIndexes[failure.index] ?? failure.index,
+      }));
+      return Response.json(
+        {
+          result: {
+            ...imported,
+            failures: [...rejected, ...serverFailures].sort(
+              (left, right) => left.index - right.index,
+            ),
+          },
         },
         { status: 201 },
       );
@@ -388,7 +441,16 @@ export async function PUT(request: Request) {
       id?: number;
       record?: Record<string, unknown>;
       expectedUpdatedAt?: string;
+      resolveImportErrorId?: string;
     };
+    if (payload.resolveImportErrorId) {
+      return Response.json({
+        importError: await resolveImportError(
+          payload.resolveImportErrorId,
+          actorFrom(request),
+        ),
+      });
+    }
     if (!payload.id) {
       return Response.json({ error: "ID obrigatório." }, { status: 400 });
     }

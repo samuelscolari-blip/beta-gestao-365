@@ -1,7 +1,8 @@
-# Gemini project instructions
+# Instruções do projeto
 
-Read `AGENTS.md` and all numbered handoff documents before editing. Preserve the
-existing ChatGPT Sites project, production URL and D1 binding `DB`. Never
-include secrets in source. Validate with `npm run lint` and `npm test` before a
-publication by an authenticated owner or editor.
-
+Leia `AGENTS.md` e os documentos numerados antes de editar. Preserve o Worker
+`beta-gestao-365`, o D1 `beta-gestao-365-db`, o binding `DB` e todos os dados.
+O único endereço autorizado é
+`https://beta-gestao-365.scolarisamuel.workers.dev/`. O domínio
+`chatgpt.site` foi aposentado. Nunca inclua segredos no código e valide com
+`npm run lint` e `npm test` antes de publicar pelo GitHub Actions.

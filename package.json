@@ -13,8 +13,10 @@
     "test": "npm run build && node --test tests/*.test.mjs",
     "diagnose:live": "node scripts/live-browser-diagnostic.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
-    "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
+    "lint": "bash scripts/cloudflare-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
+    "db:generate": "bash scripts/cloudflare-env.sh -- drizzle-kit generate",
+    "db:migrate:remote": "wrangler d1 migrations apply beta-gestao-365-db --remote --config wrangler.jsonc",
+    "deploy:cloudflare": "vinext deploy --skip-build"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

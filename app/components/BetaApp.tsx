@@ -5,6 +5,7 @@ import {
   type CSSProperties,
   type FormEvent,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -81,6 +82,30 @@ type AuditLog = {
   entryHash?: string;
   integrity?: "SEALED" | "LEGACY";
   createdAt: string;
+};
+
+type ImportRunView = {
+  id: string;
+  fileName: string;
+  targetModule: string;
+  status: string;
+  totalRows: number;
+  totalSuccess: number;
+  totalUpdated: number;
+  totalSkipped: number;
+  totalErrors: number;
+  startedAt: string;
+  finishedAt: string;
+  createdAt: string;
+  errors: Array<{
+    id: string;
+    rowNumber: number;
+    sheet: string;
+    module: string;
+    payload: Record<string, unknown>;
+    reason: string;
+    resolved: boolean;
+  }>;
 };
 
 type BatchPayrollResponse = {
@@ -2532,31 +2557,10 @@ function ConstructionExecutivePanel({
   const budgetConsumption = projectBudget
     ? Math.min(100, (projectRealizedCost / projectBudget) * 100)
     : 0;
-  const commitmentShare = projectBudget
-    ? Math.min(100, (projectOpenCommitments / projectBudget) * 100)
-    : 0;
-  const budgetAvailableAfterCommitments = Math.max(
-    0,
-    projectBudget - projectRealizedCost - projectOpenCommitments,
-  );
   const uncommittedCostToComplete = Math.max(
     0,
     estimatedCostToComplete - projectOpenCommitments,
   );
-  const costAheadOfProgress = budgetConsumption - physicalProgress;
-  const realizedForecastShare = projectedFinalCost
-    ? (projectRealizedCost / projectedFinalCost) * 100
-    : 0;
-  const commitmentForecastShare = projectedFinalCost
-    ? (projectOpenCommitments / projectedFinalCost) * 100
-    : 0;
-  const uncommittedForecastShare = Math.max(
-    0,
-    100 - realizedForecastShare - commitmentForecastShare,
-  );
-  const projectedVariancePercent = projectBudget
-    ? (Math.abs(projectedBudgetVariance) / projectBudget) * 100
-    : 0;
   const unavailableMachines = Math.max(0, machineRows.length - activeMachines);
   const capacityComponents = [
     {
@@ -2579,14 +2583,6 @@ function ConstructionExecutivePanel({
     (a, b) => a.value - b.value,
   )[0];
   const operationCapacity = capacityConstraint.value;
-  const operationTone =
-    operationCapacity < 60
-      ? "danger"
-      : operationCapacity < 85
-        ? "warning"
-        : operationCapacity < 100
-          ? "attention"
-          : "success";
   const operationStatus =
     operationCapacity < 60
       ? "Operação crítica"
@@ -2661,20 +2657,6 @@ function ConstructionExecutivePanel({
         0,
       ) / overallWeight
     : 0;
-  const overallTone =
-    overallIndex < 50
-      ? "negative"
-      : overallIndex < 75
-        ? "warning"
-        : "positive";
-  const overallStatus =
-    overallIndex >= 85
-      ? "Saudável"
-      : overallIndex >= 70
-        ? "Atenção"
-        : overallIndex >= 50
-          ? "Crítico"
-          : "Risco elevado";
   const topCause = causes[0] || null;
   const highestImpactMachine = [...machineRows].sort(
     (a, b) =>
@@ -4489,19 +4471,15 @@ function Dashboard({
   records,
   onNavigate,
   onNew,
-  onImport,
   onOpenRecord,
   onOpenApprovalRecord,
-  settings,
   canEdit,
 }: {
   records: StoredRecord[];
   onNavigate: (view: string) => void;
   onNew: (moduleId: string) => void;
-  onImport: () => void;
   onOpenRecord: (record: StoredRecord) => void;
   onOpenApprovalRecord: (record: StoredRecord) => void;
-  settings: SystemSettings;
   canEdit: boolean;
 }) {
   const { visible: showInternalCodes } = useContext(
@@ -4731,11 +4709,6 @@ function Dashboard({
           : recordAmount(record)),
     0,
   );
-  const trackedCommitments = paidFinance + payable;
-  const paidCommitmentShare =
-    trackedCommitments > 0
-      ? Math.min(100, Math.max(0, (paidFinance / trackedCommitments) * 100))
-      : 0;
   const realManagementRequests = records.filter(isRealManagementRequest);
   const readyManagementRequests = realManagementRequests.filter(
     requestIsReadyForManagement,
@@ -5733,18 +5706,22 @@ function FinancialCenterPage({
 function IntegrationHub({
   records,
   allRecords,
+  importRuns,
   onNew,
   onEdit,
   onDelete,
   onImportAll,
+  onResolveImportError,
   canEdit,
 }: {
   records: StoredRecord[];
   allRecords: StoredRecord[];
+  importRuns: ImportRunView[];
   onNew: () => void;
   onEdit: (record: StoredRecord) => void;
   onDelete: (record: StoredRecord) => void;
   onImportAll: () => void;
+  onResolveImportError: (id: string) => void;
   canEdit: boolean;
 }) {
   const services = [
@@ -5790,7 +5767,7 @@ function IntegrationHub({
     },
     {
       name: "Excel",
-      detail: "Importador inteligente controlado para Custos, Máquinas e Funcionários",
+      detail: "Importador inteligente controlado para Obras, Custos, Máquinas e Funcionários",
       status: "Pronto",
       href: "",
     },
@@ -5828,15 +5805,16 @@ function IntegrationHub({
           <span className="hero-kicker">TRANSIÇÃO SEM REDIGITAÇÃO</span>
           <h2>As planilhas já criadas entram direto no sistema.</h2>
           <p>
-            O Importador Inteligente aceita somente Custos, Máquinas e
-            Funcionários. Ele reconhece tabelas verticais, horizontais e
-            matrizes de datas, apresenta uma prévia e não grava linhas inválidas.
+            O Importador Inteligente aceita Obras, Custos, Máquinas e
+            Funcionários em Excel ou CSV. Ele reconhece tabelas verticais,
+            horizontais e matrizes de datas, apresenta uma prévia e isola as
+            linhas inválidas para correção.
           </p>
           <div className="hero-actions">
             {canEdit ? (
               <>
                 <button className="button light" onClick={onImportAll}>
-                  <Icon name="upload" size={18} /> Importar Custos, Máquinas ou Funcionários
+                  <Icon name="upload" size={18} /> Importar Obras, Custos, Máquinas ou Funcionários
                 </button>
                 <button
                   className="button ghost-light"
@@ -5859,6 +5837,104 @@ function IntegrationHub({
           <small>Banco online com auditoria</small>
         </div>
       </section>
+
+      {canEdit ? (
+        <section className="content-card table-card">
+          <div className="card-heading integration-table-title">
+            <div>
+              <span className="eyebrow">IMPORTAÇÕES E FILA DE CORREÇÃO</span>
+              <h2>Histórico dos arquivos processados</h2>
+              <p>
+                Linhas válidas são gravadas em lotes; pendências ficam isoladas
+                aqui e não contaminam os registros corretos.
+              </p>
+            </div>
+            <span className="soft-badge">
+              {importRuns.reduce((total, run) => total + run.errors.length, 0)} pendências
+            </span>
+          </div>
+          {importRuns.length ? (
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Arquivo</th>
+                    <th>Situação</th>
+                    <th>Incluídos</th>
+                    <th>Atualizados</th>
+                    <th>Ignorados</th>
+                    <th>Pendências</th>
+                    <th>Finalização</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {importRuns.map((run) => (
+                    <tr key={run.id}>
+                      <td>
+                        <strong>{run.fileName}</strong>
+                        <small>{run.targetModule || "Detecção automática"}</small>
+                      </td>
+                      <td>
+                        <span
+                          className={`status-pill ${
+                            run.status === "Falha"
+                              ? "danger"
+                              : run.errors.length
+                                ? "warning"
+                                : statusTone(run.status)
+                          }`}
+                        >
+                          {run.status}
+                        </span>
+                      </td>
+                      <td>{run.totalSuccess}</td>
+                      <td>{run.totalUpdated}</td>
+                      <td>{run.totalSkipped}</td>
+                      <td>
+                        {run.errors.length ? (
+                          <details>
+                            <summary>{run.errors.length} para corrigir</summary>
+                            <div className="import-error-list">
+                              {run.errors.map((error) => (
+                                <article key={error.id}>
+                                  <strong>
+                                    {error.sheet || "Planilha"} • linha {error.rowNumber}
+                                  </strong>
+                                  <p>{error.reason}</p>
+                                  <button
+                                    type="button"
+                                    className="button secondary"
+                                    onClick={() => onResolveImportError(error.id)}
+                                  >
+                                    <Icon name="check" size={15} /> Marcar como resolvida
+                                  </button>
+                                </article>
+                              ))}
+                            </div>
+                          </details>
+                        ) : (
+                          <span className="soft-badge">Nenhuma</span>
+                        )}
+                      </td>
+                      <td>
+                        {run.finishedAt
+                          ? new Date(run.finishedAt).toLocaleString("pt-BR")
+                          : "Em processamento"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty-state compact-empty">
+              <Icon name="upload" size={24} />
+              <strong>Nenhum arquivo processado nesta versão.</strong>
+              <p>O primeiro relatório aparecerá após uma importação confirmada.</p>
+            </div>
+          )}
+        </section>
+      ) : null}
 
       <section className="service-grid">
         {services.map((service) => (
@@ -6518,12 +6594,14 @@ function PayrollStudio({
               {batchRunning ? "Processando lote…" : "Calcular e registrar lote"}
             </button>
           ) : (
-            <a
+            <button
               className="button secondary"
-              href="/signin-with-chatgpt?return_to=%2F"
+              type="button"
+              disabled
+              title="A administração é autenticada pelo Cloudflare Access."
             >
-              Entrar para processar
-            </a>
+              Acesso administrativo protegido
+            </button>
           )}
         </div>
         {batchError ? (
@@ -7635,6 +7713,7 @@ export default function BetaApp({
 }) {
   const [activeView, setActiveView] = useState("dashboard");
   const [records, setRecords] = useState<StoredRecord[]>([]);
+  const [importRuns, setImportRuns] = useState<ImportRunView[]>([]);
   const [taxProfile, setTaxProfile] = useState<Partial<SystemSettings>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -7675,6 +7754,29 @@ export default function BetaApp({
       setLoading(false);
     }
   }
+
+  const loadImportRuns = useCallback(async () => {
+    if (!isAdmin) return;
+    try {
+      const response = await fetch("/api/records?view=imports", {
+        cache: "no-store",
+      });
+      const result = (await response.json()) as {
+        imports?: ImportRunView[];
+        error?: string;
+      };
+      if (!response.ok) throw new Error(result.error);
+      setImportRuns(result.imports || []);
+    } catch (error) {
+      setToast({
+        kind: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Não foi possível carregar o histórico de importações.",
+      });
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
     let cancelled = false;
@@ -7763,6 +7865,7 @@ export default function BetaApp({
     setSearch("");
     setStatusFilter("");
     setSidebarOpen(false);
+    if (view === "m365" && isAdmin) void loadImportRuns();
   }
 
   function openRecord(record: StoredRecord) {
@@ -8209,10 +8312,55 @@ export default function BetaApp({
 
   async function handleImport(file?: File) {
     if (!file || !hasEditingAccess()) return;
+    const importId = crypto.randomUUID();
+    const startedAt = new Date().toISOString();
+    let reportStarted = false;
+    let plannedTotalRows = 0;
+    let clientSkipped = 0;
+    let insertedCount = 0;
+    let updatedCount = 0;
+    let serverSkipped = 0;
     try {
       setToast({ kind: "success", text: "Lendo, identificando e validando a planilha…" });
       const imported = await importWorkbook(file, importTarget);
+      clientSkipped = imported.report.reduce(
+        (total, item) => total + item.duplicates + item.skipped,
+        0,
+      );
+      plannedTotalRows =
+        imported.records.length + imported.failures.length + clientSkipped;
       if (!imported.records.length) {
+        if (imported.failures.length) {
+          const failureReportResponse = await fetch("/api/records", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              importReport: {
+                id: importId,
+                fileName: file.name,
+                targetModule: importTarget || "Detecção automática",
+                status: "Concluída com pendências",
+                totalRows: imported.failures.length + clientSkipped,
+                inserted: 0,
+                updated: 0,
+                skipped: clientSkipped,
+                failures: imported.failures,
+                startedAt,
+                finishedAt: new Date().toISOString(),
+              },
+            }),
+          });
+          if (!failureReportResponse.ok) {
+            const failureReport = (await failureReportResponse.json()) as {
+              error?: string;
+            };
+            throw new Error(
+              failureReport.error ||
+                "As pendências foram detectadas, mas o relatório não pôde ser salvo.",
+            );
+          }
+          await loadImportRuns();
+        }
         const unmatched = imported.unmatchedSheets.length
           ? " Abas não reconhecidas: " + imported.unmatchedSheets.join(", ") + "."
           : "";
@@ -8257,7 +8405,42 @@ export default function BetaApp({
         return;
       }
 
-      let importedCount = 0;
+      const processingResponse = await fetch("/api/records", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          importReport: {
+            id: importId,
+            fileName: file.name,
+            targetModule: importTarget || "Detecção automática",
+            status: "Processando",
+            totalRows: plannedTotalRows,
+            inserted: 0,
+            updated: 0,
+            skipped: clientSkipped,
+            failures: [],
+            startedAt,
+          },
+        }),
+      });
+      const processingResult = (await processingResponse.json()) as {
+        error?: string;
+      };
+      if (!processingResponse.ok) {
+        throw new Error(
+          processingResult.error ||
+            "Não foi possível iniciar o controle da importação.",
+        );
+      }
+      reportStarted = true;
+
+      const serverFailures: Array<{
+        module: string;
+        sheet: string;
+        location: string;
+        reason: string;
+        payload: Record<string, unknown>;
+      }> = [];
       const batchSize = 250;
       for (let index = 0; index < imported.records.length; index += batchSize) {
         const batch = imported.records.slice(index, index + batchSize);
@@ -8267,26 +8450,148 @@ export default function BetaApp({
           body: JSON.stringify({ records: batch }),
         });
         const result = (await response.json()) as {
-          result?: { count: number };
+          result?: {
+            count: number;
+            inserted?: number;
+            updated?: number;
+            skipped?: number;
+            failures?: Array<{
+              index: number;
+              reason: string;
+              payload: Record<string, unknown>;
+            }>;
+          };
           error?: string;
         };
         if (!response.ok) throw new Error(result.error || "Falha ao gravar um lote da planilha.");
-        importedCount += result.result?.count || batch.length;
+        insertedCount += result.result?.inserted ?? result.result?.count ?? batch.length;
+        updatedCount += result.result?.updated || 0;
+        serverSkipped += result.result?.skipped || 0;
+        for (const failure of result.result?.failures || []) {
+          const sourceRecord = batch[failure.index];
+          serverFailures.push({
+            module: sourceRecord?.module || importTarget || "",
+            sheet:
+              sourceRecord?.importSheet ||
+              sourceRecord?.source.split(" / ").at(-1) ||
+              file.name,
+            location:
+              sourceRecord?.importLocation ||
+              `lote ${Math.floor(index / batchSize) + 1}, registro ${failure.index + 1}`,
+            reason: failure.reason,
+            payload: failure.payload || sourceRecord?.payload || {},
+          });
+        }
       }
 
+      const reportResponse = await fetch("/api/records", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          importReport: {
+            id: importId,
+            fileName: file.name,
+            targetModule: importTarget || "Detecção automática",
+            status: "Concluída",
+            totalRows: plannedTotalRows,
+            inserted: insertedCount,
+            updated: updatedCount,
+            skipped: clientSkipped + serverSkipped,
+            failures: [...imported.failures, ...serverFailures],
+            startedAt,
+            finishedAt: new Date().toISOString(),
+          },
+        }),
+      });
+      const reportResult = (await reportResponse.json()) as { error?: string };
+      if (!reportResponse.ok) {
+        throw new Error(
+          reportResult.error ||
+            "Os dados foram gravados, mas o relatório da importação não pôde ser salvo.",
+        );
+      }
+      reportStarted = false;
       await loadRecords();
+      await loadImportRuns();
       setToast({
         kind: "success",
-        text: importedCount + " registros importados após detecção, validação e conferência.",
+        text:
+          `${insertedCount} incluídos, ${updatedCount} atualizados, ` +
+          `${clientSkipped + serverSkipped} ignorados e ` +
+          `${imported.failures.length + serverFailures.length} pendências registradas.`,
       });
     } catch (error) {
+      const failureMessage =
+        error instanceof Error
+          ? error.message
+          : "Não foi possível importar a planilha.";
+      if (reportStarted) {
+        try {
+          await fetch("/api/records", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({
+              importReport: {
+                id: importId,
+                fileName: file.name,
+                targetModule: importTarget || "Detecção automática",
+                status: "Falha",
+                totalRows: plannedTotalRows,
+                inserted: insertedCount,
+                updated: updatedCount,
+                skipped: clientSkipped + serverSkipped,
+                failures: [
+                  {
+                    module: importTarget || "",
+                    sheet: file.name,
+                    location: "processamento",
+                    reason: failureMessage,
+                    payload: {},
+                  },
+                ],
+                startedAt,
+                finishedAt: new Date().toISOString(),
+              },
+            }),
+          });
+          await loadImportRuns();
+        } catch {
+          // A falha original continua sendo apresentada ao administrador.
+        }
+      }
       setToast({
         kind: "error",
-        text: error instanceof Error ? error.message : "Não foi possível importar a planilha.",
+        text: failureMessage,
       });
     } finally {
       if (fileInput.current) fileInput.current.value = "";
       setImportTarget(undefined);
+    }
+  }
+
+  async function resolveImportFailure(id: string) {
+    if (!hasEditingAccess()) return;
+    try {
+      const response = await fetch("/api/records", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ resolveImportErrorId: id }),
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(result.error);
+      await loadImportRuns();
+      setToast({
+        kind: "success",
+        text: "Pendência de importação marcada como resolvida.",
+      });
+    } catch (error) {
+      setToast({
+        kind: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Não foi possível resolver a pendência.",
+      });
     }
   }
 
@@ -8330,7 +8635,7 @@ export default function BetaApp({
         ref={fileInput}
         className="hidden-file-input"
         type="file"
-        accept=".xlsx"
+        accept=".xlsx,.csv"
         disabled={!isAdmin}
         onChange={(event) => handleImport(event.target.files?.[0])}
       />
@@ -8481,9 +8786,9 @@ export default function BetaApp({
                 exclusões, importações e exportações exigem o administrador.
               </small>
             </div>
-            <a href="/signin-with-chatgpt?return_to=%2F">
-              Entrar como administrador
-            </a>
+            <span title="A identidade administrativa é validada pelo Cloudflare Access.">
+              Acesso via Cloudflare
+            </span>
           </div>
         ) : null}
 
@@ -8495,10 +8800,8 @@ export default function BetaApp({
               records={operationalRecords}
               onNavigate={navigate}
               onNew={openNew}
-              onImport={() => requestImport()}
               onOpenRecord={openRecord}
               onOpenApprovalRecord={openApprovalRecord}
-              settings={settings}
               canEdit={isAdmin}
             />
           ) : activeView === "admin" && isAdmin ? (
@@ -8556,10 +8859,12 @@ export default function BetaApp({
             <IntegrationHub
               records={moduleRecords}
               allRecords={operationalRecords}
+              importRuns={importRuns}
               onNew={() => openNew("m365")}
               onEdit={openEdit}
               onDelete={remove}
               onImportAll={() => requestImport()}
+              onResolveImportError={resolveImportFailure}
               canEdit={isAdmin}
             />
           ) : activeModule ? (

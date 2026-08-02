@@ -2,7 +2,7 @@
 set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-runtime_root="${SITES_RUNTIME_ROOT:-${project_root}/.sites-runtime}"
+runtime_root="${CLOUDFLARE_RUNTIME_ROOT:-${project_root}/.cloudflare-runtime}"
 
 mkdir -p \
   "${runtime_root}/home" \
@@ -11,8 +11,8 @@ mkdir -p \
   "${runtime_root}/tmp" \
   "${runtime_root}/wrangler/logs"
 
-export SITES_ENV_READY=1
-export SITES_PROJECT_ROOT="${project_root}"
+export CLOUDFLARE_ENV_READY=1
+export CLOUDFLARE_PROJECT_ROOT="${project_root}"
 export HOME="${runtime_root}/home"
 export XDG_CONFIG_HOME="${runtime_root}/xdg-config"
 export TMPDIR="${runtime_root}/tmp"
@@ -20,8 +20,8 @@ export WRANGLER_WRITE_LOGS=false
 export WRANGLER_LOG_PATH="${runtime_root}/wrangler/logs"
 export MINIFLARE_REGISTRY_PATH="${runtime_root}/wrangler/registry"
 
-# The runtime may provide a global npm cache. Keep the image's read-only Sites
-# seed separate and make this project's writable cache authoritative.
+# The runtime may provide a global npm cache. Keep any read-only image seed
+# separate and make this project's writable cache authoritative.
 unset NPM_CONFIG_CACHE npm_config_cache || true
 export npm_config_cache="${runtime_root}/npm-cache"
 export npm_config_audit=false
@@ -44,7 +44,7 @@ if [[ "${1:-}" == "--" ]]; then
 fi
 
 if [[ "$#" -eq 0 ]]; then
-  echo "usage: scripts/sites-env.sh -- command [args...]" >&2
+  echo "usage: scripts/cloudflare-env.sh -- command [args...]" >&2
   exit 64
 fi
 

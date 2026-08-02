@@ -1,45 +1,27 @@
-Você está autorizado por Samuel Scolari a continuar o desenvolvimento e, após
-validação, publicar novas versões do sistema Beta Gestão 365.
+Você está autorizado por Samuel Scolari a continuar o Beta Gestão 365 no
+repositório samuelscolari-blip/beta-gestao-365.
 
-Use o código-fonte deste pacote como base e trabalhe SOMENTE no Site existente:
+Destino exclusivo:
+- Worker: beta-gestao-365
+- URL: https://beta-gestao-365.scolarisamuel.workers.dev/
+- D1: beta-gestao-365-db
+- Binding: DB
 
-Projeto: appgprj_6a67cdc58ee8819180fe477f9299edf7
-Slug: beta-gestao-365
-URL: https://beta-gestao-365.scolarisamuel.chatgpt.site
-Versão-base: 51
-Commit-base: e304021c25cdf5be679daa441c085cad5aa4269d
-Banco: Cloudflare D1, binding DB
+O domínio chatgpt.site foi aposentado. Não use ChatGPT Sites e não recrie
+.openai/hosting.json.
 
-REGRAS OBRIGATÓRIAS:
-
-1. Não crie outro Site.
-2. Não troque o project_id, o slug, a URL ou o binding DB.
-3. Preserve todos os dados e registros históricos.
-4. Não apague nem recrie o banco.
-5. Não altere migrations já aplicadas. Novos esquemas exigem migration aditiva.
-6. Não exponha nem grave senhas, tokens, certificados ou segredos.
-7. Não altere o administrador operacional sem pedido expresso de Samuel.
-8. Preserve códigos internos ocultos por padrão.
-9. Preserve o módulo operacional de Terceiros oculto.
-10. Preserve o Passo a passo da obra.
-11. Em Compras, mantenha somente Aguardando análise, Aprovado e Reprovado.
-12. Exemplos fictícios nunca podem entrar nos totais ou nas ações reais.
-13. Visitantes permanecem somente leitura.
-14. Antes de publicar, execute npm run lint e npm test e corrija todas as falhas.
-15. Verifique visualmente as telas alteradas.
-16. Salve e publique uma nova versão imutável no MESMO Site.
-17. Acompanhe a implantação até o status final de sucesso e informe a URL.
-
-Leia primeiro:
-- 00_LEIA-ME_PRIMEIRO.md
-- 01_GUIA_PARA_OUTRA_IA_PUBLICAR.md
-- 02_AUTORIZACAO_DE_CONTINUIDADE_E_PUBLICACAO.md
-- 03_MAPA_TECNICO_DO_PROJETO.md
-- 04_CHECKLIST_DE_PUBLICACAO.md
-- 05_CREDENCIAIS_E_PERMISSOES.md
-- 07_INVENTARIO_DE_ACESSOS_NECESSARIOS.md
-
-Se você não tiver uma sessão autenticada de proprietário ou editor do Site,
-faça as alterações e devolva um ZIP ou patch validado para que Samuel publique.
-Não tente contornar a falta de acesso.
-
+REGRAS:
+1. Preserve dados e registros históricos.
+2. Não apague nem recrie o D1.
+3. Não altere migrations aplicadas; crie apenas migrations aditivas.
+4. Não exponha senhas, tokens, certificados ou segredos.
+5. Preserve a autorização administrativa no servidor.
+6. Mantenha códigos internos ocultos por padrão.
+7. Mantenha Terceiros operacional oculto.
+8. Preserve o Passo a passo da obra.
+9. Compras usa somente Aguardando análise, Aprovado e Reprovado.
+10. Exemplos fictícios não entram em totais ou decisões reais.
+11. Visitantes permanecem somente leitura.
+12. Execute npm run lint e npm test.
+13. Publique pela branch main e acompanhe o GitHub Actions até sucesso.
+14. Valide a URL workers.dev depois do deploy.

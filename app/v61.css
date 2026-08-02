@@ -1,0 +1,53 @@
+.import-error-list {
+  display: grid;
+  min-width: min(520px, 72vw);
+  max-height: 360px;
+  margin-top: 10px;
+  padding: 10px;
+  gap: 10px;
+  overflow: auto;
+  border: 1px solid #d7e1e8;
+  border-radius: 12px;
+  background: #f8fbfd;
+}
+
+.import-error-list article {
+  display: grid;
+  gap: 7px;
+  padding: 12px;
+  border-left: 4px solid #d97706;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.import-error-list article p {
+  margin: 0;
+  color: #5d6873;
+  line-height: 1.45;
+}
+
+.import-error-list .button {
+  width: max-content;
+  min-height: 34px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.integration-table-title + .table-wrap details > summary {
+  cursor: pointer;
+  color: #9a5b04;
+  font-weight: 750;
+}
+
+.integration-table-title + .table-wrap td > small {
+  display: block;
+  margin-top: 4px;
+  color: #687887;
+}
+
+@media (max-width: 780px) {
+  .import-error-list {
+    min-width: 78vw;
+  }
+}
+
