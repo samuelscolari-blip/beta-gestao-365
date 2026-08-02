@@ -1,0 +1,45 @@
+/*
+ * V73 — complemento seguro da PR #36.
+ *
+ * O painel de produtividade possui duas colunas que precisam de cerca de
+ * 830px reais. Como a barra lateral e o padding da página reduzem a largura
+ * útil, o viewport não é uma referência suficiente. Esta camada usa a
+ * largura efetiva do próprio painel e evita estouro entre 981px e 1185px.
+ */
+
+.machine-productivity-panel {
+  container-name: machine-productivity-v73;
+  container-type: inline-size;
+}
+
+@container machine-productivity-v73 (max-width: 840px) {
+  .machine-productivity-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container machine-productivity-v73 (max-width: 620px) {
+  .machine-productivity-header {
+    gap: 16px;
+  }
+
+  .machine-productivity-actions {
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .machine-productivity-actions label {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .machine-productivity-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .machine-productivity-utilization {
+    grid-column: auto;
+  }
+}

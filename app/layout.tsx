@@ -15,6 +15,7 @@ import "./v65.css";
 import "./v67.css";
 import "./v66.css";
 import "./v72-executive-panel.css";
+import "./v73-pr36-followup.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
