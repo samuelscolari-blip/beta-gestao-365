@@ -5,6 +5,7 @@ import {
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 
+// SecureBetaAppV65 permanece preservado e é encapsulado pelo componente V66.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
