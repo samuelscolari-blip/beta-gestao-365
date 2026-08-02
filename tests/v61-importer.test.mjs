@@ -10,6 +10,7 @@ import { findSemanticHeaderIndex } from "../app/lib/spreadsheet-semantic.mjs";
 const spreadsheet = await readFile("app/lib/spreadsheet.ts", "utf8");
 const policy = await readFile("app/lib/import-policy.ts", "utf8");
 const app = await readFile("app/components/BetaApp.tsx", "utf8");
+const recordsStore = await readFile("db/records.ts", "utf8");
 
 test("V61 restringe a importação a Custos, Máquinas e Funcionários", () => {
   assert.match(policy, /id: "costs"/);
@@ -29,6 +30,12 @@ test("V61 protege o importador na interface e na camada de leitura", () => {
   assert.match(app, /Importar Custos, Máquinas ou Funcionários/);
   assert.match(spreadsheet, /allowedImportModuleIds\.has\(module\.id\)/);
   assert.match(spreadsheet, /targetModuleId && !isImportableModule\(targetModuleId\)/);
+});
+
+test("V61 bloqueia planilhas proibidas também no servidor", () => {
+  assert.match(recordsStore, /source\.startsWith\("Planilha:"\)/);
+  assert.match(recordsStore, /!isImportableModule\(moduleId\)/);
+  assert.match(recordsStore, /IMPORT_MODULE_NOT_ALLOWED/);
 });
 
 test("V61 informa família, orientação, confiança e erros na prévia", () => {
