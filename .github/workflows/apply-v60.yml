@@ -7,6 +7,12 @@ on:
     paths:
       - scripts/fix-v60-import-finally.mjs
       - .github/workflows/apply-v60.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/fix-v60-import-finally.mjs
+      - .github/workflows/apply-v60.yml
 
 permissions:
   contents: write
