@@ -1,15 +1,15 @@
 name: Auditoria final da produção V74
 
 on:
-  push:
-    branches:
-      - agent/final-production-audit-v74
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
   production-audit:
+    if: github.head_ref == 'agent/final-production-audit-v74'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
