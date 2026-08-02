@@ -157,8 +157,8 @@ function AdminAccessControl({ isAdmin, userEmail }: Props) {
         <strong>{isAdmin ? "Administrador ativo" : "Acesso do administrador"}</strong>
         <small>
           {isAdmin
-            ? userEmail || "scolarisamuel@gmail.com"
-            : "Somente scolarisamuel@gmail.com"}
+            ? userEmail || "Conta administrativa autenticada"
+            : "Somente a conta Google autorizada"}
         </small>
         {message ? <em>{message}</em> : null}
       </div>
