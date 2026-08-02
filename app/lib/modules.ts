@@ -160,6 +160,9 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "netAmount", label: "Valor líquido a pagar", type: "currency" },
       { key: "status", label: "Situação do serviço / pagamento", type: "select", required: true, options: ["Rascunho", "Em conferência", "Aguardando aprovação", "Aprovada", "Faturada", "Paga", "Rejeitada"] },
       { key: "invoiceUrl", label: "Nota fiscal / fatura", type: "url" },
+      { key: "paymentDate", label: "Data do pagamento", type: "date" },
+      { key: "paidAmount", label: "Valor efetivamente pago", type: "currency" },
+      { key: "receiptUrl", label: "Comprovante de pagamento", type: "url", placeholder: "Cole o link do comprovante salvo no SharePoint ou OneDrive" },
       { key: "measurementUrl", label: "Relatório / comprovante do serviço", type: "url" },
       { key: "contractUrl", label: "Contrato e aditivos", type: "url" },
       { key: "responsible", label: "Responsável pela conferência", type: "text" },
@@ -315,6 +318,9 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "documentUrl", label: "Nota fiscal ou recibo", type: "url", placeholder: "Cole o link do documento", aliases: ["Link documento"] },
       { key: "approval", label: "Situação da aprovação", type: "select", options: ["Pendente", "Aprovada", "Devolvida", "Rejeitada"], aliases: ["Aprovação"] },
       { key: "status", label: "Status", type: "select", required: true, options: ["Pendente", "Documento pendente", "Em análise", "Conferida", "Paga", "Reprovada"], aliases: ["Status"] },
+      { key: "paymentDate", label: "Data do pagamento da fatura", type: "date" },
+      { key: "paidAmount", label: "Valor efetivamente pago", type: "currency" },
+      { key: "receiptUrl", label: "Comprovante de pagamento da fatura", type: "url", placeholder: "Cole o link do comprovante" },
       { key: "responsible", label: "Responsável", type: "text", aliases: ["Responsável"] },
       { key: "notes", label: "Observações", type: "textarea", wide: true, aliases: ["Observações"] },
     ],
@@ -394,6 +400,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "paymentStatus", label: "Situação do pagamento da locação", type: "select", options: ["Pendente", "Parcial", "Pago", "Não se aplica"], aliases: ["Situação pagamento"] },
       { key: "paidAmount", label: "Valor já pago da locação", type: "currency", aliases: ["Valor pago"] },
       { key: "paymentDate", label: "Data do pagamento", type: "date", aliases: ["Data pagamento"] },
+      { key: "receiptUrl", label: "Comprovante do pagamento da locação", type: "url", placeholder: "Cole o link do comprovante", aliases: ["Link comprovante"] },
       { key: "nextMaintenance", label: "Próxima manutenção", type: "date", aliases: ["Próxima manutenção"] },
       { key: "meter", label: "Quilometragem ou horas de uso", type: "number", help: "Para veículos, informe os quilômetros. Para máquinas, informe o horímetro.", aliases: ["KM/horímetro"] },
       { key: "idleSince", label: "Inativo desde", type: "date", aliases: ["Inativo desde"] },
@@ -444,6 +451,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "paidAmount", label: "Valor já pago da manutenção", type: "currency" },
       { key: "dueDate", label: "Vencimento da manutenção", type: "date" },
       { key: "paymentDate", label: "Data do pagamento da manutenção", type: "date" },
+      { key: "receiptUrl", label: "Comprovante do pagamento da manutenção", type: "url", placeholder: "Cole o link do comprovante" },
       { key: "status", label: "Andamento da ocorrência", type: "select", required: true, options: ["Aberta", "Em correção", "Concluída", "Encerrada"] },
       { key: "documentUrl", label: "Orçamento, nota ou ordem de serviço", type: "url", placeholder: "Cole o link do documento" },
       { key: "notes", label: "Observações", type: "textarea", wide: true },
@@ -547,6 +555,11 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "bankData", label: "Dados bancários para pagamento", type: "textarea", wide: true, aliases: ["Dados bancários"] },
       { key: "occupationalExamValidity", label: "Validade do exame ocupacional", type: "date", aliases: ["Validade ASO"] },
       { key: "status", label: "Status", type: "select", required: true, options: ["Ativo", "Afastado", "Férias", "Em desligamento", "Desligado"], aliases: ["Status"] },
+      { key: "vacationAcquisitionStart", label: "Início do período aquisitivo vigente", type: "date", help: "Não use uma data fixa para todos. Informe conforme a admissão e os períodos já concedidos." },
+      { key: "vacationAcquisitionEnd", label: "Fim do período aquisitivo vigente", type: "date" },
+      { key: "vacationStart", label: "Início das férias atuais ou programadas", type: "date" },
+      { key: "vacationEnd", label: "Fim das férias atuais ou programadas", type: "date" },
+      { key: "vacationDays", label: "Dias de férias", type: "number" },
       { key: "scheduleStartDate", label: "Início da jornada", type: "date" },
       { key: "weeklyHours", label: "Carga horária semanal", type: "number" },
       { key: "restDay", label: "Dia de repouso", type: "select", options: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Variável"] },
@@ -864,7 +877,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
     dateField: "requestDate",
     amountField: "totalAmount",
     spreadsheetSheets: ["07_COMPRAS"],
-    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "totalAmount", "status", "documentsUrl"],
+    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "totalAmount", "status", "paymentStatus", "receiptUrl"],
     fields: [
       { key: "requestId", label: "Código da solicitação", type: "text", required: true, help: "Criado automaticamente pelo sistema.", aliases: ["ID solicitação"] },
       { key: "requestDate", label: "Data da solicitação", type: "date", required: true, aliases: ["Data"] },
@@ -883,6 +896,10 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "receivedDate", label: "Data do recebimento", type: "date", aliases: ["Data recebimento"] },
       { key: "receivedQty", label: "Quantidade recebida", type: "number", aliases: ["Qtd. recebida"] },
       { key: "status", label: "Status", type: "select", required: true, options: ["Aguardando análise", "Aprovado", "Reprovado"], aliases: ["Status"] },
+      { key: "paymentStatus", label: "Situação do pagamento", type: "select", options: ["Pendente", "Pago"] },
+      { key: "paymentDate", label: "Data do pagamento", type: "date" },
+      { key: "paidAmount", label: "Valor efetivamente pago", type: "currency" },
+      { key: "receiptUrl", label: "Comprovante de pagamento", type: "url", placeholder: "Cole o link do comprovante salvo no SharePoint ou OneDrive" },
       { key: "documentsUrl", label: "Orçamentos, pedido e nota fiscal", type: "url", placeholder: "Cole o link da pasta com os documentos", aliases: ["Link documentos"] },
       { key: "notes", label: "Observações", type: "textarea", wide: true, aliases: ["Observações"] },
     ],
@@ -1064,13 +1081,13 @@ export const moduleTips: Record<string, string> = {
   asset_events:
     "Selecione a máquina, informe a causa e os dias parados. O sistema calcula o custo diário e a perda estimada sem duplicar o custo contábil.",
   people:
-    "Este módulo acompanha quadro e custos de pessoal. Documentos pessoais devem ficar apenas em pastas restritas.",
+    "Use as abas Ativos, Férias e Inativos para organizar o quadro. O status alimenta a seleção da folha e dos cálculos; férias devem usar o período aquisitivo individual, nunca uma data fixa para todos.",
   food:
     "Compare pessoas previstas, refeições entregues e retiradas para identificar desperdícios ou faltas.",
   taxes:
     "Registre o vencimento assim que receber a obrigação e anexe a guia e o comprovante para manter o histórico completo.",
   purchases:
-    "Descreva claramente o material, a quantidade, a obra e a data necessária antes de iniciar as cotações.",
+    "Descreva claramente o material, a quantidade, a obra e a data necessária antes de iniciar as cotações. O pedido só pode ficar Pago depois de informar data, valor efetivamente pago e comprovante.",
   documents:
     "O sistema guarda o índice e o link. O arquivo original deve permanecer no SharePoint ou OneDrive autorizado.",
   emails:

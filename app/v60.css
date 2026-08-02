@@ -1,0 +1,167 @@
+/* V60 — Pagamentos comprovados, RH segmentado e obra alinhada. */
+
+.people-status-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #d7e3ea;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(7, 35, 55, 0.06);
+}
+
+.people-status-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 1px solid #d7e3ea;
+  border-radius: 14px;
+  color: #17324d;
+  background: #f8fbfc;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.people-status-tabs button strong {
+  display: grid;
+  min-width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 999px;
+  color: #0d4267;
+  background: #dff4f8;
+}
+
+.people-status-tabs button.active {
+  border-color: #10607f;
+  color: #ffffff;
+  background: linear-gradient(135deg, #082f50, #10607f);
+  box-shadow: 0 10px 24px rgba(8, 47, 80, 0.18);
+}
+
+.people-status-tabs button.active strong {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.people-status-tabs > p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #587185;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.rule-engine-explainer {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rule-engine-explainer > div {
+  padding: 18px;
+  border: 1px solid #cfe0e8;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff, #f2f8fa);
+  box-shadow: 0 10px 26px rgba(7, 35, 55, 0.055);
+}
+
+.rule-engine-explainer strong {
+  display: block;
+  color: #123a55;
+  font-size: 15px;
+}
+
+.rule-engine-explainer p {
+  margin: 7px 0 0;
+  color: #5b7385;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Operação Própria foi removida por duplicar o KPI de equipe. */
+.construction-operational-detail-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.construction-loss-card {
+  width: 100%;
+}
+
+/* Execução da obra mais compacta, alinhada e legível. */
+.construction-executive-v2 .construction-dashboard-heading-v56 h3,
+.construction-executive-v2 .construction-stage-roadmap h3,
+.construction-executive-v2 .construction-priority-board h3,
+.construction-executive-v2 .construction-health-board h3,
+.construction-executive-v2 .construction-loss-card h3,
+.construction-executive-v2 .construction-fleet-v2 h3 {
+  font-size: clamp(21px, 1.45vw, 26px) !important;
+  line-height: 1.22;
+}
+
+.construction-executive-v2 .construction-kpi-row-v56 {
+  align-items: stretch;
+}
+
+.construction-executive-v2 .construction-kpi-v56 {
+  display: flex;
+  min-height: 158px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > strong {
+  font-size: clamp(25px, 1.8vw, 34px);
+  letter-spacing: -0.045em;
+}
+
+.construction-executive-v2 .construction-stage-track {
+  align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.construction-executive-v2 .construction-stage-track article {
+  display: grid;
+  min-width: 138px;
+  align-content: start;
+  gap: 7px;
+  scroll-snap-align: start;
+  text-align: left;
+}
+
+.construction-executive-v2 .construction-stage-track article > strong {
+  min-height: 36px;
+  font-size: 12px;
+}
+
+.construction-executive-v2 .construction-main-grid-v56 {
+  align-items: start;
+}
+
+.construction-executive-v2 .construction-stage-card-v56 > p {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 > div {
+  min-height: 45px;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 strong {
+  font-size: 14px;
+}
+
+@media (max-width: 780px) {
+  .people-status-tabs,
+  .rule-engine-explainer {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-kpi-row-v56 {
+    grid-template-columns: 1fr;
+  }
+}

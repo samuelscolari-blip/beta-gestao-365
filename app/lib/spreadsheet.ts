@@ -12,6 +12,7 @@ import {
   normalizeHeader,
   type ModuleDefinition,
 } from "./modules";
+import { validateRecordPayload } from "./record-validation";
 
 export type ImportRecord = {
   module: string;
@@ -122,43 +123,111 @@ export function parseModuleSheet(
   return { records, skipped, matched: true };
 }
 
+function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
+  const aliases = headerAliases(module);
+  let best = 0;
+  for (const row of rows.slice(0, 25)) {
+    const normalized = row.map(normalizeHeader);
+    const score = aliases.filter(({ normalized: fieldAliases }) =>
+      normalized.some((header) => fieldAliases.includes(header)),
+    ).length;
+    best = Math.max(best, score);
+  }
+  return best;
+}
+
+function importKey(record: ImportRecord) {
+  const reference = record.reference.trim().toLowerCase();
+  if (reference) return record.module + "::ref::" + reference;
+  return record.module + "::" + record.title.trim().toLowerCase() + "::" + record.recordDate + "::" + record.amount;
+}
+
 export async function importWorkbook(file: File, targetModuleId?: string) {
+  if (!/\.xlsx$/i.test(file.name)) {
+    throw new Error("Selecione uma planilha Excel no formato .xlsx. Arquivos .xls antigos devem ser salvos novamente como .xlsx.");
+  }
+  if (file.size > 15 * 1024 * 1024) {
+    throw new Error("A planilha ultrapassa 15 MB. Divida o arquivo em partes menores.");
+  }
+
   const sheets = await readXlsxFile(file);
-  const targets = targetModuleId
+  const candidates = targetModuleId
     ? moduleDefinitions.filter((module) => module.id === targetModuleId)
     : moduleDefinitions.filter((module) => module.spreadsheetSheets.length);
+  if (!candidates.length) throw new Error("O módulo escolhido não aceita importação por planilha.");
 
-  const records: ImportRecord[] = [];
+  const accepted: ImportRecord[] = [];
+  const seen = new Set<string>();
   const report: Array<{
     module: string;
     sheet: string;
     imported: number;
     skipped: number;
+    invalid: number;
+    duplicates: number;
+    confidence: number;
+    detected: boolean;
   }> = [];
+  const unmatchedSheets: string[] = [];
 
-  for (const targetModule of targets) {
-    const sheet = sheets.find((candidate) =>
-      targetModule.spreadsheetSheets.some(
-        (name) => normalizeHeader(name) === normalizeHeader(candidate.sheet),
+  for (const sheet of sheets) {
+    const direct = candidates.find((module) =>
+      module.spreadsheetSheets.some(
+        (name) => normalizeHeader(name) === normalizeHeader(sheet.sheet),
       ),
     );
-    if (!sheet) continue;
+    const scored = candidates
+      .map((module) => ({ module, score: sheetScore(module, sheet.data as unknown[][]) }))
+      .sort((a, b) => b.score - a.score);
+    const selected = direct || (scored[0]?.score >= 2 ? scored[0].module : undefined);
+    if (!selected) {
+      unmatchedSheets.push(sheet.sheet);
+      continue;
+    }
+
     const parsed = parseModuleSheet(
-      targetModule,
+      selected,
       sheet.data as unknown[][],
-      `${file.name} / ${sheet.sheet}`,
+      file.name + " / " + sheet.sheet,
     );
-    records.push(...parsed.records);
+    let invalid = 0;
+    let duplicates = 0;
+    let imported = 0;
+    for (const record of parsed.records) {
+      const issues = validateRecordPayload(record.module, record.payload);
+      if (issues.length) {
+        invalid += 1;
+        continue;
+      }
+      const key = importKey(record);
+      if (seen.has(key)) {
+        duplicates += 1;
+        continue;
+      }
+      seen.add(key);
+      accepted.push(record);
+      imported += 1;
+      if (accepted.length > 10_000) {
+        throw new Error("A importação ultrapassa 10.000 registros. Divida a planilha em arquivos menores.");
+      }
+    }
+
+    const bestScore = direct ? Math.max(2, sheetScore(selected, sheet.data as unknown[][])) : scored[0]?.score || 0;
+    const confidence = Math.min(100, Math.round((bestScore / Math.max(2, selected.fields.length)) * 300));
     report.push({
-      module: targetModule.label,
+      module: selected.label,
       sheet: sheet.sheet,
-      imported: parsed.records.length,
+      imported,
       skipped: parsed.skipped,
+      invalid,
+      duplicates,
+      confidence,
+      detected: !direct,
     });
   }
-  return { records, report };
-}
 
+  return { records: accepted, report, unmatchedSheets };
+}
 function excelCell(value: unknown, fieldType: string) {
   if (fieldType === "currency") {
     return {
