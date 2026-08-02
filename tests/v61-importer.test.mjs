@@ -48,8 +48,11 @@ test("V61 informa família, orientação, confiança e erros na prévia", () => 
   assert.match(app, /Pendências encontradas/);
 });
 
-test("V61 reconhece data serial do Excel", () => {
+test("V61 reconhece datas seriais plausíveis sem confundir números pequenos", () => {
   assert.equal(spreadsheetDateValue(46237), "2026-08-03");
+  assert.equal(spreadsheetDateValue(1), "");
+  assert.equal(spreadsheetDateValue(2), "");
+  assert.equal(spreadsheetDateValue(31), "");
 });
 
 test("V61 faz mapeamento semântico conservador de cabeçalhos", () => {
