@@ -122,6 +122,21 @@ async function terminate(processHandle) {
   ]);
 }
 
+async function removeDirectoryWithRetry(path) {
+  const retryableCodes = new Set(["EBUSY", "ENOTEMPTY", "EPERM"]);
+
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    try {
+      await rm(path, { recursive: true, force: true });
+      return;
+    } catch (error) {
+      const isLastAttempt = attempt === 5;
+      if (isLastAttempt || !retryableCodes.has(error?.code)) throw error;
+      await sleep(150 * (attempt + 1));
+    }
+  }
+}
+
 assertRuntime();
 new URL(TARGET);
 
@@ -331,6 +346,7 @@ try {
   const deadline = Date.now() + WAIT_MS;
   let state;
   let stateError;
+  let stylesheetReloadAttempted = false;
 
   while (Date.now() < deadline) {
     await sleep(500);
@@ -378,6 +394,10 @@ try {
             return ({
             href: location.href,
             readyState: document.readyState,
+            stylesheets: Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(link => ({
+              href: link.href,
+              loaded: Boolean(link.sheet),
+            })),
             loading: Boolean(document.querySelector('.page-area .loading-state')),
             loadingText: document.querySelector('.page-area .loading-state')?.textContent?.trim() || '',
             dashboard: Boolean(document.querySelector('.dashboard-grid, .construction-executive, .page-stack')),
@@ -421,7 +441,21 @@ try {
         8_000,
       );
       state = result.result?.value;
-      if (state && !state.loading && state.dashboard && state.sidebar) break;
+      const stylesheetsReady = state?.stylesheets?.length > 0
+        && state.stylesheets.every((stylesheet) => stylesheet.loaded);
+      const applicationReady = state && !state.loading && state.dashboard && state.sidebar;
+
+      if (applicationReady && stylesheetsReady) break;
+
+      // Logo após um deploy, um POP pode entregar por alguns instantes o HTML
+      // anterior apontando para um CSS que já saiu do conjunto de assets. Uma
+      // única navegação sem cache busca o manifesto atual sem mascarar defeitos.
+      if (applicationReady && !stylesheetsReady && !stylesheetReloadAttempted) {
+        stylesheetReloadAttempted = true;
+        targetUrl.searchParams.set("__beta_diagnostic", `${Date.now()}`);
+        await sleep(1_000);
+        await command("Page.navigate", { url: targetUrl.href });
+      }
     } catch (error) {
       stateError = error;
       break;
@@ -515,6 +549,9 @@ try {
   if (!state.dashboard || !state.sidebar) {
     throw new Error(`Painel não apareceu: ${clipped(state)}`);
   }
+  if (!state.stylesheets?.length || state.stylesheets.some((stylesheet) => !stylesheet.loaded)) {
+    throw new Error(`Folha de estilos não carregou: ${clipped(state.stylesheets)}`);
+  }
   if (state.layout?.horizontalOverflow > 1) {
     throw new Error(`Layout criou rolagem horizontal: ${clipped(state.layout)}`);
   }
@@ -539,6 +576,6 @@ try {
     socket?.close();
   } catch {}
   await terminate(chrome);
-  await rm(userDataDir, { recursive: true, force: true });
+  await removeDirectoryWithRetry(userDataDir);
   if (chromeStderr) console.error("CHROME_STDERR", chromeStderr.slice(-3_000));
 }

@@ -27,4 +27,8 @@ test("the live diagnostic rejects clipping, poor contrast and uneven panels", as
   assert.match(diagnostic, /fleetContrast < 4\.5/);
   assert.match(diagnostic, /costFooterRatio > 1\.12/);
   assert.match(diagnostic, /Emulation\.setDeviceMetricsOverride/);
+  assert.match(diagnostic, /stylesheetReloadAttempted/);
+  assert.match(diagnostic, /Folha de estilos não carregou/);
+  assert.match(diagnostic, /removeDirectoryWithRetry/);
+  assert.match(diagnostic, /ENOTEMPTY/);
 });
