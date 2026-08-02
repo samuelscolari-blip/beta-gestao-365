@@ -1,4 +1,4 @@
-/* V66 — acesso administrativo em domínio público e correção visual de Aprovados. */
+/* V66/V68 — acesso administrativo em domínio público e correção visual de Aprovados. */
 
 .v66-admin-access {
   position: fixed;
@@ -9,7 +9,7 @@
   grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
   gap: 11px;
-  width: min(430px, calc(100vw - 36px));
+  width: min(455px, calc(100vw - 36px));
   padding: 11px 12px;
   border: 1px solid #d8e4ea;
   border-radius: 16px;
@@ -101,6 +101,32 @@
   outline-offset: 2px;
 }
 
+.v68-google-login {
+  position: relative;
+  display: flex;
+  min-width: 190px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.v68-google-login > div[aria-label="Entrar com Google"] {
+  min-width: 190px;
+  min-height: 40px;
+}
+
+.v68-google-login > span {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: #17324d;
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 10px;
+  font-weight: 800;
+}
+
 .management-overview .v66-approved-overview {
   display: flex;
 }
@@ -122,8 +148,13 @@
     height: 36px;
   }
 
-  .v66-admin-access-action {
+  .v66-admin-access-action,
+  .v68-google-login {
     grid-column: 1 / -1;
     width: 100%;
+  }
+
+  .v68-google-login {
+    justify-content: center;
   }
 }
