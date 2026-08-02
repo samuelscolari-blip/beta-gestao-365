@@ -18,7 +18,7 @@ test("financial center has the three requested tabs", () => {
 
 test("expenses only expose the requested statuses", () => {
   assert.match(v52, /options: \["Aguardando validação", "Reprovado", "Pago"\]/);
-  assert.match(route, /Aguardando validação/);
+  assert.doesNotMatch(route, /statusText\.includes\("pag"\)/);
   assert.match(route, /Lançamento bloqueado: anexe a nota fiscal/);
   assert.match(route, /CPF ou CNPJ do fornecedor/);
   assert.match(records, /pendingStatusBackfills/);

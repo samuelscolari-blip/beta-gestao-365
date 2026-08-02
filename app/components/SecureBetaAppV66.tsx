@@ -9,6 +9,12 @@ import {
   useState,
 } from "react";
 import SecureBetaAppV65 from "./SecureBetaAppV65";
+import {
+  approvedDecisionAmount,
+  approvedDecisionModuleLabels,
+  approvedDecisionModules,
+  isApprovedDecision,
+} from "../lib/approved-decisions";
 
 type Props = {
   userName?: string | null;
@@ -80,19 +86,8 @@ const GOOGLE_CLIENT_ID =
 const REMEMBERED_ADMIN_KEY = "beta-admin-device-v69";
 const ADMIN_REQUIRED_EVENT = "beta:admin-required";
 
-const decisionModules = new Set([
-  "purchases",
-  "expenses",
-  "cards",
-  "rentals",
-]);
-
-const moduleLabels: Record<string, string> = {
-  purchases: "Compras",
-  expenses: "Contas a pagar",
-  cards: "Cartão corporativo",
-  rentals: "Aluguéis",
-};
+const decisionModules = approvedDecisionModules;
+const moduleLabels = approvedDecisionModuleLabels;
 
 function normalized(value: unknown) {
   return String(value ?? "")
@@ -114,30 +109,11 @@ function isRealRecord(record: RecordView) {
 }
 
 function isApproved(record: RecordView) {
-  return [
-    record.payload.managementDecision,
-    record.payload.approval,
-    record.status,
-  ].some((value) => {
-    const text = normalized(value);
-    return text.includes("aprov") || text === "pago" || text === "paga";
-  });
+  return isApprovedDecision(record);
 }
 
 function recordAmount(record: RecordView) {
-  const payload = record.payload;
-  const value =
-    record.module === "purchases"
-      ? payload.totalAmount
-      : record.module === "expenses"
-        ? payload.expectedAmount
-        : record.module === "cards"
-          ? payload.amount
-          : record.module === "rentals"
-            ? payload.totalMonthly
-            : record.amount;
-  const amount = Number(value ?? record.amount ?? 0);
-  return Number.isFinite(amount) ? amount : 0;
+  return approvedDecisionAmount(record);
 }
 
 function evidenceUrl(record: RecordView) {

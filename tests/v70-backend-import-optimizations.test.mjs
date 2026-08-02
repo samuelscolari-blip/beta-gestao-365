@@ -18,7 +18,11 @@ test("V70 normaliza aliases no backend antes das validações documentais", asyn
   assert.match(route, /payload\.supplierCode = firstNonBlank/);
   assert.match(route, /payload\.holder = firstNonBlank/);
   assert.match(route, /payload\.cardEnding = firstNonBlank/);
-  assert.match(route, /payload\.work = firstNonBlank/);
+  assert.doesNotMatch(
+    route,
+    /payload\.work = firstNonBlank\([\s\S]*landlordDocument/,
+  );
+  assert.match(route, /"landlordDocument"/);
   assert.match(route, /applyCanonicalAliases\(moduleId, payload\);[\s\S]*?const amount/);
 });
 

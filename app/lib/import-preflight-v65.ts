@@ -3,26 +3,16 @@
 import readXlsxFile from "read-excel-file/browser";
 import {
   moduleDefinitions,
-  normalizeHeader,
-  type ModuleDefinition,
 } from "./modules";
 import {
   allowedImportModuleIds,
   importFamilyForModule,
 } from "./import-policy";
 import { parseCsvRows } from "./spreadsheet-csv.mjs";
-import { parseModuleSheet } from "./spreadsheet";
+import { resolveImportSheet } from "./spreadsheet";
 import "./v65-module-enhancements";
 
 type SheetData = { sheet: string; data: unknown[][] };
-
-type Candidate = {
-  module: ModuleDefinition;
-  score: number;
-  records: number;
-  invalid: number;
-  layout: string;
-};
 
 export type ImportPreflightResult = {
   kind: "clear" | "warning" | "error";
@@ -30,35 +20,6 @@ export type ImportPreflightResult = {
   message: string;
   details: string[];
 };
-
-function directModule(sheetName: string, candidates: ModuleDefinition[]) {
-  return candidates.find((module) =>
-    module.spreadsheetSheets.some(
-      (name) => normalizeHeader(name) === normalizeHeader(sheetName),
-    ),
-  );
-}
-
-function candidateFor(
-  module: ModuleDefinition,
-  rows: unknown[][],
-  sourceName: string,
-): Candidate {
-  const parsed = parseModuleSheet(module, rows, sourceName);
-  const records = parsed.records.length;
-  const invalid = parsed.failures.length;
-  const score = Math.max(
-    0,
-    records * 6 + (parsed.matched ? 4 : 0) - Math.min(20, invalid * 2),
-  );
-  return {
-    module,
-    score,
-    records,
-    invalid,
-    layout: parsed.layout,
-  };
-}
 
 async function workbookSheets(file: File): Promise<SheetData[]> {
   if (/\.csv$/i.test(file.name)) {
@@ -112,50 +73,39 @@ export async function inspectImportFileV65(
       continue;
     }
 
-    const direct = directModule(sheet.sheet, candidates);
-    if (direct) {
-      const parsed = candidateFor(
-        direct,
-        rows,
-        `${file.name} / ${sheet.sheet}`,
-      );
-      recognized += 1;
-      details.push(
-        `${sheet.sheet}: ${direct.label} • ${parsed.layout} • ${parsed.records} registro(s) identificado(s).`,
-      );
+    const resolution = resolveImportSheet(
+      candidates,
+      rows,
+      sheet.sheet,
+      `${file.name} / ${sheet.sheet}`,
+    );
+    if (resolution.ambiguous) {
+      ambiguities.push(resolution.reason || `${sheet.sheet}: identificação ambígua.`);
       continue;
     }
-
-    const ranked = candidates
-      .map((module) =>
-        candidateFor(module, rows, `${file.name} / ${sheet.sheet}`),
-      )
-      .filter((candidate) => candidate.records > 0 || candidate.score > 4)
-      .sort((a, b) => b.score - a.score);
-    const first = ranked[0];
-    const second = ranked[1];
-
-    if (!first || first.score <= 4) {
+    const selected = resolution.selected;
+    if (!selected) {
       unrecognized.push(sheet.sheet);
       continue;
     }
-
     recognized += 1;
-    const family = importFamilyForModule(first.module.id)?.label || first.module.label;
-    details.push(
-      `${sheet.sheet}: provável ${family} / ${first.module.label} • ${first.layout} • ${first.records} registro(s).`,
+    const candidate = resolution.ranked.find(
+      (item) => item.module.id === selected.id,
     );
+    const family = importFamilyForModule(selected.id)?.label || selected.label;
+    details.push(
+      `${sheet.sheet}: ${family} / ${selected.label} • ${candidate?.layout || "Tabela vertical"} • ${candidate?.records || 0} registro(s).`,
+    );
+  }
 
-    if (
-      second &&
-      second.score > 4 &&
-      second.score >= first.score * 0.82 &&
-      second.module.id !== first.module.id
-    ) {
-      ambiguities.push(
-        `${sheet.sheet}: pode ser “${first.module.label}” ou “${second.module.label}”.`,
-      );
-    }
+  if (ambiguities.length) {
+    return {
+      kind: "error",
+      title: "Escolha manual do módulo necessária",
+      message:
+        "O conteúdo corresponde a mais de um módulo. Para evitar gravação incorreta, selecione o módulo de destino e importe novamente.",
+      details: [...ambiguities, ...details],
+    };
   }
 
   if (!recognized) {
@@ -168,14 +118,13 @@ export async function inspectImportFileV65(
     };
   }
 
-  if (ambiguities.length || unrecognized.length) {
+  if (unrecognized.length) {
     return {
       kind: "warning",
       title: "Revisão necessária antes de importar",
       message:
         "O sistema encontrou abas ambíguas ou não reconhecidas. Revise a identificação abaixo; ao continuar, a prévia normal ainda mostrará linhas válidas, rejeitadas e duplicadas antes da gravação.",
       details: [
-        ...ambiguities,
         ...unrecognized.map((sheet) => `${sheet}: estrutura não reconhecida e será ignorada.`),
         ...details,
       ],

@@ -73,6 +73,9 @@ export function applyV52ModuleCorrections() {
     if (key === "cardEnding") return "merchantDocument";
     return key;
   });
+  ["paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
+    if (!cards.tableColumns.includes(key)) cards.tableColumns.push(key);
+  });
 
   const food = moduleMap.food;
   removeFields(food, ["supplierCode"]);
@@ -84,9 +87,20 @@ export function applyV52ModuleCorrections() {
     placeholder: "Documento exibido no comprovante fiscal",
     aliases: ["CPF/CNPJ", "CNPJ", "Documento fornecedor"],
   });
+  ["paymentStatus", "paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
+    if (!food.tableColumns.includes(key)) food.tableColumns.push(key);
+  });
 
   const rentals = moduleMap.rentals;
-  removeFields(rentals, ["work"]);
+  const workField = rentals.fields.find((field) => field.key === "work");
+  if (workField) {
+    Object.assign(workField, {
+      label: "Obra vinculada",
+      placeholder: "Nome ou código da obra",
+      required: false,
+      help: "Obra atendida pelo imóvel; não confundir com o documento do locador.",
+    });
+  }
   addAfter(rentals, "landlord", {
     key: "landlordDocument",
     label: "CPF ou CNPJ do locador",
@@ -94,6 +108,15 @@ export function applyV52ModuleCorrections() {
     required: true,
     placeholder: "Documento do proprietário ou empresa locadora",
     aliases: ["CPF/CNPJ locador", "CNPJ locador", "Documento locador"],
+  });
+  if (!rentals.tableColumns.includes("work")) {
+    rentals.tableColumns.splice(1, 0, "work");
+  }
+  if (!rentals.tableColumns.includes("landlordDocument")) {
+    rentals.tableColumns.push("landlordDocument");
+  }
+  ["paymentStatus", "paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
+    if (!rentals.tableColumns.includes(key)) rentals.tableColumns.push(key);
   });
 
   const purchases = moduleMap.purchases;

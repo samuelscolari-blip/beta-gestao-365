@@ -18,6 +18,11 @@ const preflight = await readFile(
   "app/lib/import-preflight-v65.ts",
   "utf8",
 );
+const spreadsheet = await readFile("app/lib/spreadsheet.ts", "utf8");
+const approvedDecisions = await readFile(
+  "app/lib/approved-decisions.ts",
+  "utf8",
+);
 const secure = await readFile(
   "app/components/SecureBetaAppV65.tsx",
   "utf8",
@@ -75,19 +80,24 @@ test("V65 só ativa regra documentada e homologada", () => {
   assert.doesNotMatch(validation, /eval\(|new Function/);
 });
 
-test("V65 revisa planilhas ambíguas antes da importação", () => {
-  assert.match(preflight, /second\.score >= first\.score \* 0\.82/);
-  assert.match(preflight, /Revisão necessária antes de importar/);
+test("V65 bloqueia planilhas ambíguas antes da importação", () => {
+  assert.match(spreadsheet, /second\.score >= first\.score \* 0\.82/);
+  assert.match(preflight, /Escolha manual do módulo necessária/);
+  assert.match(preflight, /kind: "error"/);
   assert.match(preflight, /Nenhuma aba apresentou cabeçalhos suficientes/);
   assert.match(secure, /window\.addEventListener\("change", interceptFile, true\)/);
-  assert.match(secure, /Continuar para a prévia/);
   assert.match(secure, /dispatchValidatedFile/);
 });
 
-test("V65 mostra decisões aprovadas sem remover as filas anteriores", () => {
+test("V65 mostra decisões aprovadas sem confundir pagamento", () => {
   assert.match(secure, /Aprovados <span>\{approved\.length\}<\/span>/);
   assert.match(secure, /v65-approved-overview/);
-  assert.match(secure, /decisionModules = new Set\(\["purchases", "expenses", "cards"\]\)/);
+  assert.match(secure, /approvedDecisionModules/);
+  assert.match(approvedDecisions, /"purchases"/);
+  assert.match(approvedDecisions, /"expenses"/);
+  assert.match(approvedDecisions, /"cards"/);
+  assert.match(approvedDecisions, /"rentals"/);
+  assert.doesNotMatch(approvedDecisions, /"pago"|"paga"/);
   assert.match(v65Css, /v65-show-approved \.management-list/);
   assert.match(v65Css, /v65-approved-row/);
   assert.match(page, /SecureBetaAppV65/);
