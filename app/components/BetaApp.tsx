@@ -2512,7 +2512,6 @@ function ConstructionExecutivePanel({
       ? 100
       : 0;
   const ownWorkforceGap = Math.max(0, requiredOwnTeamCount - ownTeamCount);
-  const ownTeamProgress = boundedPercent(selectedWork.payload.ownTeamProgress);
   const constructionStages = [
     "Mobilização",
     "Terraplenagem",
@@ -2758,103 +2757,6 @@ function ConstructionExecutivePanel({
     });
   }
   operationalPriorities.sort((a, b) => b.score - a.score);
-
-  const positiveSignals = [
-    Number(latestLog?.payload.progressDelta || 0) > 0
-      ? {
-          value: `+${decimalNumber(Number(latestLog?.payload.progressDelta || 0))} p.p.`,
-          label: "avanço no último diário",
-          detail: String(
-            latestLog?.payload.conditionDetail ||
-              "Produção registrada pela engenharia.",
-          ),
-        }
-      : null,
-    productiveHours > 0
-      ? {
-          value: `${decimalNumber(productiveHours)} h`,
-          label: "de produção comprovada",
-          detail: `${decimalNumber(utilizationPercent)}% de aproveitamento no período.`,
-        }
-      : null,
-    activeMachines > 0
-      ? {
-          value: `${activeMachines}`,
-          label:
-            activeMachines === 1
-              ? "máquina ativa e produzindo"
-              : "máquinas ativas e produzindo",
-          detail: highestImpactMachine
-            ? `${machineRows.find((row) => row.state === "active")?.asset.title || "Frota operacional"} em atividade.`
-            : "Frota com equipamento em produção.",
-        }
-      : null,
-    ownTeamProgress > physicalProgress
-      ? {
-          value: `${decimalNumber(ownTeamProgress)}%`,
-          label: "execução das frentes próprias",
-          detail: `${decimalNumber(ownTeamProgress - physicalProgress)} p.p. acima do avanço geral.`,
-        }
-      : null,
-    projectBudget > 0 && projectedBudgetVariance <= 0
-      ? {
-          value: currency.format(Math.abs(projectedBudgetVariance)),
-          label: "margem prevista no orçamento",
-          detail: `Custo final projetado em ${currency.format(projectedFinalCost)}.`,
-        }
-      : null,
-  ].filter(
-    (
-      signal,
-    ): signal is { value: string; label: string; detail: string } =>
-      Boolean(signal),
-  );
-  const negativeSignals = [
-    projectBudget > 0 && projectedBudgetVariance > 0
-      ? {
-          value: currency.format(projectedBudgetVariance),
-          label: "estouro projetado do orçamento",
-          detail: `${currency.format(projectedFinalCost)} de custo final estimado.`,
-        }
-      : null,
-    hasPlannedProgress && scheduleDelta < 0
-      ? {
-          value: `-${decimalNumber(progressGapPoints)} p.p.`,
-          label: "desvio do cronograma",
-          detail: scheduleDelayDays
-            ? `${scheduleDelayDays} dias de atraso apurados.`
-            : "Atraso em dias ainda não apurado.",
-        }
-      : null,
-    unavailableMachines > 0
-      ? {
-          value: `${unavailableMachines}/${machineRows.length}`,
-          label: "máquinas sem produzir",
-          detail: `${maintenanceMachines} em manutenção e ${idleMachines} ociosas.`,
-        }
-      : null,
-    workEconomicImpact > 0
-      ? {
-          value: currency.format(workEconomicImpact),
-          label: "impacto econômico da frota",
-          detail: `${currency.format(workMaintenanceCost)} em manutenção + ${currency.format(workDowntimeLoss)} em parada.`,
-        }
-      : null,
-    lostHours > 0
-      ? {
-          value: `${decimalNumber(lostHours)} h`,
-          label: "de tempo produtivo perdido",
-          detail: topCause
-            ? `Principal causa: ${topCause.cause}.`
-            : "Causa a detalhar no diário.",
-        }
-      : null,
-  ].filter(
-    (
-      signal,
-    ): signal is { value: string; label: string; detail: string } =>
-      Boolean(signal),
-  );
 
   const useOperationalDashboard = Number(selectedWork.id) >= 0;
   return useOperationalDashboard ? (
@@ -3150,7 +3052,7 @@ function ConstructionExecutivePanel({
         </div>
       </section>
 
-      <div className="construction-decision-grid">
+      <div className="construction-decision-grid construction-decision-grid-single">
         <article className="construction-priority-board">
           <header>
             <div>
@@ -3188,107 +3090,6 @@ function ConstructionExecutivePanel({
           </div>
         </article>
 
-        <article className="construction-health-board">
-          <header>
-            <span className="eyebrow">LEITURA DA OBRA</span>
-            <h3>Positivo e negativo</h3>
-            <p>O que sustenta o resultado e o que está puxando a obra para baixo.</p>
-          </header>
-          <div className="construction-health-columns">
-            <section className="positive">
-              <header>
-                <span><Icon name="check" size={16} /></span>
-                <strong>Pontos positivos</strong>
-              </header>
-              {positiveSignals.slice(0, 3).map((signal) => (
-                <div key={`${signal.value}-${signal.label}`}>
-                  <strong>{signal.value}</strong>
-                  <span>{signal.label}</span>
-                  <small>{signal.detail}</small>
-                </div>
-              ))}
-              {!positiveSignals.length ? (
-                <p>Nenhum resultado positivo comprovado no período.</p>
-              ) : null}
-            </section>
-            <section className="negative">
-              <header>
-                <span><Icon name="alert" size={16} /></span>
-                <strong>Pontos negativos</strong>
-              </header>
-              {negativeSignals.slice(0, 3).map((signal) => (
-                <div key={`${signal.value}-${signal.label}`}>
-                  <strong>{signal.value}</strong>
-                  <span>{signal.label}</span>
-                  <small>{signal.detail}</small>
-                </div>
-              ))}
-              {!negativeSignals.length ? (
-                <p>Nenhum desvio crítico registrado no período.</p>
-              ) : null}
-            </section>
-          </div>
-        </article>
-      </div>
-
-      <div className="construction-operational-detail-grid">
-        <article className="construction-loss-card">
-          <header>
-            <div>
-              <span className="eyebrow">PRODUTIVIDADE COMPROVADA</span>
-              <h3>Horas produzidas e causas de perda</h3>
-            </div>
-            <button onClick={() => onNavigate("worklogs")}>
-              Abrir diário <Icon name="arrow" size={14} />
-            </button>
-          </header>
-          <div className="construction-hours-balance">
-            <div className="positive">
-              <small>PRODUÇÃO</small>
-              <strong>{decimalNumber(productiveHours)} h</strong>
-              <span>
-                {executiveQuantity(
-                  productiveDays,
-                  "dia equivalente",
-                  "dias equivalentes",
-                )}
-              </span>
-            </div>
-            <div className="negative">
-              <small>PERDA</small>
-              <strong>{decimalNumber(lostHours)} h</strong>
-              <span>
-                {executiveQuantity(
-                  unproductiveDays,
-                  "dia equivalente",
-                  "dias equivalentes",
-                )}
-              </span>
-            </div>
-          </div>
-          <div className="construction-loss-causes">
-            {causes.slice(0, 4).map((cause) => (
-              <div key={cause.cause}>
-                <span>
-                  <strong>{cause.cause}</strong>
-                  <small>{decimalNumber(cause.hours)} h perdidas</small>
-                </span>
-                <b><i style={{ width: `${cause.share}%` }} /></b>
-                <em>{decimalNumber(cause.share)}%</em>
-              </div>
-            ))}
-            {!causes.length ? (
-              <p>Nenhuma causa de improdutividade registrada.</p>
-            ) : null}
-          </div>
-          <footer>
-            <span>
-              {decimalNumber(recordedHours)} h registradas em{" "}
-              {executiveQuantity(recordedDays, "dia", "dias")}
-            </span>
-            <span>1 dia equivalente = {decimalNumber(dailyWorkHours)} h</span>
-          </footer>
-        </article>
       </div>
 
       <section
@@ -4075,6 +3876,187 @@ function machineOutstandingAmount(record: StoredRecord) {
     .toLowerCase();
   if (status === "nao se aplica") return 0;
   return Math.max(0, machineCommittedAmount(record) - machinePaidAmount(record));
+}
+
+function MachineProductivityPanel({
+  records,
+  onNavigate,
+}: {
+  records: StoredRecord[];
+  onNavigate: (view: string) => void;
+}) {
+  const works = useMemo(
+    () =>
+      records
+        .filter((record) => record.module === "works")
+        .sort((a, b) => {
+          const rank = (status: string) =>
+            status === "Ativa"
+              ? 0
+              : status === "Pausada"
+                ? 1
+                : status === "Planejada"
+                  ? 2
+                  : 3;
+          return rank(a.status) - rank(b.status) || a.title.localeCompare(b.title);
+        }),
+    [records],
+  );
+  const [selectedReference, setSelectedReference] = useState("");
+  const selectedWork =
+    works.find((work) => work.reference === selectedReference) || works[0] || null;
+  const workLogs = useMemo(
+    () =>
+      selectedWork
+        ? records
+            .filter(
+              (record) =>
+                record.module === "worklogs" &&
+                belongsToWork(record, selectedWork),
+            )
+            .sort(
+              (a, b) =>
+                String(b.recordDate).localeCompare(String(a.recordDate)) ||
+                b.id - a.id,
+            )
+        : [],
+    [records, selectedWork],
+  );
+
+  const productivity = calculateWorkProductivity(
+    workLogs.map((log) => ({
+      date: String(log.payload.date || log.recordDate),
+      productivityStatus: String(log.payload.productivityStatus || ""),
+      lostHours: Number(log.payload.lostHours || 0),
+      cause: String(log.payload.unproductiveCause || "Outro"),
+    })),
+    selectedWork?.payload.dailyWorkHours,
+  );
+  const {
+    dailyWorkHours,
+    recordedDays,
+    recordedHours,
+    productiveHours,
+    lostHours,
+    productiveDays,
+    unproductiveDays,
+    utilizationPercent,
+    causes,
+  } = productivity;
+
+  return (
+    <section
+      className="machine-productivity-panel"
+      aria-label="Produtividade e horas das máquinas na obra"
+    >
+      <header className="machine-productivity-header">
+        <div>
+          <span className="eyebrow">PRODUTIVIDADE COMPROVADA</span>
+          <h1>Horas produzidas e causas de perda</h1>
+          <p>
+            Produção registrada nos diários da obra, com as perdas que afetam a
+            disponibilidade das máquinas.
+          </p>
+        </div>
+        <div className="machine-productivity-actions">
+          {selectedWork ? (
+            <label>
+              <span>Obra acompanhada</span>
+              <select
+                value={selectedWork.reference}
+                onChange={(event) => setSelectedReference(event.target.value)}
+              >
+                {works.map((work) => (
+                  <option key={work.id} value={work.reference}>
+                    {work.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          <button type="button" onClick={() => onNavigate("worklogs")}>
+            Abrir diário <Icon name="arrow" size={15} />
+          </button>
+        </div>
+      </header>
+
+      {selectedWork ? (
+        <div className="machine-productivity-content">
+          <div className="machine-productivity-kpis">
+            <article className="productive">
+              <small>PRODUÇÃO</small>
+              <strong>{decimalNumber(productiveHours)} h</strong>
+              <span>
+                {executiveQuantity(
+                  productiveDays,
+                  "dia equivalente",
+                  "dias equivalentes",
+                )}
+              </span>
+            </article>
+            <article className="lost">
+              <small>PERDA</small>
+              <strong>{decimalNumber(lostHours)} h</strong>
+              <span>
+                {executiveQuantity(
+                  unproductiveDays,
+                  "dia equivalente",
+                  "dias equivalentes",
+                )}
+              </span>
+            </article>
+            <div className="machine-productivity-utilization">
+              <span>
+                <strong>{decimalNumber(utilizationPercent)}%</strong>
+                aproveitamento
+              </span>
+              <b aria-hidden="true">
+                <i style={{ width: `${utilizationPercent}%` }} />
+              </b>
+              <small>
+                {decimalNumber(recordedHours)} h em{" "}
+                {executiveQuantity(recordedDays, "dia", "dias")} · jornada de{" "}
+                {decimalNumber(dailyWorkHours)} h
+              </small>
+            </div>
+          </div>
+
+          <div className="machine-productivity-causes">
+            <header>
+              <span>CAUSAS DE PERDA</span>
+              <small>{causes.length ? "Ordenadas pelo maior impacto" : "Sem perdas registradas"}</small>
+            </header>
+            <div>
+              {causes.slice(0, 4).map((cause) => (
+                <article key={cause.cause}>
+                  <span>
+                    <strong>{cause.cause}</strong>
+                    <small>{decimalNumber(cause.hours)} h perdidas</small>
+                  </span>
+                  <b aria-hidden="true">
+                    <i style={{ width: `${cause.share}%` }} />
+                  </b>
+                  <em>{decimalNumber(cause.share)}%</em>
+                </article>
+              ))}
+              {!causes.length ? (
+                <p>Nenhuma causa de improdutividade registrada nesta obra.</p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="machine-productivity-empty">
+          <span><Icon name="works" size={22} /></span>
+          <div>
+            <strong>Nenhuma obra cadastrada</strong>
+            <p>Cadastre uma obra e seus diários para acompanhar as horas aqui.</p>
+          </div>
+          <button type="button" onClick={() => onNavigate("works")}>Abrir Obras</button>
+        </div>
+      )}
+    </section>
+  );
 }
 
 function MachineExecutivePanel({
@@ -5039,11 +5021,11 @@ function Dashboard({
         <div className="management-heading">
           <div>
             <span className="eyebrow">CENTRAL DE PEDIDOS</span>
-            <h2>Pedidos para decisão da gerência</h2>
+            <h2>Central de decisões gerenciais</h2>
             <p>
-              Fila única de compras, pagamentos e cartões. Abra um pedido para
-              conferir necessidade, valor, responsável e documentos antes de
-              aprovar ou reprovar com justificativa.
+              Pedidos documentados, organizados por etapa e prontos para
+              conferência. Cada decisão fica registrada com responsável,
+              justificativa e histórico.
             </p>
           </div>
           <div className="management-heading-tools">
@@ -8883,12 +8865,18 @@ export default function BetaApp({
                 />
               ) : null}
               {activeView === "assets" ? (
-                <MachineExecutivePanel
-                  records={operationalRecords}
-                  onNew={openNew}
-                  onOpenRecord={openRecord}
-                  canEdit={isAdmin}
-                />
+                <>
+                  <MachineProductivityPanel
+                    records={operationalRecords}
+                    onNavigate={navigate}
+                  />
+                  <MachineExecutivePanel
+                    records={operationalRecords}
+                    onNew={openNew}
+                    onOpenRecord={openRecord}
+                    canEdit={isAdmin}
+                  />
+                </>
               ) : null}
               {activeView === "expenses" ? (
                 <FinancialCenterPage

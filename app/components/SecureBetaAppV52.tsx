@@ -25,9 +25,9 @@ type ApiRecord = {
   [key: string]: unknown;
 };
 
-const MANAGEMENT_TITLE = "Documentos para decisão da gerência";
+const MANAGEMENT_TITLE = "Central de decisões gerenciais";
 const MANAGEMENT_DESCRIPTION =
-  "Compras, pagamentos, cartões e aluguéis documentados para a gerência conferir e decidir. O sistema não recomenda aprovação ou reprovação.";
+  "Pedidos documentados, organizados por etapa e prontos para conferência. Cada decisão fica registrada com responsável, justificativa e histórico.";
 
 function addVisibleFields(record: ApiRecord): ApiRecord {
   const payload = { ...(record.payload || {}) };
