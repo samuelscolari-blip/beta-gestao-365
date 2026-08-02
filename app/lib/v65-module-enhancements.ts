@@ -17,19 +17,10 @@ function appendColumn(module: ModuleDefinition | undefined, key: string) {
   else module.tableColumns.push(key);
 }
 
-function applyPaymentFields(
-  moduleId: "rentals" | "food",
+function appendPaymentEvidenceFields(
+  module: ModuleDefinition | undefined,
   expectedLabel: string,
 ) {
-  const module = moduleMap[moduleId];
-  appendField(module, {
-    key: "paymentStatus",
-    label: "Situação do pagamento",
-    type: "select",
-    options: ["Pendente", "Parcial", "Pago", "Não se aplica"],
-    aliases: ["Status pagamento", "Situação pagamento"],
-    help: `Use Pago somente depois de registrar data, valor e comprovante do ${expectedLabel}.`,
-  });
   appendField(module, {
     key: "paymentDate",
     label: "Data do pagamento",
@@ -48,9 +39,26 @@ function applyPaymentFields(
     type: "url",
     placeholder: "Cole o link do comprovante",
     aliases: ["Link comprovante", "Comprovante"],
+    help: `Obrigatório ao registrar o pagamento do ${expectedLabel}.`,
   });
-  appendColumn(module, "paymentStatus");
   appendColumn(module, "receiptUrl");
+}
+
+function applyPaymentFields(
+  moduleId: "rentals" | "food",
+  expectedLabel: string,
+) {
+  const module = moduleMap[moduleId];
+  appendField(module, {
+    key: "paymentStatus",
+    label: "Situação do pagamento",
+    type: "select",
+    options: ["Pendente", "Parcial", "Pago", "Não se aplica"],
+    aliases: ["Status pagamento", "Situação pagamento"],
+    help: `Use Pago somente depois de registrar data, valor e comprovante do ${expectedLabel}.`,
+  });
+  appendPaymentEvidenceFields(module, expectedLabel);
+  appendColumn(module, "paymentStatus");
 }
 
 const marker = moduleMap as typeof moduleMap & { __v65Applied?: boolean };
@@ -60,6 +68,11 @@ if (!marker.__v65Applied) {
 
   applyPaymentFields("rentals", "aluguel e das contas do imóvel");
   applyPaymentFields("food", "fornecimento de alimentação");
+
+  // A configuração visual V52 simplificou a tela do cartão e removeu estes
+  // campos. Eles precisam voltar para que o usuário consiga cumprir a regra
+  // que bloqueia o status Paga sem data, valor e comprovante.
+  appendPaymentEvidenceFields(moduleMap.cards, "cartão corporativo");
 
   const compliance = moduleMap.compliance;
   appendField(compliance, {
@@ -108,6 +121,8 @@ if (!marker.__v65Applied) {
     "Informe moradores, responsáveis e custos. Ao registrar pagamento parcial ou integral, inclua data, valor e comprovante.";
   moduleTips.food =
     "Compare previsto, entregue e retirado. Quando a cobrança for paga, registre data, valor e comprovante para fechar o histórico.";
+  moduleTips.cards =
+    "Informe cartão, estabelecimento, itens e documento fiscal. Ao marcar a fatura como Paga, registre data, valor e comprovante.";
   moduleTips.compliance =
     "Use esta tela para preparar, validar e acompanhar cada obrigação. Transmissão só é confirmada com protocolo; processamento só é confirmado com recibo ou retorno oficial.";
   moduleTips.rules =
