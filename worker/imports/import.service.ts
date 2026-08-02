@@ -124,8 +124,16 @@ export class ImportService {
     }
 
     await this.flush(importId, batchValidos, batchErros, progress);
-    await this.repo.atualizarImportacao(importId, 'Concluída', progress, {
+
+    const finalStatus =
+      progress.invalidos > 0 ? 'Concluída com erros' : 'Concluída';
+
+    await this.repo.atualizarImportacao(importId, finalStatus, progress, {
       completedAt: new Date().toISOString(),
+      resultado:
+        progress.invalidos > 0
+          ? 'Existem linhas rejeitadas para revisão.'
+          : 'Todas as linhas válidas foram processadas.',
     });
 
     return { importId, ...progress };
