@@ -14,5 +14,27 @@
       "database_id": "c8f423c5-d793-47ba-a685-d0cf42339288",
       "migrations_dir": "drizzle"
     }
-  ]
+  ],
+  "r2_buckets": [
+    {
+      "binding": "STORAGE_BUCKET",
+      "bucket_name": "beta-gestao-365-importacoes"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "IMPORT_QUEUE",
+        "queue": "beta-gestao-365-importacoes"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "beta-gestao-365-importacoes",
+        "max_batch_size": 1,
+        "max_batch_timeout": 5,
+        "max_retries": 3
+      }
+    ]
+  }
 }

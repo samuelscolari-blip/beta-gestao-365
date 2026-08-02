@@ -5,10 +5,17 @@ import {
   DEFAULT_IMAGE_SIZES,
 } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import {
+  handleImportRequest,
+  processImportQueue,
+} from "./imports/import-worker";
+import type {
+  ImportQueuePayload,
+  ImportWorkerEnv,
+} from "./imports/types";
 
-interface Env {
+interface Env extends ImportWorkerEnv {
   ASSETS: Fetcher;
-  DB: D1Database;
   IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -19,9 +26,6 @@ interface Env {
       };
     };
   };
-  DEPLOYMENT_PLATFORM?: string;
-  TEAM_DOMAIN?: string;
-  POLICY_AUD?: string;
 }
 
 interface ExecutionContext {
@@ -205,7 +209,17 @@ const worker = {
     }
 
     const authenticatedRequest = await requestWithTrustedIdentity(request, env);
+    const importResponse = await handleImportRequest(authenticatedRequest, env);
+    if (importResponse) return importResponse;
+
     return handler.fetch(authenticatedRequest, env, ctx);
+  },
+
+  async queue(
+    batch: MessageBatch<ImportQueuePayload>,
+    env: Env,
+  ): Promise<void> {
+    await processImportQueue(batch, env);
   },
 };
 
