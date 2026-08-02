@@ -564,7 +564,7 @@ try {
   if (state.layout?.fleetRow?.scrollWidth > state.layout?.fleetRow?.clientWidth + 1) {
     throw new Error(`Linha da frota foi cortada: ${clipped(state.layout)}`);
   }
-  if (state.layout?.fleetContrast < 4.5) {
+  if (state.layout?.fleetRow && state.layout?.fleetContrast < 4.5) {
     throw new Error(`Contraste da frota insuficiente: ${clipped(state.layout)}`);
   }
   if (state.layout?.costFooterRatio > 1.12) {
