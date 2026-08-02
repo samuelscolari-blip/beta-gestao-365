@@ -6,12 +6,14 @@ on:
       - v60-finance-rh-importer-construction
     paths:
       - scripts/apply-v60.mjs
+      - scripts/run-v60-fixed.mjs
       - .github/workflows/apply-v60.yml
   pull_request:
     branches:
       - main
     paths:
       - scripts/apply-v60.mjs
+      - scripts/run-v60-fixed.mjs
       - .github/workflows/apply-v60.yml
 
 permissions:
@@ -36,7 +38,7 @@ jobs:
           cache: npm
 
       - name: Aplicar transformação controlada
-        run: node scripts/apply-v60.mjs
+        run: node scripts/run-v60-fixed.mjs
 
       - name: Instalar dependências
         run: npm ci
