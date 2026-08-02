@@ -118,6 +118,7 @@ async function inspect(attempt) {
           workforce: Boolean(pick('.construction-workforce-card')),
           loss: Boolean(pick('.construction-loss-card')),
           fleet: Boolean(pick('.construction-fleet-v2')),
+          dashboardEyebrow: pick('.construction-dashboard-heading-v56 .eyebrow')?.textContent?.trim() || '',
           kpiCount: kpis.length,
           dashboardBackground: style('.construction-dashboard-v56')?.backgroundImage || '',
           roadmapBackground: style('.construction-stage-roadmap')?.backgroundImage || '',
@@ -130,7 +131,6 @@ async function inspect(attempt) {
           budgetValueSize: Number.parseFloat(style('.construction-budget-card-v56 h3')?.fontSize || '0'),
           kpiValueColors: kpis.map((item) => getComputedStyle(item.querySelector(':scope > strong')).color),
           kpiOverflowWrap: kpis.map((item) => getComputedStyle(item.querySelector(':scope > strong')).overflowWrap),
-          bodyText: pick('.construction-executive-v2')?.textContent?.replace(/\\s+/g, ' ').trim().slice(0, 500) || '',
         };
       })()`,
       returnByValue: true,
@@ -168,6 +168,7 @@ test("V59 está publicada e consistente no site oficial", { timeout: 240_000 }, 
         state?.workforce &&
         state?.loss &&
         state?.fleet &&
+        state?.dashboardEyebrow === "PAINEL EXECUTIVO DA OBRA" &&
         state?.kpiCount === 4 &&
         gradients.every((value) => String(value).includes("gradient")) &&
         state?.dashboardTitleSize >= 23 &&
@@ -175,8 +176,7 @@ test("V59 está publicada e consistente no site oficial", { timeout: 240_000 }, 
         state?.stageTitleSize >= 28 &&
         state?.budgetValueSize >= 29 &&
         state?.kpiValueColors.every((value) => value === "rgb(255, 255, 255)") &&
-        state?.kpiOverflowWrap.every((value) => value === "anywhere") &&
-        String(state?.bodyText || "").includes("PAINEL EXECUTIVO DA OBRA");
+        state?.kpiOverflowWrap.every((value) => value === "anywhere");
       if (published) return;
     } catch (error) {
       lastError = error;
