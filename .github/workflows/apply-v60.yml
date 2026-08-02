@@ -7,12 +7,19 @@ on:
     paths:
       - scripts/apply-v60.mjs
       - .github/workflows/apply-v60.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/apply-v60.mjs
+      - .github/workflows/apply-v60.yml
 
 permissions:
   contents: write
 
 jobs:
   transform-build-test:
+    if: github.actor != 'beta-gestao-365-bot'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
