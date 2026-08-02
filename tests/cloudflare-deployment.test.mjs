@@ -35,6 +35,7 @@ test("production deploy runs only through GitHub Actions and workers.dev", async
   assert.match(workflow, /branches: \[main\]/);
   assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
   assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
+  assert.match(workflow, /node scripts\/adopt-d1-migration-history\.mjs/);
   assert.match(workflow, /npm run db:migrate:remote/);
   assert.match(workflow, /npm run deploy:cloudflare/);
   assert.match(
@@ -47,6 +48,15 @@ test("production deploy runs only through GitHub Actions and workers.dev", async
     access(new URL("../.openai/hosting.json", import.meta.url)),
     (error) => error?.code === "ENOENT",
   );
+});
+
+test("existing production D1 is adopted only after schema verification", async () => {
+  const adoption = await source("scripts/adopt-d1-migration-history.mjs");
+  assert.match(adoption, /missingLegacySchema/);
+  assert.match(adoption, /O banco remoto não contém todo o schema legado esperado/);
+  assert.match(adoption, /INSERT OR IGNORE INTO d1_migrations/);
+  assert.match(adoption, /0006_numerous_franklin_storm\.sql/);
+  assert.doesNotMatch(adoption, /DROP TABLE|DELETE FROM d1_migrations/i);
 });
 
 test("Cloudflare identity is verified before becoming administrator identity", async () => {
