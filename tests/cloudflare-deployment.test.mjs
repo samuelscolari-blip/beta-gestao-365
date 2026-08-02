@@ -56,6 +56,9 @@ test("existing production D1 is adopted only after schema verification", async (
   assert.match(adoption, /O banco remoto não contém todo o schema legado esperado/);
   assert.match(adoption, /INSERT OR IGNORE INTO d1_migrations/);
   assert.match(adoption, /0006_numerous_franklin_storm\.sql/);
+  assert.match(adoption, /missingV61Schema/);
+  assert.match(adoption, /missingColumnStatements/);
+  assert.match(adoption, /0007_clever_daredevil\.sql/);
   assert.doesNotMatch(adoption, /DROP TABLE|DELETE FROM d1_migrations/i);
 });
 
