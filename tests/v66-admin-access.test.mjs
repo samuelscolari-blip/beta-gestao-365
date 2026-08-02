@@ -13,7 +13,7 @@ test("o site permanece público e usa o botão oficial do Google", async () => {
   ]);
 
   assert.match(page, /SecureBetaAppV66/);
-  assert.match(component, /Acesso do administrador/);
+  assert.match(component, /Acesso administrativo/);
   assert.match(component, /accounts\.google\.com\/gsi\/client/);
   assert.match(component, /window\.google\.accounts\.id\.initialize/);
   assert.match(component, /window\.google\.accounts\.id\.renderButton/);
