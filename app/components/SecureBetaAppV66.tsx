@@ -7,12 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import SecureBetaAppV52 from "./SecureBetaAppV52";
-import {
-  inspectImportFileV65,
-  type ImportPreflightResult,
-} from "../lib/import-preflight-v65";
-import "../lib/v65-module-enhancements";
+import SecureBetaAppV65 from "./SecureBetaAppV65";
 
 type Props = {
   userName?: string | null;
@@ -37,12 +32,6 @@ type PortalTargets = {
   center: HTMLElement | null;
   overview: HTMLElement | null;
   tabs: HTMLElement | null;
-};
-
-type PendingImport = {
-  input: HTMLInputElement;
-  file: File;
-  result: ImportPreflightResult;
 };
 
 const decisionModules = new Set([
@@ -139,7 +128,51 @@ function decisionDate(record: RecordView) {
     : new Intl.DateTimeFormat("pt-BR").format(date);
 }
 
-function ApprovedDecisionExtension() {
+function AdminAccessControl({ isAdmin, userEmail }: Props) {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const state = new URLSearchParams(window.location.search).get("admin");
+    if (state === "ativo") {
+      setMessage("Sessão administrativa ativada neste navegador.");
+    } else if (state === "nao-autorizado") {
+      setMessage("Esta conta Google não possui acesso administrativo.");
+    } else if (state === "configuracao-pendente") {
+      setMessage("O login foi aberto, mas a configuração segura ainda não foi concluída.");
+    }
+  }, []);
+
+  return (
+    <aside
+      className={`v66-admin-access ${isAdmin ? "active" : "public"}`}
+      aria-label="Acesso administrativo"
+    >
+      <div className="v66-admin-access-icon" aria-hidden="true">
+        {isAdmin ? "✓" : "G"}
+      </div>
+      <div className="v66-admin-access-copy">
+        <strong>{isAdmin ? "Administrador ativo" : "Acesso do administrador"}</strong>
+        <small>
+          {isAdmin
+            ? userEmail || "scolarisamuel@gmail.com"
+            : "Somente a conta Google autorizada"}
+        </small>
+        {message ? <em>{message}</em> : null}
+      </div>
+      {isAdmin ? (
+        <a href="/cdn-cgi/access/logout" className="v66-admin-access-action secondary">
+          Sair
+        </a>
+      ) : (
+        <a href="/admin-login" className="v66-admin-access-action primary">
+          Entrar com Google
+        </a>
+      )}
+    </aside>
+  );
+}
+
+function ApprovedDecisionFallback() {
   const [targets, setTargets] = useState<PortalTargets>({
     center: null,
     overview: null,
@@ -155,7 +188,7 @@ function ApprovedDecisionExtension() {
       const body = (await response.json()) as { records?: RecordView[] };
       setRecords(Array.isArray(body.records) ? body.records : []);
     } catch {
-      // A Central de Decisões principal permanece utilizável se a consulta falhar.
+      // A tela principal permanece utilizável se a consulta auxiliar falhar.
     }
   }, []);
 
@@ -318,133 +351,12 @@ function ApprovedDecisionExtension() {
   return <>{overviewPortal}{tabPortal}{listPortal}</>;
 }
 
-function ImportPreflightModal({
-  pending,
-  onContinue,
-  onCancel,
-}: {
-  pending: PendingImport;
-  onContinue: () => void;
-  onCancel: () => void;
-}) {
-  return createPortal(
-    <div className="v65-preflight-backdrop" role="presentation">
-      <section
-        className={`v65-preflight-modal ${pending.result.kind}`}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="v66-preflight-title"
-      >
-        <header>
-          <span aria-hidden="true">
-            {pending.result.kind === "error" ? "!" : "✓"}
-          </span>
-          <div>
-            <small>VERIFICAÇÃO DO IMPORTADOR</small>
-            <h2 id="v66-preflight-title">{pending.result.title}</h2>
-            <p>{pending.result.message}</p>
-          </div>
-        </header>
-        {pending.result.details.length ? (
-          <div className="v65-preflight-details">
-            {pending.result.details.slice(0, 12).map((detail) => (
-              <p key={detail}>{detail}</p>
-            ))}
-          </div>
-        ) : null}
-        <footer>
-          <button type="button" className="button secondary" onClick={onCancel}>
-            {pending.result.kind === "error" ? "Fechar" : "Cancelar"}
-          </button>
-          {pending.result.kind !== "error" ? (
-            <button type="button" className="button primary" onClick={onContinue}>
-              Continuar para a prévia
-            </button>
-          ) : null}
-        </footer>
-      </section>
-    </div>,
-    document.body,
-  );
-}
-
 export default function SecureBetaAppV66(props: Props) {
-  const [pendingImport, setPendingImport] = useState<PendingImport | null>(null);
-
-  const dispatchValidatedFile = useCallback((input: HTMLInputElement) => {
-    input.dataset.v66Validated = "true";
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-    window.setTimeout(() => delete input.dataset.v66Validated, 0);
-  }, []);
-
-  useEffect(() => {
-    const interceptFile = (event: Event) => {
-      const input = event.target as HTMLInputElement | null;
-      if (
-        !input?.matches('input.hidden-file-input[type="file"]') ||
-        input.dataset.v66Validated === "true"
-      ) {
-        return;
-      }
-      const file = input.files?.[0];
-      if (!file) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-
-      void inspectImportFileV65(file)
-        .then((result) => {
-          if (result.kind === "clear") {
-            dispatchValidatedFile(input);
-            return;
-          }
-          setPendingImport({ input, file, result });
-        })
-        .catch((error) => {
-          setPendingImport({
-            input,
-            file,
-            result: {
-              kind: "error",
-              title: "Não foi possível conferir a planilha",
-              message:
-                error instanceof Error
-                  ? error.message
-                  : "O arquivo não pôde ser analisado antes da importação.",
-              details: [],
-            },
-          });
-        });
-    };
-
-    window.addEventListener("change", interceptFile, true);
-    return () => window.removeEventListener("change", interceptFile, true);
-  }, [dispatchValidatedFile]);
-
-  const cancelPreflight = useCallback(() => {
-    if (pendingImport) pendingImport.input.value = "";
-    setPendingImport(null);
-  }, [pendingImport]);
-
-  const continuePreflight = useCallback(() => {
-    if (!pendingImport) return;
-    const input = pendingImport.input;
-    setPendingImport(null);
-    dispatchValidatedFile(input);
-  }, [dispatchValidatedFile, pendingImport]);
-
   return (
     <>
-      <SecureBetaAppV52 {...props} />
-      <ApprovedDecisionExtension />
-      {pendingImport ? (
-        <ImportPreflightModal
-          pending={pendingImport}
-          onContinue={continuePreflight}
-          onCancel={cancelPreflight}
-        />
-      ) : null}
+      <SecureBetaAppV65 {...props} />
+      {!props.isAdmin ? <ApprovedDecisionFallback /> : null}
+      <AdminAccessControl {...props} />
     </>
   );
 }
