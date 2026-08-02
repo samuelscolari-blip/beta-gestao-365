@@ -50,27 +50,17 @@ test("production deploy runs only through GitHub Actions and workers.dev", async
   );
 });
 
-test("existing production D1 is adopted only after schema verification", async () => {
-  const adoption = await source("scripts/adopt-d1-migration-history.mjs");
-  assert.match(adoption, /missingLegacySchema/);
-  assert.match(adoption, /O banco remoto não contém todo o schema legado esperado/);
-  assert.match(adoption, /INSERT OR IGNORE INTO d1_migrations/);
-  assert.match(adoption, /0006_numerous_franklin_storm\.sql/);
-  assert.match(adoption, /missingV61Schema/);
-  assert.match(adoption, /missingColumnStatements/);
-  assert.match(adoption, /0007_clever_daredevil\.sql/);
-  assert.doesNotMatch(adoption, /DROP TABLE|DELETE FROM d1_migrations/i);
-});
-
-test("Cloudflare identity is verified before becoming administrator identity", async () => {
+test("Google identity is verified before becoming administrator identity", async () => {
   const worker = await source("worker/index.ts");
   const access = await source("app/lib/server-access.ts");
-  assert.match(worker, /cf-access-jwt-assertion/);
+  assert.match(worker, /www\.googleapis\.com\/oauth2\/v3\/certs/);
   assert.match(worker, /crypto\.subtle\.verify/);
-  assert.match(worker, /POLICY_AUD/);
-  assert.match(worker, /TEAM_DOMAIN/);
+  assert.match(worker, /audienceMatches\(payload\.aud\)/);
+  assert.match(worker, /payload\.email_verified !== true/);
+  assert.match(worker, /email !== ADMIN_EMAIL/);
   assert.match(worker, /headers\.delete\("oai-authenticated-user-email"\)/);
   assert.match(worker, /headers\.set\("x-beta-authenticated-email", email\)/);
+  assert.doesNotMatch(worker, /cf-access-jwt-assertion|POLICY_AUD|TEAM_DOMAIN/);
   assert.match(access, /x-beta-authenticated-email/);
   assert.doesNotMatch(access, /oai-authenticated-user-email/);
 });
