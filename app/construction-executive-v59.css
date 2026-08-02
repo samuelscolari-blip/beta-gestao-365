@@ -1,0 +1,497 @@
+/*
+ * Painel executivo da obra V59
+ * Consolida a referência visual aprovada sem substituir os dados dinâmicos.
+ */
+
+.construction-executive-v2 {
+  --construction-page: #edf4f7;
+  --construction-navy-950: #062642;
+  --construction-navy-900: #082f50;
+  --construction-navy-800: #0d4267;
+  --construction-navy-700: #10607f;
+  --construction-cyan: #38c8e3;
+  --construction-cyan-soft: #9ee7f3;
+  --construction-white: #ffffff;
+  --construction-copy: #d8edf4;
+  --construction-muted: #b7d4df;
+  --construction-line: rgba(255, 255, 255, 0.14);
+  --construction-panel:
+    radial-gradient(circle at 96% 3%, rgba(56, 200, 227, 0.16), transparent 31%),
+    linear-gradient(145deg, var(--construction-navy-950) 0%, var(--construction-navy-900) 52%, var(--construction-navy-800) 100%);
+  --construction-panel-soft: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.13),
+    rgba(255, 255, 255, 0.055)
+  );
+  --construction-shadow: 0 20px 48px rgba(6, 38, 66, 0.22);
+  color: #102f45;
+}
+
+.construction-executive-v2 :is(
+  .construction-dashboard-v56,
+  .construction-stage-roadmap,
+  .construction-priority-board,
+  .construction-health-board,
+  .construction-workforce-card,
+  .construction-loss-card,
+  .construction-fleet-v2
+) {
+  border-color: rgba(16, 91, 124, 0.52);
+  color: var(--construction-white);
+  background: var(--construction-panel);
+  box-shadow: var(--construction-shadow);
+}
+
+.construction-executive-v2 :is(
+  .construction-dashboard-heading-v56 h3,
+  .construction-stage-roadmap h3,
+  .construction-priority-board h3,
+  .construction-health-board h3,
+  .construction-workforce-card h3,
+  .construction-loss-card h3,
+  .construction-fleet-v2 h3
+) {
+  color: var(--construction-white) !important;
+  font-size: clamp(23px, 1.8vw, 30px);
+  font-weight: 900;
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 :is(
+  .construction-dashboard-heading-v56 .eyebrow,
+  .construction-stage-roadmap .eyebrow,
+  .construction-priority-board .eyebrow,
+  .construction-health-board .eyebrow,
+  .construction-workforce-card .eyebrow,
+  .construction-loss-card .eyebrow,
+  .construction-fleet-v2 .eyebrow
+) {
+  color: var(--construction-cyan-soft) !important;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+}
+
+.construction-executive-v2 :is(
+  .construction-stage-roadmap header p,
+  .construction-priority-board header p,
+  .construction-health-board header p,
+  .construction-fleet-v2 header p
+) {
+  color: var(--construction-copy) !important;
+  font-size: 14px;
+  font-weight: 560;
+  line-height: 1.6;
+}
+
+/* Passo a passo: mesma linguagem do painel, com etapa atual realmente destacada. */
+.construction-executive-v2 .construction-stage-roadmap {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.construction-executive-v2 .construction-stage-roadmap > header {
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid var(--construction-line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.construction-executive-v2 .construction-stage-roadmap > header > strong {
+  min-width: 88px;
+  padding: 12px 15px;
+  border: 1px solid rgba(158, 231, 243, 0.25);
+  border-radius: 16px;
+  color: var(--construction-white);
+  background: rgba(56, 200, 227, 0.12);
+  font-size: 25px;
+  text-align: center;
+}
+
+.construction-executive-v2 .construction-stage-roadmap > header > strong small {
+  color: var(--construction-muted);
+  font-size: 10px;
+}
+
+.construction-executive-v2 .construction-stage-track {
+  gap: 10px;
+  padding: 20px 22px 24px;
+}
+
+.construction-executive-v2 .construction-stage-track article {
+  min-width: 126px;
+  padding: 14px 12px;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--construction-white);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.construction-executive-v2 .construction-stage-track article.current {
+  border-color: rgba(126, 226, 241, 0.48);
+  background: linear-gradient(145deg, rgba(56, 200, 227, 0.22), rgba(255, 255, 255, 0.08));
+  box-shadow: 0 12px 26px rgba(2, 27, 47, 0.2);
+}
+
+.construction-executive-v2 .construction-stage-track article.completed {
+  border-color: rgba(83, 224, 174, 0.26);
+  background: rgba(49, 208, 154, 0.08);
+}
+
+.construction-executive-v2 .construction-stage-track article > strong {
+  color: var(--construction-white);
+  font-size: 13px;
+  font-weight: 850;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-stage-track article > small {
+  color: var(--construction-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* KPIs: valores longos não podem estourar o cartão. */
+.construction-executive-v2 .construction-kpi-v56 {
+  min-height: 166px;
+  padding: 20px;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > small {
+  color: #c5e2ec;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > strong {
+  max-width: 100%;
+  font-size: clamp(27px, 2.15vw, 39px);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > p {
+  color: var(--construction-copy);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > span {
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+/* Etapa e orçamento: estrutura única, legível e responsiva. */
+.construction-executive-v2 .construction-main-grid-v56 {
+  grid-template-columns: minmax(0, 2fr) minmax(340px, 1fr);
+  gap: 20px;
+}
+
+.construction-executive-v2 :is(
+  .construction-stage-card-v56,
+  .construction-budget-card-v56
+) {
+  padding: 25px;
+  border-radius: 19px;
+  background: var(--construction-panel-soft);
+}
+
+.construction-executive-v2 .construction-stage-card-v56 h3 {
+  font-size: clamp(28px, 2.5vw, 38px);
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-stage-card-v56 > p {
+  color: var(--construction-copy);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.construction-executive-v2 .construction-stage-progress-v56 > span {
+  color: #d9edf4;
+  font-size: 13px;
+}
+
+.construction-executive-v2 .construction-stage-progress-v56 > span strong {
+  font-size: 17px;
+}
+
+.construction-executive-v2 .construction-stage-meta-v56 > div {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.construction-executive-v2 .construction-stage-meta-v56 small {
+  font-size: 10px;
+}
+
+.construction-executive-v2 .construction-stage-meta-v56 strong {
+  color: var(--construction-white);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-stage-meta-v56 span {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-budget-card-v56 h3 {
+  max-width: 100%;
+  font-size: clamp(29px, 3vw, 42px);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-budget-card-v56 > p {
+  color: #d4e8f0;
+  font-size: 13px;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 span {
+  color: #c7dfe8;
+  font-size: 12px;
+}
+
+.construction-executive-v2 .construction-budget-lines-v56 strong {
+  max-width: 55%;
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-budget-alert-v56 {
+  font-size: 13px;
+}
+
+/* Decisão, equipe e produtividade usam os mesmos padrões de painel. */
+.construction-executive-v2 :is(
+  .construction-priority-board,
+  .construction-health-board,
+  .construction-workforce-card,
+  .construction-loss-card
+) {
+  border-radius: 24px;
+}
+
+.construction-executive-v2 :is(
+  .construction-priority-board,
+  .construction-health-board,
+  .construction-workforce-card,
+  .construction-loss-card
+) > header {
+  padding: 21px 23px;
+}
+
+.construction-executive-v2 .construction-priority-board > div > button {
+  min-height: 86px;
+  padding: 14px 16px;
+}
+
+.construction-executive-v2 .construction-priority-copy strong,
+.construction-executive-v2 .construction-priority-value strong {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-priority-copy p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.construction-executive-v2 .construction-health-columns > section > div > strong {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-health-columns > section > div > span {
+  font-size: 13px;
+}
+
+.construction-executive-v2 .construction-health-columns > section > div > small {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.construction-executive-v2 :is(
+  .construction-workforce-card > header button,
+  .construction-loss-card > header button,
+  .construction-fleet-v2 button
+) {
+  min-height: 38px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.construction-executive-v2 .construction-workforce-main > div:first-child strong {
+  font-size: clamp(38px, 4vw, 58px);
+}
+
+.construction-executive-v2 .construction-workforce-main > div:nth-child(2) > span strong {
+  font-size: 18px;
+}
+
+.construction-executive-v2 .construction-workforce-kpis strong,
+.construction-executive-v2 .construction-hours-balance strong {
+  font-size: clamp(20px, 2vw, 28px);
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-workforce-kpis span,
+.construction-executive-v2 .construction-hours-balance span,
+.construction-executive-v2 .construction-loss-causes small {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+/* Frota também passa a parecer parte do mesmo painel. */
+.construction-executive-v2 .construction-fleet-v2 {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.construction-executive-v2 .construction-fleet-v2 > header {
+  padding: 24px 25px;
+  border-bottom: 1px solid var(--construction-line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.construction-executive-v2 .construction-fleet-status-chips span {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--construction-white);
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.construction-executive-v2 .construction-machine-table {
+  padding: 14px;
+}
+
+.construction-executive-v2 .construction-machine-table-head {
+  color: #b9d5e0;
+}
+
+.construction-executive-v2 .construction-machine-row {
+  border-color: rgba(255, 255, 255, 0.11);
+  color: var(--construction-white);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.construction-executive-v2 .construction-machine-row:hover {
+  border-color: rgba(126, 226, 241, 0.34);
+  background: rgba(255, 255, 255, 0.095);
+}
+
+.construction-executive-v2 .construction-machine-row strong {
+  color: var(--construction-white);
+}
+
+.construction-executive-v2 .construction-machine-row small,
+.construction-executive-v2 .construction-machine-row span {
+  color: #c3dce6;
+}
+
+/* Acessibilidade de teclado nos controles da tela. */
+.construction-executive-v2 :is(button, summary, select, input):focus-visible {
+  outline: 3px solid #7ce2f1;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1260px) {
+  .construction-executive-v2 .construction-main-grid-v56 {
+    grid-template-columns: minmax(0, 1.55fr) minmax(310px, 1fr);
+  }
+
+  .construction-executive-v2 .construction-kpi-v56 > strong {
+    font-size: clamp(25px, 2.35vw, 34px);
+  }
+}
+
+@media (max-width: 1040px) {
+  .construction-executive-v2 .construction-main-grid-v56 {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-decision-grid,
+  .construction-executive-v2 .construction-operational-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 strong {
+    max-width: 60%;
+  }
+}
+
+@media (max-width: 760px) {
+  .construction-executive-v2 :is(
+    .construction-dashboard-v56,
+    .construction-stage-roadmap,
+    .construction-priority-board,
+    .construction-health-board,
+    .construction-workforce-card,
+    .construction-loss-card,
+    .construction-fleet-v2
+  ) {
+    border-radius: 18px;
+  }
+
+  .construction-executive-v2 .construction-stage-roadmap > header,
+  .construction-executive-v2 .construction-fleet-v2 > header {
+    padding: 19px 17px;
+  }
+
+  .construction-executive-v2 .construction-stage-roadmap > header,
+  .construction-executive-v2 .construction-fleet-v2 > header,
+  .construction-executive-v2 .construction-stage-card-v56 > header,
+  .construction-executive-v2 .construction-budget-card-v56 > header,
+  .construction-executive-v2 .construction-workforce-card > header,
+  .construction-executive-v2 .construction-loss-card > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .construction-executive-v2 .construction-kpi-row-v56,
+  .construction-executive-v2 .construction-stage-meta-v56,
+  .construction-executive-v2 .construction-health-columns,
+  .construction-executive-v2 .construction-workforce-kpis,
+  .construction-executive-v2 .construction-hours-balance {
+    grid-template-columns: 1fr;
+  }
+
+  .construction-executive-v2 :is(
+    .construction-stage-card-v56,
+    .construction-budget-card-v56
+  ) {
+    padding: 19px 17px;
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 > div {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .construction-executive-v2 .construction-budget-lines-v56 strong {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .construction-executive-v2 .construction-machine-table-head {
+    display: none;
+  }
+
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .construction-executive-v2 *,
+  .construction-executive-v2 *::before,
+  .construction-executive-v2 *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
