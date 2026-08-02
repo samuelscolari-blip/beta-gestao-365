@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, rmSync } from "node:fs";
 
-// Correção final isolada: restaura a limpeza do seletor após qualquer tentativa.
+// Correção final isolada e idempotente: restaura a limpeza após qualquer tentativa.
 const appPath = "app/components/BetaApp.tsx";
 let app = readFileSync(appPath, "utf8");
 const before = `    } catch (error) {\n      setToast({\n        kind: "error",\n        text: error instanceof Error ? error.message : "Não foi possível importar a planilha.",\n      });\n    }\n  }\n\n  const displayName =`;
