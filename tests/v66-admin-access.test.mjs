@@ -17,12 +17,13 @@ test("o site permanece público e o login administrativo usa rota isolada", asyn
   assert.match(component, /Entrar com Google/);
   assert.match(component, /href="\/admin-login"/);
   assert.match(component, /href="\/admin-logout"/);
-  assert.match(worker, /url\.pathname === "\/admin-login"/);
+  assert.match(worker, /url\.pathname !== "\/admin-login"/);
   assert.match(worker, /url\.pathname === "\/admin-logout"/);
   assert.match(worker, /__Host-beta_admin_session/);
   assert.match(worker, /HttpOnly; Secure; SameSite=Lax; Path=\//);
   assert.match(worker, /ADMIN_EMAIL = "scolarisamuel@gmail\.com"/);
   assert.match(worker, /ADMIN_SESSION_SECRET/);
+  assert.doesNotMatch(component, /Somente scolarisamuel@gmail\.com/);
   assert.doesNotMatch(wrangler, /access_app|application_aud|"Restrito"/i);
 });
 
