@@ -1,130 +1,168 @@
-/* V66/V68 — acesso administrativo em domínio público e correção visual de Aprovados. */
+/* V66/V69 — acesso administrativo discreto e correção visual de Aprovados. */
 
-.v66-admin-access {
+/* O cabeçalho mantém somente o avatar. As ações continuam disponíveis nos
+   respectivos módulos, sem ocupar espaço permanente na visão executiva. */
+.topbar-actions > .sync-chip,
+.topbar-actions > .tenant-chip {
+  display: none !important;
+}
+
+.topbar-actions {
+  gap: 0;
+}
+
+.top-avatar[data-admin-entry="login"] {
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.top-avatar[data-admin-entry="login"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 4px rgba(23, 63, 88, 0.1);
+}
+
+.top-avatar[data-admin-entry="login"]:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.24);
+  outline-offset: 3px;
+}
+
+.v69-admin-modal {
   position: fixed;
-  z-index: 9500;
-  right: 18px;
-  bottom: 18px;
+  z-index: 10000;
+  inset: 0;
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 11px;
-  width: min(455px, calc(100vw - 36px));
-  padding: 11px 12px;
-  border: 1px solid #d8e4ea;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 18px 48px rgba(15, 43, 61, 0.18);
-  backdrop-filter: blur(12px);
-}
-
-.v66-admin-access.active {
-  border-color: #b8dfc5;
-  background: rgba(247, 253, 249, 0.98);
-}
-
-.v66-admin-access-icon {
-  display: grid;
-  width: 40px;
-  height: 40px;
   place-items: center;
-  border-radius: 12px;
+  padding: 24px;
+}
+
+.v69-admin-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(8, 28, 42, 0.58);
+  backdrop-filter: blur(7px);
+  cursor: default;
+}
+
+.v69-admin-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(440px, 100%);
+  gap: 18px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 28px 80px rgba(7, 31, 47, 0.32);
+}
+
+.v69-admin-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #dce6eb;
+  border-radius: 10px;
+  color: #496174;
+  background: #f7fafb;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.v69-admin-close:hover {
+  color: #173f58;
+  background: #eef4f7;
+}
+
+.v69-admin-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 15px;
   color: #ffffff;
   background: linear-gradient(145deg, #4285f4, #1a73e8);
-  font-size: 16px;
+  box-shadow: 0 12px 28px rgba(26, 115, 232, 0.24);
+  font-size: 20px;
   font-weight: 900;
 }
 
-.v66-admin-access.active .v66-admin-access-icon {
-  background: linear-gradient(145deg, #16a34a, #15803d);
-}
-
-.v66-admin-access-copy {
+.v69-admin-copy {
   display: grid;
-  min-width: 0;
-  gap: 2px;
+  gap: 7px;
 }
 
-.v66-admin-access-copy strong {
-  color: #17324d;
-  font-size: 12px;
-  line-height: 1.35;
-}
-
-.v66-admin-access-copy small,
-.v66-admin-access-copy em {
-  overflow: hidden;
-  color: #64748b;
-  font-size: 9px;
-  line-height: 1.4;
-  font-style: normal;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.v66-admin-access-copy em {
-  color: #166534;
-  font-weight: 700;
-}
-
-.v66-admin-access-action {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 13px;
-  border: 1px solid transparent;
-  border-radius: 10px;
+.v69-admin-copy small {
+  color: #718698;
   font-size: 10px;
   font-weight: 850;
-  text-decoration: none;
-  white-space: nowrap;
+  letter-spacing: 0.13em;
 }
 
-.v66-admin-access-action.primary {
-  color: #ffffff;
-  background: #173f58;
+.v69-admin-copy h2 {
+  margin: 0;
+  color: #143149;
+  font-size: 24px;
+  line-height: 1.18;
 }
 
-.v66-admin-access-action.primary:hover {
-  background: #0f3148;
+.v69-admin-copy p {
+  margin: 0;
+  color: #607487;
+  font-size: 13px;
+  line-height: 1.65;
 }
 
-.v66-admin-access-action.secondary {
-  color: #166534;
-  border-color: #bbdfc6;
-  background: #ffffff;
-}
-
-.v66-admin-access-action:focus-visible {
-  outline: 3px solid rgba(37, 99, 235, 0.22);
-  outline-offset: 2px;
-}
-
-.v68-google-login {
+.v69-google-login {
   position: relative;
-  display: flex;
-  min-width: 190px;
-  min-height: 40px;
-  align-items: center;
-  justify-content: flex-end;
+  display: grid;
+  min-height: 44px;
+  place-items: center;
 }
 
-.v68-google-login > div[aria-label="Entrar com Google"] {
-  min-width: 190px;
-  min-height: 40px;
+.v69-google-login > div[aria-label="Entrar com Google"] {
+  min-width: 260px;
+  min-height: 44px;
 }
 
-.v68-google-login > span {
+.v69-google-login > span {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  border-radius: 8px;
+  border-radius: 9px;
   color: #17324d;
-  background: rgba(255, 255, 255, 0.94);
-  font-size: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  font-size: 11px;
   font-weight: 800;
+}
+
+.v69-admin-message {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #cce6d4;
+  border-radius: 10px;
+  color: #166534;
+  background: #f3fbf5;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.v69-admin-security {
+  color: #7b8d9b;
+  font-size: 10px;
+  line-height: 1.55;
+  text-align: center;
 }
 
 .management-overview .v66-approved-overview {
@@ -136,25 +174,22 @@
 }
 
 @media (max-width: 640px) {
-  .v66-admin-access {
-    right: 10px;
-    bottom: 10px;
-    grid-template-columns: 36px minmax(0, 1fr);
-    width: calc(100vw - 20px);
+  .v69-admin-modal {
+    align-items: end;
+    padding: 12px;
   }
 
-  .v66-admin-access-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .v66-admin-access-action,
-  .v68-google-login {
-    grid-column: 1 / -1;
+  .v69-admin-card {
     width: 100%;
+    padding: 26px 20px 22px;
+    border-radius: 20px;
   }
 
-  .v68-google-login {
-    justify-content: center;
+  .v69-admin-copy h2 {
+    font-size: 21px;
+  }
+
+  .v69-google-login > div[aria-label="Entrar com Google"] {
+    min-width: min(260px, calc(100vw - 64px));
   }
 }
