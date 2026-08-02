@@ -1,4 +1,5 @@
 import { validateRecordPayload } from "../app/lib/record-validation";
+import { isImportableModule } from "../app/lib/import-policy";
 
 export type StoredRecord = {
   id: number;
@@ -634,6 +635,14 @@ function normalizeInput(input: Partial<RecordInput>): RecordInput {
       "INVALID_AMOUNT",
     );
   }
+  const source = cleanText(input.source || "system", 80);
+  if (source.startsWith("Planilha:") && !isImportableModule(moduleId)) {
+    throw new RecordStoreError(
+      "Este módulo não aceita dados importados por planilha. Use cadastro ou validação interna.",
+      "IMPORT_MODULE_NOT_ALLOWED",
+      403,
+    );
+  }
   const issues = validateRecordPayload(moduleId, payload);
   if (issues.length) {
     throw new RecordStoreError(
@@ -652,7 +661,7 @@ function normalizeInput(input: Partial<RecordInput>): RecordInput {
     recordDate: normalizeRecordDate(input.recordDate),
     amount,
     payload,
-    source: cleanText(input.source || "system", 80),
+    source,
   };
 }
 
