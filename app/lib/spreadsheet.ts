@@ -13,6 +13,7 @@ import {
   type ModuleDefinition,
 } from "./modules";
 import { validateRecordPayload } from "./record-validation";
+import { buildImportDeduplicationKey } from "./import-deduplication.mjs";
 
 export type ImportRecord = {
   module: string;
@@ -136,12 +137,6 @@ function sheetScore(module: ModuleDefinition, rows: unknown[][]) {
   return best;
 }
 
-function importKey(record: ImportRecord) {
-  const reference = record.reference.trim().toLowerCase();
-  if (reference) return record.module + "::ref::" + reference;
-  return record.module + "::" + record.title.trim().toLowerCase() + "::" + record.recordDate + "::" + record.amount;
-}
-
 export async function importWorkbook(file: File, targetModuleId?: string) {
   if (!/\.xlsx$/i.test(file.name)) {
     throw new Error("Selecione uma planilha Excel no formato .xlsx. Arquivos .xls antigos devem ser salvos novamente como .xlsx.");
@@ -199,7 +194,7 @@ export async function importWorkbook(file: File, targetModuleId?: string) {
         invalid += 1;
         continue;
       }
-      const key = importKey(record);
+      const key = buildImportDeduplicationKey(record);
       if (seen.has(key)) {
         duplicates += 1;
         continue;
