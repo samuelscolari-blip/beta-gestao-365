@@ -8424,45 +8424,104 @@ export default function BetaApp({
         payload: Record<string, unknown>;
       }> = [];
       const batchSize = 250;
-      for (let index = 0; index < imported.records.length; index += batchSize) {
-        const batch = imported.records.slice(index, index + batchSize);
+      const concurrencyLimit = 2;
+      const batches = Array.from(
+        { length: Math.ceil(imported.records.length / batchSize) },
+        (_, batchIndex) =>
+imported.records.slice(
+  batchIndex * batchSize,
+  (batchIndex + 1) * batchSize,
+),
+      );
+
+      async function uploadImportBatch(
+        batch: typeof imported.records,
+        batchIndex: number,
+      ) {
         const response = await fetch("/api/records", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ records: batch }),
+method: "POST",
+headers: { "content-type": "application/json" },
+body: JSON.stringify({ records: batch }),
         });
         const result = (await response.json()) as {
-          result?: {
-            count: number;
-            inserted?: number;
-            updated?: number;
-            skipped?: number;
-            failures?: Array<{
-              index: number;
-              reason: string;
-              payload: Record<string, unknown>;
-            }>;
-          };
-          error?: string;
+result?: {
+  count?: number;
+  inserted?: number;
+  updated?: number;
+  skipped?: number;
+  failures?: Array<{
+    index: number;
+    reason: string;
+    payload: Record<string, unknown>;
+  }>;
+};
+error?: string;
         };
-        if (!response.ok) throw new Error(result.error || "Falha ao gravar um lote da planilha.");
-        insertedCount += result.result?.inserted ?? result.result?.count ?? batch.length;
-        updatedCount += result.result?.updated || 0;
-        serverSkipped += result.result?.skipped || 0;
-        for (const failure of result.result?.failures || []) {
-          const sourceRecord = batch[failure.index];
-          serverFailures.push({
-            module: sourceRecord?.module || importTarget || "",
-            sheet:
-              sourceRecord?.importSheet ||
-              sourceRecord?.source.split(" / ").at(-1) ||
-              file.name,
-            location:
-              sourceRecord?.importLocation ||
-              `lote ${Math.floor(index / batchSize) + 1}, registro ${failure.index + 1}`,
-            reason: failure.reason,
-            payload: failure.payload || sourceRecord?.payload || {},
-          });
+        if (!response.ok) {
+throw new Error(
+  result.error || `Falha ao gravar o lote ${batchIndex + 1}.`,
+);
+        }
+
+        const failures = (result.result?.failures || []).map((failure) => {
+const sourceRecord = batch[failure.index];
+return {
+  module: sourceRecord?.module || importTarget || "",
+  sheet:
+    sourceRecord?.importSheet ||
+    sourceRecord?.source?.split(" / ").at(-1) ||
+    file.name,
+  location:
+    sourceRecord?.importLocation ||
+    `lote ${batchIndex + 1}, registro ${failure.index + 1}`,
+  reason: failure.reason,
+  payload: failure.payload || sourceRecord?.payload || {},
+};
+        });
+
+        return {
+inserted:
+  result.result?.inserted ??
+  result.result?.count ??
+  batch.length,
+updated: result.result?.updated || 0,
+skipped: result.result?.skipped || 0,
+failures,
+        };
+      }
+
+      for (
+        let offset = 0;
+        offset < batches.length;
+        offset += concurrencyLimit
+      ) {
+        const group = batches.slice(offset, offset + concurrencyLimit);
+        const outcomes = await Promise.allSettled(
+group.map((batch, relativeIndex) =>
+  uploadImportBatch(batch, offset + relativeIndex),
+),
+        );
+        const failedMessages: string[] = [];
+
+        for (const outcome of outcomes) {
+if (outcome.status === "fulfilled") {
+  insertedCount += outcome.value.inserted;
+  updatedCount += outcome.value.updated;
+  serverSkipped += outcome.value.skipped;
+  serverFailures.push(...outcome.value.failures);
+} else {
+  failedMessages.push(
+    outcome.reason instanceof Error
+      ? outcome.reason.message
+      : String(outcome.reason),
+  );
+}
+        }
+
+        if (failedMessages.length) {
+throw new Error(
+  `A importação foi interrompida após falha em ${failedMessages.length} lote(s): ${failedMessages.join(" | ")}`,
+);
         }
       }
 

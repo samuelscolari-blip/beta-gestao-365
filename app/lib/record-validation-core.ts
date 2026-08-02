@@ -175,31 +175,152 @@ function validatePaymentEvidence(
   return issues;
 }
 
-function validateBusinessRules(
+type ModuleValidator = (
+  payload: Record<string, unknown>,
+) => RecordValidationIssue[];
+
+function validatePeopleBusinessRules(
+  payload: Record<string, unknown>,
+): RecordValidationIssue[] {
+  const issues: RecordValidationIssue[] = [];
+  const cpf = String(payload.cpf ?? "").replace(/\D/g, "");
+  if (cpf && cpf.length !== 11) {
+    issues.push({
+      field: "cpf",
+      message: "O CPF deve conter 11 dígitos.",
+    });
+  }
+  if (
+    payload.status === "Desligado" &&
+    isBlank(payload.terminationDate)
+  ) {
+    issues.push({
+      field: "terminationDate",
+      message:
+        "Informe a data de desligamento para um colaborador com status Desligado.",
+    });
+  }
+  return issues;
+}
+
+function validateContractorBusinessRules(
+  payload: Record<string, unknown>,
+): RecordValidationIssue[] {
+  const issues: RecordValidationIssue[] = [];
+  const document = String(payload.cnpj ?? "").replace(/\D/g, "");
+  if (document && ![11, 14].includes(document.length)) {
+    issues.push({
+      field: "cnpj",
+      message: "O CPF ou CNPJ deve conter 11 ou 14 dígitos.",
+    });
+  }
+  const workerCount = numberValue(payload, "workerCount");
+  if (
+    !isBlank(payload.workerCount) &&
+    (!Number.isInteger(workerCount) || workerCount < 1)
+  ) {
+    issues.push({
+      field: "workerCount",
+      message:
+        "Informe uma quantidade inteira de trabalhadores terceirizados, igual ou maior que 1.",
+    });
+  }
+  const measured = numberValue(payload, "measuredAmount");
+  const deductions =
+    numberValue(payload, "retentionInss") +
+    numberValue(payload, "retentionIss");
+  if (deductions > measured) {
+    issues.push({
+      field: "retentionInss",
+      message:
+        "A soma das retenções não pode superar o valor bruto da medição.",
+    });
+  }
+  [
+    ["scopeWeight", "O peso do escopo"],
+    ["plannedProgress", "A execução planejada"],
+    ["executionProgress", "A execução comprovada"],
+  ].forEach(([key, label]) => {
+    if (numberValue(payload, key) > 100) {
+      issues.push({
+        field: key,
+        message: `${label} deve ficar entre 0% e 100%.`,
+      });
+    }
+  });
+  return issues;
+}
+
+function validateWorkBusinessRules(
+  payload: Record<string, unknown>,
+): RecordValidationIssue[] {
+  const issues: RecordValidationIssue[] = [];
+  [
+    ["plannedProgress", "O avanço planejado"],
+    ["physicalProgress", "O avanço físico"],
+    ["ownTeamProgress", "A execução da equipe própria"],
+  ].forEach(([key, label]) => {
+    if (numberValue(payload, key) > 100) {
+      issues.push({
+        field: key,
+        message: `${label} deve ficar entre 0% e 100%.`,
+      });
+    }
+  });
+  if (
+    !isBlank(payload.startDate) &&
+    !isBlank(payload.endDate) &&
+    String(payload.endDate) < String(payload.startDate)
+  ) {
+    issues.push({
+      field: "endDate",
+      message: "A previsão de término não pode ser anterior ao início da obra.",
+    });
+  }
+  const dailyWorkHours = numberValue(payload, "dailyWorkHours");
+  if (
+    !isBlank(payload.dailyWorkHours) &&
+    (dailyWorkHours <= 0 || dailyWorkHours > 24)
+  ) {
+    issues.push({
+      field: "dailyWorkHours",
+      message:
+        "A jornada operacional deve ser maior que zero e não pode superar 24 horas.",
+    });
+  }
+  const scheduleDelayDays = numberValue(payload, "scheduleDelayDays");
+  if (!isBlank(payload.scheduleDelayDays) && scheduleDelayDays < 0) {
+    issues.push({
+      field: "scheduleDelayDays",
+      message: "Os dias de atraso não podem ser negativos.",
+    });
+  }
+  const totalPlannedDays = numberValue(payload, "totalPlannedDays");
+  if (
+    scheduleDelayDays > 0 &&
+    totalPlannedDays > 0 &&
+    scheduleDelayDays > totalPlannedDays
+  ) {
+    issues.push({
+      field: "scheduleDelayDays",
+      message:
+        "Os dias de atraso não podem superar o prazo total planejado da obra.",
+    });
+  }
+  return issues;
+}
+
+const moduleValidators: Partial<Record<string, ModuleValidator>> = {
+  people: validatePeopleBusinessRules,
+  contractors: validateContractorBusinessRules,
+  works: validateWorkBusinessRules,
+};
+
+function validateRemainingBusinessRules(
   definition: ModuleDefinition,
   payload: Record<string, unknown>,
 ): RecordValidationIssue[] {
   const issues: RecordValidationIssue[] = [];
-
-  if (definition.id === "people") {
-    const cpf = String(payload.cpf ?? "").replace(/\D/g, "");
-    if (cpf && cpf.length !== 11) {
-      issues.push({
-        field: "cpf",
-        message: "O CPF deve conter 11 dígitos.",
-      });
-    }
-    if (
-      payload.status === "Desligado" &&
-      isBlank(payload.terminationDate)
-    ) {
-      issues.push({
-        field: "terminationDate",
-        message:
-          "Informe a data de desligamento para um colaborador com status Desligado.",
-      });
-    }
-  }
 
   if (definition.id === "suppliers") {
     const cnpj = String(payload.cnpj ?? "").replace(/\D/g, "");
@@ -207,105 +328,6 @@ function validateBusinessRules(
       issues.push({
         field: "cnpj",
         message: "O CNPJ deve conter 14 dígitos.",
-      });
-    }
-  }
-
-  if (definition.id === "contractors") {
-    const document = String(payload.cnpj ?? "").replace(/\D/g, "");
-    if (document && ![11, 14].includes(document.length)) {
-      issues.push({
-        field: "cnpj",
-        message: "O CPF ou CNPJ deve conter 11 ou 14 dígitos.",
-      });
-    }
-    const workerCount = numberValue(payload, "workerCount");
-    if (
-      !isBlank(payload.workerCount) &&
-      (!Number.isInteger(workerCount) || workerCount < 1)
-    ) {
-      issues.push({
-        field: "workerCount",
-        message:
-          "Informe uma quantidade inteira de trabalhadores terceirizados, igual ou maior que 1.",
-      });
-    }
-    const measured = numberValue(payload, "measuredAmount");
-    const deductions =
-      numberValue(payload, "retentionInss") +
-      numberValue(payload, "retentionIss");
-    if (deductions > measured) {
-      issues.push({
-        field: "retentionInss",
-        message:
-          "A soma das retenções não pode superar o valor bruto da medição.",
-      });
-    }
-    [
-      ["scopeWeight", "O peso do escopo"],
-      ["plannedProgress", "A execução planejada"],
-      ["executionProgress", "A execução comprovada"],
-    ].forEach(([key, label]) => {
-      if (numberValue(payload, key) > 100) {
-        issues.push({
-          field: key,
-          message: `${label} deve ficar entre 0% e 100%.`,
-        });
-      }
-    });
-  }
-
-  if (definition.id === "works") {
-    [
-      ["plannedProgress", "O avanço planejado"],
-      ["physicalProgress", "O avanço físico"],
-      ["ownTeamProgress", "A execução da equipe própria"],
-    ].forEach(([key, label]) => {
-      if (numberValue(payload, key) > 100) {
-        issues.push({
-          field: key,
-          message: `${label} deve ficar entre 0% e 100%.`,
-        });
-      }
-    });
-    if (
-      !isBlank(payload.startDate) &&
-      !isBlank(payload.endDate) &&
-      String(payload.endDate) < String(payload.startDate)
-    ) {
-      issues.push({
-        field: "endDate",
-        message: "A previsão de término não pode ser anterior ao início da obra.",
-      });
-    }
-    const dailyWorkHours = numberValue(payload, "dailyWorkHours");
-    if (
-      !isBlank(payload.dailyWorkHours) &&
-      (dailyWorkHours <= 0 || dailyWorkHours > 24)
-    ) {
-      issues.push({
-        field: "dailyWorkHours",
-        message:
-          "A jornada operacional deve ser maior que zero e não pode superar 24 horas.",
-      });
-    }
-    const scheduleDelayDays = numberValue(payload, "scheduleDelayDays");
-    if (!isBlank(payload.scheduleDelayDays) && scheduleDelayDays < 0) {
-      issues.push({
-        field: "scheduleDelayDays",
-        message: "Os dias de atraso não podem ser negativos.",
-      });
-    }
-    const totalPlannedDays = numberValue(payload, "totalPlannedDays");
-    if (
-      scheduleDelayDays > 0 &&
-      totalPlannedDays > 0 &&
-      scheduleDelayDays > totalPlannedDays
-    ) {
-      issues.push({
-        field: "scheduleDelayDays",
-        message:
-          "Os dias de atraso não podem superar o prazo total planejado da obra.",
       });
     }
   }
@@ -678,6 +700,18 @@ function validateBusinessRules(
 
   return issues;
 }
+
+function validateBusinessRules(
+  definition: ModuleDefinition,
+  payload: Record<string, unknown>,
+): RecordValidationIssue[] {
+  const validator = moduleValidators[definition.id];
+  return [
+    ...(validator ? validator(payload) : []),
+    ...validateRemainingBusinessRules(definition, payload),
+  ];
+}
+
 
 export function validateRecordPayload(
   moduleId: string,

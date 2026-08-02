@@ -95,6 +95,40 @@ function requiredWriteField(
   }
 }
 
+function firstNonBlank(...values: unknown[]) {
+  return (
+    values.find((value) => String(value ?? "").trim() !== "") ?? ""
+  );
+}
+
+function applyCanonicalAliases(
+  moduleId: string,
+  payload: Record<string, unknown>,
+) {
+  if (moduleId === "expenses") {
+    payload.supplierCode = firstNonBlank(
+      payload.supplierDocument,
+      payload.supplierCode,
+    );
+  } else if (moduleId === "cards") {
+    payload.holder = firstNonBlank(payload.cardName, payload.holder);
+    payload.cardEnding = firstNonBlank(
+      payload.merchantDocument,
+      payload.cardEnding,
+    );
+  } else if (moduleId === "food") {
+    payload.supplierCode = firstNonBlank(
+      payload.supplierDocument,
+      payload.supplierCode,
+    );
+  } else if (moduleId === "rentals") {
+    payload.work = firstNonBlank(
+      payload.landlordDocument,
+      payload.work,
+    );
+  }
+}
+
 function normalizeRecordForWrite(input: Record<string, unknown>) {
   const moduleId = String(input.module || "").trim();
   const payload = {
@@ -102,6 +136,8 @@ function normalizeRecordForWrite(input: Record<string, unknown>) {
       ? input.payload
       : {}) as Record<string, unknown>),
   };
+  applyCanonicalAliases(moduleId, payload);
+
   const amount = Math.max(0, Number(input.amount || 0));
   const next: Record<string, unknown> = { ...input, payload };
 

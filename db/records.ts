@@ -156,7 +156,20 @@ async function ensureColumn(
   await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${definition}`).run();
 }
 
-export async function ensureSchema() {
+let schemaPromise: Promise<void> | null = null;
+
+export function ensureSchema(): Promise<void> {
+  if (!schemaPromise) {
+    schemaPromise = ensureSchemaOnce().catch((error) => {
+      // Permite uma nova tentativa caso a primeira inicialização falhe.
+      schemaPromise = null;
+      throw error;
+    });
+  }
+  return schemaPromise;
+}
+
+async function ensureSchemaOnce(): Promise<void> {
   const db = await database();
   await db.batch([
     db.prepare(`
