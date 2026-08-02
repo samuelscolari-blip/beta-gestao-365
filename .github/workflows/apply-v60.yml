@@ -7,6 +7,7 @@ on:
     paths:
       - scripts/apply-v60.mjs
       - scripts/run-v60-fixed.mjs
+      - scripts/prepatch-v60.mjs
       - .github/workflows/apply-v60.yml
   pull_request:
     branches:
@@ -14,6 +15,7 @@ on:
     paths:
       - scripts/apply-v60.mjs
       - scripts/run-v60-fixed.mjs
+      - scripts/prepatch-v60.mjs
       - .github/workflows/apply-v60.yml
 
 permissions:
@@ -38,7 +40,10 @@ jobs:
           cache: npm
 
       - name: Aplicar transformação controlada
-        run: node scripts/run-v60-fixed.mjs
+        run: |
+          node scripts/prepatch-v60.mjs
+          node scripts/run-v60-fixed.mjs
+          rm -f scripts/prepatch-v60.mjs
 
       - name: Instalar dependências
         run: npm ci
