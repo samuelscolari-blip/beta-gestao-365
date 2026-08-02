@@ -6,7 +6,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ChangeEvent as ReactChangeEvent,
 } from "react";
 import SecureBetaAppV52 from "./SecureBetaAppV52";
 import {
@@ -45,6 +44,10 @@ type PendingImport = {
   file: File;
   result: ImportPreflightResult;
 };
+
+function clearFileInput(input: HTMLInputElement | null) {
+  if (input) input.value = "";
+}
 
 const decisionModules = new Set(["purchases", "expenses", "cards"]);
 
@@ -169,9 +172,12 @@ function ApprovedDecisionExtension() {
   }, []);
 
   useEffect(() => {
-    void refresh();
+    const initialRefresh = window.setTimeout(refresh, 0);
     const interval = window.setInterval(refresh, 30_000);
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearTimeout(initialRefresh);
+      window.clearInterval(interval);
+    };
   }, [refresh]);
 
   useEffect(() => {
@@ -396,7 +402,7 @@ export default function SecureBetaAppV65(props: Props) {
   }, [dispatchValidatedFile, props.isAdmin]);
 
   const cancelPreflight = useCallback(() => {
-    if (pendingImport) pendingImport.input.value = "";
+    clearFileInput(pendingImport?.input || null);
     setPendingImport(null);
   }, [pendingImport]);
 
