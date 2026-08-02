@@ -29,6 +29,10 @@ import {
   importWorkbook,
 } from "../lib/spreadsheet";
 import {
+  importScopeDescription,
+  isImportableModule,
+} from "../lib/import-policy";
+import {
   calculatePayroll,
   payrollRules2026,
   type PayrollInput,
@@ -5450,7 +5454,7 @@ function ModulePage({
               ))}
             </select>
           ) : null}
-          {canEdit && module.spreadsheetSheets.length ? (
+          {canEdit && isImportableModule(module.id) ? (
             <button className="button secondary compact-button" onClick={onImport}>
               <Icon name="upload" size={17} /> Importar
             </button>
@@ -5610,13 +5614,13 @@ function ModulePage({
               <p>
                 {records.length
                   ? "Ajuste os filtros para ampliar a busca."
-                  : module.spreadsheetSheets.length
+                  : isImportableModule(module.id)
                     ? "Importe a planilha existente ou faça o primeiro cadastro."
                     : "Faça o primeiro cadastro para iniciar este módulo."}
               </p>
               {!records.length && canEdit ? (
                 <div className="empty-actions">
-                  {module.spreadsheetSheets.length ? (
+                  {isImportableModule(module.id) ? (
                     <button className="button secondary" onClick={onImport}>
                       <Icon name="upload" size={17} /> Importar planilha
                     </button>
@@ -5786,7 +5790,7 @@ function IntegrationHub({
     },
     {
       name: "Excel",
-      detail: "Importação das planilhas e exportação do backup",
+      detail: "Importador inteligente controlado para Custos, Máquinas e Funcionários",
       status: "Pronto",
       href: "",
     },
@@ -5824,14 +5828,15 @@ function IntegrationHub({
           <span className="hero-kicker">TRANSIÇÃO SEM REDIGITAÇÃO</span>
           <h2>As planilhas já criadas entram direto no sistema.</h2>
           <p>
-            O importador reconhece as abas da Central Operacional, converte os
-            registros para cada módulo e ignora as linhas demonstrativas.
+            O Importador Inteligente aceita somente Custos, Máquinas e
+            Funcionários. Ele reconhece tabelas verticais, horizontais e
+            matrizes de datas, apresenta uma prévia e não grava linhas inválidas.
           </p>
           <div className="hero-actions">
             {canEdit ? (
               <>
                 <button className="button light" onClick={onImportAll}>
-                  <Icon name="upload" size={18} /> Importar Central Operacional
+                  <Icon name="upload" size={18} /> Importar Custos, Máquinas ou Funcionários
                 </button>
                 <button
                   className="button ghost-light"
@@ -8189,6 +8194,15 @@ export default function BetaApp({
 
   function requestImport(moduleId?: string) {
     if (!hasEditingAccess()) return;
+    if (moduleId && !isImportableModule(moduleId)) {
+      setToast({
+        kind: "error",
+        text:
+          "Este módulo não aceita importação automática. O Importador Inteligente recebe somente " +
+          importScopeDescription,
+      });
+      return;
+    }
     setImportTarget(moduleId);
     fileInput.current?.click();
   }
@@ -8208,10 +8222,33 @@ export default function BetaApp({
       }
 
       const preview = imported.report
-        .map((item) =>
-          item.sheet + " → " + item.module + ": " + item.imported + " válidos, " + item.invalid + " inválidos, " + item.duplicates + " duplicados, " + item.skipped + " ignorados",
-        )
-        .join("\n");
+        .map((item) => {
+          const errors = item.invalidExamples.length
+            ? "\n  Pendências encontradas: " + item.invalidExamples.join(" | ")
+            : "";
+          return (
+            item.sheet +
+            " → " +
+            item.family +
+            " / " +
+            item.module +
+            " • " +
+            item.layout +
+            " • confiança " +
+            item.confidence +
+            "%: " +
+            item.imported +
+            " válidos, " +
+            item.invalid +
+            " inválidos, " +
+            item.duplicates +
+            " duplicados reais, " +
+            item.skipped +
+            " ignorados" +
+            errors
+          );
+        })
+        .join("\n\n");
       const confirmed = window.confirm(
         "Prévia da importação\n\n" + preview + "\n\nTotal pronto para importar: " + imported.records.length + ".\n\nConfirma a gravação?",
       );
