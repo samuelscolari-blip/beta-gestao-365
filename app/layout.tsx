@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import "./ibs-cbs.css";
 import "./v52.css";
@@ -24,13 +23,6 @@ import "./v79-executive-dark-theme.css";
 import "./v84-hybrid-executive-theme.css";
 import "./v86-shared-ui-system.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
   description:
@@ -50,8 +42,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
-      <body className="v86-root antialiased">{children}</body>
+    <html lang="pt-BR">
+      <body
+        className="v86-root antialiased"
+        style={{
+          fontFamily:
+            'Inter, "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
+        }}
+      >
+        {children}
+      </body>
     </html>
   );
 }
