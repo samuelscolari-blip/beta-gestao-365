@@ -1,0 +1,292 @@
+/*
+ * V92 — Padronização de leitura em Aluguéis e UX das Ações Rápidas.
+ *
+ * Escopo estritamente visual:
+ * - unifica a escala tipográfica da tabela de aluguéis;
+ * - amplia a coluna STATUS e impede que badges quebrem em duas linhas;
+ * - reutiliza o status-pill existente como fonte única de badges;
+ * - eleva todos os cartões de Ações rápidas ao padrão do CTA principal;
+ * - remove apenas o CTA redundante do cabeçalho de Administrativo e Pessoas.
+ */
+
+/* ==========================================================================
+   1. ALUGUÉIS — TABELA E STATUS PADRONIZADOS
+   ========================================================================== */
+
+.page-area:has(.v52-rental-management) .table-card {
+  border-color: #cfdee6 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 38px rgba(20, 47, 63, 0.075) !important;
+}
+
+.page-area:has(.v52-rental-management) .table-wrap {
+  overflow-x: auto;
+}
+
+.page-area:has(.v52-rental-management) .table-wrap table {
+  width: 100%;
+  min-width: 1380px;
+  table-layout: auto;
+}
+
+/* Cabeçalhos: uma única escala e altura de leitura. */
+.page-area:has(.v52-rental-management) .table-wrap thead th {
+  padding: 15px 14px !important;
+  color: #486579 !important;
+  background: #eef4f7 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0.045em;
+  vertical-align: middle;
+}
+
+/* Conteúdo: elimina a mistura de letras pequenas e grandes entre colunas. */
+.page-area:has(.v52-rental-management) .table-wrap tbody td {
+  padding: 16px 14px !important;
+  color: #173f58 !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  line-height: 1.45 !important;
+  vertical-align: middle;
+}
+
+.page-area:has(.v52-rental-management) .table-wrap tbody td :is(span, a, button, small, strong) {
+  line-height: 1.35;
+}
+
+.page-area:has(.v52-rental-management) .table-wrap tbody td small {
+  font-size: 13px !important;
+}
+
+/* Moradores e links usam a mesma escala da tabela. */
+.page-area:has(.v52-rental-management) .v52-inline-detail {
+  min-height: 42px;
+  padding: 8px 13px;
+  border-radius: 11px;
+  font-size: 13px !important;
+  font-weight: 750;
+  line-height: 1.2 !important;
+}
+
+.page-area:has(.v52-rental-management) .v52-landlord-link,
+.page-area:has(.v52-rental-management) .document-link {
+  font-size: 13px !important;
+  font-weight: 720;
+  line-height: 1.35 !important;
+}
+
+/* A coluna STATUS deixa de ser comprimida. */
+.page-area:has(.v52-rental-management) .table-wrap th:nth-child(4),
+.page-area:has(.v52-rental-management) .table-wrap td:nth-child(4) {
+  width: 158px;
+  min-width: 158px;
+}
+
+/* O mesmo badge existente passa a ser o padrão compartilhado da tela. */
+.page-area:has(.v52-rental-management) .table-wrap .status-pill {
+  display: inline-flex;
+  width: max-content;
+  min-width: 112px;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px !important;
+  border-radius: 999px !important;
+  font-size: 12px !important;
+  font-weight: 780 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.01em;
+  text-align: center;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Situação do pagamento recebe a mesma área mínima para não parecer menor. */
+.page-area:has(.v52-rental-management) .table-wrap th:nth-child(7),
+.page-area:has(.v52-rental-management) .table-wrap td:nth-child(7) {
+  min-width: 142px;
+}
+
+.page-area:has(.v52-rental-management) .table-wrap th:nth-child(10),
+.page-area:has(.v52-rental-management) .table-wrap td:nth-child(10) {
+  min-width: 154px;
+}
+
+.page-area:has(.v52-rental-management) .row-actions {
+  gap: 7px;
+}
+
+.page-area:has(.v52-rental-management) .row-actions button {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+}
+
+/* ==========================================================================
+   2. ADMINISTRATIVO E PESSOAS — AÇÕES RÁPIDAS COM UX DE CTA
+   ========================================================================== */
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions {
+  padding: 28px 30px;
+  border-color: #cddfe7;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 95% 5%, rgba(67, 184, 219, 0.13), transparent 30%),
+    linear-gradient(135deg, #fbfdfe 0%, #ffffff 68%);
+  box-shadow: 0 18px 42px rgba(18, 52, 77, 0.075);
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions header {
+  align-items: center;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions header span {
+  font-size: 12px !important;
+  letter-spacing: 0.11em;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions h2 {
+  margin: 6px 0 5px;
+  color: #123f5c;
+  font-size: clamp(25px, 2vw, 31px);
+  font-weight: 760;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions header p {
+  color: #607989;
+  font-size: 14px !important;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions header > strong {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 13px;
+  border: 1px solid #cce8dc;
+  color: #0b684c;
+  background: #ecfaf4;
+  font-size: 12px !important;
+  font-weight: 780;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions > div {
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions > div > button {
+  grid-template-columns: 50px minmax(0, 1fr) 32px;
+  gap: 14px;
+  min-height: 94px;
+  padding: 16px 17px;
+  border: 1px solid #cedee6;
+  border-radius: 17px;
+  color: #12344d;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fbfc 100%);
+  box-shadow:
+    0 8px 20px rgba(18, 52, 77, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions > div > button:hover {
+  transform: translateY(-3px);
+  border-color: #7bc9df;
+  background: linear-gradient(145deg, #ffffff 0%, #eef9fc 100%);
+  box-shadow: 0 15px 30px rgba(18, 74, 102, 0.12);
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions > div > button:focus-visible {
+  outline: 3px solid rgba(67, 184, 219, 0.28);
+  outline-offset: 2px;
+  border-color: #43b8db;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions button i {
+  width: 48px;
+  height: 48px;
+  border: 1px solid color-mix(in srgb, var(--action-color) 18%, transparent);
+  border-radius: 14px;
+  font-size: 15px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions button strong {
+  color: #12344d;
+  font-size: 15px !important;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions button small {
+  margin-top: 5px;
+  color: #69808e;
+  font-size: 13px !important;
+  font-weight: 500;
+  line-height: 1.35 !important;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions button b {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  color: #246c87;
+  background: #edf6f9;
+  font-size: 20px;
+  font-weight: 700;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.page-area:has(.v52-administrative-actions) .v52-administrative-actions > div > button:hover b {
+  transform: translateX(2px);
+  background: #dff2f7;
+}
+
+/* O cadastro continua nas Ações rápidas; apenas o CTA duplicado do cabeçalho sai. */
+.page-area:has(.v52-administrative-actions) .module-heading .button.primary {
+  display: none !important;
+}
+
+/* ==========================================================================
+   3. RESPONSIVIDADE
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions {
+    padding: 24px;
+  }
+
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions {
+    padding: 19px !important;
+  }
+
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions header {
+    align-items: start;
+  }
+
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions > div {
+    grid-template-columns: 1fr;
+  }
+
+  .page-area:has(.v52-administrative-actions) .v52-administrative-actions > div > button {
+    min-height: 88px;
+  }
+
+  .page-area:has(.v52-rental-management) .table-wrap table {
+    min-width: 1320px;
+  }
+}
