@@ -7,6 +7,14 @@ const cssPath = new URL(
   import.meta.url,
 );
 const layoutPath = new URL("../app/layout.tsx", import.meta.url);
+const workflowPath = new URL(
+  "../.github/workflows/deploy-cloudflare.yml",
+  import.meta.url,
+);
+const wideDiagnosticPath = new URL(
+  "../scripts/live-fleet-wide-diagnostic.mjs",
+  import.meta.url,
+);
 
 test("a correção responsiva é carregada depois do Design System V86", async () => {
   const layout = await readFile(layoutPath, "utf8");
@@ -30,21 +38,39 @@ test("a própria tabela mede a largura e possui fallback de notebook", async () 
   assert.match(css, /@media \(max-width: 720px\)/);
 });
 
+test("desktop amplo não recebe grid-area implícita", async () => {
+  const css = await readFile(cssPath, "utf8");
+  const responsiveStart = css.indexOf(
+    "@container v86-machine-table (max-width: 1040px)",
+  );
+
+  assert.ok(responsiveStart > 0);
+  const desktopRules = css.slice(0, responsiveStart);
+  assert.doesNotMatch(desktopRules, /grid-area\s*:/);
+  assert.match(
+    desktopRules,
+    /grid-template-columns:[\s\S]*minmax\(150px, 1fr\)[\s\S]*minmax\(175px, 1\.3fr\)/,
+  );
+});
+
 test("a linha estreita usa áreas explícitas para todos os campos", async () => {
   const css = await readFile(cssPath, "utf8");
 
   for (const area of [
-    "machine",
-    "operation",
-    "stop",
-    "impact",
-    "priority",
-    "arrow",
+    "machine-main",
+    "machine-operation",
+    "machine-stop",
+    "machine-impact",
+    "machine-priority",
+    "machine-arrow",
   ]) {
     assert.match(css, new RegExp(`grid-area:\\s*${area}`));
   }
 
-  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(118px, 140px\) 18px/);
+  assert.match(
+    css,
+    /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(118px, 140px\) 18px/,
+  );
   assert.match(css, /width:\s*100%\s*!important/);
   assert.match(css, /max-width:\s*100%\s*!important/);
 });
@@ -68,4 +94,18 @@ test("a grade ampla evita mínimos que excedam o painel operacional", async () =
   assert.match(css, /minmax\(175px, 1\.3fr\)/);
   assert.match(css, /minmax\(108px, 0\.56fr\)/);
   assert.doesNotMatch(css, /minmax\(240px, 1\.45fr\)/);
+});
+
+test("produção mede ordem, corte e sobreposição da frota em desktop largo", async () => {
+  const [workflow, diagnostic] = await Promise.all([
+    readFile(workflowPath, "utf8"),
+    readFile(wideDiagnosticPath, "utf8"),
+  ]);
+
+  assert.match(workflow, /Confirmar frota em desktop largo/);
+  assert.match(workflow, /node scripts\/live-fleet-wide-diagnostic\.mjs/);
+  assert.match(diagnostic, /width:\s*1920/);
+  assert.match(diagnostic, /gridTemplateAreas !== "none"/);
+  assert.match(diagnostic, /Células sobrepostas/);
+  assert.match(diagnostic, /Célula \$\{part\.name\} saiu da linha/);
 });
