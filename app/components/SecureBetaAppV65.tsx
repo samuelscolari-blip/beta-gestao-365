@@ -66,17 +66,6 @@ function normalized(value: unknown) {
     .toLowerCase();
 }
 
-function isRealRecord(record: RecordView) {
-  const source = normalized(record.source);
-  const reference = normalized(record.reference);
-  return (
-    !source.includes("demonstracao") &&
-    !source.includes("ficticio") &&
-    !reference.startsWith("tst-") &&
-    record.payload.isDemo !== true
-  );
-}
-
 function isApproved(record: RecordView) {
   return isApprovedDecision(record);
 }
@@ -191,7 +180,6 @@ function ApprovedDecisionExtension() {
         .filter(
           (record) =>
             decisionModules.has(record.module) &&
-            isRealRecord(record) &&
             isApproved(record),
         )
         .sort((a, b) =>
@@ -268,7 +256,7 @@ function ApprovedDecisionExtension() {
             <div className="v65-approved-empty">
               <span aria-hidden="true">✓</span>
               <strong>Nenhuma decisão aprovada registrada</strong>
-              <p>Quando a gerência aprovar um pedido real, ele aparecerá aqui com responsável, data e documento.</p>
+              <p>Quando a gerência aprovar um pedido real ou fictício, ele aparecerá aqui com responsável, data e documento.</p>
             </div>
           )}
         </div>,

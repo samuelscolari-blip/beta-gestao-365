@@ -561,16 +561,20 @@ function normalizedWorkflowText(value: unknown) {
     .toLowerCase();
 }
 
-function isRealManagementRequest(record: StoredRecord) {
+function isDemoRecord(record: StoredRecord) {
   const source = normalizedWorkflowText(record.source);
   const reference = normalizedWorkflowText(record.reference);
   return (
-    managementModules.has(record.module) &&
-    !source.includes("demonstracao") &&
-    !source.includes("dados ficticios") &&
-    !reference.startsWith("tst-") &&
-    record.payload.isDemo !== true
+    source.includes("demonstracao") ||
+    source.includes("dados ficticios") ||
+    source.includes("ficticio") ||
+    reference.startsWith("tst-") ||
+    record.payload.isDemo === true
   );
+}
+
+function isManagementRequest(record: StoredRecord) {
+  return managementModules.has(record.module);
 }
 
 function requestDecisionState(record: StoredRecord) {
@@ -4691,11 +4695,11 @@ function Dashboard({
           : recordAmount(record)),
     0,
   );
-  const realManagementRequests = records.filter(isRealManagementRequest);
-  const readyManagementRequests = realManagementRequests.filter(
+  const managementRequests = records.filter(isManagementRequest);
+  const readyManagementRequests = managementRequests.filter(
     requestIsReadyForManagement,
   );
-  const rejectedRequestRecords = realManagementRequests.filter(
+  const rejectedRequestRecords = managementRequests.filter(
     (record) => requestDecisionState(record) === "rejected",
   );
   const missingRequestRecords = readyManagementRequests.filter(
@@ -4765,6 +4769,7 @@ function Dashboard({
     (sum, record) => sum + Math.max(0, Number(record.amount || 0)),
     0,
   );
+  const managementDemoCount = managementRecords.filter(isDemoRecord).length;
 
 
   return (
@@ -5030,7 +5035,7 @@ function Dashboard({
           </div>
           <div className="management-heading-tools">
             <span className="real-records-chip">
-              <Icon name="lock" size={14} /> Somente pedidos reais
+              <Icon name="database" size={14} /> Dados reais e fictícios
             </span>
             <span className="management-total">
               {managementRecords.length}{" "}
@@ -5171,21 +5176,46 @@ function Dashboard({
                 name={managementFocus === "rejected" ? "history" : "check"}
                 size={20}
               />
-              <strong>Nenhum pedido real nesta fila</strong>
+              <strong>Nenhum pedido nesta fila</strong>
               <small>
-                Nenhum pedido operacional atende aos critérios desta etapa.
+                Nenhum registro real ou fictício atende aos critérios desta etapa.
               </small>
             </div>
           )}
         </div>
-        <footer className="management-footer">
-          <span>
-            <Icon name="lock" size={14} />
-            Decisões restritas ao administrador e gravadas na auditoria
-          </span>
-          <strong>
-            Valor desta fila: {currency.format(managementQueueTotal)}
-          </strong>
+        <footer className="management-footer management-footer-v75">
+          <article className="management-footer-stat">
+            <span><Icon name="queue" size={16} /></span>
+            <div>
+              <small>Registros na fila</small>
+              <strong>{managementRecords.length} {managementRecords.length === 1 ? "pedido" : "pedidos"}</strong>
+            </div>
+          </article>
+          <article className="management-footer-stat demo">
+            <span>T</span>
+            <div>
+              <small>Dados de teste</small>
+              <strong>{managementDemoCount} fictício(s)</strong>
+            </div>
+          </article>
+          <article className="management-footer-stat">
+            <span><Icon name="lock" size={16} /></span>
+            <div>
+              <small>Integridade</small>
+              <strong>Auditoria ativa</strong>
+            </div>
+          </article>
+          <article className="management-footer-stat value">
+            <span>R$</span>
+            <div>
+              <small>Valor total da fila</small>
+              <strong>{currency.format(managementQueueTotal)}</strong>
+            </div>
+          </article>
+          <p className="management-footer-note">
+            <Icon name="alert" size={14} />
+            Registros fictícios permanecem visíveis em todo o sistema para testes até a remoção manual pelo administrador.
+          </p>
         </footer>
       </section>
 
