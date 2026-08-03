@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: beta-gestao-365-production
-  cancel-in-progress: false
+  group: beta-gestao-365-production-${{ github.event.pull_request.merge_commit_sha || github.sha }}
+  cancel-in-progress: true
 
 jobs:
   validate-and-deploy:
