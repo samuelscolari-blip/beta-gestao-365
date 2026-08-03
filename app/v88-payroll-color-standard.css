@@ -1,0 +1,201 @@
+/*
+ * V88 — padronização cromática exclusiva do Cálculo de Folha.
+ *
+ * Esta camada não altera grid, dimensões, conteúdo, cálculos ou comportamento.
+ * Apenas substitui a paleta roxa/escura isolada pela linguagem clara e azul
+ * utilizada nas demais áreas administrativas do Beta Gestão 365.
+ */
+
+.payroll-page {
+  --payroll-accent: #0f6f8c;
+  --payroll-accent-strong: #0b526a;
+  --payroll-accent-soft: #eaf7fb;
+  --payroll-accent-soft-2: #f5fbfd;
+  --payroll-line: #cfe2ea;
+  --payroll-ink: #12344d;
+  --payroll-copy: #58758a;
+  --payroll-muted: #7892a2;
+}
+
+/* Cabeçalho principal: mesma superfície clara dos demais módulos. */
+.payroll-page .payroll-heading {
+  border-color: var(--payroll-line) !important;
+  background:
+    radial-gradient(circle at 94% 18%, rgba(67, 177, 211, 0.12), transparent 30%),
+    linear-gradient(135deg, #ffffff 0%, #f7fbfd 72%, #eef8fb 100%) !important;
+}
+
+.payroll-page .payroll-heading h1 {
+  color: var(--payroll-ink) !important;
+}
+
+.payroll-page .payroll-heading p {
+  color: var(--payroll-copy) !important;
+}
+
+.payroll-page .payroll-heading .eyebrow {
+  color: var(--payroll-accent) !important;
+}
+
+.payroll-page .payroll-icon {
+  border-color: #bcdde8 !important;
+  color: var(--payroll-accent) !important;
+  background: var(--payroll-accent-soft) !important;
+}
+
+.payroll-page .rules-chip {
+  border-color: #bcdde8 !important;
+  color: var(--payroll-accent-strong) !important;
+  background: #e8f7fb !important;
+}
+
+.payroll-page .time-sync-button {
+  border-color: #cbdde5 !important;
+  color: var(--payroll-ink) !important;
+  background: #ffffff !important;
+}
+
+.payroll-page .time-sync-button:hover {
+  border-color: #82bfd1 !important;
+  background: #f2fafc !important;
+}
+
+.payroll-page .time-sync-button small {
+  color: var(--payroll-muted) !important;
+}
+
+/* Processamento em lote: remove o roxo sem mudar a composição. */
+.payroll-page .batch-payroll-panel {
+  border-color: var(--payroll-line) !important;
+  background: #ffffff !important;
+}
+
+.payroll-page .batch-payroll-intro {
+  border-bottom-color: #dce8ed !important;
+  background:
+    linear-gradient(135deg, rgba(45, 154, 188, 0.055), transparent 46%),
+    #ffffff !important;
+}
+
+.payroll-page .batch-icon {
+  color: #ffffff !important;
+  background: linear-gradient(145deg, #147b99, #0d5f78) !important;
+}
+
+.payroll-page .batch-payroll-intro .eyebrow {
+  color: var(--payroll-accent) !important;
+}
+
+.payroll-page .batch-payroll-intro h2,
+.payroll-page .batch-payroll-intro strong {
+  color: var(--payroll-ink) !important;
+}
+
+.payroll-page .batch-payroll-intro p {
+  color: var(--payroll-copy) !important;
+}
+
+.payroll-page .batch-limit {
+  color: var(--payroll-accent-strong) !important;
+  background: #eaf7fb !important;
+}
+
+.payroll-page .batch-controls {
+  background: #ffffff !important;
+}
+
+.payroll-page .batch-controls label > span,
+.payroll-page .batch-scope > span {
+  color: #5c7788 !important;
+}
+
+.payroll-page .batch-controls input,
+.payroll-page .batch-controls select {
+  border-color: #cddfe7 !important;
+  color: var(--payroll-ink) !important;
+  background: #fbfdfe !important;
+}
+
+.payroll-page .batch-controls input:focus,
+.payroll-page .batch-controls select:focus {
+  border-color: #67b7cd !important;
+  box-shadow: 0 0 0 3px rgba(67, 183, 205, 0.14) !important;
+}
+
+.payroll-page .batch-controls .primary-button,
+.payroll-page .batch-controls button[type="submit"] {
+  border-color: #65c6df !important;
+  color: #082f3d !important;
+  background: #72d0e6 !important;
+}
+
+.payroll-page .batch-controls .primary-button:hover,
+.payroll-page .batch-controls button[type="submit"]:hover {
+  background: #5fc1da !important;
+}
+
+/* Enquadramento: superfície clara, sem o bloco azul-escuro isolado. */
+.payroll-page .company-tax-profile {
+  border-color: var(--payroll-line) !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(20, 47, 63, 0.045);
+}
+
+.payroll-page .company-tax-profile > div {
+  border-right-color: #dfe9ed !important;
+  background: #ffffff !important;
+}
+
+.payroll-page .company-tax-profile .tax-profile-main {
+  border-left: 5px solid #63c7df;
+  color: var(--payroll-ink) !important;
+  background:
+    linear-gradient(135deg, #eef9fc 0%, #f8fcfd 68%, #ffffff 100%) !important;
+}
+
+.payroll-page .company-tax-profile span,
+.payroll-page .company-tax-profile small,
+.payroll-page .company-tax-profile .tax-profile-main small {
+  color: var(--payroll-muted) !important;
+}
+
+.payroll-page .company-tax-profile .tax-profile-main .eyebrow {
+  color: var(--payroll-accent) !important;
+}
+
+.payroll-page .company-tax-profile strong,
+.payroll-page .company-tax-profile .tax-profile-main strong {
+  color: var(--payroll-ink) !important;
+}
+
+/* Resultados e superfícies auxiliares seguem o mesmo azul administrativo. */
+.payroll-page :is(
+  .payroll-summary,
+  .payroll-result-card,
+  .payroll-memory-card,
+  .payroll-form-card,
+  .payroll-employee-card
+) {
+  border-color: var(--payroll-line) !important;
+  background: #ffffff !important;
+}
+
+.payroll-page :is(
+  .payroll-summary,
+  .payroll-result-card,
+  .payroll-memory-card,
+  .payroll-form-card,
+  .payroll-employee-card
+) :is(h2, h3, strong) {
+  color: var(--payroll-ink) !important;
+}
+
+.payroll-page :is(
+  .payroll-summary,
+  .payroll-result-card,
+  .payroll-memory-card,
+  .payroll-form-card,
+  .payroll-employee-card
+) :is(p, small, span, label) {
+  color: var(--payroll-copy);
+}
