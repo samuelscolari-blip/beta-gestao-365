@@ -28,6 +28,7 @@ import "./v89-financial-ux.css";
 import "./v90-payroll-result-colors.css";
 import "./v91-clean-payroll-technical-ui.css";
 import "./v92-rentals-admin-ux.css";
+import "./v93-financial-header-approved.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
