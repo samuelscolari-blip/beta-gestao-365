@@ -56,6 +56,16 @@ jobs:
           git rev-parse HEAD
           test "$(git rev-parse HEAD)" = "$TARGET_SHA"
 
+      - name: Preparar título da implantação
+        shell: bash
+        run: |
+          deploy_message="$(git log -1 --pretty=%s | tr '\r\n' ' ' | sed -E 's/[[:space:]]+/ /g; s/^ //; s/ $//' | cut -c1-120)"
+          if [ -z "$deploy_message" ]; then
+            deploy_message="Beta Gestão 365 ${TARGET_SHA:0:12}"
+          fi
+          echo "DEPLOY_MESSAGE=$deploy_message" >> "$GITHUB_ENV"
+          echo "Descrição Cloudflare: $deploy_message"
+
       - name: Instalar dependências travadas
         run: npm ci
 
@@ -70,6 +80,7 @@ jobs:
             echo "Beta Gestão 365"
             echo "environment=production"
             echo "commit=$TARGET_SHA"
+            echo "message=$DEPLOY_MESSAGE"
             echo "event=${{ github.event_name }}"
             echo "deployed_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           } > public/deployment-version.txt
@@ -84,7 +95,12 @@ jobs:
         run: npm run db:migrate:remote
 
       - name: Publicar o Worker de produção
-        run: npm run deploy:cloudflare
+        shell: bash
+        run: |
+          test -f dist/server/wrangler.json
+          npx wrangler deploy \
+            --config dist/server/wrangler.json \
+            --message "$DEPLOY_MESSAGE"
 
       - name: Confirmar o commit exato publicado
         shell: bash
@@ -115,5 +131,6 @@ jobs:
             echo "## Publicação Cloudflare"
             echo "- Evento: ${{ github.event_name }}"
             echo "- Commit esperado: \`$TARGET_SHA\`"
+            echo "- Título na Cloudflare: $DEPLOY_MESSAGE"
             echo "- Worker: https://beta-gestao-365.scolarisamuel.workers.dev/"
           } >> "$GITHUB_STEP_SUMMARY"
