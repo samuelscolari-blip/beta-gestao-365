@@ -1,5 +1,21 @@
 import { moduleMap, type ModuleDefinition, type ModuleField } from "../lib/modules";
 
+export const AUDITED_PAYMENT_FIELDS = new Set([
+  "paymentStatus",
+  "status",
+  "paymentDate",
+  "paidAmount",
+  "receiptUrl",
+]);
+
+function keepAuditedPaymentColumns(moduleDefinition: ModuleDefinition) {
+  for (const key of AUDITED_PAYMENT_FIELDS) {
+    if (moduleDefinition.fields.some((field) => field.key === key) && !moduleDefinition.tableColumns.includes(key)) {
+      moduleDefinition.tableColumns.push(key);
+    }
+  }
+}
+
 function removeFields(moduleDefinition: ModuleDefinition, keys: string[]) {
   const removed = new Set(keys);
   moduleDefinition.fields = moduleDefinition.fields.filter(
@@ -73,9 +89,7 @@ export function applyV52ModuleCorrections() {
     if (key === "cardEnding") return "merchantDocument";
     return key;
   });
-  ["paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
-    if (!cards.tableColumns.includes(key)) cards.tableColumns.push(key);
-  });
+  keepAuditedPaymentColumns(cards);
 
   const food = moduleMap.food;
   removeFields(food, ["supplierCode"]);
@@ -87,9 +101,7 @@ export function applyV52ModuleCorrections() {
     placeholder: "Documento exibido no comprovante fiscal",
     aliases: ["CPF/CNPJ", "CNPJ", "Documento fornecedor"],
   });
-  ["paymentStatus", "paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
-    if (!food.tableColumns.includes(key)) food.tableColumns.push(key);
-  });
+  keepAuditedPaymentColumns(food);
 
   const rentals = moduleMap.rentals;
   const workField = rentals.fields.find((field) => field.key === "work");
@@ -115,9 +127,7 @@ export function applyV52ModuleCorrections() {
   if (!rentals.tableColumns.includes("landlordDocument")) {
     rentals.tableColumns.push("landlordDocument");
   }
-  ["paymentStatus", "paymentDate", "paidAmount", "receiptUrl"].forEach((key) => {
-    if (!rentals.tableColumns.includes(key)) rentals.tableColumns.push(key);
-  });
+  keepAuditedPaymentColumns(rentals);
 
   const purchases = moduleMap.purchases;
   addAfter(purchases, "supplier", {

@@ -10,6 +10,14 @@ const validation = await readFile(
   "app/lib/record-validation.ts",
   "utf8",
 );
+const paymentEngine = await readFile(
+  "app/lib/payment-validation-engine.ts",
+  "utf8",
+);
+const fiscalGuardian = await readFile(
+  "app/lib/fiscal-compliance-guardian.ts",
+  "utf8",
+);
 const validationCore = await readFile(
   "app/lib/record-validation-core.ts",
   "utf8",
@@ -19,6 +27,7 @@ const preflight = await readFile(
   "utf8",
 );
 const spreadsheet = await readFile("app/lib/spreadsheet.ts", "utf8");
+const sheetAnalyzer = await readFile("app/lib/sheet-analyzer.ts", "utf8");
 const approvedDecisions = await readFile(
   "app/lib/approved-decisions.ts",
   "utf8",
@@ -47,8 +56,10 @@ test("V65 exige evidência em todos os novos fluxos de pagamento", () => {
   assert.match(enhancements, /key: "receiptUrl"/);
   assert.match(validation, /rentals: \{ statusKey: "paymentStatus"/);
   assert.match(validation, /food: \{ statusKey: "paymentStatus"/);
-  assert.match(validation, /Anexe ou informe o link do comprovante/);
-  assert.match(validation, /Quando o valor pago alcançar o total previsto/);
+  assert.match(validation, /PaymentValidationEngine\.audit/);
+  assert.match(paymentEngine, /Anexe ou informe o link do comprovante/);
+  assert.match(paymentEngine, /Quando o valor pago alcançar o total previsto/);
+  assert.match(paymentEngine, /validHttpUrl/);
   assert.match(validationCore, /validatePaymentEvidence/);
 });
 
@@ -64,9 +75,12 @@ test("V65 torna Fiscal e Compliance um fluxo controlado", () => {
   assert.match(enhancements, /key: "dueDate"/);
   assert.match(enhancements, /key: "checklistUrl"/);
   assert.match(enhancements, /key: "rejectionReason"/);
-  assert.match(validation, /Conclua a validação interna/);
-  assert.match(validation, /Informe o certificado ou a procuração/);
-  assert.match(validation, /Registre o motivo da rejeição/);
+  assert.match(validation, /FiscalComplianceGuardian\.verify/);
+  assert.match(fiscalGuardian, /Conclua a validação interna/);
+  assert.match(fiscalGuardian, /certificado A1\/A3 ou a procuração/);
+  assert.match(fiscalGuardian, /Registre o motivo da rejeição/);
+  assert.match(fiscalGuardian, /batchProtocol/);
+  assert.match(fiscalGuardian, /receiptNumber/);
 });
 
 test("V65 só ativa regra documentada e homologada", () => {
@@ -81,7 +95,10 @@ test("V65 só ativa regra documentada e homologada", () => {
 });
 
 test("V65 bloqueia planilhas ambíguas antes da importação", () => {
-  assert.match(spreadsheet, /second\.score >= first\.score \* 0\.82/);
+  assert.match(spreadsheet, /SheetAnalyzer\.isAmbiguous/);
+  assert.match(spreadsheet, /SheetAnalyzer\.assessKnownSheet/);
+  assert.match(sheetAnalyzer, /AMBIGUITY_RATIO = 0\.82/);
+  assert.match(sheetAnalyzer, /MIN_HEADER_SCORE = 2/);
   assert.match(preflight, /Escolha manual do módulo necessária/);
   assert.match(preflight, /kind: "error"/);
   assert.match(preflight, /Nenhuma aba apresentou cabeçalhos suficientes/);
@@ -93,6 +110,7 @@ test("V65 mostra decisões aprovadas sem confundir pagamento", () => {
   assert.match(secure, /Aprovados <span>\{approved\.length\}<\/span>/);
   assert.match(secure, /v65-approved-overview/);
   assert.match(secure, /approvedDecisionModules/);
+  assert.match(secure, /ApprovedRequestsPanel/);
   assert.match(approvedDecisions, /"purchases"/);
   assert.match(approvedDecisions, /"expenses"/);
   assert.match(approvedDecisions, /"cards"/);

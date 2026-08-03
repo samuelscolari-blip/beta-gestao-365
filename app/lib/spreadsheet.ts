@@ -13,6 +13,7 @@ import {
   type ModuleDefinition,
 } from "./modules";
 import { validateRecordPayload } from "./record-validation";
+import { SheetAnalyzer } from "./sheet-analyzer";
 import { buildImportDeduplicationKey } from "./import-deduplication.mjs";
 import { parseCsvRows } from "./spreadsheet-csv.mjs";
 import {
@@ -375,20 +376,27 @@ export function resolveImportSheet(
   const directCandidate = direct
     ? ranked.find((candidate) => candidate.module.id === direct.id)
     : undefined;
+  const directAssessment = direct
+    ? SheetAnalyzer.assessKnownSheet(
+        sheetName,
+        direct.label,
+        directCandidate,
+      )
+    : undefined;
 
-  if (direct && !directCandidate?.records && viable.length) {
+  if (direct && directAssessment && !directAssessment.isValid && viable.length) {
     return {
       direct,
       ranked,
       ambiguous: true,
-      reason: `A aba “${sheetName}” tem nome de “${direct.label}”, mas o conteúdo corresponde a outro módulo. Selecione o destino manualmente.`,
+      reason: directAssessment?.reason || `A aba “${sheetName}” tem nome de “${direct.label}”, mas o conteúdo corresponde a outro módulo. Selecione o destino manualmente.`,
     };
   }
-  if (directCandidate?.records) {
+  if (directCandidate?.records && directAssessment?.isValid) {
     const competitor = viable.find(
       (candidate) => candidate.module.id !== directCandidate.module.id,
     );
-    if (competitor && competitor.score >= directCandidate.score * 0.82) {
+    if (competitor && SheetAnalyzer.isAmbiguous(directCandidate.score, competitor.score)) {
       return {
         direct,
         ranked,
@@ -403,7 +411,7 @@ export function resolveImportSheet(
   if (!first) {
     return { direct, ranked, ambiguous: false, reason: `A aba “${sheetName}” não possui registros reconhecíveis.` };
   }
-  if (second && second.score >= first.score * 0.82) {
+  if (second && SheetAnalyzer.isAmbiguous(first.score, second.score)) {
     return {
       direct,
       ranked,

@@ -9,6 +9,9 @@ import {
   useState,
 } from "react";
 import SecureBetaAppV65 from "./SecureBetaAppV65";
+import ApprovedRequestsPanel, {
+  type ApprovedRequestItem,
+} from "./ApprovedRequestsPanel";
 import {
   approvedDecisionAmount,
   approvedDecisionModuleLabels,
@@ -505,6 +508,26 @@ function ApprovedDecisionFallback() {
         ),
     [records],
   );
+  const approvedItems = useMemo<ApprovedRequestItem[]>(
+    () =>
+      approved.slice(0, 12).map((record) => ({
+        id: record.id,
+        category: moduleLabels[record.module] || record.module,
+        title: record.title,
+        description: String(
+          record.payload.description ||
+            record.payload.notes ||
+            record.payload.requestDescription ||
+            "Solicitação aprovada e disponível para execução.",
+        ),
+        amount: recordAmount(record),
+        approvalDate: decisionDate(record),
+        owner: decisionOwner(record),
+        evidenceUrl: evidenceUrl(record) || undefined,
+      })),
+    [approved],
+  );
+
 
   const overviewPortal = targets.overview
     ? createPortal(
@@ -541,54 +564,10 @@ function ApprovedDecisionFallback() {
 
   const listPortal = targets.center && showApproved
     ? createPortal(
-        <div
-          className="v65-approved-list"
-          data-v66-approved="list"
-          aria-live="polite"
-        >
-          {approved.length ? (
-            approved.slice(0, 12).map((record) => {
-              const proof = evidenceUrl(record);
-              return (
-                <article className="v65-approved-row" key={record.id}>
-                  <span className="v65-approved-mark" aria-hidden="true">✓</span>
-                  <div className="v65-approved-main">
-                    <strong>{record.title}</strong>
-                    <small>
-                      {moduleLabels[record.module] || record.module} • Responsável: {decisionOwner(record)}
-                    </small>
-                    <em>Decisão registrada em {decisionDate(record)}</em>
-                  </div>
-                  <div className="v65-approved-value">
-                    <strong>
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      }).format(recordAmount(record))}
-                    </strong>
-                    <small>Aprovado</small>
-                  </div>
-                  {proof ? (
-                    <a href={proof} target="_blank" rel="noreferrer">
-                      Ver documento ↗
-                    </a>
-                  ) : (
-                    <span className="v65-no-proof">Sem documento vinculado</span>
-                  )}
-                </article>
-              );
-            })
-          ) : (
-            <div className="v65-approved-empty">
-              <span aria-hidden="true">✓</span>
-              <strong>Nenhuma decisão aprovada registrada</strong>
-              <p>
-                Quando um pedido real for aprovado, ele aparecerá aqui com
-                responsável, data, valor e documento.
-              </p>
-            </div>
-          )}
-        </div>,
+        <ApprovedRequestsPanel
+          items={approvedItems}
+          emptyDescription="Quando a gerência aprovar um pedido real ou fictício, ele aparecerá aqui com responsável, data, valor e documento."
+        />,
         targets.center,
       )
     : null;

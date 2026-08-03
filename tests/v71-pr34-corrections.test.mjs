@@ -16,21 +16,34 @@ test("item 14 separates work, landlord document and payment fields", async () =>
 
 test("item 14 blocks underpayment and calculates the rental total", async () => {
   const validation = await source("app/lib/record-validation.ts");
-  assert.match(validation, /paidAmount < expectedAmount - 0\.01/);
-  assert.match(validation, /numberValue\(payload, "monthlyRent"\)/);
-  assert.match(validation, /numberValue\(payload, "internet"\)/);
+  const engine = await source("app/lib/payment-validation-engine.ts");
+  assert.match(validation, /PaymentValidationEngine\.audit/);
+  assert.match(engine, /paidAmount < expectedAmount - 0\.01/);
+  assert.match(engine, /firstPositiveAlias\(payload, \["monthlyRent", "rentAmount"\]\)/);
+  assert.match(engine, /numberValue\(payload, "internet"\)/);
+  assert.match(engine, /firstPositiveAlias\(payload, \["energy", "electricity"\]\)/);
 });
 
 test("item 16 requires certificate for successful processing", async () => {
   const validation = await source("app/lib/record-validation.ts");
-  assert.match(validation, /"Processado com sucesso",[\s\S]*certificateType/);
+  const guardian = await source("app/lib/fiscal-compliance-guardian.ts");
+  assert.match(validation, /FiscalComplianceGuardian\.verify/);
+  assert.match(guardian, /"Processado com sucesso"/);
+  assert.match(guardian, /certificateType/);
+  assert.match(guardian, /certificateId/);
+  assert.match(guardian, /powerOfAttorneyId/);
+  assert.match(guardian, /receiptNumber/);
 });
 
 test("item 18 shares content detection and blocks ambiguity", async () => {
   const spreadsheet = await source("app/lib/spreadsheet.ts");
+  const analyzer = await source("app/lib/sheet-analyzer.ts");
   const preflight = await source("app/lib/import-preflight-v65.ts");
   assert.match(spreadsheet, /export function resolveImportSheet/);
-  assert.match(spreadsheet, /competitor\.score >= directCandidate\.score \* 0\.82/);
+  assert.match(spreadsheet, /SheetAnalyzer\.assessKnownSheet/);
+  assert.match(spreadsheet, /SheetAnalyzer\.isAmbiguous/);
+  assert.match(analyzer, /AMBIGUITY_RATIO = 0\.82/);
+  assert.match(analyzer, /MIN_HEADER_SCORE = 2/);
   assert.match(preflight, /Escolha manual do módulo necessária/);
   assert.match(preflight, /kind: "error"/);
 });
@@ -45,4 +58,6 @@ test("item 21 does not equate paid with approved", async () => {
   assert.match(decisions, /"aprovado", "aprovada"/);
   assert.match(admin, /approvedDecisionModules/);
   assert.match(publicView, /approvedDecisionModules/);
+  assert.match(admin, /ApprovedRequestsPanel/);
+  assert.match(publicView, /ApprovedRequestsPanel/);
 });
