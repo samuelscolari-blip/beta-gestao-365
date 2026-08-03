@@ -7,6 +7,14 @@ const cssPath = new URL(
   import.meta.url,
 );
 const layoutPath = new URL("../app/layout.tsx", import.meta.url);
+const workflowPath = new URL(
+  "../.github/workflows/deploy-cloudflare.yml",
+  import.meta.url,
+);
+const wideDiagnosticPath = new URL(
+  "../scripts/live-fleet-wide-diagnostic.mjs",
+  import.meta.url,
+);
 
 test("a correção responsiva é carregada depois do Design System V86", async () => {
   const layout = await readFile(layoutPath, "utf8");
@@ -86,4 +94,18 @@ test("a grade ampla evita mínimos que excedam o painel operacional", async () =
   assert.match(css, /minmax\(175px, 1\.3fr\)/);
   assert.match(css, /minmax\(108px, 0\.56fr\)/);
   assert.doesNotMatch(css, /minmax\(240px, 1\.45fr\)/);
+});
+
+test("produção mede ordem, corte e sobreposição da frota em desktop largo", async () => {
+  const [workflow, diagnostic] = await Promise.all([
+    readFile(workflowPath, "utf8"),
+    readFile(wideDiagnosticPath, "utf8"),
+  ]);
+
+  assert.match(workflow, /Confirmar frota em desktop largo/);
+  assert.match(workflow, /node scripts\/live-fleet-wide-diagnostic\.mjs/);
+  assert.match(diagnostic, /width:\s*1920/);
+  assert.match(diagnostic, /gridTemplateAreas !== "none"/);
+  assert.match(diagnostic, /Células sobrepostas/);
+  assert.match(diagnostic, /Célula \$\{part\.name\} saiu da linha/);
 });
