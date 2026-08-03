@@ -11,7 +11,7 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
@@ -29,6 +29,9 @@ jobs:
 
       - name: Instalar dependências como o Cloudflare
         run: npm ci
+
+      - name: Verificar qualidade do código
+        run: npm run lint
 
       - name: Compilar versão final para Cloudflare
         run: npm run build
