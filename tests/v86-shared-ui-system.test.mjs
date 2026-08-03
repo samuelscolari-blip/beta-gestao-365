@@ -9,16 +9,16 @@ const componentPath = new URL(
   import.meta.url,
 );
 
-test("V86 é carregada depois da V84 e ativa Inter no layout", async () => {
+test("V86 é carregada depois da V84 e ativa a pilha Inter segura", async () => {
   const layout = await readFile(layoutPath, "utf8");
   const v84 = layout.indexOf('import "./v84-hybrid-executive-theme.css";');
   const v86 = layout.indexOf('import "./v86-shared-ui-system.css";');
 
   assert.ok(v84 >= 0, "V84 deve continuar preservada");
   assert.ok(v86 > v84, "V86 deve prevalecer sobre os estilos compartilhados");
-  assert.match(layout, /import \{ Inter \} from "next\/font\/google"/);
-  assert.match(layout, /variable:\s*"--font-inter"/);
   assert.match(layout, /className="v86-root antialiased"/);
+  assert.match(layout, /Inter, \"Segoe UI Variable\", \"Segoe UI\"/);
+  assert.doesNotMatch(layout, /next\/font\/google/);
   assert.doesNotMatch(layout, /fonts\.googleapis\.com/);
 });
 
