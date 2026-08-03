@@ -1,0 +1,392 @@
+/*
+ * V86 — tipografia e componentes compartilhados.
+ *
+ * Esta camada é carregada depois da V84. Ela melhora a leitura sem substituir
+ * dados, componentes ou regras, e corrige os padrões compartilhados que
+ * aparecem em diversos módulos: KPIs claros, badges e a coluna Prioridade.
+ */
+
+:root {
+  --v86-font: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --v86-ink: #12344d;
+  --v86-copy: #46677a;
+  --v86-muted: #68879b;
+  --v86-line: #d7e5ee;
+  --v86-surface: #ffffff;
+  --v86-canvas: #f4f7f9;
+  --v86-cyan: #38c8e3;
+  --v86-warning: #e8a838;
+  --v86-danger: #d94848;
+  --v86-success: #2fa66f;
+}
+
+/* PARTE 1 — tipografia global, sem importação externa em runtime. */
+html,
+body,
+.v86-root,
+.page-area,
+button,
+input,
+select,
+textarea {
+  font-family: var(--v86-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body,
+.v86-root,
+.page-area {
+  font-size: 15px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.page-area :is(p, small, span, label, td, th) {
+  text-wrap: pretty;
+}
+
+/* Badges compartilhados: altura, padding e contraste consistentes. */
+.page-area :is(
+  .soft-badge,
+  .status-badge,
+  .count-badge,
+  .construction-machine-status,
+  .construction-machine-priority,
+  .v77-approved-category
+) {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+/* Chips dos KPIs escuros: frases longas não ficam esmagadas ou invisíveis. */
+.construction-executive-v2 .construction-kpi-v56 > span {
+  display: flex;
+  width: 100%;
+  min-height: 32px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > small {
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.construction-executive-v2 .construction-kpi-v56 > p {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* PARTE 2 — componente SummaryCard e o padrão antigo mini-kpis usam a mesma base. */
+.v86-summary-card,
+.page-area .mini-kpis article {
+  position: relative;
+  min-width: 0;
+  min-height: 126px;
+  overflow: hidden;
+  border: 1px solid var(--v86-line) !important;
+  border-radius: 20px !important;
+  color: var(--v86-copy) !important;
+  background: var(--v86-surface) !important;
+  box-shadow: 0 10px 28px rgba(20, 47, 63, 0.065) !important;
+  box-sizing: border-box;
+}
+
+.v86-summary-card {
+  display: flex;
+  flex-direction: column;
+  transition: border-color 160ms ease, box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.v86-summary-card:hover {
+  transform: translateY(-1px);
+  border-color: #c4d9e4 !important;
+  box-shadow: 0 14px 34px rgba(20, 47, 63, 0.1) !important;
+}
+
+.v86-summary-card__body {
+  flex: 1;
+  padding: 20px 20px 22px;
+}
+
+.v86-summary-card__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+
+.v86-summary-card__title,
+.page-area .mini-kpis article > span {
+  color: var(--v86-muted) !important;
+  font-size: 11.5px !important;
+  font-weight: 750 !important;
+  line-height: 1.3;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase;
+}
+
+.v86-summary-card__icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid #dbe8ee;
+  border-radius: 10px;
+  color: #47768a;
+  background: #f1f7f9;
+}
+
+.v86-summary-card__value,
+.page-area .mini-kpis article > strong {
+  display: block;
+  color: var(--v86-ink) !important;
+  font-size: clamp(26px, 2.2vw, 34px) !important;
+  font-weight: 800 !important;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.v86-summary-card__description,
+.page-area .mini-kpis article > small {
+  display: block;
+  margin-top: 8px;
+  color: var(--v86-muted) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4;
+}
+
+.v86-summary-card__strip {
+  min-height: 38px;
+  padding: 10px 20px;
+  border-top: 1px solid currentColor;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.v86-summary-card.neutral .v86-summary-card__strip {
+  border-color: #d9e5eb;
+  color: #587486;
+  background: #f3f7f9;
+}
+
+.v86-summary-card.warning .v86-summary-card__strip {
+  border-color: #f0c87b;
+  color: #946c17;
+  background: #fdf8ee;
+}
+
+.v86-summary-card.danger .v86-summary-card__strip {
+  border-color: #ffaaa6;
+  color: #a83431;
+  background: #feeeee;
+}
+
+.v86-summary-card.info .v86-summary-card__strip {
+  border-color: #7bd0e6;
+  color: #176d86;
+  background: #eefafc;
+}
+
+.v86-summary-card.success .v86-summary-card__strip {
+  border-color: #90d9b5;
+  color: #21714f;
+  background: #effaf4;
+}
+
+/* O acento dos mini-kpis fica dentro do raio, nunca abaixo do cartão. */
+.page-area .mini-kpis {
+  align-items: stretch;
+  gap: 16px !important;
+}
+
+.page-area .mini-kpis article {
+  padding: 20px 20px 24px !important;
+  border-bottom-width: 1px !important;
+}
+
+.page-area .mini-kpis article::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  border-radius: 0;
+  background: #cfdee5;
+  content: "";
+  pointer-events: none;
+}
+
+.page-area .mini-kpis article:nth-child(2)::after {
+  background: var(--v86-warning);
+}
+
+.page-area .mini-kpis article:nth-child(3)::after {
+  background: var(--v86-cyan);
+}
+
+.page-area .mini-kpis article:nth-child(4)::after {
+  background: var(--v86-success);
+}
+
+/* PARTE 3 — coluna Prioridade corrigida estruturalmente. */
+.construction-executive-v2 .construction-machine-table-head,
+.construction-executive-v2 .construction-machine-row {
+  grid-template-columns:
+    minmax(190px, 1fr)
+    minmax(240px, 1.45fr)
+    minmax(140px, 0.76fr)
+    minmax(145px, 0.82fr)
+    minmax(132px, 0.62fr)
+    22px !important;
+  column-gap: 10px !important;
+}
+
+.construction-executive-v2 .construction-machine-table-head > span:nth-child(5) {
+  justify-self: stretch;
+  text-align: center;
+}
+
+.construction-executive-v2 .construction-machine-priority {
+  width: 100%;
+  min-width: 108px;
+  max-width: 132px;
+  min-height: 34px;
+  justify-self: stretch;
+  padding: 8px 13px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.construction-executive-v2 .construction-machine-priority.critical {
+  border-color: #f2a7a3;
+  color: #9d2f2f !important;
+  background: #ffe9e7 !important;
+}
+
+.construction-executive-v2 .construction-machine-priority.warning {
+  border-color: #efcb83;
+  color: #845f12 !important;
+  background: #fff5dc !important;
+}
+
+.construction-executive-v2 .construction-machine-priority.success {
+  border-color: #93dab9;
+  color: #1e704e !important;
+  background: #e9f9f0 !important;
+}
+
+.construction-executive-v2 .construction-machine-row > svg {
+  justify-self: center;
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  color: #8bd9e6;
+}
+
+/* A tabela recebe escala levemente maior sem perder densidade operacional. */
+.construction-executive-v2 .construction-machine-table-head {
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.construction-executive-v2 .construction-machine-main strong {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.construction-executive-v2 .construction-machine-main small,
+.construction-executive-v2 .construction-machine-operation > small {
+  font-size: 12px;
+}
+
+.construction-executive-v2 .construction-machine-operation > strong,
+.construction-executive-v2 .construction-machine-stop > strong,
+.construction-executive-v2 .construction-machine-total-impact > strong {
+  font-size: 13px;
+  font-weight: 750;
+}
+
+@container construction-executive (max-width: 1040px) {
+  .construction-executive-v2 .construction-machine-table-head {
+    display: none;
+  }
+
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-areas:
+      "machine-main machine-priority machine-arrow"
+      "machine-operation machine-operation machine-operation"
+      "machine-stop machine-impact machine-impact";
+    grid-template-columns: minmax(0, 1fr) minmax(132px, 150px) 22px !important;
+    gap: 16px 10px !important;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    grid-area: machine-priority;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@container construction-executive (max-width: 620px) {
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-areas:
+      "machine-main machine-arrow"
+      "machine-priority machine-priority"
+      "machine-operation machine-operation"
+      "machine-stop machine-impact";
+    grid-template-columns: minmax(0, 1fr) 22px !important;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    width: fit-content;
+    min-width: 126px;
+    max-width: 100%;
+    justify-self: start;
+  }
+
+  .page-area .mini-kpis {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
