@@ -29,7 +29,6 @@ test("o enquadramento da empresa deixa de usar superfície escura", async () => 
   const css = await readFile(cssPath, "utf8");
 
   assert.match(css, /\.payroll-page \.company-tax-profile \.tax-profile-main/);
-  assert.match(css, /border-left:\s*5px solid #63c7df/);
   assert.match(css, /linear-gradient\(135deg, #eef9fc 0%, #f8fcfd 68%, #ffffff 100%\)/);
   assert.doesNotMatch(css, /#17384d|#225f6c|#6340bf|#6d28d9|#5b21b6/);
 });
@@ -43,8 +42,11 @@ test("o cabeçalho e o processamento usam a paleta administrativa azul", async (
   assert.match(css, /#eaf7fb/);
 });
 
-test("a camada declara explicitamente que não altera estrutura", async () => {
+test("a camada não altera a estrutura da tela", async () => {
   const css = await readFile(cssPath, "utf8");
 
-  assert.doesNotMatch(css, /grid-template-columns|grid-template-areas|position:\s*absolute|width:\s*\d+px|height:\s*\d+px/);
+  assert.doesNotMatch(
+    css,
+    /grid-template-columns|grid-template-areas|position:\s*absolute|width:\s*\d+px|height:\s*\d+px|border-left:/,
+  );
 });
