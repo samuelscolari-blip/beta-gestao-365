@@ -1,4 +1,6 @@
 import "./v65-module-enhancements";
+import { PaymentValidationEngine } from "./payment-validation-engine";
+import { FiscalComplianceGuardian } from "./fiscal-compliance-guardian";
 import {
   validateRecordPayload as validateCoreRecordPayload,
   type RecordValidationIssue,
@@ -50,98 +52,12 @@ function numberValue(payload: Record<string, unknown>, key: string) {
   return Number.isFinite(value) ? value : 0;
 }
 
-function expectedPaymentAmount(
-  moduleId: string,
-  payload: Record<string, unknown>,
-  rule: PaymentEvidenceRule,
-) {
-  if (moduleId === "rentals") {
-    const declaredTotal = numberValue(payload, "totalMonthly");
-    if (declaredTotal > 0) return declaredTotal;
-    return (
-      numberValue(payload, "monthlyRent") +
-      numberValue(payload, "water") +
-      numberValue(payload, "energy") +
-      numberValue(payload, "internet")
-    );
-  }
-  return (
-    rule.expectedKeys
-      .map((key) => numberValue(payload, key))
-      .find((value) => value > 0) || 0
-  );
-}
-
 function validatePaymentEvidence(
   moduleId: string,
   payload: Record<string, unknown>,
 ): RecordValidationIssue[] {
   const rule = paymentEvidenceRules[moduleId];
-  if (!rule) return [];
-
-  const status = normalized(payload[rule.statusKey]);
-  const isPaid = status === "pago" || status === "paga";
-  const isPartial = status === "parcial";
-  if (!isPaid && !isPartial) return [];
-
-  const issues: RecordValidationIssue[] = [];
-  const paidAmount = numberValue(payload, rule.amountKey);
-  const expectedAmount = expectedPaymentAmount(moduleId, payload, rule);
-
-  if (isBlank(payload[rule.dateKey])) {
-    issues.push({
-      field: rule.dateKey,
-      message: isPaid
-        ? "Informe a data do pagamento antes de marcar o item como Pago."
-        : "Informe a data do pagamento parcial.",
-    });
-  }
-  if (paidAmount <= 0) {
-    issues.push({
-      field: rule.amountKey,
-      message: isPaid
-        ? "Informe o valor efetivamente pago antes de marcar o item como Pago."
-        : "Informe o valor efetivamente pago na parcela.",
-    });
-  }
-  if (isBlank(payload[rule.proofKey])) {
-    issues.push({
-      field: rule.proofKey,
-      message: isPaid
-        ? "Anexe ou informe o link do comprovante antes de marcar o item como Pago."
-        : "Anexe ou informe o link do comprovante do pagamento parcial.",
-    });
-  }
-  if (
-    isPaid &&
-    expectedAmount > 0 &&
-    paidAmount < expectedAmount - 0.01
-  ) {
-    issues.push({
-      field: rule.amountKey,
-      message:
-        "Para quitar integralmente, o valor pago não pode ser menor que o previsto. Use o status Parcial se houver saldo remanescente.",
-    });
-  }
-  if (expectedAmount > 0 && paidAmount > expectedAmount + 0.01) {
-    issues.push({
-      field: rule.amountKey,
-      message:
-        "O valor pago não pode superar o valor previsto sem uma correção do lançamento.",
-    });
-  }
-  if (
-    isPartial &&
-    expectedAmount > 0 &&
-    paidAmount >= expectedAmount - 0.01
-  ) {
-    issues.push({
-      field: rule.amountKey,
-      message:
-        "Quando o valor pago alcançar o total previsto, altere a situação para Pago.",
-    });
-  }
-  return issues;
+  return rule ? PaymentValidationEngine.audit(moduleId, payload, rule) : [];
 }
 
 function validateActiveRule(
@@ -168,65 +84,7 @@ function validateActiveRule(
 function validateComplianceWorkflow(
   payload: Record<string, unknown>,
 ): RecordValidationIssue[] {
-  const status = String(payload.status ?? "");
-  const issues: RecordValidationIssue[] = [];
-
-  if (
-    [
-      "Pronto para transmissão",
-      "Transmitido",
-      "Em processamento",
-      "Processado com sucesso",
-    ].includes(status) &&
-    String(payload.validationStatus ?? "") !== "Validado internamente"
-  ) {
-    issues.push({
-      field: "validationStatus",
-      message:
-        "Conclua a validação interna antes de preparar ou confirmar a transmissão.",
-    });
-  }
-
-  if (
-    [
-      "Pronto para transmissão",
-      "Transmitido",
-      "Em processamento",
-      "Processado com sucesso",
-    ].includes(status) &&
-    ["", "Não configurado"].includes(String(payload.certificateType ?? ""))
-  ) {
-    issues.push({
-      field: "certificateType",
-      message:
-        "Informe o certificado ou a procuração responsável pela assinatura.",
-    });
-  }
-
-  if (
-    status === "Rejeitado" &&
-    isBlank(payload.rejectionReason) &&
-    isBlank(payload.notes)
-  ) {
-    issues.push({
-      field: "rejectionReason",
-      message: "Registre o motivo da rejeição para permitir a correção.",
-    });
-  }
-
-  if (
-    !isBlank(payload.dueDate) &&
-    !isBlank(payload.competence) &&
-    String(payload.dueDate) < String(payload.competence)
-  ) {
-    issues.push({
-      field: "dueDate",
-      message:
-        "O prazo operacional não pode ser anterior à competência informada.",
-    });
-  }
-
-  return issues;
+  return FiscalComplianceGuardian.verify(payload);
 }
 
 function deduplicate(issues: RecordValidationIssue[]) {

@@ -4,6 +4,10 @@ import test from "node:test";
 
 const modules = await readFile("app/lib/modules.ts", "utf8");
 const validation = await readFile("app/lib/record-validation.ts", "utf8");
+const paymentEngine = await readFile(
+  "app/lib/payment-validation-engine.ts",
+  "utf8",
+);
 const spreadsheet = await readFile("app/lib/spreadsheet.ts", "utf8");
 const app = await readFile("app/components/BetaApp.tsx", "utf8");
 const layout = await readFile("app/layout.tsx", "utf8");
@@ -11,8 +15,10 @@ const css = await readFile("app/v60.css", "utf8");
 
 test("V60 exige comprovante, data e valor para pagamentos confirmados", () => {
   assert.match(validation, /paymentEvidenceRules/);
-  assert.match(validation, /Anexe ou informe o link do comprovante/);
-  assert.match(validation, /Informe o valor efetivamente pago/);
+  assert.match(validation, /PaymentValidationEngine\.audit/);
+  assert.match(paymentEngine, /Anexe ou informe o link do comprovante/);
+  assert.match(paymentEngine, /Informe o valor efetivamente pago/);
+  assert.match(paymentEngine, /validHttpUrl/);
   assert.match(validation, /purchases: { statusKey: "paymentStatus"/);
   assert.match(modules, /Comprovante de pagamento da fatura/);
   assert.match(modules, /Comprovante do pagamento da locação/);
