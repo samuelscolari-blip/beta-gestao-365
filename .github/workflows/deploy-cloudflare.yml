@@ -3,6 +3,9 @@ name: Publicar no Cloudflare
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+    types: [closed]
   workflow_dispatch:
 
 permissions:
@@ -14,8 +17,16 @@ concurrency:
 
 jobs:
   validate-and-deploy:
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'pull_request' &&
+        github.event.pull_request.merged == true &&
+        github.event.pull_request.head.repo.full_name == github.repository
+      )
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     environment:
       name: production
       url: https://beta-gestao-365.scolarisamuel.workers.dev/
@@ -23,9 +34,12 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       WRANGLER_SEND_METRICS: "false"
+      TARGET_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.merge_commit_sha || github.sha }}
     steps:
-      - name: Baixar código
+      - name: Baixar exatamente a revisão a publicar
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_SHA }}
 
       - name: Preparar Node.js
         uses: actions/setup-node@v4
@@ -33,17 +47,32 @@ jobs:
           node-version: 22.19.0
           cache: npm
 
-      - name: Confirmar credenciais protegidas
+      - name: Confirmar credenciais e revisão
         shell: bash
         run: |
           test -n "$CLOUDFLARE_API_TOKEN"
           test -n "$CLOUDFLARE_ACCOUNT_ID"
+          test -n "$TARGET_SHA"
+          git rev-parse HEAD
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
 
       - name: Instalar dependências travadas
         run: npm ci
 
       - name: Verificar qualidade do código
         run: npm run lint
+
+      - name: Registrar identidade da implantação
+        shell: bash
+        run: |
+          mkdir -p public
+          {
+            echo "Beta Gestão 365"
+            echo "environment=production"
+            echo "commit=$TARGET_SHA"
+            echo "event=${{ github.event_name }}"
+            echo "deployed_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } > public/deployment-version.txt
 
       - name: Compilar e executar testes
         run: npm test
@@ -57,17 +86,19 @@ jobs:
       - name: Publicar o Worker de produção
         run: npm run deploy:cloudflare
 
-      - name: Verificar endereço publicado
+      - name: Confirmar o commit exato publicado
         shell: bash
         run: |
-          for attempt in 1 2 3 4 5; do
-            status="$(curl --silent --show-error --location --output /dev/null --write-out '%{http_code}' --max-time 30 'https://beta-gestao-365.scolarisamuel.workers.dev/')"
-            if [[ "$status" == "200" ]]; then
+          expected="commit=$TARGET_SHA"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            marker="$(curl --silent --show-error --location --max-time 30 'https://beta-gestao-365.scolarisamuel.workers.dev/deployment-version.txt' || true)"
+            if grep --fixed-strings --quiet "$expected" <<< "$marker"; then
+              echo "$marker"
               exit 0
             fi
             sleep 5
           done
-          echo "O Worker não respondeu HTTP 200 após a publicação." >&2
+          echo "A Cloudflare respondeu, mas não publicou o commit esperado: $TARGET_SHA" >&2
           exit 1
 
       - name: Confirmar interface em navegador real
@@ -75,3 +106,14 @@ jobs:
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
           DIAGNOSTIC_WAIT_MS: "45000"
+
+      - name: Registrar resumo da publicação
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Publicação Cloudflare"
+            echo "- Evento: ${{ github.event_name }}"
+            echo "- Commit esperado: \`$TARGET_SHA\`"
+            echo "- Worker: https://beta-gestao-365.scolarisamuel.workers.dev/"
+          } >> "$GITHUB_STEP_SUMMARY"
