@@ -56,13 +56,26 @@ test("publicação baixa e confirma exatamente o commit esperado", async () => {
   assert.match(content, /deployment-version\.txt/);
 });
 
+test("Cloudflare recebe o título do commit sem abandonar o artefato Vinext", async () => {
+  const content = await deployWorkflow();
+
+  assert.match(content, /git log -1 --pretty=%s/);
+  assert.match(content, /DEPLOY_MESSAGE=\$deploy_message/);
+  assert.match(content, /test -f dist\/server\/wrangler\.json/);
+  assert.match(content, /npx wrangler deploy/);
+  assert.match(content, /--config dist\/server\/wrangler\.json/);
+  assert.match(content, /--message "\$DEPLOY_MESSAGE"/);
+  assert.match(content, /echo "message=\$DEPLOY_MESSAGE"/);
+  assert.doesNotMatch(content, /github\.event\.head_commit\.message/);
+});
+
 test("build, testes, D1 e diagnóstico precedem a conclusão", async () => {
   const content = await deployWorkflow();
 
   const lint = content.indexOf("npm run lint");
   const tests = content.indexOf("npm test");
   const migration = content.indexOf("npm run db:migrate:remote");
-  const deploy = content.indexOf("npm run deploy:cloudflare");
+  const deploy = content.indexOf("npx wrangler deploy");
   const marker = content.indexOf("Confirmar o commit exato publicado");
   const browser = content.indexOf("npm run diagnose:live");
 
@@ -74,14 +87,18 @@ test("build, testes, D1 e diagnóstico precedem a conclusão", async () => {
   assert.ok(browser > marker);
 });
 
-test("a validação da PR executa lint antes de build e testes", async () => {
+test("a validação da PR testa o comando descrito sem publicar", async () => {
   const content = await validationWorkflow();
 
   const lint = content.indexOf("npm run lint");
   const build = content.indexOf("npm run build");
+  const dryRun = content.indexOf("--dry-run");
   const tests = content.indexOf("node --test tests/*.test.mjs");
 
   assert.ok(lint > -1);
   assert.ok(build > lint);
-  assert.ok(tests > build);
+  assert.ok(dryRun > build);
+  assert.ok(tests > dryRun);
+  assert.match(content, /--config dist\/server\/wrangler\.json/);
+  assert.match(content, /--message "\$deploy_message"/);
 });
