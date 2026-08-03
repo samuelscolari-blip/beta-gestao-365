@@ -1,0 +1,176 @@
+/*
+ * V92 — redesenho do extrato "Dados do pagamento" no Cálculo de Folha.
+ *
+ * Esta camada não altera dados, cálculos, colunas ou comportamento. Apenas
+ * eleva a apresentação do extrato (cabeçalho, legenda, tabela e barra de
+ * totais) para uma linguagem visual mais profissional, seguindo a paleta
+ * azul/petróleo já padronizada na V88.
+ *
+ * Não estiliza ".statement-rules" nem ".payroll-warnings": a V91 já oculta
+ * os dois blocos (docs/v91-ui-cleanup.md), então essa camada não duplica
+ * regras para elementos que permanecem invisíveis.
+ *
+ * O seletor raiz exclui explicitamente ".termination-memory" para não
+ * alcançar o extrato de Rescisão, que tem paleta e contexto próprios.
+ */
+
+.payment-statement:not(.termination-memory) {
+  border-color: var(--payroll-line, #cfe2ea);
+  box-shadow: 0 10px 26px rgba(15, 52, 71, 0.06);
+}
+
+.payment-statement:not(.termination-memory) .card-heading {
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--payroll-line, #cfe2ea);
+  background: linear-gradient(180deg, #f8fcfd 0%, #ffffff 100%);
+}
+
+.payment-statement:not(.termination-memory) .card-heading .eyebrow {
+  color: var(--payroll-accent, #0f6f8c);
+}
+
+.payment-statement:not(.termination-memory) .card-heading h2 {
+  color: var(--payroll-ink, #12344d);
+  font-size: 18px;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend {
+  gap: 8px;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend span::before {
+  content: "";
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend .earning {
+  color: #2662b8;
+  background: #e8f2ff;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend .deduction {
+  color: #227a4b;
+  background: #e5f7ea;
+}
+
+.payment-statement:not(.termination-memory) .statement-legend .employer {
+  color: #97710f;
+  background: #fdf5df;
+}
+
+.payment-statement:not(.termination-memory) th {
+  padding: 13px 14px;
+  color: var(--payroll-muted, #58758a);
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.07em;
+}
+
+.payment-statement:not(.termination-memory) td {
+  padding: 13px 14px;
+  color: var(--payroll-ink, #12344d);
+  font-size: 12px;
+}
+
+.payment-statement:not(.termination-memory) td strong {
+  font-weight: 700;
+}
+
+.payment-statement:not(.termination-memory) .statement-row {
+  --kind-accent: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.payment-statement:not(.termination-memory) .statement-row td:first-child {
+  box-shadow: inset 3px 0 0 var(--kind-accent);
+}
+
+.payment-statement:not(.termination-memory) .statement-row.earning {
+  --kind-accent: #3672c9;
+  background: #f6faff;
+}
+
+.payment-statement:not(.termination-memory) .statement-row.deduction {
+  --kind-accent: #2f9e56;
+  background: #f4fbf5;
+}
+
+.payment-statement:not(.termination-memory) .statement-row.employer,
+.payment-statement:not(.termination-memory) .statement-row.provision {
+  --kind-accent: #c9a227;
+  background: #fefcf1;
+}
+
+.payment-statement:not(.termination-memory) .statement-row:hover {
+  filter: saturate(1.2) brightness(0.985);
+}
+
+.payment-statement:not(.termination-memory) tfoot td {
+  padding: 18px 14px;
+  border-top: 2px solid var(--payroll-line, #cfe2ea);
+  background: #f7fafb;
+  font-size: 13px;
+}
+
+.payment-statement:not(.termination-memory) tfoot td:first-child {
+  color: var(--payroll-muted, #58758a);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.payment-statement:not(.termination-memory) tfoot td:first-child strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--payroll-ink, #12344d);
+  font-size: 13px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.payment-statement:not(.termination-memory) tfoot td:nth-child(3) {
+  color: #9a5412;
+}
+
+.payment-statement:not(.termination-memory) tfoot td:last-child {
+  background: linear-gradient(
+    135deg,
+    var(--payroll-accent-strong, #0b526a),
+    var(--payroll-accent, #0f6f8c)
+  );
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.payment-statement:not(.termination-memory) tfoot td:last-child strong {
+  color: #ffffff;
+  font-size: 19px;
+}
+
+@media (max-width: 720px) {
+  .payment-statement:not(.termination-memory) tfoot td {
+    padding: 14px 12px;
+    font-size: 12px;
+  }
+
+  .payment-statement:not(.termination-memory) tfoot td:last-child strong {
+    font-size: 16px;
+  }
+}
