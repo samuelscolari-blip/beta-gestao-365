@@ -1,9 +1,10 @@
 /*
- * V86 — correção responsiva da tabela de máquinas.
+ * V87 — reparo estrutural da tabela de máquinas.
  *
- * A largura disponível é determinada pelo painel, não pelo viewport. A própria
- * tabela passa a ser o contêiner de consulta. Um fallback de notebook protege
- * navegadores em que a consulta interna não vence regras históricas da grade.
+ * A V86 deixou os nomes de grid-area ativos também no desktop amplo. Sem um
+ * grid-template-areas correspondente, o navegador criou áreas implícitas e
+ * sobrepôs os campos da frota. Nesta camada, as áreas existem somente quando a
+ * linha realmente muda para o layout responsivo.
  */
 
 .construction-executive-v2 .construction-machine-table {
@@ -32,7 +33,7 @@
   word-break: normal;
 }
 
-/* Grade ampla com mínimos conservadores. */
+/* Desktop amplo: seis colunas reais, sem áreas nomeadas ou posicionamento implícito. */
 .construction-executive-v2 .construction-machine-table-head,
 .construction-executive-v2 .construction-machine-row {
   grid-template-columns:
@@ -45,7 +46,10 @@
   column-gap: 8px !important;
 }
 
-/* Reorganização compartilhada por container e pelo fallback de notebook. */
+/*
+ * Área responsiva compartilhada. As atribuições grid-area estão deliberadamente
+ * dentro do escopo: fora dele, o fluxo normal das seis colunas permanece ativo.
+ */
 @container v86-machine-table (max-width: 1040px) {
   .construction-executive-v2 .construction-machine-table-head {
     display: none;
@@ -54,22 +58,50 @@
   .construction-executive-v2 .construction-machine-row {
     display: grid;
     grid-template-areas:
-      "machine priority arrow"
-      "operation operation operation"
-      "stop impact impact";
+      "machine-main machine-priority machine-arrow"
+      "machine-operation machine-operation machine-operation"
+      "machine-stop machine-impact machine-impact";
     grid-template-columns: minmax(0, 1fr) minmax(118px, 140px) 18px !important;
     gap: 14px 10px !important;
     width: 100%;
     min-width: 0;
     max-width: 100%;
+    align-items: start;
     box-sizing: border-box;
+  }
+
+  .construction-executive-v2 .construction-machine-main {
+    grid-area: machine-main;
+  }
+
+  .construction-executive-v2 .construction-machine-operation {
+    grid-area: machine-operation;
+  }
+
+  .construction-executive-v2 .construction-machine-stop {
+    grid-area: machine-stop;
+  }
+
+  .construction-executive-v2 .construction-machine-total-impact {
+    grid-area: machine-impact;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    grid-area: machine-priority;
+    width: 100%;
+    min-width: 0;
+    max-width: 140px;
+    justify-self: stretch;
+  }
+
+  .construction-executive-v2 .construction-machine-row > svg {
+    grid-area: machine-arrow;
+    justify-self: center;
+    align-self: center;
   }
 }
 
-/*
- * O workspace real possui cerca de 900 px em telas de 1366 px por causa da
- * barra lateral. Esta proteção não depende da resolução da consulta interna.
- */
+/* Fallback para notebooks em navegadores que não apliquem a consulta interna. */
 @media (max-width: 1440px) {
   .construction-executive-v2 .construction-machine-table-head {
     display: none !important;
@@ -78,74 +110,77 @@
   .construction-executive-v2 .construction-machine-row {
     display: grid !important;
     grid-template-areas:
-      "machine priority arrow"
-      "operation operation operation"
-      "stop impact impact" !important;
+      "machine-main machine-priority machine-arrow"
+      "machine-operation machine-operation machine-operation"
+      "machine-stop machine-impact machine-impact" !important;
     grid-template-columns: minmax(0, 1fr) minmax(118px, 140px) 18px !important;
     gap: 14px 10px !important;
     width: 100% !important;
     min-width: 0 !important;
     max-width: 100% !important;
+    align-items: start;
     box-sizing: border-box;
   }
-}
 
-/* Áreas explícitas: todos os seis filhos permanecem dentro da grade. */
-.construction-executive-v2 .construction-machine-main {
-  grid-area: machine;
-  min-width: 0;
-}
+  .construction-executive-v2 .construction-machine-main {
+    grid-area: machine-main;
+  }
 
-.construction-executive-v2 .construction-machine-operation {
-  grid-area: operation;
-  min-width: 0;
-}
+  .construction-executive-v2 .construction-machine-operation {
+    grid-area: machine-operation;
+  }
 
-.construction-executive-v2 .construction-machine-stop {
-  grid-area: stop;
-  min-width: 0;
-}
+  .construction-executive-v2 .construction-machine-stop {
+    grid-area: machine-stop;
+  }
 
-.construction-executive-v2 .construction-machine-total-impact {
-  grid-area: impact;
-  min-width: 0;
-}
+  .construction-executive-v2 .construction-machine-total-impact {
+    grid-area: machine-impact;
+  }
 
-.construction-executive-v2 .construction-machine-priority {
-  grid-area: priority;
-  width: 100%;
-  min-width: 0;
-  max-width: 140px;
-  justify-self: stretch;
-}
+  .construction-executive-v2 .construction-machine-priority {
+    grid-area: machine-priority;
+    width: 100%;
+    min-width: 0;
+    max-width: 140px;
+    justify-self: stretch;
+  }
 
-.construction-executive-v2 .construction-machine-row > svg {
-  grid-area: arrow;
-  justify-self: center;
-  align-self: center;
+  .construction-executive-v2 .construction-machine-row > svg {
+    grid-area: machine-arrow;
+    justify-self: center;
+    align-self: center;
+  }
 }
 
 @container v86-machine-table (max-width: 620px) {
   .construction-executive-v2 .construction-machine-row {
     grid-template-areas:
-      "machine arrow"
-      "priority priority"
-      "operation operation"
-      "stop stop"
-      "impact impact";
+      "machine-main machine-arrow"
+      "machine-priority machine-priority"
+      "machine-operation machine-operation"
+      "machine-stop machine-stop"
+      "machine-impact machine-impact";
     grid-template-columns: minmax(0, 1fr) 18px !important;
     gap: 12px 8px !important;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    width: fit-content;
+    min-width: 126px;
+    max-width: 100%;
+    justify-self: start;
   }
 }
 
 @media (max-width: 720px) {
   .construction-executive-v2 .construction-machine-row {
     grid-template-areas:
-      "machine arrow"
-      "priority priority"
-      "operation operation"
-      "stop stop"
-      "impact impact" !important;
+      "machine-main machine-arrow"
+      "machine-priority machine-priority"
+      "machine-operation machine-operation"
+      "machine-stop machine-stop"
+      "machine-impact machine-impact" !important;
     grid-template-columns: minmax(0, 1fr) 18px !important;
     gap: 12px 8px !important;
   }
