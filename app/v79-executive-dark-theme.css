@@ -1,0 +1,637 @@
+/*
+ * V79 — tema executivo global inspirado no painel da obra.
+ *
+ * Esta camada é carregada por último e atua somente sobre a estrutura visual
+ * existente. Não cria dados, não troca componentes e não altera regras de
+ * negócio, permissões, formulários, tabelas ou cálculos.
+ */
+
+:root {
+  --v79-canvas: #041421;
+  --v79-shell: #051827;
+  --v79-surface: #061c2e;
+  --v79-card: #0b2a44;
+  --v79-card-soft: #0e304b;
+  --v79-card-strong: #103552;
+  --v79-line: #143c5d;
+  --v79-line-soft: rgba(123, 208, 230, 0.16);
+  --v79-title: #ffffff;
+  --v79-text: #d4e8f0;
+  --v79-muted: #8aaebf;
+  --v79-cyan: #7bd0e6;
+  --v79-cyan-strong: #38c8e3;
+  --v79-green: #65dda7;
+  --v79-orange: #e8a838;
+  --v79-red: #ff7972;
+  --v79-shadow: 0 18px 44px rgba(0, 10, 19, 0.28);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--v79-canvas) !important;
+}
+
+body {
+  color: var(--v79-text);
+}
+
+.app-shell {
+  background:
+    radial-gradient(circle at 82% 3%, rgba(56, 200, 227, 0.08), transparent 25%),
+    var(--v79-canvas) !important;
+}
+
+.page-area {
+  min-width: 0;
+  color: var(--v79-text);
+  background:
+    radial-gradient(circle at 92% 0%, rgba(123, 208, 230, 0.055), transparent 26%),
+    linear-gradient(180deg, #051827 0%, #041421 100%) !important;
+}
+
+.page-stack,
+.integrated-view-stack {
+  min-width: 0;
+  gap: 24px !important;
+}
+
+/* Superfícies principais de todos os módulos. */
+.page-area :is(
+  .module-heading,
+  .content-card,
+  .table-card,
+  .deadline-card,
+  .management-center,
+  .batch-payroll-panel,
+  .capability-card,
+  .compliance-events,
+  .compliance-rules,
+  .construction-compliance-strip,
+  .tax-profile-card,
+  .admin-card
+) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text);
+  background:
+    radial-gradient(circle at 94% 0%, rgba(123, 208, 230, 0.07), transparent 31%),
+    linear-gradient(145deg, var(--v79-surface) 0%, #082239 100%) !important;
+  box-shadow: var(--v79-shadow) !important;
+}
+
+.page-area :is(.content-card, .table-card, .deadline-card, .management-center) {
+  border-radius: 22px !important;
+  overflow: hidden;
+}
+
+/* Cabeçalho padrão dos módulos. */
+.page-area .module-heading {
+  padding: clamp(22px, 2.5vw, 32px) !important;
+  border-radius: 24px !important;
+}
+
+.page-area .module-heading::before,
+.page-area .module-heading::after {
+  opacity: 0.35;
+}
+
+.page-area .module-big-icon {
+  border: 1px solid rgba(123, 208, 230, 0.2) !important;
+  color: var(--v79-cyan) !important;
+  background: linear-gradient(145deg, #0e304b, #0a263d) !important;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06) !important;
+}
+
+.page-area .module-heading :is(h1, h2) {
+  color: var(--v79-title) !important;
+  letter-spacing: -0.035em;
+}
+
+.page-area .module-heading p {
+  max-width: 780px;
+  color: var(--v79-muted) !important;
+}
+
+.page-area .eyebrow,
+.page-area .module-heading .eyebrow,
+.page-area .card-heading .eyebrow {
+  color: var(--v79-cyan) !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.13em !important;
+}
+
+/* Botões principais e secundários. */
+.page-area :is(.button.primary, .primary-button, .module-primary-action) {
+  border-color: rgba(123, 208, 230, 0.7) !important;
+  color: #041421 !important;
+  background: var(--v79-cyan) !important;
+  box-shadow: 0 0 18px rgba(123, 208, 230, 0.18) !important;
+}
+
+.page-area :is(.button.primary, .primary-button, .module-primary-action):hover {
+  background: #98dfef !important;
+}
+
+.page-area :is(.button.secondary, .secondary-button, .ghost-button) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+}
+
+/* KPIs reaproveitam os valores dinâmicos existentes. */
+.page-area .mini-kpis {
+  gap: 16px !important;
+}
+
+.page-area .mini-kpis article {
+  min-height: 138px;
+  padding: 22px !important;
+  border: 1px solid var(--v79-line) !important;
+  border-radius: 20px !important;
+  color: var(--v79-text);
+  background: linear-gradient(145deg, var(--v79-card) 0%, #09263e 100%) !important;
+  box-shadow: 0 12px 28px rgba(0, 10, 19, 0.2) !important;
+}
+
+.page-area .mini-kpis article:nth-child(2) {
+  border-bottom: 4px solid var(--v79-orange) !important;
+}
+
+.page-area .mini-kpis article:nth-child(3) {
+  border-bottom: 4px solid var(--v79-cyan-strong) !important;
+}
+
+.page-area .mini-kpis article:nth-child(4) {
+  border-bottom: 4px solid var(--v79-green) !important;
+}
+
+.page-area .mini-kpis span {
+  color: #a1c4d4 !important;
+}
+
+.page-area .mini-kpis strong {
+  color: var(--v79-title) !important;
+}
+
+.page-area .mini-kpis small {
+  color: var(--v79-muted) !important;
+}
+
+/* Instrução de uso. */
+.page-area .module-guide {
+  padding: 18px 20px !important;
+  border: 1px solid #164166 !important;
+  border-radius: 16px !important;
+  color: var(--v79-text);
+  background: linear-gradient(145deg, var(--v79-card-soft), #0a2942) !important;
+}
+
+.page-area .module-guide .guide-icon {
+  border: 1px solid rgba(123, 208, 230, 0.18) !important;
+  color: var(--v79-cyan) !important;
+  background: #132f41 !important;
+}
+
+.page-area .module-guide strong {
+  color: #a1c4d4 !important;
+}
+
+.page-area .module-guide p {
+  color: var(--v79-muted) !important;
+}
+
+/* Barras, filtros e campos de formulário. */
+.page-area :is(.table-toolbar, .card-heading, .integration-table-title) {
+  border-color: rgba(123, 208, 230, 0.12) !important;
+  background: rgba(4, 20, 33, 0.22) !important;
+}
+
+.page-area :is(input, select, textarea) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background: #081f33 !important;
+  box-shadow: none !important;
+}
+
+.page-area :is(input, select, textarea)::placeholder {
+  color: #6f95a7 !important;
+}
+
+.page-area :is(input, select, textarea):focus {
+  border-color: var(--v79-cyan) !important;
+  outline: 3px solid rgba(123, 208, 230, 0.12) !important;
+}
+
+.page-area select option {
+  color: var(--v79-text);
+  background: #081f33;
+}
+
+.page-area :is(.search-box, .filter-box) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-muted) !important;
+  background: #081f33 !important;
+}
+
+/* Tabelas e listas de registros. */
+.page-area .table-wrap {
+  border-color: rgba(123, 208, 230, 0.1) !important;
+  background: #071c2e !important;
+}
+
+.page-area table {
+  color: var(--v79-text) !important;
+  background: transparent !important;
+}
+
+.page-area thead,
+.page-area th {
+  border-color: rgba(123, 208, 230, 0.13) !important;
+  color: #a1c4d4 !important;
+  background: #0d2a43 !important;
+}
+
+.page-area td {
+  border-color: rgba(123, 208, 230, 0.1) !important;
+  color: #c8e0e9 !important;
+  background: rgba(6, 28, 46, 0.72) !important;
+}
+
+.page-area tbody tr:hover td {
+  background: #0d304c !important;
+}
+
+.page-area :is(.soft-badge, .status-badge, .count-badge) {
+  border-color: rgba(123, 208, 230, 0.15) !important;
+  color: #b8d7e2 !important;
+  background: rgba(123, 208, 230, 0.08) !important;
+}
+
+/* Agenda financeira — elimina o grande cartão branco da imagem enviada. */
+.page-area .deadline-heading {
+  border-bottom: 1px solid rgba(123, 208, 230, 0.12) !important;
+  background: linear-gradient(145deg, #082239, #061c2e) !important;
+}
+
+.page-area .deadline-heading h2 {
+  color: var(--v79-title) !important;
+}
+
+.page-area .deadline-heading p {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .deadline-filter {
+  border-color: var(--v79-line) !important;
+  background: #081f33 !important;
+}
+
+.page-area .deadline-filter button {
+  color: #9abcca !important;
+  background: transparent !important;
+}
+
+.page-area .deadline-filter button.active {
+  color: #041421 !important;
+  background: var(--v79-cyan) !important;
+}
+
+.page-area .deadline-list {
+  background: #061a2b !important;
+}
+
+.page-area .deadline-row {
+  border-color: rgba(123, 208, 230, 0.1) !important;
+  color: var(--v79-text) !important;
+  background: #0a263d !important;
+}
+
+.page-area .deadline-row:hover {
+  background: #0e304b !important;
+}
+
+.page-area .deadline-row.overdue {
+  border-left-color: var(--v79-red) !important;
+  background: linear-gradient(90deg, rgba(255, 121, 114, 0.15), #0a263d 25%) !important;
+}
+
+.page-area .deadline-row.today,
+.page-area .deadline-row.urgent {
+  border-left-color: var(--v79-orange) !important;
+  background: linear-gradient(90deg, rgba(232, 168, 56, 0.13), #0a263d 25%) !important;
+}
+
+.page-area .deadline-row.upcoming {
+  border-left-color: var(--v79-cyan-strong) !important;
+}
+
+.page-area .deadline-row :is(strong, b) {
+  color: var(--v79-title) !important;
+}
+
+.page-area .deadline-row :is(small, em) {
+  color: var(--v79-muted) !important;
+}
+
+/* Painel financeiro e mapa executivo — uma superfície contínua. */
+.page-area .consolidated-card {
+  padding: 0 !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(123, 208, 230, 0.09), transparent 28%),
+    linear-gradient(145deg, #061c2e, #08243a) !important;
+}
+
+.page-area .consolidated-heading {
+  padding: clamp(24px, 3vw, 34px) !important;
+  border-bottom: 1px solid rgba(123, 208, 230, 0.11) !important;
+  background: transparent !important;
+}
+
+.page-area .consolidated-heading :is(h1, h2) {
+  color: var(--v79-title) !important;
+}
+
+.page-area .consolidated-heading p {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .consolidated-kpis {
+  padding: 18px 22px 20px !important;
+  background: transparent !important;
+}
+
+.page-area .consolidated-kpis article {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background: linear-gradient(145deg, var(--v79-card), #09263e) !important;
+}
+
+.page-area .consolidated-kpis article :is(small, p) {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .consolidated-kpis article strong {
+  color: var(--v79-title) !important;
+}
+
+.page-area .executive-cost-layout {
+  padding: 0 22px 24px !important;
+  background: transparent !important;
+}
+
+.page-area .cost-composition-card {
+  border-color: var(--v79-line) !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(56, 200, 227, 0.09), transparent 32%),
+    linear-gradient(145deg, #07213a, #0a3150) !important;
+  box-shadow: 0 16px 34px rgba(0, 10, 19, 0.24) !important;
+}
+
+.page-area .cost-chart-heading,
+.page-area .cost-bar-legend {
+  border-color: rgba(123, 208, 230, 0.14) !important;
+  color: #a1c4d4 !important;
+  background: transparent !important;
+}
+
+.page-area .cost-chart-heading strong {
+  color: var(--v79-title) !important;
+}
+
+.page-area .cost-chart-heading p,
+.page-area .cost-bar-label small,
+.page-area .cost-bar-value small {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .cost-total-highlight {
+  border-color: var(--v79-orange) !important;
+  color: var(--v79-title) !important;
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.15), rgba(123, 208, 230, 0.09)) !important;
+}
+
+.page-area .cost-bar-row {
+  border-color: rgba(123, 208, 230, 0.13) !important;
+  color: var(--v79-text) !important;
+  background: rgba(11, 42, 68, 0.86) !important;
+}
+
+.page-area .cost-bar-row:hover,
+.page-area .cost-bar-row.leader {
+  background: #0e3655 !important;
+}
+
+.page-area .cost-bar-label b,
+.page-area .cost-bar-value strong {
+  color: var(--v79-title) !important;
+}
+
+.page-area .cost-bar-track {
+  border-color: rgba(123, 208, 230, 0.18) !important;
+  background: rgba(197, 226, 237, 0.12) !important;
+}
+
+/* Central de decisões: sem cartões brancos, mantendo cores semânticas. */
+.page-area .management-overview {
+  background: #061a2b !important;
+}
+
+.page-area .management-overview article {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background: linear-gradient(145deg, var(--v79-card), #09263e) !important;
+}
+
+.page-area .management-overview article.validation {
+  border-color: rgba(232, 168, 56, 0.5) !important;
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.14), #09263e 68%) !important;
+}
+
+.page-area .management-overview article.rejected {
+  border-color: rgba(255, 121, 114, 0.48) !important;
+  background: linear-gradient(145deg, rgba(255, 121, 114, 0.13), #09263e 68%) !important;
+}
+
+.page-area .management-overview article.approved {
+  border-color: rgba(101, 221, 167, 0.48) !important;
+  background: linear-gradient(145deg, rgba(101, 221, 167, 0.13), #09263e 68%) !important;
+}
+
+.page-area .management-overview article :is(small, em) {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .management-overview article strong {
+  color: var(--v79-title) !important;
+}
+
+.page-area .management-tabs,
+.page-area .management-list,
+.page-area .management-footer {
+  border-color: rgba(123, 208, 230, 0.12) !important;
+  background: #061a2b !important;
+}
+
+.page-area .management-tabs button {
+  color: #9abcca !important;
+}
+
+.page-area .management-tabs button.active {
+  color: var(--v79-cyan) !important;
+  border-bottom-color: var(--v79-cyan) !important;
+}
+
+/* Cabeçalho da obra — corrige especificamente a faixa branca mostrada. */
+.page-area .construction-executive-v2 {
+  border-color: var(--v79-line) !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(56, 200, 227, 0.1), transparent 31%),
+    linear-gradient(145deg, #061c2e, #082f50) !important;
+}
+
+.page-area .construction-executive-header {
+  border-color: rgba(123, 208, 230, 0.13) !important;
+  color: var(--v79-text) !important;
+  background: linear-gradient(145deg, #08243a, #0c3552) !important;
+}
+
+.page-area .construction-executive-header :is(h1, h2) {
+  color: var(--v79-title) !important;
+}
+
+.page-area .construction-executive-header p {
+  color: var(--v79-muted) !important;
+}
+
+.page-area .construction-executive-header :is(select, button) {
+  border-color: #1c4a6c !important;
+  color: var(--v79-text) !important;
+  background: #0b2a44 !important;
+}
+
+/* Formulários, modal, detalhes e confirmações também seguem o padrão. */
+.modal-backdrop,
+.detail-backdrop,
+.confirm-backdrop {
+  background: rgba(1, 10, 18, 0.78) !important;
+  backdrop-filter: blur(8px);
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(123, 208, 230, 0.075), transparent 29%),
+    linear-gradient(145deg, #061c2e, #08243a) !important;
+  box-shadow: 0 28px 70px rgba(0, 8, 15, 0.5) !important;
+}
+
+:is(.modal-header, .detail-header, .modal-footer) {
+  border-color: rgba(123, 208, 230, 0.12) !important;
+  background: transparent !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(h1, h2, h3, strong) {
+  color: var(--v79-title) !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(p, small, label, dt) {
+  color: var(--v79-muted) !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(input, select, textarea) {
+  border-color: var(--v79-line) !important;
+  color: var(--v79-text) !important;
+  background: #081f33 !important;
+}
+
+/* Telas especializadas que ainda possuíam cartões claros. */
+.page-area :is(
+  .compliance-kpis article,
+  .context-grid article,
+  .pipeline-steps article,
+  .capability-list article,
+  .batch-payroll-intro,
+  .batch-controls,
+  .compliance-event-list > button,
+  .rule-version-list > button,
+  .compliance-rules footer
+) {
+  border-color: rgba(123, 208, 230, 0.11) !important;
+  color: var(--v79-text) !important;
+  background: rgba(11, 42, 68, 0.78) !important;
+}
+
+.page-area :is(
+  .compliance-kpis strong,
+  .context-grid h3,
+  .pipeline-steps strong,
+  .capability-list strong,
+  .batch-payroll-intro h2,
+  .compliance-event-list strong,
+  .rule-version-list strong
+) {
+  color: var(--v79-title) !important;
+}
+
+.page-area :is(
+  .compliance-kpis small,
+  .compliance-kpis p,
+  .context-grid p,
+  .pipeline-steps small,
+  .capability-list p,
+  .capability-list small,
+  .batch-payroll-intro p,
+  .compliance-event-list small,
+  .rule-version-list small
+) {
+  color: var(--v79-muted) !important;
+}
+
+/* Estados vazios mantêm contraste e não parecem áreas quebradas. */
+.page-area :is(.empty-state, .management-empty, .machine-productivity-empty) {
+  border-color: rgba(123, 208, 230, 0.22) !important;
+  color: var(--v79-text) !important;
+  background:
+    repeating-linear-gradient(135deg, rgba(123, 208, 230, 0.018) 0 10px, transparent 10px 20px),
+    rgba(11, 42, 68, 0.52) !important;
+}
+
+.page-area :is(.empty-state, .management-empty, .machine-productivity-empty) p,
+.page-area :is(.empty-state, .management-empty, .machine-productivity-empty) small {
+  color: var(--v79-muted) !important;
+}
+
+@media (max-width: 980px) {
+  .page-area .module-heading,
+  .page-area .construction-executive-header {
+    align-items: stretch !important;
+  }
+
+  .page-area .consolidated-kpis,
+  .page-area .executive-cost-layout {
+    padding-inline: 16px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-stack,
+  .integrated-view-stack {
+    gap: 16px !important;
+  }
+
+  .page-area .module-heading,
+  .page-area .consolidated-heading {
+    padding: 20px !important;
+  }
+
+  .page-area .mini-kpis article {
+    min-height: 118px;
+    padding: 18px !important;
+  }
+
+  .page-area :is(.content-card, .table-card, .deadline-card, .management-center) {
+    border-radius: 17px !important;
+  }
+}
