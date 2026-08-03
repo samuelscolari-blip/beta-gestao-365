@@ -123,6 +123,12 @@ jobs:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
           DIAGNOSTIC_WAIT_MS: "45000"
 
+      - name: Confirmar frota em desktop largo
+        run: node scripts/live-fleet-wide-diagnostic.mjs
+        env:
+          DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
+          DIAGNOSTIC_WAIT_MS: "45000"
+
       - name: Registrar resumo da publicação
         if: always()
         shell: bash
