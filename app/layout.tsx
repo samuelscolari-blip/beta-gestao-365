@@ -25,6 +25,7 @@ import "./v86-shared-ui-system.css";
 import "./v86-machine-priority-responsive.css";
 import "./v88-payroll-color-standard.css";
 import "./v89-financial-ux.css";
+import "./v90-payroll-result-colors.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",

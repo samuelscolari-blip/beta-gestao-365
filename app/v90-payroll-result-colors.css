@@ -1,0 +1,32 @@
+/*
+ * V90 — Cores dos resultados líquidos de Folha e Rescisão.
+ *
+ * Escopo estritamente visual:
+ * - Cálculo de salário: verde-claro, texto preto e valor preto;
+ * - Rescisão: vermelho-claro, texto preto e valor preto;
+ * - preserva estrutura, dimensões, textos e cálculos.
+ */
+
+/* Cálculo de salário / folha */
+.payroll-page:not(.termination-page) .payroll-summary-grid .net-result {
+  background: linear-gradient(135deg, #e8f7ec 0%, #dff3e5 100%) !important;
+  border-color: #9bc9a7 !important;
+  box-shadow: 0 8px 20px rgba(22, 101, 52, 0.08) !important;
+}
+
+.payroll-page:not(.termination-page) .payroll-summary-grid .net-result span,
+.payroll-page:not(.termination-page) .payroll-summary-grid .net-result strong {
+  color: #111111 !important;
+}
+
+/* Rescisão */
+.termination-page .termination-result-card .payroll-summary-grid .net-result {
+  background: linear-gradient(135deg, #fdeaea 0%, #f8dede 100%) !important;
+  border-color: #e5a0a0 !important;
+  box-shadow: 0 8px 20px rgba(153, 27, 27, 0.08) !important;
+}
+
+.termination-page .termination-result-card .payroll-summary-grid .net-result span,
+.termination-page .termination-result-card .payroll-summary-grid .net-result strong {
+  color: #111111 !important;
+}
