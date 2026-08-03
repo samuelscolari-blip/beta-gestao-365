@@ -22,6 +22,7 @@ import "./v78-status-colors.css";
 import "./v79-executive-dark-theme.css";
 import "./v84-hybrid-executive-theme.css";
 import "./v86-shared-ui-system.css";
+import "./v86-machine-priority-responsive.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
