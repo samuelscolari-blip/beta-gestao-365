@@ -24,6 +24,10 @@ O workflow de produção:
 - consulta o endereço público e falha se a Cloudflare não estiver servindo exatamente esse commit;
 - executa diagnóstico em navegador real após a publicação.
 
+## Validação ponta a ponta
+
+A instalação do mecanismo permanente somente é considerada concluída depois de uma PR posterior à criação do workflow ser mesclada e o job **Publicar no Cloudflare** confirmar publicamente o SHA desse merge. Esse teste evita considerar a simples presença do arquivo YAML como prova de funcionamento.
+
 ## Como acompanhar
 
 No GitHub, abra **Actions → Publicar no Cloudflare**. A execução somente é considerada concluída quando as etapas de publicação, confirmação do commit e diagnóstico real estiverem verdes.
