@@ -18,6 +18,7 @@ import "./v73-pr36-followup.css";
 import "./v74-production-audit.css";
 import "./v75-demo-data.css";
 import "./v77-consolidated-engines.css";
+import "./v78-status-colors.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
