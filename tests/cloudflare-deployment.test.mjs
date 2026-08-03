@@ -37,7 +37,10 @@ test("production deploy runs only through GitHub Actions and workers.dev", async
   assert.match(workflow, /secrets\.CLOUDFLARE_ACCOUNT_ID/);
   assert.match(workflow, /node scripts\/adopt-d1-migration-history\.mjs/);
   assert.match(workflow, /npm run db:migrate:remote/);
-  assert.match(workflow, /npm run deploy:cloudflare/);
+  assert.match(workflow, /test -f dist\/server\/wrangler\.json/);
+  assert.match(workflow, /npx wrangler deploy/);
+  assert.match(workflow, /--config dist\/server\/wrangler\.json/);
+  assert.match(workflow, /--message "\$DEPLOY_MESSAGE"/);
   assert.match(
     workflow,
     /https:\/\/beta-gestao-365\.scolarisamuel\.workers\.dev\//,
