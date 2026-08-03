@@ -51,7 +51,7 @@ test("os totais do cálculo viram uma barra de destaque legível", async () => {
 
   assert.match(css, /tfoot td[\s\S]*border-top:\s*2px solid/);
   assert.match(css, /tfoot td:last-child[\s\S]*linear-gradient/);
-  assert.match(css, /tfoot td:last-child strong[\s\S]*font-size:\s*19px/);
+  assert.match(css, /tfoot td:last-child strong[\s\S]*font-size:\s*1\.55rem/);
 });
 
 test("cada verba mantém um indicador de tipo sem esconder dados", async () => {

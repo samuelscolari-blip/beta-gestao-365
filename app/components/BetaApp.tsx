@@ -7116,7 +7116,10 @@ function PayrollStudio({
                 </td>
                 <td>Bruto: {currency.format(result.gross)}</td>
                 <td>Descontos: {currency.format(result.totalDeductions)}</td>
-                <td><strong>Líquido: {currency.format(result.net)}</strong></td>
+                <td>
+                  <span>Líquido estimado</span>
+                  <strong>{currency.format(result.net)}</strong>
+                </td>
               </tr>
             </tfoot>
           </table>

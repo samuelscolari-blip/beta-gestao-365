@@ -150,18 +150,26 @@
 }
 
 .payment-statement:not(.termination-memory) tfoot td:last-child {
-  background: linear-gradient(
-    135deg,
-    var(--payroll-accent-strong, #0b526a),
-    var(--payroll-accent, #0f6f8c)
-  );
-  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(135deg, #e8f7ec 0%, #dff3e5 100%);
+  box-shadow: 0 8px 20px rgba(22, 101, 52, 0.08);
+  color: #111111;
   font-size: 16px;
 }
 
+.payment-statement:not(.termination-memory) tfoot td:last-child span {
+  color: #111111;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .payment-statement:not(.termination-memory) tfoot td:last-child strong {
-  color: #ffffff;
-  font-size: 19px;
+  color: #111111;
+  font-size: 1.55rem;
 }
 
 @media (max-width: 720px) {
@@ -171,6 +179,6 @@
   }
 
   .payment-statement:not(.termination-memory) tfoot td:last-child strong {
-    font-size: 16px;
+    font-size: 1.2rem;
   }
 }
