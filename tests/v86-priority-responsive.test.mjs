@@ -109,3 +109,12 @@ test("produção mede ordem, corte e sobreposição da frota em desktop largo", 
   assert.match(diagnostic, /Células sobrepostas/);
   assert.match(diagnostic, /Célula \$\{part\.name\} saiu da linha/);
 });
+
+test("alinhamento largo compara o eixo central e não o topo de conteúdos diferentes", async () => {
+  const diagnostic = await readFile(wideDiagnosticPath, "utf8");
+
+  assert.match(diagnostic, /const centers = parts\.map/);
+  assert.match(diagnostic, /\(part\.top \+ part\.bottom\) \/ 2/);
+  assert.match(diagnostic, /Math\.max\(\.\.\.centers\) - Math\.min\(\.\.\.centers\) > 4/);
+  assert.doesNotMatch(diagnostic, /const tops = parts\.map/);
+});
