@@ -213,9 +213,16 @@ try {
     }
   }
 
-  const tops = parts.map((part) => part.top);
-  if (Math.max(...tops) - Math.min(...tops) > 24) {
-    throw new Error(`Colunas da frota perderam alinhamento vertical: ${JSON.stringify(parts)}`);
+  /*
+   * Conteúdos diferentes têm alturas diferentes, mas devem compartilhar o
+   * mesmo eixo central da linha. Comparar o topo gerava falso positivo entre
+   * textos, badges e o ícone da seta, mesmo quando todos estavam alinhados.
+   */
+  const centers = parts.map((part) => (part.top + part.bottom) / 2);
+  if (Math.max(...centers) - Math.min(...centers) > 4) {
+    throw new Error(
+      `Colunas da frota perderam o eixo vertical: ${JSON.stringify(parts)}`,
+    );
   }
 } finally {
   for (const waiter of waiters.values()) {
