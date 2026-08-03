@@ -1,0 +1,110 @@
+/*
+ * V86 — correção responsiva da tabela de máquinas.
+ *
+ * A largura disponível é determinada pelo painel, não pelo viewport. A própria
+ * tabela passa a ser o contêiner de consulta, evitando corte quando a barra
+ * lateral reduz o espaço útil em notebooks e desktops menores.
+ */
+
+.construction-executive-v2 .construction-machine-table {
+  min-width: 0;
+  container-name: v86-machine-table;
+  container-type: inline-size;
+}
+
+/* Grade ampla com mínimos conservadores. */
+.construction-executive-v2 .construction-machine-table-head,
+.construction-executive-v2 .construction-machine-row {
+  grid-template-columns:
+    minmax(160px, 1fr)
+    minmax(190px, 1.35fr)
+    minmax(112px, 0.7fr)
+    minmax(118px, 0.78fr)
+    minmax(116px, 0.58fr)
+    20px !important;
+  column-gap: 8px !important;
+}
+
+/* O painel real possui menos de 1.040 px em notebooks com menu lateral. */
+@container v86-machine-table (max-width: 1040px) {
+  .construction-executive-v2 .construction-machine-table-head {
+    display: none;
+  }
+
+  .construction-executive-v2 .construction-machine-row {
+    display: grid;
+    grid-template-areas:
+      "machine priority arrow"
+      "operation operation operation"
+      "stop impact impact";
+    grid-template-columns: minmax(0, 1fr) minmax(122px, 148px) 20px !important;
+    gap: 14px 10px !important;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .construction-executive-v2 .construction-machine-main {
+    grid-area: machine;
+    min-width: 0;
+  }
+
+  .construction-executive-v2 .construction-machine-operation {
+    grid-area: operation;
+    min-width: 0;
+  }
+
+  .construction-executive-v2 .construction-machine-stop {
+    grid-area: stop;
+    min-width: 0;
+  }
+
+  .construction-executive-v2 .construction-machine-total-impact {
+    grid-area: impact;
+    min-width: 0;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    grid-area: priority;
+    width: 100%;
+    min-width: 0;
+    max-width: 148px;
+    justify-self: stretch;
+  }
+
+  .construction-executive-v2 .construction-machine-row > svg {
+    grid-area: arrow;
+    justify-self: center;
+    align-self: center;
+  }
+}
+
+@container v86-machine-table (max-width: 620px) {
+  .construction-executive-v2 .construction-machine-row {
+    grid-template-areas:
+      "machine arrow"
+      "priority priority"
+      "operation operation"
+      "stop stop"
+      "impact impact";
+    grid-template-columns: minmax(0, 1fr) 20px !important;
+    gap: 12px 8px !important;
+  }
+
+  .construction-executive-v2 .construction-machine-priority {
+    width: fit-content;
+    min-width: 126px;
+    max-width: 100%;
+    justify-self: start;
+  }
+
+  .construction-executive-v2 :is(
+    .construction-machine-operation,
+    .construction-machine-stop,
+    .construction-machine-total-impact
+  ) {
+    text-align: left;
+  }
+}
