@@ -1,0 +1,793 @@
+/*
+ * V84 — tema híbrido executivo.
+ *
+ * Mantém a base clara do sistema e reserva a linguagem azul-escura para
+ * painéis de decisão. Esta camada é carregada depois da V79 para corrigir o
+ * excesso de superfícies escuras sem alterar componentes, dados ou regras.
+ */
+
+:root {
+  --v84-canvas: #eef3f6;
+  --v84-surface: #ffffff;
+  --v84-surface-soft: #f7fafc;
+  --v84-line: #d6e3e9;
+  --v84-line-strong: #c7d8e1;
+  --v84-title: #173b4f;
+  --v84-text: #345569;
+  --v84-muted: #6b8492;
+  --v84-navy: #061c2e;
+  --v84-navy-card: #0b2a44;
+  --v84-navy-soft: #0e304b;
+  --v84-cyan: #7bd0e6;
+  --v84-cyan-strong: #38c8e3;
+  --v84-green: #2fa66f;
+  --v84-orange: #d58a16;
+  --v84-red: #d94848;
+  --v84-light-shadow: 0 16px 42px rgba(20, 47, 63, 0.08);
+  --v84-dark-shadow: 0 20px 50px rgba(3, 20, 33, 0.2);
+}
+
+/* Base clara preservada em todas as telas. */
+html,
+body {
+  min-height: 100%;
+  color: var(--v84-text);
+  background: var(--v84-canvas) !important;
+}
+
+.app-shell {
+  background: var(--v84-canvas) !important;
+}
+
+.page-area {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  overflow-x: hidden;
+  color: var(--v84-text);
+  background:
+    radial-gradient(circle at 94% 0%, rgba(56, 200, 227, 0.055), transparent 24%),
+    linear-gradient(180deg, #f5f8fa 0%, var(--v84-canvas) 100%) !important;
+}
+
+.page-stack,
+.integrated-view-stack,
+.v52-floating-layer {
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Remove a limitação editorial de 1200 px somente dos wrappers reais. */
+.page-stack > :is(
+  .dashboard-grid,
+  .construction-executive-v2,
+  .management-center,
+  .v52-floating-layer
+),
+.integrated-view-stack > :is(
+  .machine-productivity-panel,
+  .machine-executive,
+  .construction-executive-v2,
+  .module-heading,
+  .mini-kpis,
+  .module-guide,
+  .table-card,
+  .deadline-card,
+  .consolidated-card
+),
+.v52-floating-layer > :is(
+  .v52-module-strip,
+  .v52-administrative-actions,
+  .v52-rental-management
+) {
+  width: 100% !important;
+  min-width: 0;
+  max-width: none !important;
+  margin-inline: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Superfícies operacionais voltam ao branco. */
+.page-area :is(
+  .module-heading,
+  .content-card,
+  .table-card,
+  .deadline-card,
+  .management-center,
+  .batch-payroll-panel,
+  .capability-card,
+  .compliance-events,
+  .compliance-rules,
+  .construction-compliance-strip,
+  .tax-profile-card,
+  .admin-card
+) {
+  border-color: var(--v84-line) !important;
+  color: var(--v84-text) !important;
+  background:
+    radial-gradient(circle at 96% 0%, rgba(56, 200, 227, 0.045), transparent 28%),
+    var(--v84-surface) !important;
+  box-shadow: var(--v84-light-shadow) !important;
+}
+
+.page-area :is(.content-card, .table-card, .deadline-card, .management-center) {
+  border-radius: 20px !important;
+}
+
+/* Cabeçalho de cadastro e ação permanece claro. */
+.page-area .module-heading {
+  border-radius: 22px !important;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(56, 200, 227, 0.1), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f5f9fb) !important;
+}
+
+.page-area .module-heading :is(h1, h2) {
+  color: var(--v84-title) !important;
+}
+
+.page-area .module-heading p {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .module-big-icon {
+  border-color: #cde1e9 !important;
+  color: #16647f !important;
+  background: #edf7fa !important;
+  box-shadow: none !important;
+}
+
+.page-area .eyebrow,
+.page-area .module-heading .eyebrow,
+.page-area .card-heading .eyebrow {
+  color: #34778d !important;
+}
+
+/* Botões continuam fortes sem escurecer o cartão inteiro. */
+.page-area :is(.button.primary, .primary-button, .module-primary-action) {
+  border-color: #74c9df !important;
+  color: #08283a !important;
+  background: var(--v84-cyan) !important;
+  box-shadow: 0 8px 20px rgba(56, 200, 227, 0.2) !important;
+}
+
+.page-area :is(.button.secondary, .secondary-button, .ghost-button) {
+  border-color: var(--v84-line-strong) !important;
+  color: var(--v84-title) !important;
+  background: #ffffff !important;
+}
+
+/* Painel executivo principal: a ilha escura inspirada no anexo 2. */
+.page-area .v52-module-strip {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(24px, 3vw, 34px) !important;
+  border: 1px solid #1d5272 !important;
+  border-radius: 24px !important;
+  color: #d8edf4 !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(123, 208, 230, 0.14), transparent 31%),
+    linear-gradient(145deg, #061c2e 0%, #0a3a5b 100%) !important;
+  box-shadow: var(--v84-dark-shadow) !important;
+}
+
+.page-area .v52-module-strip::after {
+  content: "";
+  position: absolute;
+  top: -96px;
+  right: -72px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: rgba(123, 208, 230, 0.055);
+  pointer-events: none;
+}
+
+.page-area .v52-module-strip-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.page-area .v52-module-strip-copy > span {
+  color: var(--v84-cyan) !important;
+}
+
+.page-area .v52-module-strip h2 {
+  color: #ffffff !important;
+  font-size: clamp(1.75rem, 2.5vw, 2.35rem) !important;
+  letter-spacing: -0.035em;
+}
+
+.page-area .v52-module-strip p {
+  max-width: 820px;
+  color: #b9d4df !important;
+}
+
+.page-area .v52-module-kpis {
+  position: relative;
+  z-index: 1;
+  gap: 14px !important;
+}
+
+.page-area .v52-module-kpis article {
+  min-height: 118px;
+  padding: 20px !important;
+  border: 1px solid rgba(123, 208, 230, 0.2) !important;
+  border-radius: 18px !important;
+  color: #d8edf4 !important;
+  background: linear-gradient(145deg, rgba(20, 67, 96, 0.9), rgba(11, 42, 68, 0.94)) !important;
+  box-shadow: 0 12px 28px rgba(0, 10, 19, 0.18) !important;
+}
+
+.page-area .v52-module-kpis article.warning {
+  border-bottom: 4px solid #e8a838 !important;
+}
+
+.page-area .v52-module-kpis article.success {
+  border-bottom: 4px solid #65dda7 !important;
+}
+
+.page-area .v52-module-kpis article.primary {
+  border-bottom: 4px solid var(--v84-cyan-strong) !important;
+}
+
+.page-area .v52-module-kpis :is(small, span) {
+  color: #a9c8d5 !important;
+}
+
+.page-area .v52-module-kpis strong {
+  color: #ffffff !important;
+}
+
+/* KPIs comuns e guias permanecem claros. */
+.page-area .mini-kpis article {
+  border-color: var(--v84-line) !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 28px rgba(20, 47, 63, 0.055) !important;
+}
+
+.page-area .mini-kpis article:nth-child(2) {
+  border-bottom-color: #e8a838 !important;
+}
+
+.page-area .mini-kpis article:nth-child(3) {
+  border-bottom-color: var(--v84-cyan-strong) !important;
+}
+
+.page-area .mini-kpis article:nth-child(4) {
+  border-bottom-color: #65b98d !important;
+}
+
+.page-area .mini-kpis span,
+.page-area .mini-kpis small {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .mini-kpis strong {
+  color: var(--v84-title) !important;
+}
+
+.page-area .module-guide {
+  border-color: #cfe2e9 !important;
+  color: var(--v84-text) !important;
+  background: linear-gradient(145deg, #f4fafc, #ffffff) !important;
+}
+
+.page-area .module-guide .guide-icon {
+  border-color: #c9e1e9 !important;
+  color: #23708b !important;
+  background: #e9f6fa !important;
+}
+
+.page-area .module-guide strong {
+  color: var(--v84-title) !important;
+}
+
+.page-area .module-guide p {
+  color: var(--v84-muted) !important;
+}
+
+/* Campos, filtros e tabelas claros e legíveis. */
+.page-area :is(.table-toolbar, .card-heading, .integration-table-title) {
+  border-color: #e1eaee !important;
+  background: linear-gradient(180deg, #ffffff, #f8fafb) !important;
+}
+
+.page-area :is(input, select, textarea) {
+  border-color: #cbdbe3 !important;
+  color: #214557 !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.page-area :is(input, select, textarea)::placeholder {
+  color: #8498a3 !important;
+}
+
+.page-area :is(input, select, textarea):focus {
+  border-color: #44b6d2 !important;
+  outline: 3px solid rgba(56, 200, 227, 0.12) !important;
+}
+
+.page-area select option {
+  color: #214557;
+  background: #ffffff;
+}
+
+.page-area :is(.search-box, .filter-box) {
+  border-color: #cbdbe3 !important;
+  color: var(--v84-muted) !important;
+  background: #ffffff !important;
+}
+
+.page-area .table-wrap {
+  border-color: #e0e9ed !important;
+  background: #ffffff !important;
+}
+
+.page-area table {
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+}
+
+.page-area thead,
+.page-area th {
+  border-color: #dbe6eb !important;
+  color: #536f7d !important;
+  background: #f1f6f8 !important;
+}
+
+.page-area td {
+  border-color: #e5ecef !important;
+  color: #315363 !important;
+  background: #ffffff !important;
+}
+
+.page-area tbody tr:hover td {
+  background: #f2f7f9 !important;
+}
+
+.page-area :is(.soft-badge, .status-badge, .count-badge) {
+  border-color: #d4e3e9 !important;
+  color: #4d6876 !important;
+  background: #eef4f6 !important;
+}
+
+/* Agenda financeira clara, com urgência semântica. */
+.page-area .deadline-heading {
+  border-bottom-color: #e1eaee !important;
+  background: #ffffff !important;
+}
+
+.page-area .deadline-heading h2 {
+  color: var(--v84-title) !important;
+}
+
+.page-area .deadline-heading p {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .deadline-filter {
+  border-color: #d4e2e8 !important;
+  background: #f2f7f9 !important;
+}
+
+.page-area .deadline-filter button {
+  color: #657f8d !important;
+  background: transparent !important;
+}
+
+.page-area .deadline-filter button.active {
+  color: #ffffff !important;
+  background: #0b6f8d !important;
+}
+
+.page-area .deadline-list {
+  background: #ffffff !important;
+}
+
+.page-area .deadline-row {
+  border-color: #e1e9ed !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+}
+
+.page-area .deadline-row:hover {
+  background: #f7fafb !important;
+}
+
+.page-area .deadline-row.overdue {
+  border-left-color: var(--v84-red) !important;
+  background: #fff3f3 !important;
+}
+
+.page-area .deadline-row.today,
+.page-area .deadline-row.urgent {
+  border-left-color: var(--v84-orange) !important;
+  background: #fff9e9 !important;
+}
+
+.page-area .deadline-row.upcoming {
+  border-left-color: #1684a5 !important;
+  background: #ffffff !important;
+}
+
+.page-area .deadline-row :is(strong, b) {
+  color: var(--v84-title) !important;
+}
+
+.page-area .deadline-row :is(small, em) {
+  color: var(--v84-muted) !important;
+}
+
+/* Painel financeiro: estrutura clara e mapa executivo escuro. */
+.page-area .consolidated-card {
+  padding: 0 !important;
+  border-color: var(--v84-line) !important;
+  background: #ffffff !important;
+  box-shadow: var(--v84-light-shadow) !important;
+}
+
+.page-area .consolidated-heading {
+  border-bottom-color: #e1eaee !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(56, 200, 227, 0.07), transparent 28%),
+    #ffffff !important;
+}
+
+.page-area .consolidated-heading :is(h1, h2) {
+  color: var(--v84-title) !important;
+}
+
+.page-area .consolidated-heading p {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .consolidated-kpis {
+  background: #ffffff !important;
+}
+
+.page-area .consolidated-kpis article {
+  border-color: var(--v84-line) !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+}
+
+.page-area .consolidated-kpis article :is(small, p) {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .consolidated-kpis article strong {
+  color: var(--v84-title) !important;
+}
+
+.page-area .executive-cost-layout {
+  background: #ffffff !important;
+}
+
+.page-area .cost-composition-card {
+  border-color: #1d5272 !important;
+  color: #d8edf4 !important;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(56, 200, 227, 0.11), transparent 32%),
+    linear-gradient(145deg, #061c2e, #0a3a5b) !important;
+  box-shadow: var(--v84-dark-shadow) !important;
+}
+
+.page-area .cost-chart-heading,
+.page-area .cost-bar-legend {
+  border-color: rgba(123, 208, 230, 0.16) !important;
+  color: #a9c8d5 !important;
+  background: transparent !important;
+}
+
+.page-area .cost-chart-heading strong,
+.page-area .cost-bar-label b,
+.page-area .cost-bar-value strong {
+  color: #ffffff !important;
+}
+
+.page-area .cost-chart-heading p,
+.page-area .cost-bar-label small,
+.page-area .cost-bar-value small {
+  color: #a9c8d5 !important;
+}
+
+.page-area .cost-total-highlight {
+  border-color: #e8b422 !important;
+  color: #ffffff !important;
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.18), rgba(123, 208, 230, 0.09)) !important;
+}
+
+.page-area .cost-bar-row {
+  border-color: rgba(123, 208, 230, 0.15) !important;
+  color: #d8edf4 !important;
+  background: rgba(11, 42, 68, 0.86) !important;
+}
+
+.page-area .cost-bar-row:hover,
+.page-area .cost-bar-row.leader {
+  background: #0e3655 !important;
+}
+
+/* Central de decisões: cabeçalho escuro, operação clara e status suaves. */
+.page-area .management-center {
+  background: #ffffff !important;
+}
+
+.page-area .management-heading {
+  border-color: #1d5272 !important;
+  color: #d8edf4 !important;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(56, 200, 227, 0.14), transparent 33%),
+    linear-gradient(135deg, #061c2e 0%, #0a3a5b 100%) !important;
+}
+
+.page-area .management-heading :is(h1, h2, strong) {
+  color: #ffffff !important;
+}
+
+.page-area .management-heading p {
+  color: #bdd7e1 !important;
+}
+
+.page-area .management-overview {
+  background: #f5f9fb !important;
+}
+
+.page-area .management-overview article {
+  border-color: #d8e4e9 !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(21, 51, 68, 0.045) !important;
+}
+
+.page-area .management-overview article.validation {
+  border-color: #f0d39b !important;
+  background: #fff8e7 !important;
+}
+
+.page-area .management-overview article.rejected {
+  border-color: #efc2c2 !important;
+  background: #fff1f1 !important;
+}
+
+.page-area .management-overview article.approved {
+  border-color: #bfe4d1 !important;
+  background: #effbf5 !important;
+}
+
+.page-area .management-overview article strong {
+  color: var(--v84-title) !important;
+}
+
+.page-area .management-overview article :is(small, em) {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .management-tabs,
+.page-area .management-list,
+.page-area .management-footer {
+  border-color: #e1e9ed !important;
+  background: #ffffff !important;
+}
+
+.page-area .management-tabs button {
+  color: #617c8a !important;
+}
+
+.page-area .management-tabs button.active {
+  color: #0b6f8d !important;
+  border-bottom-color: #0b6f8d !important;
+}
+
+/* Aprovados mantém o verde suave solicitado. */
+.page-area .v77-approved-panel {
+  border-color: #cfe5d8 !important;
+  color: var(--v84-text) !important;
+  background: linear-gradient(145deg, #f8fcfa, #ffffff) !important;
+  box-shadow: 0 12px 30px rgba(20, 70, 46, 0.06) !important;
+}
+
+.page-area .v77-approved-heading {
+  border-color: #dcebe2 !important;
+  background: transparent !important;
+}
+
+.page-area .v77-approved-heading :is(h3, strong) {
+  color: var(--v84-title) !important;
+}
+
+.page-area .v77-approved-heading :is(p, small) {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .v77-approved-card {
+  border-color: #cfe5d8 !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+}
+
+.page-area .v77-approved-card :is(h4, strong) {
+  color: var(--v84-title) !important;
+}
+
+.page-area .v77-approved-card :is(p, small, em, span) {
+  color: var(--v84-muted) !important;
+}
+
+.page-area .v77-approved-summary b,
+.page-area .v77-approved-value strong {
+  color: #176a4b !important;
+}
+
+/* Painel da obra permanece como referência visual escura. */
+.page-area .construction-executive-v2 {
+  border-color: #1d5272 !important;
+  color: #d8edf4 !important;
+  background:
+    radial-gradient(circle at 94% 0%, rgba(56, 200, 227, 0.11), transparent 31%),
+    linear-gradient(145deg, #061c2e, #0a3a5b) !important;
+  box-shadow: var(--v84-dark-shadow) !important;
+}
+
+.page-area .construction-executive-header {
+  border-color: rgba(123, 208, 230, 0.16) !important;
+  color: #d8edf4 !important;
+  background: linear-gradient(145deg, #08243a, #0c3552) !important;
+}
+
+.page-area .construction-executive-header :is(h1, h2) {
+  color: #ffffff !important;
+}
+
+.page-area .construction-executive-header p {
+  color: #b7d2dd !important;
+}
+
+.page-area .construction-executive-v2 :is(input, select, textarea),
+.page-area .construction-executive-header :is(select, button) {
+  border-color: #1c4a6c !important;
+  color: #d8edf4 !important;
+  background: #0b2a44 !important;
+}
+
+/* Modais e detalhes voltam ao padrão claro. */
+.modal-backdrop,
+.detail-backdrop,
+.confirm-backdrop {
+  background: rgba(9, 25, 36, 0.56) !important;
+  backdrop-filter: blur(6px);
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) {
+  border-color: var(--v84-line) !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+  box-shadow: 0 28px 70px rgba(13, 36, 51, 0.28) !important;
+}
+
+:is(.modal-header, .detail-header, .modal-footer) {
+  border-color: #e1e9ed !important;
+  background: #ffffff !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(h1, h2, h3, strong) {
+  color: var(--v84-title) !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(p, small, label, dt) {
+  color: var(--v84-muted) !important;
+}
+
+:is(.modal-panel, .detail-panel, .confirm-dialog) :is(input, select, textarea) {
+  border-color: #cbdbe3 !important;
+  color: #214557 !important;
+  background: #ffffff !important;
+}
+
+/* Telas especializadas também ficam claras, sem tocar na lógica. */
+.page-area :is(
+  .compliance-kpis article,
+  .context-grid article,
+  .pipeline-steps article,
+  .capability-list article,
+  .batch-payroll-intro,
+  .batch-controls,
+  .compliance-event-list > button,
+  .rule-version-list > button,
+  .compliance-rules footer
+) {
+  border-color: #dce7eb !important;
+  color: var(--v84-text) !important;
+  background: #ffffff !important;
+}
+
+.page-area :is(
+  .compliance-kpis strong,
+  .context-grid h3,
+  .pipeline-steps strong,
+  .capability-list strong,
+  .batch-payroll-intro h2,
+  .compliance-event-list strong,
+  .rule-version-list strong
+) {
+  color: var(--v84-title) !important;
+}
+
+.page-area :is(
+  .compliance-kpis small,
+  .compliance-kpis p,
+  .context-grid p,
+  .pipeline-steps small,
+  .capability-list p,
+  .capability-list small,
+  .batch-payroll-intro p,
+  .compliance-event-list small,
+  .rule-version-list small
+) {
+  color: var(--v84-muted) !important;
+}
+
+.page-area :is(.empty-state, .management-empty, .machine-productivity-empty) {
+  border-color: #cbdce3 !important;
+  color: var(--v84-text) !important;
+  background:
+    repeating-linear-gradient(135deg, rgba(56, 200, 227, 0.025) 0 10px, transparent 10px 20px),
+    #f8fbfc !important;
+}
+
+.page-area :is(.empty-state, .management-empty, .machine-productivity-empty) :is(p, small) {
+  color: var(--v84-muted) !important;
+}
+
+/* Timeline futura: legível dentro do painel escuro. */
+.timeline-step-pending .step-number,
+.construction-dashboard-v56 [class*="step-pending"] {
+  border-color: #2d678b !important;
+  color: var(--v84-cyan) !important;
+  background: #081e30 !important;
+}
+
+@media (max-width: 980px) {
+  .page-area .v52-module-strip,
+  .page-area .construction-executive-v2,
+  .page-area .cost-composition-card {
+    border-radius: 20px !important;
+  }
+
+  .page-area .v52-module-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page-stack,
+  .integrated-view-stack {
+    gap: 16px !important;
+  }
+
+  .page-area .v52-module-strip,
+  .page-area .module-heading,
+  .page-area .consolidated-heading {
+    padding: 20px !important;
+  }
+
+  .page-area .v52-module-kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .page-area .v52-module-kpis article,
+  .page-area .mini-kpis article {
+    min-height: 108px;
+    padding: 17px !important;
+  }
+
+  .page-area :is(.content-card, .table-card, .deadline-card, .management-center) {
+    border-radius: 17px !important;
+  }
+}
