@@ -16,11 +16,14 @@ test("a V93 é carregada depois da V92", async () => {
 
 test("o cabeçalho financeiro usa fundo claro e contraste executivo", async () => {
   const css = await readFile(cssPath, "utf8");
+  const titleBlock = css.match(
+    /\.page-stack:has\(\.financial-center-tabs\) > \.module-heading h1\s*\{([\s\S]*?)\}/,
+  )?.[1] || "";
 
   assert.match(css, /\.page-stack:has\(\.financial-center-tabs\) > \.module-heading[\s\S]*linear-gradient\(135deg, #ffffff/);
-  assert.match(css, /\.module-heading h1[\s\S]*color:\s*#071d55/);
+  assert.match(titleBlock, /color:\s*#071d55/);
   assert.match(css, /\.module-heading p[\s\S]*color:\s*#5d6f82/);
-  assert.doesNotMatch(css, /\.module-heading h1[\s\S]*color:\s*#ffffff/);
+  assert.doesNotMatch(titleBlock, /color:\s*#ffffff/);
 });
 
 test("ícone, breadcrumb e botão seguem o visual aprovado", async () => {
