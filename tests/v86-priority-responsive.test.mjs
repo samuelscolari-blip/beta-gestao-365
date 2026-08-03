@@ -30,21 +30,39 @@ test("a própria tabela mede a largura e possui fallback de notebook", async () 
   assert.match(css, /@media \(max-width: 720px\)/);
 });
 
+test("desktop amplo não recebe grid-area implícita", async () => {
+  const css = await readFile(cssPath, "utf8");
+  const responsiveStart = css.indexOf(
+    "@container v86-machine-table (max-width: 1040px)",
+  );
+
+  assert.ok(responsiveStart > 0);
+  const desktopRules = css.slice(0, responsiveStart);
+  assert.doesNotMatch(desktopRules, /grid-area\s*:/);
+  assert.match(
+    desktopRules,
+    /grid-template-columns:[\s\S]*minmax\(150px, 1fr\)[\s\S]*minmax\(175px, 1\.3fr\)/,
+  );
+});
+
 test("a linha estreita usa áreas explícitas para todos os campos", async () => {
   const css = await readFile(cssPath, "utf8");
 
   for (const area of [
-    "machine",
-    "operation",
-    "stop",
-    "impact",
-    "priority",
-    "arrow",
+    "machine-main",
+    "machine-operation",
+    "machine-stop",
+    "machine-impact",
+    "machine-priority",
+    "machine-arrow",
   ]) {
     assert.match(css, new RegExp(`grid-area:\\s*${area}`));
   }
 
-  assert.match(css, /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(118px, 140px\) 18px/);
+  assert.match(
+    css,
+    /grid-template-columns:\s*minmax\(0, 1fr\) minmax\(118px, 140px\) 18px/,
+  );
   assert.match(css, /width:\s*100%\s*!important/);
   assert.match(css, /max-width:\s*100%\s*!important/);
 });
