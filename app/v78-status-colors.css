@@ -1,0 +1,23 @@
+/* V78 — cores semânticas suaves nos cards da Central de Decisões. */
+
+.management-overview article.validation {
+  border-color: #f1d39a !important;
+  background: linear-gradient(145deg, #fffdf8 0%, #fff5df 100%) !important;
+  box-shadow: 0 6px 18px rgba(180, 112, 20, 0.07) !important;
+}
+
+.management-overview article.rejected {
+  border-color: #efc2c6 !important;
+  background: linear-gradient(145deg, #fffafb 0%, #fff0f2 100%) !important;
+  box-shadow: 0 6px 18px rgba(190, 53, 64, 0.065) !important;
+}
+
+.management-overview article.validation > span {
+  border: 1px solid rgba(196, 124, 18, 0.08);
+  background: #ffedc6;
+}
+
+.management-overview article.rejected > span {
+  border: 1px solid rgba(207, 61, 70, 0.08);
+  background: #ffe2e4;
+}
