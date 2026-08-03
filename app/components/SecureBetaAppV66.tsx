@@ -92,14 +92,6 @@ const ADMIN_REQUIRED_EVENT = "beta:admin-required";
 const decisionModules = approvedDecisionModules;
 const moduleLabels = approvedDecisionModuleLabels;
 
-function normalized(value: unknown) {
-  return String(value ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
-}
-
 function isApproved(record: RecordView) {
   return isApprovedDecision(record);
 }
@@ -238,24 +230,38 @@ function AdminAccessControl({ isAdmin }: Props) {
   useEffect(() => {
     const url = new URL(window.location.href);
     const state = url.searchParams.get("admin");
+    let pendingMessage = "";
+    let shouldOpen = false;
 
     if (isAdmin) {
       window.localStorage.setItem(REMEMBERED_ADMIN_KEY, "1");
     } else if (state === "expirado") {
       window.localStorage.removeItem(REMEMBERED_ADMIN_KEY);
-      setMessage("O acesso administrativo foi encerrado neste navegador.");
+      pendingMessage = "O acesso administrativo foi encerrado neste navegador.";
     } else if (state === "nao-autorizado") {
-      setMessage("Esta conta Google não possui acesso administrativo.");
-      setIsOpen(true);
+      pendingMessage = "Esta conta Google não possui acesso administrativo.";
+      shouldOpen = true;
     } else if (state === "configuracao-pendente") {
-      setMessage("Entre novamente com a conta Google autorizada.");
-      setIsOpen(true);
+      pendingMessage = "Entre novamente com a conta Google autorizada.";
+      shouldOpen = true;
     }
+
+    const stateTimer =
+      pendingMessage || shouldOpen
+        ? window.setTimeout(() => {
+            if (pendingMessage) setMessage(pendingMessage);
+            if (shouldOpen) setIsOpen(true);
+          }, 0)
+        : null;
 
     if (state) {
       url.searchParams.delete("admin");
       window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
     }
+
+    return () => {
+      if (stateTimer !== null) window.clearTimeout(stateTimer);
+    };
   }, [isAdmin]);
 
   useEffect(() => {
@@ -465,9 +471,16 @@ function ApprovedDecisionFallback() {
   }, []);
 
   useEffect(() => {
-    void refresh();
-    const interval = window.setInterval(refresh, 30_000);
-    return () => window.clearInterval(interval);
+    const initialRefresh = window.setTimeout(() => {
+      void refresh();
+    }, 0);
+    const interval = window.setInterval(() => {
+      void refresh();
+    }, 30_000);
+    return () => {
+      window.clearTimeout(initialRefresh);
+      window.clearInterval(interval);
+    };
   }, [refresh]);
 
   useEffect(() => {
@@ -527,7 +540,6 @@ function ApprovedDecisionFallback() {
       })),
     [approved],
   );
-
 
   const overviewPortal = targets.overview
     ? createPortal(
