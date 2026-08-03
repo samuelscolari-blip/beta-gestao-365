@@ -21,6 +21,7 @@ import "./v77-consolidated-engines.css";
 import "./v78-status-colors.css";
 import "./v79-executive-dark-theme.css";
 import "./v84-hybrid-executive-theme.css";
+import "./v86-shared-ui-system.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
@@ -43,10 +44,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className="antialiased"
+        className="v86-root antialiased"
         style={{
           fontFamily:
-            'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            'Inter, "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
         }}
       >
         {children}
