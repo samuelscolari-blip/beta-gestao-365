@@ -35,6 +35,16 @@ test("publicação aceita push, PR mesclada e acionamento manual", async () => {
   );
 });
 
+test("eventos duplicados do mesmo commit compartilham o grupo e se cancelam", async () => {
+  const content = await deployWorkflow();
+
+  assert.match(
+    content,
+    /group: beta-gestao-365-production-\$\{\{ github\.event\.pull_request\.merge_commit_sha \|\| github\.sha \}\}/,
+  );
+  assert.match(content, /cancel-in-progress: true/);
+});
+
 test("publicação baixa e confirma exatamente o commit esperado", async () => {
   const content = await deployWorkflow();
 
