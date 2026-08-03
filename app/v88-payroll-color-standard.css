@@ -17,7 +17,6 @@
   --payroll-muted: #7892a2;
 }
 
-/* Cabeçalho principal: mesma superfície clara dos demais módulos. */
 .payroll-page .payroll-heading {
   border-color: var(--payroll-line) !important;
   background:
@@ -64,7 +63,6 @@
   color: var(--payroll-muted) !important;
 }
 
-/* Processamento em lote: remove o roxo sem mudar a composição. */
 .payroll-page .batch-payroll-panel {
   border-color: var(--payroll-line) !important;
   background: #ffffff !important;
@@ -134,7 +132,6 @@
   background: #5fc1da !important;
 }
 
-/* Enquadramento: superfície clara, sem o bloco azul-escuro isolado. */
 .payroll-page .company-tax-profile {
   border-color: var(--payroll-line) !important;
   background: #ffffff !important;
@@ -147,7 +144,6 @@
 }
 
 .payroll-page .company-tax-profile .tax-profile-main {
-  border-left: 5px solid #63c7df;
   color: var(--payroll-ink) !important;
   background:
     linear-gradient(135deg, #eef9fc 0%, #f8fcfd 68%, #ffffff 100%) !important;
@@ -168,7 +164,6 @@
   color: var(--payroll-ink) !important;
 }
 
-/* Resultados e superfícies auxiliares seguem o mesmo azul administrativo. */
 .payroll-page :is(
   .payroll-summary,
   .payroll-result-card,
