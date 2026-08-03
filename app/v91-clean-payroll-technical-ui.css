@@ -1,0 +1,25 @@
+/*
+ * V91 — Limpeza das telas de Cálculo de Folha e Rescisão.
+ *
+ * Os motores, tabelas, versões, incidências, fontes e alertas continuam
+ * ativos no domínio e na memória de cálculo. Esta camada apenas retira da
+ * interface os blocos técnicos que serviram de base para a implementação.
+ *
+ * Permanecem visíveis:
+ * - dados utilizados no cálculo;
+ * - valores, verbas e memória financeira;
+ * - histórico de cálculos e prévias salvas;
+ * - alertas principais de que se trata de uma prévia não transmitida.
+ */
+
+/* Detalhamento técnico repetitivo das regras e mensagens do motor. */
+.payroll-page .statement-rules,
+.payroll-page .payroll-warnings {
+  display: none !important;
+}
+
+/* Referências de manual, evento e portais oficiais na tela de Rescisão. */
+.termination-page .termination-mos-strip,
+.termination-page .termination-official-sources {
+  display: none !important;
+}
