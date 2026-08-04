@@ -134,7 +134,7 @@ function configureRhStructure() {
     Object.assign(moduleMap.vacations, vacations);
   }
 
-  moduleTips.vacations =
+  (moduleTips as Record<string, string>).vacations =
     "Organize o período aquisitivo e a programação. O motor de cálculo de férias será implementado e validado na próxima etapa.";
 
   const rhGroup = navigationGroups.find(
