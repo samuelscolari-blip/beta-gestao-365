@@ -293,6 +293,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
     tableColumns: ["accountId", "supplier", "description", "dueDate", "expectedAmount", "status", "invoiceUrl"],
     fields: [
       { key: "accountId", label: "Código do pagamento", type: "text", required: true, help: "Criado automaticamente. Não é número de conta bancária.", aliases: ["ID conta"] },
+      { key: "purchaseRequestId", label: "Código da solicitação de compra (se houver)", type: "text", help: "Preencha quando este pagamento vier de um pedido já aprovado em Compras, para manter o histórico ligado.", aliases: ["Solicitação de compra", "Código da compra"] },
       { key: "supplierCode", label: "Código interno do fornecedor", type: "text", help: "Opcional. Use apenas se a empresa já trabalhar com códigos de fornecedores.", aliases: ["Código fornecedor"] },
       { key: "supplier", label: "Fornecedor", type: "text", required: true, aliases: ["Fornecedor"] },
       { key: "work", label: "Obra", type: "text", aliases: ["Obra"] },
@@ -892,7 +893,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
     shortLabel: "Compras",
     eyebrow: "Suprimentos",
     description:
-      "Solicitações de materiais encaminhadas para análise e decisão por obra.",
+      "Solicitações de materiais encaminhadas para análise e decisão por obra. O pagamento é feito em Contas a pagar.",
     color: "#0369a1",
     lightColor: "#f0f9ff",
     titleField: "material",
@@ -901,7 +902,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
     dateField: "requestDate",
     amountField: "totalAmount",
     spreadsheetSheets: ["07_COMPRAS"],
-    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "unit", "totalAmount", "status", "paymentStatus", "receiptUrl"],
+    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "unit", "totalAmount", "status", "documentsUrl"],
     fields: [
       { key: "requestId", label: "Código da solicitação", type: "text", required: true, help: "Criado automaticamente pelo sistema.", aliases: ["ID solicitação"] },
       { key: "requestDate", label: "Data da solicitação", type: "date", required: true, aliases: ["Data"] },
@@ -922,10 +923,6 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "receivedDate", label: "Data do recebimento", type: "date", aliases: ["Data recebimento"] },
       { key: "receivedQty", label: "Quantidade recebida", type: "number", aliases: ["Qtd. recebida"] },
       { key: "status", label: "Status", type: "select", required: true, options: ["Aguardando análise", "Aprovado", "Reprovado"], aliases: ["Status"] },
-      { key: "paymentStatus", label: "Situação do pagamento", type: "select", options: ["Pendente", "Pago"] },
-      { key: "paymentDate", label: "Data do pagamento", type: "date" },
-      { key: "paidAmount", label: "Valor efetivamente pago", type: "currency" },
-      { key: "receiptUrl", label: "Comprovante de pagamento", type: "url", placeholder: "Cole o link do comprovante salvo no SharePoint ou OneDrive" },
       { key: "documentsUrl", label: "Orçamentos, pedido e nota fiscal", type: "url", placeholder: "Cole o link da pasta com os documentos", aliases: ["Link documentos"] },
       { key: "notes", label: "Observações", type: "textarea", wide: true, aliases: ["Observações"] },
     ],
@@ -1097,7 +1094,7 @@ export const moduleTips: Record<string, string> = {
   suppliers:
     "Antes do primeiro pagamento, confira o CNPJ, os dados bancários e os documentos do fornecedor.",
   expenses:
-    "Comece pelo fornecedor, pelo que será pago e pelo vencimento. Anexe a nota fiscal quando ela estiver disponível.",
+    "Todo pagamento passa por aqui — venha de uma solicitação de compra aprovada em \"Compras\" ou de qualquer outra conta (serviços, aluguéis avulsos, contas recorrentes). Se vier de uma compra, preencha o \"Código da solicitação de compra\" para manter o histórico ligado. Comece pelo fornecedor, pelo que será pago e pelo vencimento, e anexe a nota fiscal quando ela estiver disponível.",
   cards:
     "Registre cada compra do cartão separadamente e sempre vincule a nota ou o recibo.",
   rentals:
@@ -1113,7 +1110,7 @@ export const moduleTips: Record<string, string> = {
   taxes:
     "Registre o vencimento assim que receber a obrigação e anexe a guia e o comprovante para manter o histórico completo.",
   purchases:
-    "Descreva claramente o material, a quantidade, a obra e a data necessária antes de iniciar as cotações. O pedido só pode ficar Pago depois de informar data, valor efetivamente pago e comprovante.",
+    "Use esta aba para pedir material de obra: solicitação, cotação, aprovação e recebimento ficam aqui. Descreva claramente o material, a quantidade, a obra e a data necessária antes de iniciar as cotações. Depois de aprovado, o pagamento é feito em \"Contas a pagar\" — informe o código desta solicitação por lá para manter o histórico ligado.",
   documents:
     "O sistema guarda o índice e o link. O arquivo original deve permanecer no SharePoint ou OneDrive autorizado.",
   emails:

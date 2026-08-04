@@ -19,7 +19,7 @@ test("V60 exige comprovante, data e valor para pagamentos confirmados", () => {
   assert.match(paymentEngine, /Anexe ou informe o link do comprovante/);
   assert.match(paymentEngine, /Informe o valor efetivamente pago/);
   assert.match(paymentEngine, /validHttpUrl/);
-  assert.match(validation, /purchases: { statusKey: "paymentStatus"/);
+  assert.match(validation, /rentals: { statusKey: "paymentStatus"/);
   assert.match(modules, /Comprovante de pagamento da fatura/);
   assert.match(modules, /Comprovante do pagamento da locação/);
   assert.match(modules, /Comprovante do pagamento da manutenção/);
