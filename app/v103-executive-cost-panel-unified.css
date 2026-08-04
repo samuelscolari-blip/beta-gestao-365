@@ -1,0 +1,98 @@
+/* V103 — Painel Executivo de Custos (Visão geral): une o cabeçalho e as
+   caixinhas de acompanhamento ao mesmo azul-marinho do Mapa Executivo,
+   em vez do corte branco → azul de hoje. Escopo: somente este card do
+   Dashboard (classes exclusivas dele). */
+
+.page-area .consolidated-card {
+  border-color: #1d5272 !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 200, 227, 0.12), transparent 34%),
+    linear-gradient(165deg, #071a35 0%, #0b2f50 55%, #08213d 100%) !important;
+  box-shadow: var(--v84-dark-shadow, 0 20px 50px rgba(3, 20, 33, 0.2)) !important;
+}
+
+.page-area .consolidated-heading {
+  border-bottom-color: rgba(123, 208, 230, 0.14) !important;
+  background: transparent !important;
+}
+
+.page-area .consolidated-heading .eyebrow {
+  color: #80d0df !important;
+}
+
+.page-area .consolidated-heading h1 {
+  color: #ffffff !important;
+}
+
+.page-area .consolidated-heading p {
+  color: #a9cbd4 !important;
+}
+
+.page-area .dashboard-competence span {
+  color: #a9cbd4 !important;
+}
+
+.page-area .dashboard-competence input {
+  border-color: rgba(123, 208, 230, 0.32) !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  color-scheme: dark;
+}
+
+.page-area .dashboard-competence input:focus {
+  border-color: #7bd0e6 !important;
+  box-shadow: 0 0 0 3px rgba(56, 200, 227, 0.18) !important;
+}
+
+.page-area .cost-monitor {
+  background: transparent !important;
+}
+
+.page-area .cost-monitor-grid article {
+  border-color: rgba(123, 208, 230, 0.18) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  box-shadow: none !important;
+}
+
+.page-area .cost-monitor-grid article.primary {
+  border-color: rgba(56, 200, 227, 0.35) !important;
+  background:
+    linear-gradient(135deg, rgba(56, 200, 227, 0.16), rgba(255, 255, 255, 0.03)) !important;
+}
+
+.page-area .cost-monitor-grid span {
+  color: #83adba !important;
+}
+
+.page-area .cost-monitor-grid strong {
+  color: #ffffff !important;
+}
+
+.page-area .cost-monitor-grid article.primary strong {
+  color: #7bd0e6 !important;
+}
+
+.page-area .cost-monitor-grid article.paid strong {
+  color: #4ade80 !important;
+}
+
+.page-area .cost-monitor-grid article.open strong {
+  color: #fbbf24 !important;
+}
+
+.page-area .cost-monitor-grid article.impact strong {
+  color: #f27f7f !important;
+}
+
+.page-area .cost-monitor-grid small {
+  color: #a9cbd4 !important;
+}
+
+.page-area .executive-cost-layout {
+  background: transparent !important;
+}
+
+.page-area .cost-composition-card {
+  border-color: rgba(123, 208, 230, 0.16) !important;
+  box-shadow: none !important;
+}
