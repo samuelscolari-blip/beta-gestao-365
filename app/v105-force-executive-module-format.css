@@ -1,0 +1,207 @@
+/*
+ * V105 — aplicação efetiva do padrão executivo aos blocos superiores.
+ *
+ * Esta camada é propositalmente carregada por último e usa seletores diretos.
+ * Ela altera somente apresentação visual: cabeçalhos, instruções, abas e KPIs.
+ * Textos, dados, ações, cálculos, tabelas, formulários e regras permanecem intactos.
+ */
+
+:root {
+  --v105-navy-950: #071a35;
+  --v105-navy-900: #08233e;
+  --v105-navy-850: #0a2b42;
+  --v105-navy-800: #0b3653;
+  --v105-navy-700: #14507c;
+  --v105-line: #1d5272;
+  --v105-title: #ffffff;
+  --v105-text: #d8edf5;
+  --v105-muted: #a9cbd4;
+  --v105-cyan: #7bd0e6;
+  --v105-cyan-strong: #31c5e5;
+  --v105-green: #5edba5;
+  --v105-yellow: #f0ad31;
+  --v105-shadow: 0 20px 50px rgba(3, 20, 33, 0.20);
+}
+
+/* Cabeçalho específico de cada módulo. */
+.page-area .module-heading {
+  border: 1px solid var(--v105-line) !important;
+  color: var(--v105-text) !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), transparent 34%),
+    linear-gradient(165deg, var(--v105-navy-950) 0%, #0b2f50 55%, var(--v105-navy-900) 100%) !important;
+  box-shadow: var(--v105-shadow) !important;
+}
+
+.page-area .module-heading::after {
+  display: none !important;
+}
+
+.page-area .module-heading .module-big-icon {
+  border: 1px solid rgba(123, 208, 230, 0.32) !important;
+  color: var(--v105-cyan) !important;
+  background: rgba(123, 208, 230, 0.14) !important;
+  box-shadow: none !important;
+}
+
+.page-area .module-heading .eyebrow {
+  color: #80d0df !important;
+}
+
+.page-area .module-heading :is(h1, h2, h3) {
+  color: var(--v105-title) !important;
+}
+
+.page-area .module-heading p {
+  color: var(--v105-muted) !important;
+}
+
+.page-area .module-heading :is(.read-only-chip, .rule-version-chip, .sync-chip) {
+  border-color: rgba(123, 208, 230, 0.32) !important;
+  color: var(--v105-text) !important;
+  background: #0b2f50 !important;
+}
+
+/* Ações próprias do cabeçalho. */
+.page-area .module-heading :is(.button.primary, .primary-button, .module-primary-action) {
+  border-color: #1688e1 !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #1688e1 0%, #0871c9 100%) !important;
+  box-shadow:
+    0 12px 26px rgba(4, 61, 108, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
+}
+
+.page-area .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)) {
+  border-color: rgba(123, 208, 230, 0.55) !important;
+  color: #061f33 !important;
+  background: #79d2e7 !important;
+  box-shadow: 0 10px 22px rgba(3, 31, 49, 0.22) !important;
+}
+
+.page-area .module-heading :is(.button.primary, .primary-button, .module-primary-action):hover {
+  background: linear-gradient(135deg, #2499ef 0%, #0c79d5 100%) !important;
+}
+
+.page-area .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)):hover {
+  background: #95dfef !important;
+}
+
+/* Caixa “Como usar esta tela”. */
+.page-area .module-guide {
+  border: 1px solid var(--v105-line) !important;
+  color: var(--v105-text) !important;
+  background: linear-gradient(135deg, var(--v105-navy-850), var(--v105-navy-800)) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area .module-guide .guide-icon {
+  border-color: rgba(123, 208, 230, 0.30) !important;
+  color: var(--v105-cyan) !important;
+  background: rgba(123, 208, 230, 0.16) !important;
+}
+
+.page-area .module-guide strong {
+  color: var(--v105-title) !important;
+}
+
+.page-area .module-guide p {
+  color: var(--v105-muted) !important;
+}
+
+/* KPIs simples próprios do módulo. */
+.page-area .mini-kpis article {
+  border-color: var(--v105-line) !important;
+  color: var(--v105-text) !important;
+  background: linear-gradient(135deg, var(--v105-navy-850), var(--v105-navy-800)) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area .mini-kpis article:nth-child(2) {
+  border-bottom: 4px solid var(--v105-yellow) !important;
+}
+
+.page-area .mini-kpis article:nth-child(3) {
+  border-bottom: 4px solid var(--v105-cyan-strong) !important;
+}
+
+.page-area .mini-kpis article:nth-child(4) {
+  border-bottom: 4px solid var(--v105-green) !important;
+}
+
+.page-area .mini-kpis span,
+.page-area .mini-kpis small {
+  color: var(--v105-muted) !important;
+}
+
+.page-area .mini-kpis strong {
+  color: var(--v105-title) !important;
+}
+
+/* Abas internas encontradas nos diferentes módulos. */
+.page-area :is(
+  .financial-center-tabs,
+  .people-status-tabs,
+  .management-tabs,
+  .module-tabs,
+  .payroll-tabs,
+  .construction-tabs,
+  .compliance-tabs,
+  .tax-tabs,
+  .machine-tabs,
+  .tabs,
+  .tab-list,
+  [role="tablist"]
+) {
+  border-color: var(--v105-line) !important;
+  color: var(--v105-text) !important;
+  background: linear-gradient(135deg, var(--v105-navy-850), var(--v105-navy-800)) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area :is(
+  .financial-center-tabs,
+  .people-status-tabs,
+  .management-tabs,
+  .module-tabs,
+  .payroll-tabs,
+  .construction-tabs,
+  .compliance-tabs,
+  .tax-tabs,
+  .machine-tabs,
+  .tabs,
+  .tab-list,
+  [role="tablist"]
+) button {
+  color: var(--v105-muted) !important;
+}
+
+.page-area :is(
+  .financial-center-tabs,
+  .people-status-tabs,
+  .management-tabs,
+  .module-tabs,
+  .payroll-tabs,
+  .construction-tabs,
+  .compliance-tabs,
+  .tax-tabs,
+  .machine-tabs,
+  .tabs,
+  .tab-list,
+  [role="tablist"]
+) button:is(.active, [aria-selected="true"]) {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--v105-navy-700), #1b6ba3) !important;
+  box-shadow: inset 0 -3px 0 var(--v105-cyan-strong) !important;
+}
+
+/* Mantém a área de dados clara e legível, como aprovado. */
+.page-area :is(.table-card, .table-wrap, .content-card, .form-card) {
+  --v105-data-surface-preserved: 1;
+}
+
+@media (max-width: 720px) {
+  .page-area :is(.module-heading, .module-guide, .mini-kpis article) {
+    border-radius: 18px !important;
+  }
+}
