@@ -19,7 +19,7 @@ export const importFamilies: ImportFamilyDefinition[] = [
     id: "costs",
     label: "Custos",
     description:
-      "Contas a pagar, cartões, aluguéis, alimentação, impostos, compras e custos de terceiros.",
+      "Contas a pagar, cartões, aluguéis, alimentação, impostos e compras.",
     modules: [
       "expenses",
       "cards",
@@ -27,7 +27,6 @@ export const importFamilies: ImportFamilyDefinition[] = [
       "food",
       "taxes",
       "purchases",
-      "contractors",
     ],
   },
   {

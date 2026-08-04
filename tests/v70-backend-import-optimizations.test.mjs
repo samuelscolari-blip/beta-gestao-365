@@ -30,7 +30,6 @@ test("V70 inicia estratégias isoladas sem remover as validações restantes", a
   const validation = await source("app/lib/record-validation-core.ts");
   assert.match(validation, /const moduleValidators: Partial<Record<string, ModuleValidator>>/);
   assert.match(validation, /people: validatePeopleBusinessRules/);
-  assert.match(validation, /contractors: validateContractorBusinessRules/);
   assert.match(validation, /works: validateWorkBusinessRules/);
   assert.match(validation, /validateRemainingBusinessRules\(definition, payload\)/);
   assert.match(validation, /definition\.id === "worklogs"/);

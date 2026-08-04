@@ -33,6 +33,7 @@ import "./v94-global-header-standard.css";
 import "./v92-payroll-statement-redesign.css";
 import "./v96-central-pedidos-contrast.css";
 import "./v98-vacations-ui.css";
+import "./v99-system-manual.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",

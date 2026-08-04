@@ -16,7 +16,6 @@ import {
   amountForPayload,
   fieldByKey,
   hasInternalRecordReference,
-  isHiddenOperationalModule,
   isInternalCodeField,
   moduleMap,
   moduleTips,
@@ -366,10 +365,10 @@ function Icon({
         <path d="M17 13v8M13 17h8" />
       </>
     ),
-    contractors: (
+    manual: (
       <>
-        <path d="M4 20V8l8-5 8 5v12M8 20v-6h8v6" />
-        <path d="M3 20h18M8 10h8M10 7h4" />
+        <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5Z" />
+        <path d="M4 4.5v17M8 7h8M8 11h8M8 15h5" />
       </>
     ),
     compliance: (
@@ -644,8 +643,8 @@ function requiredRequestDocument(record: StoredRecord) {
     };
   }
   return {
-    label: "Relatório ou comprovante da medição",
-    value: record.payload.measurementUrl,
+    label: "Documento comprobatório",
+    value: undefined,
   };
 }
 
@@ -1058,7 +1057,6 @@ const referencePrefixes: Record<string, string> = {
   taxes: "IMP",
   purchases: "COMPRA",
   documents: "DOC",
-  contractors: "TER",
   compliance: "EVENTO",
   rules: "REGRA",
 };
@@ -1075,7 +1073,6 @@ const actionLabels: Record<string, string> = {
   people: "Cadastrar colaborador",
   food: "Registrar alimentação",
   taxes: "Cadastrar imposto",
-  contractors: "Cadastrar terceiro",
   compliance: "Cadastrar evento",
   rules: "Cadastrar regra",
   purchases: "Criar solicitação",
@@ -1143,7 +1140,6 @@ const peopleFormSections = [
 function Modal({
   module,
   record,
-  works,
   assets,
   onClose,
   onSave,
@@ -1151,7 +1147,6 @@ function Modal({
 }: {
   module: ModuleDefinition;
   record: StoredRecord | null;
-  works: StoredRecord[];
   assets: StoredRecord[];
   onClose: () => void;
   onSave: (payload: Record<string, unknown>) => Promise<void>;
@@ -1373,11 +1368,6 @@ function Modal({
               const automatic =
                 hasAutomaticReference &&
                 field.key === module.referenceField;
-              const linkedWorkModule = ["contractors"].includes(module.id);
-              const linkedWorkName =
-                linkedWorkModule && field.key === "work" && works.length > 0;
-              const linkedWorkCode =
-                linkedWorkModule && field.key === "workCode" && works.length > 0;
               const linkedAssetName =
                 module.id === "asset_events" &&
                 field.key === "assetName" &&
@@ -1497,34 +1487,6 @@ function Modal({
                       );
                     })}
                   </select>
-                ) : linkedWorkName ? (
-                  <select
-                    value={String(payload[field.key] ?? "")}
-                    onChange={(event) => {
-                      const selected = works.find(
-                        (work) =>
-                          String(work.payload.name || work.title) ===
-                          event.target.value,
-                      );
-                      setPayload((current) => ({
-                        ...current,
-                        work: event.target.value,
-                        workCode: selected
-                          ? String(selected.payload.code || selected.reference)
-                          : "",
-                      }));
-                    }}
-                  >
-                    <option value="">Selecione a obra cadastrada</option>
-                    {works.map((work) => {
-                      const name = String(work.payload.name || work.title);
-                      return (
-                        <option key={work.id} value={name}>
-                          {name}
-                        </option>
-                      );
-                    })}
-                  </select>
                 ) : field.type === "textarea" ? (
                   <textarea
                     rows={3}
@@ -1580,7 +1542,7 @@ function Modal({
                     value={String(payload[field.key] ?? "")}
                     placeholder={field.placeholder}
                     readOnly={
-                      automatic || linkedWorkCode || calculatedAssetField
+                      automatic || calculatedAssetField
                     }
                     onChange={(event) =>
                       setPayload((current) => {
@@ -1600,15 +1562,13 @@ function Modal({
                     }
                   />
                 )}
-                {field.help || automatic || linkedWorkCode || calculatedAssetField ? (
+                {field.help || automatic || calculatedAssetField ? (
                   <small className="field-help">
                     {automatic
                       ? "Este código é criado pelo sistema para identificar o registro."
-                      : linkedWorkCode
-                        ? "Este código é preenchido ao selecionar a obra vinculada."
-                        : calculatedAssetField
-                          ? field.help || "Este valor é preenchido automaticamente pela máquina selecionada."
-                          : field.help}
+                      : calculatedAssetField
+                        ? field.help || "Este valor é preenchido automaticamente pela máquina selecionada."
+                        : field.help}
                   </small>
                 ) : null}
               </label>
@@ -7328,6 +7288,63 @@ function PayrollStudio({
   );
 }
 
+type ManualEntry = {
+  title: string;
+  summary: string;
+  paragraphs: string[];
+};
+
+const manualEntries: ManualEntry[] = [
+  {
+    title: "Compras e Contas a pagar: duas aprovações separadas",
+    summary:
+      "Como funciona a aprovação de uma compra de material, do pedido até o pagamento.",
+    paragraphs: [
+      "Com a separação que fizemos, uma compra de material agora passa por duas aprovações na mesma Central de Decisões: primeiro aprova-se a necessidade de comprar (em Compras), depois — já como um lançamento separado em Contas a pagar, referenciando o código da compra — aprova-se o pagamento em si.",
+      "Isso é mais correto ainda do ponto de vista de controle, porque as duas aprovações passam pelo mesmo lugar, mas em momentos diferentes (uma pra liberar a compra, outra pra liberar o dinheiro).",
+    ],
+  },
+];
+
+function SystemManualPage() {
+  return (
+    <div className="page-stack">
+      <section className="module-heading manual-heading">
+        <div className="module-title-wrap">
+          <span className="module-big-icon manual-icon">
+            <Icon name="manual" size={26} />
+          </span>
+          <div>
+            <span className="eyebrow">COMO O SISTEMA FUNCIONA</span>
+            <h1>Manual do sistema</h1>
+            <p>
+              Explicações das regras de negócio que orientam o uso do sistema
+              no dia a dia, reunidas aqui para consulta sempre que precisar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {manualEntries.map((entry, index) => (
+        <section className="settings-card manual-entry-card" key={entry.title}>
+          <header>
+            <span>{index + 1}</span>
+            <div>
+              <h2>{entry.title}</h2>
+              <p>{entry.summary}</p>
+            </div>
+          </header>
+          <div className="manual-entry-body">
+            {entry.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 function AdminPanel({
   settings,
   onSave,
@@ -7982,15 +7999,10 @@ export default function BetaApp({
 
   const operationalRecords = useMemo(
     () =>
-      records.filter(
-        (record) => !isHiddenOperationalModule(record.module),
-      ),
+      records.filter((record) => Boolean(moduleMap[record.module])),
     [records],
   );
-  const activeModule =
-    activeView === "dashboard" || isHiddenOperationalModule(activeView)
-      ? null
-      : moduleMap[activeView] || null;
+  const activeModule = moduleMap[activeView] || null;
   const moduleRecords = useMemo(
     () =>
       operationalRecords.filter((record) => record.module === activeView),
@@ -8019,7 +8031,7 @@ export default function BetaApp({
     : companyNavigationGroups;
 
   function navigate(view: string) {
-    setActiveView(isHiddenOperationalModule(view) ? "dashboard" : view);
+    setActiveView(view);
     setSearch("");
     setStatusFilter("");
     setSidebarOpen(false);
@@ -8027,13 +8039,11 @@ export default function BetaApp({
   }
 
   function openRecord(record: StoredRecord) {
-    if (isHiddenOperationalModule(record.module)) return;
     setDecisionRecordId(null);
     setSelectedRecord(record);
   }
 
   function openApprovalRecord(record: StoredRecord) {
-    if (isHiddenOperationalModule(record.module)) return;
     setDecisionRecordId(record.id);
     setSelectedRecord(record);
   }
@@ -8054,14 +8064,12 @@ export default function BetaApp({
 
   function openNew(moduleId: string) {
     if (!hasEditingAccess()) return;
-    if (isHiddenOperationalModule(moduleId)) return;
     setEditing(null);
     setModalModule(moduleMap[moduleId]);
   }
 
   function openEdit(record: StoredRecord) {
     if (!hasEditingAccess()) return;
-    if (isHiddenOperationalModule(record.module)) return;
     closeRecord();
     setEditing(record);
     setModalModule(moduleMap[record.module]);
@@ -8889,6 +8897,8 @@ throw new Error(
                 const label =
                   item === "dashboard"
                     ? "Visão geral"
+                    : item === "manual"
+                      ? "Manual do sistema"
                     : item === "tax-profile"
                       ? "Regime Tributário"
                     : item === "infrastructure"
@@ -8904,7 +8914,7 @@ throw new Error(
                   >
                     <Icon name={item === "tax-profile" ? "taxes" : item} size={19} />
                     <span>{label}</span>
-                    {!["dashboard", "admin", "tax-profile", "infrastructure"].includes(item) &&
+                    {!["dashboard", "manual", "admin", "tax-profile", "infrastructure"].includes(item) &&
                     records.filter((record) => record.module === item).length ? (
                       <small>
                         {records.filter((record) => record.module === item).length}
@@ -8947,6 +8957,8 @@ throw new Error(
               <strong>
                 {activeView === "dashboard"
                   ? "Central operacional"
+                  : activeView === "manual"
+                    ? "Manual do sistema"
                   : activeView === "admin"
                     ? "Administração do sistema"
                     : activeView === "tax-profile"
@@ -9028,6 +9040,8 @@ throw new Error(
               onOpenApprovalRecord={openApprovalRecord}
               canEdit={isAdmin}
             />
+          ) : activeView === "manual" ? (
+            <SystemManualPage />
           ) : activeView === "admin" && isAdmin ? (
             <AdminPanel
               settings={settings}
@@ -9159,9 +9173,6 @@ throw new Error(
         <Modal
           module={modalModule}
           record={editing}
-          works={operationalRecords.filter(
-            (record) => record.module === "works",
-          )}
           assets={operationalRecords.filter(
             (record) => record.module === "assets",
           )}
@@ -9174,9 +9185,7 @@ throw new Error(
         />
       ) : null}
 
-      {selectedRecord &&
-      !isHiddenOperationalModule(selectedRecord.module) &&
-      moduleMap[selectedRecord.module] ? (
+      {selectedRecord && moduleMap[selectedRecord.module] ? (
         <RecordDetails
           module={moduleMap[selectedRecord.module]}
           record={selectedRecord}

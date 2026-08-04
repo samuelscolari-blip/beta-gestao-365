@@ -6,7 +6,6 @@ import writeXlsxFile, {
 } from "write-excel-file/browser";
 import {
   amountForPayload,
-  isHiddenOperationalModule,
   isInternalCodeField,
   moduleDefinitions,
   normalizeHeader,
@@ -653,10 +652,7 @@ export async function exportAllWorkbook(
   records: Array<{ module: string; payload: Record<string, unknown> }>,
 ) {
   const sheets = moduleDefinitions
-    .filter(
-      (module) =>
-        module.id !== "m365" && !isHiddenOperationalModule(module.id),
-    )
+    .filter((module) => module.id !== "m365")
     .map((module) => {
       const moduleRows = records.filter((record) => record.module === module.id);
       const exportFields = module.fields.filter(

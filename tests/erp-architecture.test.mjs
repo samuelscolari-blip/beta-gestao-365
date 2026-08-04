@@ -51,7 +51,7 @@ test("exposes construction, compliance and rule-engine bounded contexts", async 
     "utf8",
   );
 
-  assert.match(modules, /id: "contractors"/);
+  assert.match(modules, /id: "works"/);
   assert.match(modules, /id: "compliance"/);
   assert.match(modules, /id: "rules"/);
   assert.match(modules, /key: "cno"/);

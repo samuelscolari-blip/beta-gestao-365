@@ -8,7 +8,7 @@ test("registros fictícios continuam disponíveis nas abas operacionais", async 
   const app = await source("app/components/BetaApp.tsx");
   assert.match(
     app,
-    /records\.filter\(\s*\(record\) => !isHiddenOperationalModule\(record\.module\)/,
+    /records\.filter\(\(record\) => Boolean\(moduleMap\[record\.module\]\)\)/,
   );
   assert.doesNotMatch(
     app,

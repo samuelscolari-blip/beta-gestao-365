@@ -31,7 +31,7 @@ projeto Sites e não publique versões naquele domínio.
 ## Regras do produto
 
 - Códigos internos permanecem ocultos por padrão.
-- Terceiros operacional permanece oculto sem apagar o histórico.
+- Terceiros (contractors) foi removido do sistema por decisão de Samuel Scolari; não recrie esse módulo.
 - Passo a passo da obra permanece presente.
 - Índice geral da obra permanece distinto do avanço físico.
 - Compras usa somente `Aguardando análise`, `Aprovado` e `Reprovado`.

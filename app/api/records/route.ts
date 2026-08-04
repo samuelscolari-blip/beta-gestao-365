@@ -17,7 +17,7 @@ import {
   isSoleAdmin,
   requireSoleAdmin,
 } from "../../lib/server-access";
-import { isHiddenOperationalModule } from "../../lib/modules";
+import { moduleMap } from "../../lib/modules";
 
 function errorResponse(error: unknown) {
   const message =
@@ -327,10 +327,11 @@ export async function GET(request: Request) {
       return Response.json({ error: "Acesso restrito." }, { status: 403 });
     }
     const moduleId = url.searchParams.get("module");
+    const isKnownModule = !moduleId || Boolean(moduleMap[moduleId]);
     const paginated = ["page", "pageSize", "search", "status"].some((key) =>
       url.searchParams.has(key),
     );
-    const queryResult = paginated
+    const queryResult = paginated && isKnownModule
       ? await queryRecords({
           module: moduleId,
           search: url.searchParams.get("search"),
@@ -341,8 +342,8 @@ export async function GET(request: Request) {
         })
       : null;
     const records = (
-      queryResult?.records || await listRecords(moduleId)
-    ).filter((record) => !isHiddenOperationalModule(record.module));
+      isKnownModule ? queryResult?.records || await listRecords(moduleId) : []
+    ).filter((record) => Boolean(moduleMap[record.module]));
     const publicRecords = isSoleAdmin(request)
       ? records
       : records
@@ -355,12 +356,8 @@ export async function GET(request: Request) {
             pagination: {
               page: queryResult.page,
               pageSize: queryResult.pageSize,
-              total: isHiddenOperationalModule(moduleId || "")
-                ? 0
-                : queryResult.total,
-              totalPages: isHiddenOperationalModule(moduleId || "")
-                ? 0
-                : queryResult.totalPages,
+              total: queryResult.total,
+              totalPages: queryResult.totalPages,
             },
           }
         : {}),
