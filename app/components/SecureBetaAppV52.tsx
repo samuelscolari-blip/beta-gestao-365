@@ -208,23 +208,24 @@ export default function SecureBetaAppV52(props: Props) {
           ?.textContent,
       );
       const strip = document.querySelector<HTMLElement>(".v52-module-strip");
-      if (
-        activeText.includes("fornecedores") &&
-        strip &&
-        !strip.querySelector(".v52-financial-links")
-      ) {
-        const links = document.createElement("div");
-        links.className = "v52-financial-links";
-        const openButton = document.createElement("button");
-        openButton.type = "button";
-        openButton.textContent = "Abrir fornecedores";
-        openButton.onclick = () => openSupplierModule(false);
-        const newButton = document.createElement("button");
-        newButton.type = "button";
-        newButton.textContent = "Cadastrar fornecedor";
-        newButton.onclick = () => openSupplierModule(true);
-        links.append(openButton, newButton);
-        strip.append(links);
+      const existingLinks = strip?.querySelector<HTMLElement>(".v52-financial-links");
+      if (activeText.includes("fornecedores") && strip) {
+        if (!existingLinks) {
+          const links = document.createElement("div");
+          links.className = "v52-financial-links";
+          const openButton = document.createElement("button");
+          openButton.type = "button";
+          openButton.textContent = "Abrir fornecedores";
+          openButton.onclick = () => openSupplierModule(false);
+          const newButton = document.createElement("button");
+          newButton.type = "button";
+          newButton.textContent = "Cadastrar fornecedor";
+          newButton.onclick = () => openSupplierModule(true);
+          links.append(openButton, newButton);
+          strip.append(links);
+        }
+      } else if (existingLinks) {
+        existingLinks.remove();
       }
     };
 
