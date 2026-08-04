@@ -23,8 +23,8 @@ const vacationsDefinition: ModuleDefinition = {
   eyebrow: "RH • Férias",
   description:
     "Tela própria para organizar o colaborador, o período aquisitivo e a programação das férias. O cálculo será integrado aos dados salariais na próxima etapa.",
-  color: "#0f766e",
-  lightColor: "#ecfdf5",
+  color: "#1477c9",
+  lightColor: "#edf7ff",
   titleField: "employeeName",
   referenceField: "vacationId",
   statusField: "status",
@@ -176,6 +176,21 @@ function replaceLegacyPayrollLabel(root: Node) {
   }
 }
 
+function markVacationsPage() {
+  document
+    .querySelectorAll<HTMLElement>(".page-stack.vacations-page")
+    .forEach((page) => page.classList.remove("vacations-page"));
+
+  const vacationsHeading = Array.from(
+    document.querySelectorAll<HTMLElement>(".page-stack > .module-heading"),
+  ).find(
+    (heading) =>
+      heading.querySelector("h1")?.textContent?.trim() === "Cálculo de Férias",
+  );
+
+  vacationsHeading?.parentElement?.classList.add("vacations-page");
+}
+
 export default function SecureBetaAppV97(props: Props) {
   // A configuração é idempotente e precisa ocorrer antes de cada renderização,
   // porque camadas anteriores também reorganizam os grupos do menu.
@@ -188,6 +203,7 @@ export default function SecureBetaAppV97(props: Props) {
       scheduledFrame = 0;
       ensureRhStructure();
       replaceLegacyPayrollLabel(document.body);
+      markVacationsPage();
     };
 
     const scheduleSync = () => {
