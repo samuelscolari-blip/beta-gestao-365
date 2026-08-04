@@ -743,9 +743,14 @@ function RentalManagementQueue({
   );
 }
 
-function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
+function V52Enhancer({
+  isAdmin,
+  activeView,
+}: {
+  isAdmin: boolean;
+  activeView: string;
+}) {
   const [records, setRecords] = useState<StoredRecord[]>([]);
-  const [activeModule, setActiveModule] = useState("dashboard");
   const originalFetchRef = useRef<typeof window.fetch | null>(null);
 
   useLayoutEffect(() => {
@@ -784,14 +789,6 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
 
   useEffect(() => {
     const enhance = () => {
-      const activeButton = document.querySelector<HTMLButtonElement>(".sidebar nav button.active");
-      const activeText = normalized(activeButton?.textContent);
-      const nextModule =
-        Object.values(moduleMap).find((module) =>
-          activeText.includes(normalized(module.shortLabel)),
-        )?.id || (activeText.includes("visao geral") ? "dashboard" : activeModule);
-      if (nextModule !== activeModule) setActiveModule(nextModule);
-
       document.querySelectorAll<HTMLElement>(".cost-monitor-progress, .management-training, .management-overview .missing").forEach((node) => {
         node.hidden = true;
       });
@@ -800,12 +797,12 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
       });
 
       const quick = document.querySelector<HTMLElement>(".page-area > .page-stack .action-center");
-      if (quick && nextModule === "dashboard") quick.hidden = true;
+      if (quick && activeView === "dashboard") quick.hidden = true;
 
       const topTitle = document.querySelector<HTMLElement>(".topbar-left strong");
       if (
         topTitle &&
-        nextModule === "dashboard" &&
+        activeView === "dashboard" &&
         topTitle.textContent !== "Visão Executiva Geral"
       ) {
         topTitle.textContent = "Visão Executiva Geral";
@@ -907,7 +904,7 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
         animationFrame = null;
       }
     };
-  }, [records, activeModule]);
+  }, [records, activeView]);
 
   const refresh = () => {
     document.querySelector<HTMLButtonElement>('.topbar button[aria-label="Atualizar dados"]')?.click();
@@ -918,12 +915,12 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
 
   return (
     <div className="v52-floating-layer" aria-hidden="true">
-      <div data-active-module={activeModule} />
-      {activeModule === "people" ? <AdministrativeActions isAdmin={isAdmin} /> : null}
-      {moduleMap[activeModule] ? (
-        <ExecutiveModuleStrip moduleId={activeModule} records={records} />
+      <div data-active-module={activeView} />
+      {activeView === "people" ? <AdministrativeActions isAdmin={isAdmin} /> : null}
+      {moduleMap[activeView] ? (
+        <ExecutiveModuleStrip moduleId={activeView} records={records} />
       ) : null}
-      {activeModule === "dashboard" ? (
+      {activeView === "dashboard" ? (
         <RentalManagementQueue records={records} isAdmin={isAdmin} onUpdated={refresh} />
       ) : null}
     </div>
@@ -931,10 +928,11 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
 }
 
 export default function BetaAppV52(props: BetaAppV52Props) {
+  const [activeView, setActiveView] = useState("dashboard");
   return (
     <>
-      <BetaApp {...props} />
-      <V52Enhancer isAdmin={props.isAdmin} />
+      <BetaApp {...props} onActiveViewChange={setActiveView} />
+      <V52Enhancer isAdmin={props.isAdmin} activeView={activeView} />
     </>
   );
 }
