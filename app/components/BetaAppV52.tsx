@@ -408,7 +408,7 @@ function configureV52Modules() {
     },
     {
       label: "FISCAL E CONFORMIDADE",
-      items: ["compliance", "rules", "taxes"],
+      items: ["compliance", "taxes"],
     },
     {
       label: "OPERAÇÃO E DOCUMENTOS",
