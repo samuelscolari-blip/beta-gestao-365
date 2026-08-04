@@ -1,12 +1,12 @@
 import { headers } from "next/headers";
-import SecureBetaAppV97 from "./components/SecureBetaAppV97";
+import SecureBetaAppV99 from "./components/SecureBetaAppV99";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 
-// SecureBetaAppV97 encapsula SecureBetaAppV66, que preserva SecureBetaAppV65,
-// e acrescenta somente a separação das rotinas de salário e férias no RH.
+// SecureBetaAppV99 preserva toda a cadeia anterior e unifica a tela de Máquinas,
+// incorporando impacto e parada à tabela principal sem alterar os cálculos.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -16,7 +16,7 @@ export default async function Home() {
   const fullName = isAdmin ? "Samuel Scolari" : null;
 
   return (
-    <SecureBetaAppV97
+    <SecureBetaAppV99
       userName={fullName}
       userEmail={email}
       isAdmin={isAdmin}
