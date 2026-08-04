@@ -48,6 +48,27 @@ const statusFinanceiro = [
   "Cancelado",
 ];
 
+// Unidade de medida sugerida por categoria de material de construção.
+// Usado para preencher automaticamente o campo "Unidade de medida" das
+// Compras quando a "Categoria do material" é selecionada. O valor
+// permanece editável: é uma sugestão, não uma trava.
+export const purchaseMaterialUnits: Record<string, string> = {
+  "Cimento": "kg",
+  "Tijolo / Bloco": "unidade",
+  "Areia": "m³",
+  "Brita": "m³",
+  "Ferro / Aço": "kg",
+  "Madeira": "unidade",
+  "Tinta": "litro",
+  "Combustível / Diesel": "litro",
+  "Água": "litro",
+};
+
+export const purchaseMaterialCategories = [
+  "Outro",
+  ...Object.keys(purchaseMaterialUnits),
+];
+
 export const moduleDefinitions: ModuleDefinition[] = [
   {
     id: "works",
@@ -877,15 +898,17 @@ export const moduleDefinitions: ModuleDefinition[] = [
     dateField: "requestDate",
     amountField: "totalAmount",
     spreadsheetSheets: ["07_COMPRAS"],
-    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "totalAmount", "status", "paymentStatus", "receiptUrl"],
+    tableColumns: ["requestId", "requestDate", "work", "material", "quantity", "unit", "totalAmount", "status", "paymentStatus", "receiptUrl"],
     fields: [
       { key: "requestId", label: "Código da solicitação", type: "text", required: true, help: "Criado automaticamente pelo sistema.", aliases: ["ID solicitação"] },
       { key: "requestDate", label: "Data da solicitação", type: "date", required: true, aliases: ["Data"] },
       { key: "work", label: "Obra", type: "text", aliases: ["Obra"] },
       { key: "requester", label: "Solicitante", type: "text", aliases: ["Solicitante"] },
       { key: "material", label: "O que precisa ser comprado?", type: "text", required: true, placeholder: "Ex.: 50 sacos de cimento CP-II", aliases: ["Material/serviço"] },
+      { key: "materialCategory", label: "Categoria do material", type: "select", options: purchaseMaterialCategories, help: "Sugere a unidade de medida da quantidade abaixo. Pode ser ajustada.", aliases: ["Categoria do material"] },
       { key: "quantity", label: "Quantidade", type: "number", aliases: ["Quantidade"] },
       { key: "unit", label: "Unidade de medida", type: "text", placeholder: "Ex.: unidade, metro, kg ou saco", aliases: ["Unidade"] },
+      { key: "unitPrice", label: "Valor por unidade", type: "currency", help: "Ex.: valor do litro do diesel ou do kg do cimento.", aliases: ["Valor unitário", "Valor por unidade"] },
       { key: "neededDate", label: "Quando o material é necessário?", type: "date", aliases: ["Data necessária"] },
       { key: "priority", label: "Prioridade", type: "select", options: ["Baixa", "Média", "Alta", "Urgente"], aliases: ["Prioridade"] },
       { key: "minimumQuotes", label: "Quantos orçamentos são necessários?", type: "number", help: "Quantidade mínima de fornecedores que devem ser consultados.", aliases: ["Cotações mínimas"] },

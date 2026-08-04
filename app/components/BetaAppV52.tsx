@@ -396,7 +396,7 @@ function configureV52Modules() {
     { label: "PAINEL EXECUTIVO", items: ["dashboard"] },
     {
       label: "FINANCEIRO E SUPRIMENTOS",
-      items: ["expenses", "cards", "purchases"],
+      items: ["expenses", "cards"],
     },
     {
       label: "ENGENHARIA E EQUIPAMENTOS",
@@ -508,7 +508,35 @@ function findSidebarButton(text: string) {
   );
 }
 
+function findFinancialTabButton(text: string) {
+  return Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".financial-center-tabs button"),
+  ).find((button) => normalized(button.textContent).includes(normalized(text)));
+}
+
+// "Compras" não tem mais item próprio no menu: seu conteúdo virou uma aba
+// dentro da tela "Fornecedores" (Central Financeira). Por isso o atalho
+// precisa abrir essa tela e então clicar na aba, em vez de procurar um
+// botão de menu que não existe mais.
+function openPurchasesTab(thenCreate: boolean) {
+  findSidebarButton(moduleMap.expenses.shortLabel)?.click();
+  window.setTimeout(() => {
+    findFinancialTabButton("Compras")?.click();
+    if (thenCreate) {
+      window.setTimeout(() => {
+        document
+          .querySelector<HTMLButtonElement>(".module-heading .button.primary")
+          ?.click();
+      }, 80);
+    }
+  }, 80);
+}
+
 function navigateAndCreate(moduleId: string) {
+  if (moduleId === "purchases") {
+    openPurchasesTab(true);
+    return;
+  }
   const moduleDefinition = moduleMap[moduleId];
   const navButton = findSidebarButton(moduleDefinition?.shortLabel || moduleId);
   navButton?.click();
@@ -597,9 +625,11 @@ function AdministrativeActions({ isAdmin }: { isAdmin: boolean }) {
             key={id}
             type="button"
             onClick={() =>
-              isAdmin
-                ? navigateAndCreate(id)
-                : findSidebarButton(moduleMap[id]?.shortLabel || id)?.click()
+              id === "purchases"
+                ? openPurchasesTab(false)
+                : isAdmin
+                  ? navigateAndCreate(id)
+                  : findSidebarButton(moduleMap[id]?.shortLabel || id)?.click()
             }
           >
             <i style={{
