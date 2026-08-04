@@ -36,6 +36,7 @@ import "./v98-vacations-ui.css";
 import "./v99-system-manual.css";
 import "./v100-unified-machines.css";
 import "./v101-machines-header-dedup.css";
+import "./v102-vacations-executive-blue.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
