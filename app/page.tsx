@@ -5,7 +5,8 @@ import {
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 
-// A V97 preserva o sistema existente e separa as rotinas de salário e férias no RH.
+// SecureBetaAppV97 encapsula SecureBetaAppV66, que preserva SecureBetaAppV65,
+// e acrescenta somente a separação das rotinas de salário e férias no RH.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
