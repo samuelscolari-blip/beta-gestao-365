@@ -1,0 +1,103 @@
+/* V96 — ajuste pontual de cores da Central de Pedidos. */
+
+.page-area .management-center .management-training {
+  border-color: #dce7eb !important;
+  color: #173f50 !important;
+  background: #f7fafc !important;
+}
+
+.page-area .management-center .management-training h3,
+.page-area .management-center .management-training h4 {
+  color: #173f50 !important;
+}
+
+.page-area .management-center .management-training > header p {
+  color: #526f7d !important;
+}
+
+.page-area .management-center .management-training-chip {
+  border-color: #b8d5de !important;
+  color: #245d6f !important;
+  background: #edf8fa !important;
+}
+
+.page-area .management-center .management-training-grid article {
+  border-color: #d8e4e9 !important;
+  color: #234654 !important;
+  background: #ffffff !important;
+}
+
+.page-area .management-center .management-training-grid article > header span {
+  color: #607784 !important;
+}
+
+.page-area .management-center .management-training-grid article > header strong {
+  color: #08705a !important;
+  background: #e4f5ef !important;
+}
+
+.page-area .management-center .management-training-grid article.reject > header strong {
+  color: #a93b3b !important;
+  background: #fdeaea !important;
+}
+
+.page-area .management-center .management-training-grid article.missing > header strong {
+  color: #8b5a0b !important;
+  background: #fff1d7 !important;
+}
+
+.page-area .management-center .management-training-grid article > b {
+  color: #143f52 !important;
+}
+
+.page-area .management-center .management-training-grid dt {
+  color: #607784 !important;
+}
+
+.page-area .management-center .management-training-grid dd {
+  color: #405f6d !important;
+}
+
+.page-area .management-center .management-training > footer span {
+  color: #496774 !important;
+  background: #eef4f6 !important;
+}
+
+.page-area .management-center .management-training > footer strong {
+  color: #21495a !important;
+}
+
+.page-area .management-center .management-training > footer svg {
+  color: #176d7c !important;
+}
+
+.page-area .management-center .management-overview {
+  border-color: #e1e9ed !important;
+  background: #f5f9fb !important;
+}
+
+.page-area .management-center .management-overview article {
+  border-color: #d8e4e9 !important;
+  color: #234654 !important;
+  background: #ffffff !important;
+}
+
+.page-area .management-center .management-overview article strong {
+  color: #173f50 !important;
+}
+
+.page-area .management-center .management-overview article :is(small, em) {
+  color: #607784 !important;
+}
+
+.page-area .management-center .management-tabs,
+.page-area .management-center .management-list,
+.page-area .management-center .management-footer {
+  border-color: #e1e9ed !important;
+  color: #4f6b78 !important;
+  background: #ffffff !important;
+}
+
+.page-area .management-center .management-footer strong {
+  color: #244a5a !important;
+}
