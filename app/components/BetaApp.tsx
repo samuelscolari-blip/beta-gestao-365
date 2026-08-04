@@ -1186,9 +1186,18 @@ function Modal({
   const activePeopleSection = peopleFormSections.find(
     (section) => section.id === peopleTab,
   ) || peopleFormSections[0];
+  const autoCalculatedWorklogFields = [
+    "ownTeamCount",
+    "progressDelta",
+    "progressPercentAfter",
+  ];
   const availableFields = module.fields.filter(
     (field) =>
-      showInternalCodes || !isInternalCodeField(module, field.key),
+      (showInternalCodes || !isInternalCodeField(module, field.key)) &&
+      !(
+        module.id === "worklogs" &&
+        autoCalculatedWorklogFields.includes(field.key)
+      ),
   );
   const visibleFields =
     module.id === "people"
@@ -2142,6 +2151,53 @@ function belongsToWork(record: StoredRecord, work: StoredRecord) {
 function boundedPercent(value: unknown) {
   const number = Number(value || 0);
   return Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : 0;
+}
+
+// O Diário de obra não pede mais "Equipe própria mobilizada", "Avanço
+// produzido no dia" nem "Avanço físico acumulado" como digitação manual: o
+// sistema calcula os três a partir do que já está cadastrado na Obra e nos
+// diários anteriores, no momento de salvar.
+function worklogAutoFields(
+  payload: Record<string, unknown>,
+  allRecords: StoredRecord[],
+  excludeId: number | null,
+) {
+  const work = allRecords.find(
+    (record) =>
+      record.module === "works" &&
+      belongsToWork({ payload } as unknown as StoredRecord, record),
+  );
+  const currentProgress = boundedPercent(work?.payload.physicalProgress);
+  const thisDate = String(payload.date || "");
+  const priorLog = work
+    ? allRecords
+        .filter(
+          (record) =>
+            record.module === "worklogs" &&
+            record.id !== excludeId &&
+            belongsToWork(record, work) &&
+            String(record.payload.date || record.recordDate || "") <= thisDate,
+        )
+        .sort((a, b) =>
+          String(b.payload.date || b.recordDate).localeCompare(
+            String(a.payload.date || a.recordDate),
+          ),
+        )[0] || null
+    : null;
+  const previousProgress = boundedPercent(priorLog?.payload.progressPercentAfter);
+  const ownTeamCount = work
+    ? allRecords.filter(
+        (record) =>
+          record.module === "people" &&
+          belongsToWork(record, work) &&
+          !record.status.toLowerCase().includes("desligado"),
+      ).length
+    : 0;
+  return {
+    progressPercentAfter: currentProgress,
+    progressDelta: Math.round((currentProgress - previousProgress) * 10) / 10,
+    ownTeamCount,
+  };
 }
 
 function decimalNumber(value: number, maximumFractionDigits = 1) {
@@ -7966,14 +8022,21 @@ export default function BetaApp({
     if (!modalModule || !hasEditingAccess()) return;
     setSaving(true);
     try {
+      const finalPayload =
+        modalModule.id === "worklogs"
+          ? {
+              ...payload,
+              ...worklogAutoFields(payload, records, editing?.id ?? null),
+            }
+          : payload;
       const recordPayload = {
         module: modalModule.id,
-        title: String(payload[modalModule.titleField] || "").trim(),
-        reference: String(payload[modalModule.referenceField] || "").trim(),
-        status: String(payload[modalModule.statusField] || "").trim(),
-        recordDate: String(payload[modalModule.dateField] || "").trim(),
-        amount: amountForPayload(modalModule, payload),
-        payload,
+        title: String(finalPayload[modalModule.titleField] || "").trim(),
+        reference: String(finalPayload[modalModule.referenceField] || "").trim(),
+        status: String(finalPayload[modalModule.statusField] || "").trim(),
+        recordDate: String(finalPayload[modalModule.dateField] || "").trim(),
+        amount: amountForPayload(modalModule, finalPayload),
+        payload: finalPayload,
         source: editing?.source || "Sistema web",
       };
       const response = await fetch("/api/records", {
