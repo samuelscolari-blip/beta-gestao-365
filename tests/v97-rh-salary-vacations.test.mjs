@@ -20,7 +20,10 @@ test("Cálculo de Folha passa a se chamar Cálculo de Salário", async () => {
 
   assert.match(source, /label:\s*"Cálculo de Salário"/);
   assert.match(source, /shortLabel:\s*"Cálculo de Salário"/);
-  assert.match(source, /replaceAll\([\s\S]*"Cálculo de Folha"[\s\S]*"Cálculo de Salário"/);
+  assert.match(
+    source,
+    /replaceAll\([\s\S]*"Cálculo de Folha"[\s\S]*"Cálculo de Salário"/,
+  );
 });
 
 test("Cálculo de Férias possui tela separada no grupo de RH", async () => {
@@ -29,15 +32,31 @@ test("Cálculo de Férias possui tela separada no grupo de RH", async () => {
   assert.match(source, /id:\s*"vacations"/);
   assert.match(source, /label:\s*"Cálculo de Férias"/);
   assert.match(source, /rhGroup\.items\.splice/);
-  assert.match(source, /"vacations"/);
+  assert.match(source, /moduleMap\.vacations/);
+});
+
+test("a aba de férias fica sempre entre salário e rescisão", async () => {
+  const source = await readFile(wrapperPath, "utf8");
+
+  assert.match(
+    source,
+    /rhGroup\.items\.filter\(\(item\) => item !== "vacations"\)/,
+  );
+  assert.match(source, /orderedItems\.indexOf\("payroll"\)/);
+  assert.match(source, /orderedItems\.indexOf\("terminations"\)/);
+  assert.match(source, /orderedItems\.splice\(insertionIndex, 0, "vacations"\)/);
+  assert.match(source, /ensureRhStructure\(\);[\s\S]*return <SecureBetaAppV66/);
 });
 
 test("a etapa não implementa fórmulas de férias antecipadamente", async () => {
   const source = await readFile(wrapperPath, "utf8");
 
-  assert.doesNotMatch(source, /calculateVacation|calcularFerias|INSS.*férias|IRRF.*férias/i);
+  assert.doesNotMatch(
+    source,
+    /calculateVacation|calcularFerias|INSS.*férias|IRRF.*férias/i,
+  );
   assert.match(
     source,
-    /As regras e os valores do cálculo serão definidos na próxima etapa/,
+    /O cálculo será integrado aos dados salariais na próxima etapa/,
   );
 });

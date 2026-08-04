@@ -16,12 +16,92 @@ type Props = {
   isAdmin: boolean;
 };
 
-let configured = false;
+const vacationsDefinition: ModuleDefinition = {
+  id: "vacations",
+  label: "Cálculo de Férias",
+  shortLabel: "Cálculo de Férias",
+  eyebrow: "RH • Férias",
+  description:
+    "Tela própria para organizar o colaborador, o período aquisitivo e a programação das férias. O cálculo será integrado aos dados salariais na próxima etapa.",
+  color: "#0f766e",
+  lightColor: "#ecfdf5",
+  titleField: "employeeName",
+  referenceField: "vacationId",
+  statusField: "status",
+  dateField: "vacationStart",
+  amountField: "estimatedAmount",
+  spreadsheetSheets: [],
+  tableColumns: [
+    "employeeName",
+    "acquisitionStart",
+    "acquisitionEnd",
+    "vacationStart",
+    "vacationDays",
+    "status",
+  ],
+  fields: [
+    {
+      key: "vacationId",
+      label: "Código do registro",
+      type: "text",
+      required: true,
+      placeholder: "Ex.: FER-2026-001",
+    },
+    {
+      key: "employeeName",
+      label: "Colaborador",
+      type: "text",
+      required: true,
+      placeholder: "Nome completo do colaborador",
+      help: "O vínculo direto com o cadastro e o salário será usado pelo motor de férias na próxima etapa.",
+    },
+    {
+      key: "acquisitionStart",
+      label: "Início do período aquisitivo",
+      type: "date",
+      required: true,
+    },
+    {
+      key: "acquisitionEnd",
+      label: "Fim do período aquisitivo",
+      type: "date",
+      required: true,
+    },
+    {
+      key: "vacationStart",
+      label: "Início previsto das férias",
+      type: "date",
+    },
+    {
+      key: "vacationDays",
+      label: "Quantidade prevista de dias",
+      type: "number",
+      placeholder: "Ex.: 30",
+    },
+    {
+      key: "status",
+      label: "Situação",
+      type: "select",
+      required: true,
+      options: [
+        "Em preparação",
+        "Aguardando cálculo",
+        "Programada",
+        "Concluída",
+      ],
+    },
+    {
+      key: "notes",
+      label: "Observações",
+      type: "textarea",
+      wide: true,
+      placeholder:
+        "Registre informações para a futura conferência do cálculo de férias.",
+    },
+  ],
+};
 
-function configureRhStructure() {
-  if (configured) return;
-  configured = true;
-
+function ensureRhStructure() {
   const payroll = moduleMap.payroll;
   if (payroll) {
     Object.assign(payroll, {
@@ -43,112 +123,38 @@ function configureRhStructure() {
     );
   }
 
-  const vacations: ModuleDefinition = {
-    id: "vacations",
-    label: "Cálculo de Férias",
-    shortLabel: "Cálculo de Férias",
-    eyebrow: "RH • Férias",
-    description:
-      "Tela separada para organizar colaborador, período aquisitivo e programação. As regras e os valores do cálculo serão definidos na próxima etapa.",
-    color: "#0f766e",
-    lightColor: "#ecfdf5",
-    titleField: "employeeName",
-    referenceField: "vacationId",
-    statusField: "status",
-    dateField: "vacationStart",
-    amountField: "estimatedAmount",
-    spreadsheetSheets: [],
-    tableColumns: [
-      "employeeName",
-      "acquisitionStart",
-      "acquisitionEnd",
-      "vacationStart",
-      "vacationDays",
-      "status",
-    ],
-    fields: [
-      {
-        key: "vacationId",
-        label: "Código do registro",
-        type: "text",
-        required: true,
-        placeholder: "Ex.: FER-2026-001",
-      },
-      {
-        key: "employeeName",
-        label: "Colaborador",
-        type: "text",
-        required: true,
-        placeholder: "Nome completo do colaborador",
-      },
-      {
-        key: "acquisitionStart",
-        label: "Início do período aquisitivo",
-        type: "date",
-        required: true,
-      },
-      {
-        key: "acquisitionEnd",
-        label: "Fim do período aquisitivo",
-        type: "date",
-        required: true,
-      },
-      {
-        key: "vacationStart",
-        label: "Início previsto das férias",
-        type: "date",
-      },
-      {
-        key: "vacationDays",
-        label: "Quantidade prevista de dias",
-        type: "number",
-        placeholder: "Ex.: 30",
-      },
-      {
-        key: "status",
-        label: "Situação",
-        type: "select",
-        required: true,
-        options: [
-          "Em preparação",
-          "Aguardando cálculo",
-          "Programada",
-          "Concluída",
-        ],
-      },
-      {
-        key: "notes",
-        label: "Observações",
-        type: "textarea",
-        wide: true,
-        placeholder:
-          "Registre informações para a futura conferência do cálculo de férias.",
-      },
-    ],
-  };
-
   if (!moduleMap.vacations) {
-    moduleDefinitions.push(vacations);
-    moduleMap.vacations = vacations;
+    moduleDefinitions.push(vacationsDefinition);
+    moduleMap.vacations = vacationsDefinition;
   } else {
-    Object.assign(moduleMap.vacations, vacations);
+    Object.assign(moduleMap.vacations, vacationsDefinition);
   }
 
   (moduleTips as Record<string, string>).vacations =
-    "Organize o período aquisitivo e a programação. O motor de cálculo de férias será implementado e validado na próxima etapa.";
+    "Organize o colaborador, o período aquisitivo e a programação. O motor de férias será conectado aos dados salariais na próxima etapa.";
 
   const rhGroup = navigationGroups.find(
     (group) =>
       group.label === "ADMINISTRATIVO E RH" || group.label === "PESSOAS",
   );
 
-  if (rhGroup && !rhGroup.items.includes("vacations")) {
-    const payrollIndex = rhGroup.items.indexOf("payroll");
-    rhGroup.items.splice(payrollIndex >= 0 ? payrollIndex + 1 : 1, 0, "vacations");
-  }
+  if (!rhGroup) return;
+
+  const orderedItems = rhGroup.items.filter((item) => item !== "vacations");
+  const payrollIndex = orderedItems.indexOf("payroll");
+  const terminationIndex = orderedItems.indexOf("terminations");
+  const insertionIndex =
+    payrollIndex >= 0
+      ? payrollIndex + 1
+      : terminationIndex >= 0
+        ? terminationIndex
+        : orderedItems.length;
+
+  orderedItems.splice(insertionIndex, 0, "vacations");
+  rhGroup.items.splice(0, rhGroup.items.length, ...orderedItems);
 }
 
-configureRhStructure();
+ensureRhStructure();
 
 function replaceLegacyPayrollLabel(root: Node) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -171,11 +177,16 @@ function replaceLegacyPayrollLabel(root: Node) {
 }
 
 export default function SecureBetaAppV97(props: Props) {
+  // A configuração é idempotente e precisa ocorrer antes de cada renderização,
+  // porque camadas anteriores também reorganizam os grupos do menu.
+  ensureRhStructure();
+
   useLayoutEffect(() => {
     let scheduledFrame = 0;
 
     const sync = () => {
       scheduledFrame = 0;
+      ensureRhStructure();
       replaceLegacyPayrollLabel(document.body);
     };
 
