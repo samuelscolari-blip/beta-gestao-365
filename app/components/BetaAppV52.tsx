@@ -379,7 +379,7 @@ function configureV52Modules() {
 
   Object.assign(moduleTips, {
     expenses:
-      "Cadastre fornecedor, CPF ou CNPJ, vencimento, valor e documento fiscal. Sem nota, cupom ou recibo, o lançamento não é aceito.",
+      "Todo pagamento passa por aqui — de uma compra aprovada ou de qualquer outra conta. Cadastre fornecedor, CPF ou CNPJ, vencimento, valor e documento fiscal; se vier de uma compra, informe o código da solicitação para manter o histórico ligado. Sem nota, cupom ou recibo, o lançamento não é aceito.",
     cards:
       "Informe o nome do cartão, o estabelecimento, CPF ou CNPJ, os produtos e o documento fiscal. A gerência decide após a conferência.",
     rentals:
@@ -387,7 +387,7 @@ function configureV52Modules() {
     food:
       "Registre somente a quantidade retirada e os funcionários que receberam. O documento fiscal e o CPF ou CNPJ do fornecedor são obrigatórios.",
     purchases:
-      "Explique a necessidade, o impacto, a prioridade, as cotações e o critério da escolha. A decisão pertence à gerência.",
+      "Explique a necessidade, o impacto, a prioridade, as cotações e o critério da escolha. A decisão pertence à gerência. Depois de aprovado, o pagamento é feito em Contas a pagar, referenciando o código desta solicitação.",
   });
 
   navigationGroups.splice(
