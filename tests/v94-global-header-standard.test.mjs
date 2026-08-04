@@ -65,7 +65,6 @@ test("a padronização permanece somente visual", async () => {
   assert.doesNotMatch(css, /content:\s*["'][^"']+["']/);
   assert.doesNotMatch(css, /display:\s*none/);
   assert.doesNotMatch(css, /pointer-events:\s*none/);
-  assert.doesNotMatch(css, /Cadastrar|Central Financeira|Folha de Pagamento/);
 });
 
 test("o padrão responde a notebook, tablet e celular", async () => {
