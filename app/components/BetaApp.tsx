@@ -1190,6 +1190,8 @@ function Modal({
     "ownTeamCount",
     "progressDelta",
     "progressPercentAfter",
+    "work",
+    "workCode",
   ];
   const availableFields = module.fields.filter(
     (field) =>
@@ -1241,7 +1243,7 @@ function Modal({
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    const missing = module.fields.find(
+    const missing = visibleFields.find(
       (field) => field.required && !String(payload[field.key] ?? "").trim(),
     );
     if (missing) {
@@ -1371,9 +1373,7 @@ function Modal({
               const automatic =
                 hasAutomaticReference &&
                 field.key === module.referenceField;
-              const linkedWorkModule = ["worklogs", "contractors"].includes(
-                module.id,
-              );
+              const linkedWorkModule = ["contractors"].includes(module.id);
               const linkedWorkName =
                 linkedWorkModule && field.key === "work" && works.length > 0;
               const linkedWorkCode =
@@ -1382,6 +1382,11 @@ function Modal({
                 module.id === "asset_events" &&
                 field.key === "assetName" &&
                 assets.length > 0;
+              const activeAssets = assets.filter(
+                (asset) => asset.status === "Em uso",
+              );
+              const linkedWorklogAsset =
+                module.id === "worklogs" && field.key === "assetName";
               const calculatedAssetField =
                 module.id === "asset_events" &&
                 [
@@ -1405,7 +1410,47 @@ function Modal({
                   {field.label}
                   {field.required ? <b> *</b> : null}
                 </span>
-                {linkedAssetName ? (
+                {linkedWorklogAsset ? (
+                  <select
+                    value={String(payload.assetId ?? "")}
+                    onChange={(event) => {
+                      const selected = activeAssets.find(
+                        (asset) =>
+                          String(asset.payload.assetId || asset.reference) ===
+                          event.target.value,
+                      );
+                      setPayload((current) => ({
+                        ...current,
+                        assetName: selected
+                          ? String(selected.payload.description || selected.title)
+                          : "",
+                        assetId: selected
+                          ? String(selected.payload.assetId || selected.reference)
+                          : "",
+                      }));
+                    }}
+                  >
+                    <option value="">
+                      {activeAssets.length
+                        ? "Selecione a máquina em uso"
+                        : "Nenhuma máquina ativa em uso no momento"}
+                    </option>
+                    {activeAssets.map((asset) => {
+                      const name = String(
+                        asset.payload.description || asset.title,
+                      );
+                      const assetId = String(
+                        asset.payload.assetId || asset.reference,
+                      );
+                      return (
+                        <option key={asset.id} value={assetId}>
+                          {name}
+                          {showInternalCodes ? ` • ${assetId}` : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
+                ) : linkedAssetName ? (
                   <select
                     value={String(payload.assetId ?? "")}
                     onChange={(event) => {
@@ -2153,20 +2198,22 @@ function boundedPercent(value: unknown) {
   return Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : 0;
 }
 
-// O Diário de obra não pede mais "Equipe própria mobilizada", "Avanço
-// produzido no dia" nem "Avanço físico acumulado" como digitação manual: o
-// sistema calcula os três a partir do que já está cadastrado na Obra e nos
-// diários anteriores, no momento de salvar.
+// O Diário de obra não pede mais "Obra", "Equipe própria mobilizada",
+// "Avanço produzido no dia" nem "Avanço físico acumulado" como digitação
+// manual. A empresa opera normalmente em uma única obra por vez (com várias
+// etapas), então a obra do diário é resolvida sozinha (a obra "Ativa", ou a
+// mais recente cadastrada) e os demais números vêm do que já está
+// cadastrado na Obra e nos diários anteriores, no momento de salvar.
 function worklogAutoFields(
   payload: Record<string, unknown>,
   allRecords: StoredRecord[],
   excludeId: number | null,
 ) {
-  const work = allRecords.find(
-    (record) =>
-      record.module === "works" &&
-      belongsToWork({ payload } as unknown as StoredRecord, record),
-  );
+  const registeredWorks = allRecords.filter((record) => record.module === "works");
+  const work =
+    registeredWorks.find((record) => record.status === "Ativa") ||
+    registeredWorks[0] ||
+    null;
   const currentProgress = boundedPercent(work?.payload.physicalProgress);
   const thisDate = String(payload.date || "");
   const priorLog = work
@@ -2194,6 +2241,8 @@ function worklogAutoFields(
       ).length
     : 0;
   return {
+    work: work ? String(work.payload.name || work.title) : "",
+    workCode: work ? String(work.payload.code || work.reference) : "",
     progressPercentAfter: currentProgress,
     progressDelta: Math.round((currentProgress - previousProgress) * 10) / 10,
     ownTeamCount,
