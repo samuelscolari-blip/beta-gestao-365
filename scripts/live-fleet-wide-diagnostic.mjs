@@ -54,6 +54,23 @@ async function waitForJson(url, options) {
   throw lastError || new Error(`Timeout ao acessar ${url}`);
 }
 
+async function removeTemporaryDirectory(path) {
+  let lastError;
+  for (let attempt = 1; attempt <= 6; attempt += 1) {
+    try {
+      await rm(path, { recursive: true, force: true, maxRetries: 3, retryDelay: 150 });
+      return;
+    } catch (error) {
+      lastError = error;
+      if (!["ENOTEMPTY", "EBUSY", "EPERM"].includes(error?.code)) throw error;
+      await sleep(attempt * 250);
+    }
+  }
+  console.warn(
+    `Não foi possível remover o diretório temporário após o diagnóstico: ${lastError?.message || path}`,
+  );
+}
+
 const port = await availablePort();
 const userDataDir = await mkdtemp(join(tmpdir(), "beta-fleet-wide-"));
 const chrome = spawn(
@@ -235,7 +252,11 @@ try {
   if (chrome.exitCode === null) {
     chrome.kill("SIGTERM");
     await Promise.race([once(chrome, "exit"), sleep(1_500)]);
-    if (chrome.exitCode === null) chrome.kill("SIGKILL");
+    if (chrome.exitCode === null) {
+      chrome.kill("SIGKILL");
+      await Promise.race([once(chrome, "exit"), sleep(1_500)]);
+    }
   }
-  await rm(userDataDir, { recursive: true, force: true });
+  await sleep(250);
+  await removeTemporaryDirectory(userDataDir);
 }
