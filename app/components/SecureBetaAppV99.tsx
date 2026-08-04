@@ -10,7 +10,6 @@ type Props = {
 };
 
 type FleetSnapshot = {
-  name: string;
   impact: string;
   downtime: string;
 };
@@ -37,7 +36,6 @@ function fleetSnapshotMap(scope: ParentNode) {
       if (!name) return;
 
       map.set(normalize(name), {
-        name,
         impact:
           row
             .querySelector<HTMLElement>(".machine-row-finance strong")
@@ -91,7 +89,7 @@ function ensureHeader(
     );
     row.insertBefore(cell, actions || null);
   }
-  cell.textContent = label;
+  if (cell.textContent !== label) cell.textContent = label;
   return cell;
 }
 
