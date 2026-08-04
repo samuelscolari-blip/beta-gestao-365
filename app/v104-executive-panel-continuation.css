@@ -1,0 +1,124 @@
+/* V104 — Continuidade visual entre a faixa "Visão executiva da área"
+   (V102) e o cabeçalho de cada tela. Mesma paleta azul-marinho aplicada
+   ao Painel Executivo de Custos (V103), agora estendida ao cabeçalho,
+   ao "Como usar esta tela" e às 3 caixinhas simples de toda tela que
+   exibe a faixa executiva — a tabela de registros continua clara.
+   Fundos sólidos (não transparentes): cada bloco é independente na
+   página, sem um contêiner escuro comum por trás. */
+
+.page-area:has(.v52-module-strip) .module-heading {
+  border-color: #1d5272 !important;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), transparent 34%),
+    linear-gradient(165deg, #071a35 0%, #0b2f50 55%, #08213d 100%) !important;
+  box-shadow: var(--v84-dark-shadow, 0 20px 50px rgba(3, 20, 33, 0.2)) !important;
+}
+
+.page-area:has(.v52-module-strip) .module-heading::after {
+  display: none;
+}
+
+.page-area:has(.v52-module-strip) .module-heading .module-big-icon {
+  border: 1px solid rgba(123, 208, 230, 0.32) !important;
+  color: #7bd0e6 !important;
+  background: rgba(123, 208, 230, 0.14) !important;
+  box-shadow: none !important;
+}
+
+.page-area:has(.v52-module-strip) .module-heading .eyebrow {
+  color: #80d0df !important;
+}
+
+.page-area:has(.v52-module-strip) .module-heading h1 {
+  color: #ffffff !important;
+}
+
+.page-area:has(.v52-module-strip) .module-heading p {
+  color: #a9cbd4 !important;
+}
+
+.page-area:has(.v52-module-strip) .module-heading .read-only-chip {
+  border-color: rgba(123, 208, 230, 0.32) !important;
+  color: #a9cbd4 !important;
+  background: #0b2f50 !important;
+}
+
+.page-area:has(.v52-module-strip) .module-guide {
+  border-color: #1d5272 !important;
+  background: linear-gradient(135deg, #0a2b42, #0b3653) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area:has(.v52-module-strip) .module-guide .guide-icon {
+  color: #7bd0e6 !important;
+  background: rgba(123, 208, 230, 0.16) !important;
+}
+
+.page-area:has(.v52-module-strip) .module-guide strong {
+  color: #ffffff !important;
+}
+
+.page-area:has(.v52-module-strip) .module-guide p {
+  color: #a9cbd4 !important;
+}
+
+.page-area:has(.v52-module-strip) .financial-center-tabs {
+  border-color: #1d5272 !important;
+  background: linear-gradient(135deg, #0a2b42, #0b3653) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area:has(.v52-module-strip) .financial-center-tabs button {
+  color: #a9cbd4 !important;
+}
+
+.page-area:has(.v52-module-strip) .financial-center-tabs button span {
+  color: #a9cbd4 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.page-area:has(.v52-module-strip) .financial-center-tabs button.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #14507c, #1b6ba3) !important;
+}
+
+.page-area:has(.v52-module-strip) .financial-center-tabs button.active span {
+  color: #051b2c !important;
+  background: #7bd0e6 !important;
+}
+
+.page-area:has(.v52-module-strip) .mini-kpis article {
+  border-color: #1d5272 !important;
+  background: linear-gradient(135deg, #0a2b42, #0b3653) !important;
+  box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
+}
+
+.page-area:has(.v52-module-strip) .mini-kpis span {
+  color: #83adba !important;
+}
+
+.page-area:has(.v52-module-strip) .mini-kpis strong {
+  color: #ffffff !important;
+}
+
+.page-area:has(.v52-module-strip) .mini-kpis small {
+  color: #a9cbd4 !important;
+}
+
+.page-area:has(.v52-module-strip) .people-status-tabs {
+  border-color: #1d5272 !important;
+  background: linear-gradient(135deg, #0a2b42, #0b3653) !important;
+}
+
+.page-area:has(.v52-module-strip) .people-status-tabs button {
+  color: #a9cbd4 !important;
+}
+
+.page-area:has(.v52-module-strip) .people-status-tabs button.active {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #14507c, #1b6ba3) !important;
+}
+
+.page-area:has(.v52-module-strip) .people-status-tabs p {
+  color: #a9cbd4 !important;
+}
