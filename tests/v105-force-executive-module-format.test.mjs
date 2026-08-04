@@ -27,14 +27,18 @@ test("V104 foi removido e substituído pelo V105", () => {
   assert.doesNotMatch(layout, /v104-executive-panel-continuation\.css/);
 });
 
-test("V105 é a última camada CSS carregada no layout", () => {
+test("V105 carrega antes das correções pontuais V106/V107, que fecham o layout", () => {
   const v105 = layout.indexOf('import "./v105-force-executive-module-format.css";');
+  const v106 = layout.indexOf('import "./v106-management-center-contrast.css";');
+  const v107 = layout.indexOf('import "./v107-works-header-dedup.css";');
   const metadata = layout.indexOf("export const metadata");
 
   assert.ok(v105 >= 0);
-  assert.ok(v105 < metadata);
+  assert.ok(v106 > v105);
+  assert.ok(v107 > v106);
+  assert.ok(v107 < metadata);
   assert.equal(
     layout.slice(v105, metadata).match(/import\s+"\.\/.*\.css";/g)?.length,
-    1,
+    3,
   );
 });

@@ -95,7 +95,6 @@
   line-height: 1.08 !important;
   letter-spacing: -0.04em !important;
   overflow-wrap: anywhere;
-  text-wrap: balance;
 }
 
 .page-stack:not(:has(.financial-center-tabs)) > .module-heading p {
