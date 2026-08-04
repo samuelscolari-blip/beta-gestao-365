@@ -1,0 +1,86 @@
+/* V99 — uma única tela de Máquinas, sem o painel inferior duplicado. */
+
+.machines-unified-active .machine-command-grid {
+  display: none !important;
+}
+
+/* Os três cartões genéricos repetiam os indicadores financeiros específicos. */
+.machines-unified-active .mini-kpis {
+  display: none !important;
+}
+
+.machines-unified-active .machine-financial-kpis {
+  margin-bottom: 4px !important;
+}
+
+.machines-unified-active .table-card {
+  margin-top: 0 !important;
+}
+
+.machines-unified-active .table-wrap {
+  overflow-x: auto !important;
+}
+
+.machines-unified-active .machines-unified-table {
+  min-width: 1780px;
+}
+
+.machines-unified-active .machines-unified-table th[data-v99],
+.machines-unified-active .machines-unified-table td[data-v99] {
+  min-width: 185px;
+}
+
+.machines-unified-active .machines-unified-table th[data-v99="downtime"],
+.machines-unified-active .machines-unified-table td[data-v99="downtime"] {
+  min-width: 210px;
+}
+
+.machines-unified-active .machines-unified-table td[data-v99] strong,
+.machines-unified-active .machines-unified-table td[data-v99] small {
+  display: block;
+}
+
+.machines-unified-active .machine-unified-impact strong {
+  color: #123f55;
+  font-size: 13px;
+  font-weight: 820;
+}
+
+.machines-unified-active .machine-unified-impact small,
+.machines-unified-active .machine-unified-downtime small {
+  margin-top: 5px;
+  color: #718896;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.machines-unified-active .machine-unified-downtime strong {
+  color: #355564;
+  font-size: 12px;
+  font-weight: 760;
+}
+
+.machines-unified-active .machine-unified-note {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  margin-left: auto;
+  padding: 0 10px;
+  border: 1px solid #c9dfe8;
+  border-radius: 999px;
+  color: #315c6d;
+  background: #eef7fa;
+  font-size: 10px;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .machines-unified-active .machine-unified-note {
+    width: 100%;
+    justify-content: center;
+    margin: 4px 0 0;
+    white-space: normal;
+    text-align: center;
+  }
+}
