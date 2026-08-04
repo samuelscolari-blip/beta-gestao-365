@@ -1,11 +1,11 @@
 import { headers } from "next/headers";
-import SecureBetaAppV66 from "./components/SecureBetaAppV66";
+import SecureBetaAppV97 from "./components/SecureBetaAppV97";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 
-// SecureBetaAppV65 permanece preservado e é encapsulado pelo componente V66.
+// A V97 preserva o sistema existente e separa as rotinas de salário e férias no RH.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -15,7 +15,7 @@ export default async function Home() {
   const fullName = isAdmin ? "Samuel Scolari" : null;
 
   return (
-    <SecureBetaAppV66
+    <SecureBetaAppV97
       userName={fullName}
       userEmail={email}
       isAdmin={isAdmin}
