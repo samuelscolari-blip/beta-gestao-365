@@ -103,16 +103,14 @@ function normalizeText(value: unknown) {
     .toLowerCase();
 }
 
-function sidebarButton(label: string) {
-  return Array.from(
-    document.querySelectorAll<HTMLButtonElement>(".sidebar nav button"),
-  ).find((button) =>
-    normalizeText(button.textContent).includes(normalizeText(label)),
-  );
-}
-
 function openSupplierModule(create: boolean) {
-  sidebarButton("Fornecedores")?.click();
+  Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".financial-center-tabs button"),
+  )
+    .find((button) =>
+      normalizeText(button.textContent).includes(normalizeText("Fornecedores")),
+    )
+    ?.click();
   if (create) {
     window.setTimeout(() => {
       document
@@ -211,7 +209,7 @@ export default function SecureBetaAppV52(props: Props) {
       );
       const strip = document.querySelector<HTMLElement>(".v52-module-strip");
       if (
-        activeText.includes("financeiro") &&
+        activeText.includes("fornecedores") &&
         strip &&
         !strip.querySelector(".v52-financial-links")
       ) {

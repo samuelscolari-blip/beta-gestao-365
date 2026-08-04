@@ -284,7 +284,7 @@ function configureV52Modules() {
   const expenses = moduleMap.expenses;
   Object.assign(expenses, {
     label: "Central Financeira e Fornecedores",
-    shortLabel: "Financeiro",
+    shortLabel: "Fornecedores",
     eyebrow: "Financeiro • Fornecedores • Pagamentos",
     description:
       "Fornecedor, documento fiscal, vencimento, aprovação e pagamento reunidos em um fluxo claro.",
@@ -396,7 +396,7 @@ function configureV52Modules() {
     { label: "PAINEL EXECUTIVO", items: ["dashboard"] },
     {
       label: "FINANCEIRO E SUPRIMENTOS",
-      items: ["expenses", "suppliers", "cards", "purchases"],
+      items: ["expenses", "cards", "purchases"],
     },
     {
       label: "ENGENHARIA E EQUIPAMENTOS",
