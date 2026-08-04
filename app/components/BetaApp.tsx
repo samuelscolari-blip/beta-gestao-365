@@ -21,6 +21,7 @@ import {
   moduleMap,
   moduleTips,
   navigationGroups,
+  purchaseMaterialUnits,
   type ModuleDefinition,
   type ModuleField,
 } from "../lib/modules";
@@ -1382,6 +1383,8 @@ function Modal({
                   "dailyRentalRate",
                   "estimatedDowntimeLoss",
                 ].includes(field.key);
+              const materialCategoryField =
+                module.id === "purchases" && field.key === "materialCategory";
               return (
                 <label
                   key={field.key}
@@ -1480,6 +1483,24 @@ function Modal({
                       }))
                     }
                   />
+                ) : materialCategoryField ? (
+                  <select
+                    value={String(payload[field.key] ?? "")}
+                    onChange={(event) => {
+                      const category = event.target.value;
+                      setPayload((current) => ({
+                        ...current,
+                        materialCategory: category,
+                        unit:
+                          purchaseMaterialUnits[category] ||
+                          String(current.unit ?? ""),
+                      }));
+                    }}
+                  >
+                    {(field.options || []).map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
+                  </select>
                 ) : field.type === "select" ? (
                   <select
                     value={String(payload[field.key] ?? "")}
@@ -5648,24 +5669,34 @@ function FinancialCenterPage({
   onOpen: (record: StoredRecord) => void;
   canEdit: boolean;
 }) {
-  const [tab, setTab] = useState<"expenses" | "suppliers" | "approved">("expenses");
+  const [tab, setTab] = useState<"expenses" | "suppliers" | "approved" | "purchases">(
+    "expenses",
+  );
   const expenseRecords = allRecords.filter((record) => record.module === "expenses");
   const supplierRecords = allRecords.filter((record) => record.module === "suppliers");
+  const purchaseRecords = allRecords.filter((record) => record.module === "purchases");
   const approvedRecords = expenseRecords.filter(
     (record) => requestDecisionState(record) === "approved",
   );
   const payableRecords = expenseRecords.filter(
     (record) => requestDecisionState(record) !== "approved",
   );
-  const selectedModule = tab === "suppliers" ? moduleMap.suppliers : moduleMap.expenses;
+  const selectedModule =
+    tab === "suppliers"
+      ? moduleMap.suppliers
+      : tab === "purchases"
+        ? moduleMap.purchases
+        : moduleMap.expenses;
   const selectedRecords =
     tab === "suppliers"
       ? supplierRecords
-      : tab === "approved"
-        ? approvedRecords
-        : payableRecords;
+      : tab === "purchases"
+        ? purchaseRecords
+        : tab === "approved"
+          ? approvedRecords
+          : payableRecords;
 
-  function selectTab(next: "expenses" | "suppliers" | "approved") {
+  function selectTab(next: "expenses" | "suppliers" | "approved" | "purchases") {
     setTab(next);
     setSearch("");
     setStatus("");
@@ -5708,6 +5739,13 @@ function FinancialCenterPage({
             onClick={() => selectTab("approved")}
           >
             Aprovados <span>{approvedRecords.length}</span>
+          </button>
+          <button
+            type="button"
+            className={tab === "purchases" ? "active" : ""}
+            onClick={() => selectTab("purchases")}
+          >
+            Compras <span>{purchaseRecords.length}</span>
           </button>
         </nav>
       )}
