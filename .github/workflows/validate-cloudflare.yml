@@ -16,6 +16,62 @@ jobs:
       - name: Baixar código
         uses: actions/checkout@v4
 
+      - name: Auditar linhas do sistema inteiro
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cloc
+
+          git worktree add --detach /tmp/beta-system-audit 3670c0d899e8577d484b14c190034941ba30ae10
+          cd /tmp/beta-system-audit
+
+          git ls-files \
+            | grep -Ev '(^|/)(node_modules|\.next|dist|out|coverage|\.wrangler|\.open-next)(/|$)' \
+            | grep -Eiv '\.(md|txt|csv|tsv|lock|png|jpe?g|gif|webp|ico|pdf|zip|woff2?|ttf|eot|map)$' \
+            | grep -Ev '(^|/)(package-lock\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.yaml|next-env\.d\.ts)$' \
+            > /tmp/beta-code-files.txt
+
+          cloc \
+            --list-file=/tmp/beta-code-files.txt \
+            --json \
+            --out=/tmp/beta-cloc.json
+
+          node <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync('/tmp/beta-cloc.json', 'utf8'));
+          const ignored = new Set(['header', 'SUM']);
+          const languages = Object.entries(report)
+            .filter(([name]) => !ignored.has(name))
+            .map(([language, values]) => ({ language, ...values }))
+            .sort((a, b) => b.code - a.code);
+          const configurationLanguages = new Set([
+            'JSON',
+            'YAML',
+            'TOML',
+            'INI',
+            'XML',
+            'Properties',
+          ]);
+          const configurationCode = languages
+            .filter(({ language }) => configurationLanguages.has(language))
+            .reduce((sum, item) => sum + item.code, 0);
+          const summary = {
+            auditedCommit: '3670c0d899e8577d484b14c190034941ba30ae10',
+            files: report.SUM.nFiles,
+            blankLines: report.SUM.blank,
+            commentLines: report.SUM.comment,
+            codeLines: report.SUM.code,
+            sourceAndLogicLines: report.SUM.code - configurationCode,
+            configurationLines: configurationCode,
+            physicalLines: report.SUM.blank + report.SUM.comment + report.SUM.code,
+            languages,
+          };
+          console.log('=== BETA GESTAO 365 — AUDITORIA DE LINHAS ===');
+          console.log(JSON.stringify(summary, null, 2));
+          console.log(`BETA_LINE_COUNT=${JSON.stringify(summary)}`);
+          NODE
+
       - name: Preparar Node.js
         uses: actions/setup-node@v4
         with:
