@@ -360,6 +360,16 @@ export function IbsCbsRegimePanel({ isAdmin }: { isAdmin: boolean }) {
     });
   }
 
+  function applyImoveisPreset(kind: "venda" | "locacao") {
+    if (!isAdmin) return;
+    const reductionPercent = kind === "venda" ? 50 : 70;
+    const specialRegime =
+      kind === "venda"
+        ? "Regime específico de bens imóveis — venda (LC 214/2025, art. 261): redução de 50% nas alíquotas de IBS/CBS."
+        : "Regime específico de bens imóveis — locação/cessão onerosa/arrendamento (LC 214/2025, art. 261): redução de 70% nas alíquotas de IBS/CBS.";
+    setDraft((current) => ({ ...current, reductionPercent, specialRegime }));
+  }
+
   async function saveConfig() {
     setSaving(true);
     setNotice(null);
@@ -447,6 +457,26 @@ export function IbsCbsRegimePanel({ isAdmin }: { isAdmin: boolean }) {
         </a>
       </div>
 
+      <div className="ibs-notice info">
+        <strong>Regime específico de bens imóveis (LC 214/2025):</strong>{" "}
+        venda e demais operações com imóveis têm as alíquotas de IBS/CBS
+        reduzidas em 50% (art. 261); locação, cessão onerosa e arrendamento
+        têm redução de 70%. Na venda de imóvel residencial novo ou lote
+        residencial por contribuinte do regime regular, ainda cabe o redutor
+        social de até R$ 100.000,00 (imóvel) ou R$ 30.000,00 (lote) sobre a
+        base de cálculo (arts. 259–260), além do redutor de ajuste (art.
+        257). Esses redutores dependem do valor de referência do imóvel e
+        não são calculados automaticamente aqui — apure com a contabilidade
+        e registre o resultado em &ldquo;Regime específico / benefício&rdquo;.{" "}
+        <a
+          href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Lei Complementar nº 214/2025 (Planalto)
+        </a>
+      </div>
+
       <NoticeBox notice={notice} />
 
       <div className="ibs-form-grid">
@@ -462,6 +492,25 @@ export function IbsCbsRegimePanel({ isAdmin }: { isAdmin: boolean }) {
         <label className="ibs-check"><input type="checkbox" checked={draft.creditEnabled} disabled={!isAdmin} onChange={(e) => update("creditEnabled", e.target.checked)} /><span>Direito a crédito habilitado para análise</span></label>
         <label className="wide"><span>Regime específico / benefício</span><input value={draft.specialRegime} disabled={!isAdmin} onChange={(e) => update("specialRegime", e.target.value)} placeholder="Informe somente quando aplicável" /></label>
         <label className="wide"><span>Observações fiscais</span><textarea value={draft.notes} disabled={!isAdmin} onChange={(e) => update("notes", e.target.value)} /></label>
+      </div>
+
+      <div className="ibs-test-buttons">
+        <button
+          type="button"
+          disabled={!isAdmin}
+          onClick={() => applyImoveisPreset("venda")}
+        >
+          <strong>Aplicar redução — venda de imóveis</strong>
+          <span>50% sobre IBS/CBS (LC 214/2025, art. 261)</span>
+        </button>
+        <button
+          type="button"
+          disabled={!isAdmin}
+          onClick={() => applyImoveisPreset("locacao")}
+        >
+          <strong>Aplicar redução — locação de imóveis</strong>
+          <span>70% sobre IBS/CBS (LC 214/2025, art. 261)</span>
+        </button>
       </div>
 
       <div className="ibs-config-total">
