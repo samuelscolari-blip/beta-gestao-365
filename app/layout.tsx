@@ -37,6 +37,7 @@ import "./v99-system-manual.css";
 import "./v100-unified-machines.css";
 import "./v101-machines-header-dedup.css";
 import "./v103-executive-cost-panel-unified.css";
+import "./v104-executive-panel-continuation.css";
 
 export const metadata: Metadata = {
   title: "Beta Gestão 365",
