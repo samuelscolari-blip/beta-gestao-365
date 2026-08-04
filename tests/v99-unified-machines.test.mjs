@@ -10,13 +10,16 @@ const cssPath = new URL("../app/v99-unified-machines.css", import.meta.url);
 const pagePath = new URL("../app/page.tsx", import.meta.url);
 const layoutPath = new URL("../app/layout.tsx", import.meta.url);
 
-test("V99 ativa a tela unificada de Máquinas preservando V97", async () => {
+test("V99 ativa a tela unificada de Máquinas preservando toda a cadeia", async () => {
   const wrapper = await readFile(wrapperPath, "utf8");
   const page = await readFile(pagePath, "utf8");
 
   assert.match(wrapper, /import SecureBetaAppV97/);
   assert.match(wrapper, /return <SecureBetaAppV97/);
   assert.match(page, /SecureBetaAppV99/);
+  assert.match(page, /SecureBetaAppV97/);
+  assert.match(page, /SecureBetaAppV66/);
+  assert.match(page, /SecureBetaAppV65/);
 });
 
 test("o painel duplicado é removido e a tabela recebe impacto e parada", async () => {
