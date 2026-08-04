@@ -72,7 +72,6 @@
   font-weight: 790 !important;
   line-height: 1.06 !important;
   letter-spacing: -0.045em !important;
-  text-wrap: balance;
 }
 
 .page-stack:has(.financial-center-tabs) > .module-heading p {

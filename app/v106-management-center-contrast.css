@@ -1,0 +1,79 @@
+/* V106 — Central de Decisões Gerenciais: as caixinhas de indicadores e as
+   abas ficavam brancas logo abaixo do cabeçalho escuro (já era escuro desde
+   o V79), criando o mesmo tipo de corte que já corrigimos em outras telas.
+   O V96 tinha revertido essas duas partes para claro por causa de um
+   problema de contraste, com seletores mais específicos (prefixo
+   ".management-center") — os seletores aqui precisam igualar essa
+   especificidade para realmente vencer. Aplicamos a mesma paleta executiva
+   (--exec-*) com as cores corretas. A lista de pedidos e o rodapé de
+   métricas continuam claros, como os dados de tabela em qualquer outra
+   tela. */
+
+.page-area .management-center .management-overview {
+  border-color: var(--exec-line, #1d5272) !important;
+  background: var(--exec-navy-950, #071a35) !important;
+}
+
+.page-area .management-center .management-overview article {
+  border-color: var(--exec-line, #1d5272) !important;
+  color: var(--exec-text, #d8edf5) !important;
+  background: linear-gradient(145deg, var(--exec-navy-850, #0a2b42), #09263e) !important;
+}
+
+.page-area .management-center .management-overview article.validation {
+  border-color: rgba(232, 168, 56, 0.5) !important;
+  background: linear-gradient(145deg, rgba(232, 168, 56, 0.16), #09263e 68%) !important;
+}
+
+.page-area .management-center .management-overview article.rejected {
+  border-color: rgba(255, 121, 114, 0.48) !important;
+  background: linear-gradient(145deg, rgba(255, 121, 114, 0.15), #09263e 68%) !important;
+}
+
+.page-area .management-center .management-overview article.missing {
+  border-color: rgba(240, 173, 49, 0.5) !important;
+  background: linear-gradient(145deg, rgba(240, 173, 49, 0.16), #09263e 68%) !important;
+}
+
+.page-area .management-center .management-overview article :is(small, em) {
+  color: var(--exec-muted, #a9cbd4) !important;
+}
+
+.page-area .management-center .management-overview article strong {
+  color: var(--exec-title, #ffffff) !important;
+}
+
+.page-area .management-center .management-tabs {
+  border-color: var(--exec-line, #1d5272) !important;
+  background: var(--exec-navy-950, #071a35) !important;
+  color: var(--exec-muted, #a9cbd4) !important;
+}
+
+.page-area .management-center .management-tabs button {
+  color: var(--exec-muted, #a9cbd4) !important;
+}
+
+.page-area .management-center .management-tabs button.active {
+  color: var(--exec-cyan, #7bd0e6) !important;
+  border-bottom-color: var(--exec-cyan, #7bd0e6) !important;
+}
+
+.page-area .management-center .management-tabs button span {
+  color: var(--exec-muted, #a9cbd4) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.page-area .management-center .management-tabs button.active span {
+  color: #051b2c !important;
+  background: var(--exec-cyan, #7bd0e6) !important;
+}
+
+.page-area .management-center .management-process-filter span {
+  color: var(--exec-muted, #a9cbd4) !important;
+}
+
+.page-area .management-center .management-process-filter select {
+  border-color: rgba(123, 208, 230, 0.32) !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}

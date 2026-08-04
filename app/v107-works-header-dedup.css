@@ -1,0 +1,15 @@
+/* V107 — remove o cabeçalho genérico duplicado da tela "Execução da Obra".
+   O mesmo problema já foi corrigido para Máquinas no V101: a tela renderiza
+   o painel executivo próprio da Obra (com seu cabeçalho "Centro de controle
+   da obra") e, logo abaixo, o cabeçalho genérico do módulo "works" também
+   aparece — agora escuro pelo V105, criando dois cabeçalhos colados um no
+   outro que ficam difíceis de ler juntos. Mantém somente o cabeçalho
+   executivo próprio da obra. */
+
+.integrated-view-stack:has(.construction-executive.module-context) .module-heading {
+  display: none !important;
+}
+
+.integrated-view-stack:has(.construction-executive.module-context) .page-stack {
+  gap: 18px !important;
+}
