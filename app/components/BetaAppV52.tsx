@@ -920,7 +920,7 @@ function V52Enhancer({ isAdmin }: { isAdmin: boolean }) {
     <div className="v52-floating-layer" aria-hidden="true">
       <div data-active-module={activeModule} />
       {activeModule === "people" ? <AdministrativeActions isAdmin={isAdmin} /> : null}
-      {["purchases", "cards", "rentals", "food", "expenses"].includes(activeModule) ? (
+      {moduleMap[activeModule] ? (
         <ExecutiveModuleStrip moduleId={activeModule} records={records} />
       ) : null}
       {activeModule === "dashboard" ? (
