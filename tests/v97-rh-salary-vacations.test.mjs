@@ -38,7 +38,10 @@ test("Cálculo de Férias possui tela separada no grupo de RH", async () => {
 test("a aba de férias fica sempre entre salário e rescisão", async () => {
   const source = await readFile(wrapperPath, "utf8");
 
-  assert.match(source, /orderedItems\.filter\(\(item\) => item !== "vacations"\)/);
+  assert.match(
+    source,
+    /rhGroup\.items\.filter\(\(item\) => item !== "vacations"\)/,
+  );
   assert.match(source, /orderedItems\.indexOf\("payroll"\)/);
   assert.match(source, /orderedItems\.indexOf\("terminations"\)/);
   assert.match(source, /orderedItems\.splice\(insertionIndex, 0, "vacations"\)/);
