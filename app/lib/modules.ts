@@ -139,58 +139,6 @@ export const moduleDefinitions: ModuleDefinition[] = [
     ],
   },
   {
-    id: "contractors",
-    label: "Registro de Terceiros",
-    shortLabel: "Registro de Terceiros",
-    eyebrow: "Contratos • Serviços terceirizados",
-    description:
-      "Terceiros contratados, atividade executada, trabalhadores envolvidos, valores, documentos e aprovação.",
-    color: "#8a4b08",
-    lightColor: "#fff8e8",
-    titleField: "companyName",
-    referenceField: "measurementId",
-    statusField: "status",
-    dateField: "measurementDate",
-    amountField: "measuredAmount",
-    spreadsheetSheets: [],
-    tableColumns: ["measurementId", "companyName", "service", "workerCount", "measurementDate", "measuredAmount", "status"],
-    fields: [
-      { key: "measurementId", label: "Código do registro", type: "text", required: true, help: "Identificador único do terceiro e do acompanhamento do serviço." },
-      { key: "companyName", label: "Razão social / nome do terceiro", type: "text", required: true },
-      { key: "cnpj", label: "CPF ou CNPJ", type: "text", required: true },
-      { key: "workCode", label: "Código da obra", type: "text", placeholder: "Ex.: OBRA-2026-001" },
-      { key: "work", label: "Obra vinculada", type: "text", required: true },
-      { key: "cno", label: "CNO relacionado (opcional)", type: "text" },
-      { key: "contractNumber", label: "Número do contrato", type: "text" },
-      { key: "service", label: "Serviço / atividade executada", type: "text", required: true, placeholder: "Ex.: execução de alvenaria" },
-      { key: "currentActivity", label: "O que o terceiro está executando agora", type: "textarea", wide: true },
-      { key: "workerCount", label: "Trabalhadores terceirizados na atividade", type: "number", required: true, placeholder: "Ex.: 8", help: "Informe quantas pessoas do terceiro estão exercendo esta atividade." },
-      { key: "contractValue", label: "Valor total do contrato", type: "currency" },
-      { key: "scopeWeight", label: "Peso do escopo no avanço da obra (%)", type: "number", help: "Quanto este contrato representa no avanço físico total da obra." },
-      { key: "plannedProgress", label: "Execução planejada do terceiro (%)", type: "number" },
-      { key: "executionProgress", label: "Execução comprovada do terceiro (%)", type: "number", help: "Percentual acumulado do escopo contratado, validado pela engenharia." },
-      { key: "productivityStatus", label: "Condição da frente terceirizada", type: "select", options: ["No ritmo", "Atenção", "Atrasada", "Paralisada", "Concluída"] },
-      { key: "delayReason", label: "Motivo do desvio ou paralisação", type: "text" },
-      { key: "expectedCompletion", label: "Previsão de conclusão do escopo", type: "date" },
-      { key: "lastProgressUpdate", label: "Última atualização do avanço", type: "date" },
-      { key: "measurementNumber", label: "Etapa / número da medição", type: "text" },
-      { key: "measurementDate", label: "Data da conferência do serviço", type: "date", required: true },
-      { key: "measuredAmount", label: "Valor do serviço realizado", type: "currency", required: true },
-      { key: "retentionInss", label: "Retenção previdenciária (R$)", type: "currency", help: "Informe o valor apurado; a incidência e a alíquota dependem do serviço e devem ser validadas." },
-      { key: "retentionIss", label: "Retenção de ISS (R$)", type: "currency", help: "Informe o valor apurado conforme o município e a natureza do serviço." },
-      { key: "netAmount", label: "Valor líquido a pagar", type: "currency" },
-      { key: "status", label: "Situação do serviço / pagamento", type: "select", required: true, options: ["Rascunho", "Em conferência", "Aguardando aprovação", "Aprovada", "Faturada", "Paga", "Rejeitada"] },
-      { key: "invoiceUrl", label: "Nota fiscal / fatura", type: "url" },
-      { key: "paymentDate", label: "Data do pagamento", type: "date" },
-      { key: "paidAmount", label: "Valor efetivamente pago", type: "currency" },
-      { key: "receiptUrl", label: "Comprovante de pagamento", type: "url", placeholder: "Cole o link do comprovante salvo no SharePoint ou OneDrive" },
-      { key: "measurementUrl", label: "Relatório / comprovante do serviço", type: "url" },
-      { key: "contractUrl", label: "Contrato e aditivos", type: "url" },
-      { key: "responsible", label: "Responsável pela conferência", type: "text" },
-      { key: "notes", label: "Observações", type: "textarea", wide: true },
-    ],
-  },
-  {
     id: "worklogs",
     label: "Diário de produtividade da obra",
     shortLabel: "Diário de obra",
@@ -1064,7 +1012,6 @@ const modulesWithInternalReferences = new Set([
   "taxes",
   "purchases",
   "documents",
-  "contractors",
 ]);
 
 export function isInternalCodeField(
@@ -1080,10 +1027,6 @@ export function isInternalCodeField(
 
 export function hasInternalRecordReference(moduleId: string) {
   return modulesWithInternalReferences.has(moduleId);
-}
-
-export function isHiddenOperationalModule(moduleId: string) {
-  return moduleId === "contractors";
 }
 
 export const moduleTips: Record<string, string> = {
@@ -1121,8 +1064,6 @@ export const moduleTips: Record<string, string> = {
     "Simule, confira a memória de cálculo e valide com a contabilidade antes de qualquer fechamento oficial.",
   terminations:
     "Selecione o funcionário para reaproveitar cadastro e histórico do Cálculo de Folha. Revise motivo, aviso, férias, médias, FGTS e descontos antes da validação contábil.",
-  contractors:
-    "Cadastre o terceiro, vincule a obra e atualize a execução comprovada do escopo. Confira equipe, produtividade, contrato, retenções, nota fiscal e aprovação antes do pagamento.",
   compliance:
     "Validação interna não significa transmissão oficial. Somente marque como transmitido quando houver protocolo e, como processado, quando houver recibo ou retorno.",
   rules:
@@ -1130,7 +1071,7 @@ export const moduleTips: Record<string, string> = {
 };
 
 export const navigationGroups = [
-  { label: "GESTÃO", items: ["dashboard"] },
+  { label: "GESTÃO", items: ["dashboard", "manual"] },
   { label: "FINANCEIRO & SUPRIMENTOS", items: ["expenses", "cards", "purchases", "suppliers"] },
   { label: "ENGENHARIA & MÁQUINAS", items: ["works", "worklogs", "assets"] },
   { label: "PESSOAS", items: ["people", "payroll", "terminations"] },

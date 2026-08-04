@@ -393,7 +393,7 @@ function configureV52Modules() {
   navigationGroups.splice(
     0,
     navigationGroups.length,
-    { label: "PAINEL EXECUTIVO", items: ["dashboard"] },
+    { label: "PAINEL EXECUTIVO", items: ["dashboard", "manual"] },
     {
       label: "FINANCEIRO E SUPRIMENTOS",
       items: ["expenses", "cards"],

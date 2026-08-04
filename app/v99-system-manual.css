@@ -1,0 +1,18 @@
+.manual-icon {
+  color: #fff;
+  background: var(--brand-primary);
+}
+
+.manual-entry-card .manual-entry-body {
+  padding: 18px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.manual-entry-card .manual-entry-body p {
+  margin: 0;
+  color: #33454e;
+  font-size: 14px;
+  line-height: 1.6;
+}

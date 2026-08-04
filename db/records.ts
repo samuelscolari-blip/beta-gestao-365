@@ -127,7 +127,6 @@ const allowedModules = new Set([
   "documents",
   "emails",
   "m365",
-  "contractors",
   "compliance",
   "rules",
   "settings",
@@ -446,60 +445,6 @@ export async function ensureDemoRecords() {
     }
   }
 
-  const demoWorkerCounts = new Map(
-    demoRecords
-      .filter((record) => record.module === "contractors")
-      .map((record) => [
-        record.reference.trim().toLowerCase(),
-        Number(record.payload.workerCount || 0),
-      ]),
-  );
-  const workerCountBackfills = (existing.results || []).flatMap((row) => {
-    if (row.module !== "contractors" || row.source !== DEMO_SOURCE) return [];
-    const desiredCount = demoWorkerCounts.get(row.reference.trim().toLowerCase());
-    if (!desiredCount) return [];
-    try {
-      const payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
-      if (Number(payload.workerCount || 0) > 0) return [];
-      return [{
-        id: row.id,
-        payload: { ...payload, workerCount: desiredCount },
-      }];
-    } catch {
-      return [];
-    }
-  });
-
-  if (workerCountBackfills.length) {
-    const updatedAt = new Date().toISOString();
-    await db.batch(
-      workerCountBackfills.map((record) =>
-        db
-          .prepare(
-            `UPDATE records
-             SET payload = ?, updated_at = ?
-             WHERE tenant_id = ? AND id = ? AND source = ?`,
-          )
-          .bind(
-            JSON.stringify(record.payload),
-            updatedAt,
-            DEFAULT_TENANT_ID,
-            record.id,
-            DEMO_SOURCE,
-          ),
-      ),
-    );
-    for (const record of workerCountBackfills) {
-      await audit(
-        "DEMO_REFRESH",
-        "contractors",
-        record.id,
-        "Quantidade fictícia de trabalhadores adicionada ao Registro de Terceiros",
-        "Sistema",
-      );
-    }
-  }
-
   const executiveFieldsByModule: Record<string, string[]> = {
     works: [
       "plannedProgress",
@@ -519,17 +464,6 @@ export async function ensureDemoRecords() {
       "nextMilestoneDate",
       "riskLevel",
       "scheduleNotes",
-    ],
-    contractors: [
-      "workCode",
-      "currentActivity",
-      "scopeWeight",
-      "plannedProgress",
-      "executionProgress",
-      "productivityStatus",
-      "delayReason",
-      "expectedCompletion",
-      "lastProgressUpdate",
     ],
     assets: [
       "rentalEndDate",

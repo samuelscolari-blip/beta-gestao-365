@@ -120,7 +120,6 @@ const paymentEvidenceRules: Record<string, PaymentEvidenceRule> = {
   taxes: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["expectedAmount"] },
   purchases: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["totalAmount"] },
   cards: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["amount"] },
-  contractors: { statusKey: "status", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["netAmount", "measuredAmount"] },
   assets: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["monthlyCost"] },
   asset_events: { statusKey: "paymentStatus", dateKey: "paymentDate", amountKey: "paidAmount", proofKey: "receiptUrl", expectedKeys: ["maintenanceCost"] },
 };
@@ -203,54 +202,6 @@ function validatePeopleBusinessRules(
   return issues;
 }
 
-function validateContractorBusinessRules(
-  payload: Record<string, unknown>,
-): RecordValidationIssue[] {
-  const issues: RecordValidationIssue[] = [];
-  const document = String(payload.cnpj ?? "").replace(/\D/g, "");
-  if (document && ![11, 14].includes(document.length)) {
-    issues.push({
-      field: "cnpj",
-      message: "O CPF ou CNPJ deve conter 11 ou 14 dígitos.",
-    });
-  }
-  const workerCount = numberValue(payload, "workerCount");
-  if (
-    !isBlank(payload.workerCount) &&
-    (!Number.isInteger(workerCount) || workerCount < 1)
-  ) {
-    issues.push({
-      field: "workerCount",
-      message:
-        "Informe uma quantidade inteira de trabalhadores terceirizados, igual ou maior que 1.",
-    });
-  }
-  const measured = numberValue(payload, "measuredAmount");
-  const deductions =
-    numberValue(payload, "retentionInss") +
-    numberValue(payload, "retentionIss");
-  if (deductions > measured) {
-    issues.push({
-      field: "retentionInss",
-      message:
-        "A soma das retenções não pode superar o valor bruto da medição.",
-    });
-  }
-  [
-    ["scopeWeight", "O peso do escopo"],
-    ["plannedProgress", "A execução planejada"],
-    ["executionProgress", "A execução comprovada"],
-  ].forEach(([key, label]) => {
-    if (numberValue(payload, key) > 100) {
-      issues.push({
-        field: key,
-        message: `${label} deve ficar entre 0% e 100%.`,
-      });
-    }
-  });
-  return issues;
-}
-
 function validateWorkBusinessRules(
   payload: Record<string, unknown>,
 ): RecordValidationIssue[] {
@@ -312,7 +263,6 @@ function validateWorkBusinessRules(
 
 const moduleValidators: Partial<Record<string, ModuleValidator>> = {
   people: validatePeopleBusinessRules,
-  contractors: validateContractorBusinessRules,
   works: validateWorkBusinessRules,
 };
 

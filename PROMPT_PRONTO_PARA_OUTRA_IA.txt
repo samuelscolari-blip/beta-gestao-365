@@ -17,7 +17,7 @@ REGRAS:
 4. Não exponha senhas, tokens, certificados ou segredos.
 5. Preserve a autorização administrativa no servidor.
 6. Mantenha códigos internos ocultos por padrão.
-7. Mantenha Terceiros operacional oculto.
+7. Terceiros (contractors) foi removido do sistema; não recrie esse módulo.
 8. Preserve o Passo a passo da obra.
 9. Compras usa somente Aguardando análise, Aprovado e Reprovado.
 10. Exemplos fictícios não entram em totais ou decisões reais.
