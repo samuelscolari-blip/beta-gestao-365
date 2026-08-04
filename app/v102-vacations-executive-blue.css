@@ -1,0 +1,61 @@
+/* V102 — Cálculo de Férias com o mesmo azul executivo da visão de área. */
+
+.page-area .page-stack.vacations-page > section.module-heading {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid #174f73 !important;
+  color: #ffffff !important;
+  background-color: #082b46 !important;
+  background-image:
+    radial-gradient(circle at 96% 0%, rgba(83, 165, 214, 0.22), transparent 29%),
+    linear-gradient(135deg, #082b46 0%, #0a3553 58%, #0d4568 100%) !important;
+  box-shadow: 0 18px 42px rgba(5, 35, 56, 0.22) !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading::before {
+  opacity: 0 !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading::after {
+  right: -54px !important;
+  bottom: -90px !important;
+  width: 250px !important;
+  height: 250px !important;
+  border-color: rgba(144, 208, 238, 0.13) !important;
+  opacity: 1 !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading .module-big-icon {
+  border-color: rgba(169, 221, 245, 0.3) !important;
+  color: #bcecff !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(73, 161, 205, 0.09)) !important;
+  box-shadow:
+    0 12px 28px rgba(2, 24, 39, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.13) !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading .eyebrow {
+  color: #74d8ff !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading h1 {
+  color: #ffffff !important;
+  text-shadow: none !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading p {
+  color: #c9e4ef !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading .button.primary {
+  border-color: #ffffff !important;
+  color: #0a3d5d !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  box-shadow: 0 12px 26px rgba(2, 25, 41, 0.24) !important;
+}
+
+.page-area .page-stack.vacations-page > section.module-heading .button.primary:hover {
+  color: #082f49 !important;
+  background: #eef9ff !important;
+}
