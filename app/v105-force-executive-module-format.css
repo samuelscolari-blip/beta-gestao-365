@@ -1,7 +1,7 @@
 /*
  * V105 — aplicação efetiva do padrão executivo aos blocos superiores.
  *
- * Esta camada é propositalmente carregada por último e não depende de :has().
+ * Esta camada é propositalmente carregada por último e usa seletores diretos.
  * Ela altera somente apresentação visual: cabeçalhos, instruções, abas e KPIs.
  * Textos, dados, ações, cálculos, tabelas, formulários e regras permanecem intactos.
  */
