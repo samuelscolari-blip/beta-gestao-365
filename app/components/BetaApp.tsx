@@ -7948,10 +7948,12 @@ export default function BetaApp({
   userName,
   userEmail,
   isAdmin,
+  onActiveViewChange,
 }: {
   userName?: string | null;
   userEmail?: string | null;
   isAdmin: boolean;
+  onActiveViewChange?: (view: string) => void;
 }) {
   const [activeView, setActiveView] = useState("dashboard");
   const [records, setRecords] = useState<StoredRecord[]>([]);
@@ -7973,6 +7975,10 @@ export default function BetaApp({
   const [importTarget, setImportTarget] = useState<string | undefined>(undefined);
   const [showInternalCodes, setShowInternalCodes] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    onActiveViewChange?.(activeView);
+  }, [activeView, onActiveViewChange]);
 
   async function loadRecords(showLoading = false) {
     if (showLoading) setLoading(true);
