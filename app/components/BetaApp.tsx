@@ -6174,17 +6174,32 @@ function IntegrationHub({
 
 function ComplianceCenter({
   records,
+  search,
+  setSearch,
+  status,
+  setStatus,
   onNavigate,
   onNew,
+  onEdit,
+  onDelete,
+  onImport,
   onOpen,
   canEdit,
 }: {
   records: StoredRecord[];
+  search: string;
+  setSearch: (value: string) => void;
+  status: string;
+  setStatus: (value: string) => void;
   onNavigate: (view: string) => void;
   onNew: (moduleId: string) => void;
+  onEdit: (record: StoredRecord) => void;
+  onDelete: (record: StoredRecord) => void;
+  onImport: (moduleId: string) => void;
   onOpen: (record: StoredRecord) => void;
   canEdit: boolean;
 }) {
+  const [tab, setTab] = useState<"overview" | "rules">("overview");
   const events = records.filter((record) => record.module === "compliance");
   const rules = records.filter((record) => record.module === "rules");
   const sealedOrReady = events.filter((record) =>
@@ -6200,6 +6215,51 @@ function ComplianceCenter({
     record.status.toLowerCase().includes("rejeitado"),
   ).length;
   const activeRules = rules.filter((record) => record.status === "Ativa").length;
+
+  function selectTab(next: "overview" | "rules") {
+    setTab(next);
+    setSearch("");
+    setStatus("");
+  }
+
+  const complianceTabs = (
+    <nav className="financial-center-tabs" aria-label="Áreas da Central Fiscal e Compliance">
+      <button
+        type="button"
+        className={tab === "overview" ? "active" : ""}
+        onClick={() => selectTab("overview")}
+      >
+        Visão geral <span>{events.length}</span>
+      </button>
+      <button
+        type="button"
+        className={tab === "rules" ? "active" : ""}
+        onClick={() => selectTab("rules")}
+      >
+        Motor de Regras <span>{rules.length}</span>
+      </button>
+    </nav>
+  );
+
+  if (tab === "rules") {
+    return (
+      <ModulePage
+        module={moduleMap.rules}
+        records={rules}
+        search={search}
+        setSearch={setSearch}
+        status={status}
+        setStatus={setStatus}
+        onNew={() => onNew("rules")}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onImport={() => onImport("rules")}
+        onOpen={onOpen}
+        canEdit={canEdit}
+        topNavigation={complianceTabs}
+      />
+    );
+  }
 
   return (
     <div className="page-stack compliance-page">
@@ -6234,6 +6294,8 @@ function ComplianceCenter({
           )}
         </div>
       </section>
+
+      {complianceTabs}
 
       <aside className="compliance-boundary-note">
         <Icon name="lock" size={20} />
@@ -6314,7 +6376,12 @@ function ComplianceCenter({
             <p>{context.description}</p>
             <div>
               {context.modules.map((moduleId) => (
-                <button key={moduleId} onClick={() => onNavigate(moduleId)}>
+                <button
+                  key={moduleId}
+                  onClick={() =>
+                    moduleId === "rules" ? selectTab("rules") : onNavigate(moduleId)
+                  }
+                >
                   {moduleMap[moduleId]?.shortLabel || moduleId}
                 </button>
               ))}
@@ -6395,7 +6462,7 @@ function ComplianceCenter({
               <span className="eyebrow">REGRAS E VIGÊNCIAS</span>
               <h2>Catálogo homologável</h2>
             </div>
-            <button className="text-button" onClick={() => onNavigate("rules")}>
+            <button className="text-button" onClick={() => selectTab("rules")}>
               Ver regras <Icon name="arrow" size={14} />
             </button>
           </div>
@@ -9061,8 +9128,15 @@ throw new Error(
           ) : activeView === "compliance" ? (
             <ComplianceCenter
               records={operationalRecords}
+              search={search}
+              setSearch={setSearch}
+              status={statusFilter}
+              setStatus={setStatusFilter}
               onNavigate={navigate}
               onNew={openNew}
+              onEdit={openEdit}
+              onDelete={remove}
+              onImport={requestImport}
               onOpen={openRecord}
               canEdit={isAdmin}
             />

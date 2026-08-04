@@ -1075,7 +1075,7 @@ export const navigationGroups = [
   { label: "FINANCEIRO & SUPRIMENTOS", items: ["expenses", "cards", "purchases", "suppliers"] },
   { label: "ENGENHARIA & MÁQUINAS", items: ["works", "worklogs", "assets"] },
   { label: "PESSOAS", items: ["people", "payroll", "terminations"] },
-  { label: "FISCAL & COMPLIANCE", items: ["compliance", "rules", "taxes"] },
+  { label: "FISCAL & COMPLIANCE", items: ["compliance", "taxes"] },
   { label: "OPERAÇÃO & DOCUMENTOS", items: ["rentals", "food", "documents"] },
   { label: "MICROSOFT 365", items: ["emails", "m365"] },
 ];
