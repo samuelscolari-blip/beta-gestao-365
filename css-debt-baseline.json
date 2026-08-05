@@ -1,9 +1,9 @@
 {
-  "_comentario": "Teto da divida de CSS legado. Estes numeros so podem DIMINUIR. Ver AGENTS.md, secao Governanca de CSS.",
+  "_comentario": "Teto da divida de CSS legado. Estes numeros so podem DIMINUIR. Ver AGENTS.md, secao Governanca de CSS. Reducao da etapa 5D: 1282->1078 !important, 158->86 :has() e 41->39 folhas globais, pela remocao das regras que estilizavam .module-heading — hoje sem efeito, porque o cabecalho passou a ter CSS proprio.",
   "ceilings": {
-    "importantDeclarations": 1282,
-    "hasSelectors": 158,
-    "legacyCssImports": 41
+    "importantDeclarations": 1078,
+    "hasSelectors": 86,
+    "legacyCssImports": 39
   },
   "frozenLegacyImports": [
     "./globals.css",
@@ -35,8 +35,6 @@
     "./v90-payroll-result-colors.css",
     "./v91-clean-payroll-technical-ui.css",
     "./v92-rentals-admin-ux.css",
-    "./v93-financial-header-approved.css",
-    "./v94-global-header-standard.css",
     "./v92-payroll-statement-redesign.css",
     "./v96-central-pedidos-contrast.css",
     "./v98-vacations-ui.css",

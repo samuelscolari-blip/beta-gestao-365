@@ -112,52 +112,6 @@
 }
 
 /* Cabeçalho executivo no padrão da referência, sem trocar conteúdo. */
-.page-stack:has(.financial-center-tabs) > .module-heading {
-  min-height: 164px;
-  padding: 30px 32px !important;
-  border-color: #164166 !important;
-  background:
-    radial-gradient(circle at 92% 8%, rgba(123, 208, 230, 0.14), transparent 34%),
-    linear-gradient(135deg, #051b2c 0%, #0a2b42 58%, #0b3653 100%) !important;
-  box-shadow: 0 22px 48px rgba(3, 24, 39, 0.2) !important;
-}
-
-.page-stack:has(.financial-center-tabs) > .module-heading .module-big-icon {
-  width: 64px !important;
-  height: 64px !important;
-  border: 1px solid rgba(123, 208, 230, 0.28);
-  color: #7bd0e6 !important;
-  background: rgba(123, 208, 230, 0.12) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-.page-stack:has(.financial-center-tabs) > .module-heading .eyebrow {
-  color: #7bd0e6 !important;
-  font-size: 12px !important;
-}
-
-.page-stack:has(.financial-center-tabs) > .module-heading h1 {
-  color: #ffffff !important;
-  font-size: clamp(31px, 2.6vw, 42px) !important;
-}
-
-.page-stack:has(.financial-center-tabs) > .module-heading p {
-  max-width: 920px;
-  color: #c1dce7 !important;
-  font-size: 15px !important;
-  line-height: 1.65 !important;
-}
-
-.page-stack:has(.financial-center-tabs) > .module-heading .button,
-.page-stack:has(.financial-center-tabs) > .module-heading button {
-  min-height: 46px;
-  border-color: #7bd0e6 !important;
-  color: #051b2c !important;
-  background: #7bd0e6 !important;
-  font-size: 14px !important;
-  font-weight: 800;
-  box-shadow: 0 9px 22px rgba(123, 208, 230, 0.22);
-}
 
 /* Guia clara e discreta, ligada ao fluxo. */
 .page-stack:has(.financial-center-tabs) > .module-guide {
@@ -344,10 +298,6 @@
     padding: 12px 10px 10px;
   }
 
-  .page-stack:has(.financial-center-tabs) > .module-heading {
-    padding: 26px 24px !important;
-  }
-
   .page-stack:has(.financial-center-tabs) > .mini-kpis {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -365,20 +315,6 @@
 
   .consolidated-card .cost-chart-heading > div:first-child > strong {
     font-size: 25px !important;
-  }
-
-  .page-stack:has(.financial-center-tabs) > .module-heading {
-    min-height: 0;
-    padding: 22px 19px !important;
-  }
-
-  .page-stack:has(.financial-center-tabs) > .module-heading .module-big-icon {
-    width: 54px !important;
-    height: 54px !important;
-  }
-
-  .page-stack:has(.financial-center-tabs) > .module-heading h1 {
-    font-size: 28px !important;
   }
 
   .page-stack:has(.financial-center-tabs) .financial-center-tabs,

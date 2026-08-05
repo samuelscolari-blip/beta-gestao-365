@@ -67,18 +67,8 @@ body {
   .management-center,
   .v52-floating-layer
 ),
-.integrated-view-stack > :is(
-  .machine-productivity-panel,
-  .machine-executive,
-  .construction-executive-v2,
-  .module-heading,
-  .mini-kpis,
-  .module-guide,
-  .table-card,
-  .deadline-card,
-  .consolidated-card
-),
-.v52-floating-layer > :is(
+  .integrated-view-stack > :is(.machine-productivity-panel, .machine-executive, .construction-executive-v2, .mini-kpis, .module-guide, .table-card, .deadline-card, .consolidated-card),
+  .v52-floating-layer > :is(
   .v52-module-strip,
   .v52-administrative-actions,
   .v52-rental-management
@@ -91,20 +81,7 @@ body {
 }
 
 /* Superfícies operacionais voltam ao branco. */
-.page-area :is(
-  .module-heading,
-  .content-card,
-  .table-card,
-  .deadline-card,
-  .management-center,
-  .batch-payroll-panel,
-  .capability-card,
-  .compliance-events,
-  .compliance-rules,
-  .construction-compliance-strip,
-  .tax-profile-card,
-  .admin-card
-) {
+.page-area :is(.content-card, .table-card, .deadline-card, .management-center, .batch-payroll-panel, .capability-card, .compliance-events, .compliance-rules, .construction-compliance-strip, .tax-profile-card, .admin-card) {
   border-color: var(--v84-line) !important;
   color: var(--v84-text) !important;
   background:
@@ -118,20 +95,6 @@ body {
 }
 
 /* Cabeçalho de cadastro e ação permanece claro. */
-.page-area .module-heading {
-  border-radius: 22px !important;
-  background:
-    radial-gradient(circle at 92% 10%, rgba(56, 200, 227, 0.1), transparent 34%),
-    linear-gradient(135deg, #ffffff, #f5f9fb) !important;
-}
-
-.page-area .module-heading :is(h1, h2) {
-  color: var(--v84-title) !important;
-}
-
-.page-area .module-heading p {
-  color: var(--v84-muted) !important;
-}
 
 .page-area .module-big-icon {
   border-color: #cde1e9 !important;
@@ -141,7 +104,6 @@ body {
 }
 
 .page-area .eyebrow,
-.page-area .module-heading .eyebrow,
 .page-area .card-heading .eyebrow {
   color: #34778d !important;
 }
@@ -772,7 +734,6 @@ body {
   }
 
   .page-area .v52-module-strip,
-  .page-area .module-heading,
   .page-area .consolidated-heading {
     padding: 20px !important;
   }

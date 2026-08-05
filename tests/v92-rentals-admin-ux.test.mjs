@@ -43,8 +43,19 @@ test("as Ações rápidas recebem cartões maiores e leitura melhor", async () =
 test("somente o CTA redundante de Pessoas é retirado", async () => {
   const css = await readFile(cssPath, "utf8");
 
-  assert.match(css, /\.page-area:has\(\.v52-administrative-actions\) \.module-heading \.button\.primary[\s\S]*display:\s*none/);
-  assert.doesNotMatch(css, /(^|\n)\.module-heading \.button\.primary\s*\{/);
+  /*
+   * A garantia é a mesma; mudou quem a cumpre. O CSS escondia
+   * `.button.primary` dentro do cabeçalho quando a tela tinha o painel
+   * de Ações rápidas. Na etapa 5D a classe global sumiu, e a supressão
+   * passou para o React.
+   *
+   * A troca não era opcional: a linha de base NÃO teria acusado a perda,
+   * porque ela roda em modo visitante, onde o cabeçalho mostra um selo
+   * de consulta e não existe botão nenhum para esconder.
+   */
+  const betaApp = await readFile("app/components/BetaApp.tsx", "utf8");
+  assert.match(betaApp, /hidePrimaryAction=\{activeView === "people"\}/);
+  assert.match(betaApp, /canEdit && !hidePrimaryAction \?/);
   assert.doesNotMatch(css, /\.v52-administrative-actions[^\n]*display:\s*none/);
 });
 

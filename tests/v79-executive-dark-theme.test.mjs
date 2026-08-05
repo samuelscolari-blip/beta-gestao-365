@@ -36,7 +36,7 @@ test("V79 cobre estrutura global, módulos, agenda, custos, obra e modais", asyn
   const requiredSelectors = [
     ".app-shell",
     ".page-area",
-    ".module-heading",
+    /* `.module-heading` saiu na etapa 5D: o cabeçalho tem CSS próprio. */
     ".mini-kpis article",
     ".module-guide",
     ".table-wrap",

@@ -14,17 +14,24 @@ suposto) para que a etapa final seja executada sem redescobrir nada.
 | 5A — CSS próprio da `executive` | publicada | linha de base sem diferença visual nas 12 telas |
 | 5B — CSS próprio da `financial` | publicada | linha de base sem diferença visual nas 2 telas |
 | 5C — CSS próprio da `standard` | publicada | linha de base sem diferença visual nas 2 telas |
-| 5D — remoção do legado | **não iniciada** | — |
+| 5D — remoção do legado | publicada | 112 regras removidas, zero diferença visual |
 
 A etapa 4 deixou o componente ainda emitindo a classe global
 `.module-heading`, de propósito. Enquanto essa classe existir, o componente
 continua exposto às folhas globais — é isso que a etapa 5 resolve, uma
 variante por vez.
 
-A 5A tirou as 12 telas executivas dessa exposição. As outras duas variantes
-continuam no caminho legado, e por isso **as regras legadas ainda não podem
-ser apagadas** — elas são o único estilo que resta para `financial` e
-`standard`. A limpeza é a 5D.
+**A migração terminou.** As três variantes têm CSS próprio, as 112 regras
+globais que estilizavam o cabeçalho foram removidas, e duas folhas inteiras
+(`v93` e `v94`) deixaram de existir por terem sobrado sem nenhuma regra.
+
+Redução medida da dívida:
+
+| | antes | depois |
+|---|---|---|
+| `!important` | 1282 | **1078** |
+| `:has()` | 158 | **86** |
+| folhas globais | 41 | **39** |
 
 ### O que a 5A mediu, e o que sobrou
 
@@ -90,19 +97,11 @@ Tributário. A tela Administração também usa esta variante, mas só aparece
 para administrador e **não está coberta pela linha de base automática** —
 exige conferência manual.
 
-**Cabeçalho oculto** — Execução da Obra e Máquinas renderizam o cabeçalho
-genérico com `display: none`, porque já têm painel próprio acima. Hoje isso
-vem de `v101-machines-header-dedup.css` (via classe marcada por JavaScript em
-`SecureBetaAppV100.tsx`) e de `v107-works-header-dedup.css` (via `:has()`).
-
-Substituto React já identificado, que elimina os dois mecanismos:
-
-```
-activeView === "works" || activeView === "assets"
-```
-
-Basta passar isso como prop ao `ModulePage`, que decide não renderizar o
-cabeçalho. As duas folhas de dedup ficam obsoletas.
+**Cabeçalho oculto** — Execução da Obra e Máquinas não renderizam o
+cabeçalho genérico, porque já têm painel próprio acima. Desde a 5A isso é
+decidido pelo React (`hideHeading`), e não mais por CSS. As folhas
+`v101` e `v107` continuam existindo, mas só pelo espaçamento da pilha:
+a regra que escondia o cabeçalho saiu na 5D.
 
 ## Os sete pontos de renderização
 
@@ -116,7 +115,7 @@ Todos em `app/components/BetaApp.tsx`, já usando `<ModuleHeader>`:
 6. Administração — `variantClass="admin-heading"`
 7. Regime Tributário — `variantClass="tax-heading"`
 
-## As 126 regras legadas a remover
+## As 112 regras legadas — removidas na 5D
 
 | Arquivo | Regras |
 |---|---|

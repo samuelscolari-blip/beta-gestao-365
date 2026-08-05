@@ -60,7 +60,8 @@ test("V84 mantém base clara e limita o escuro aos painéis executivos", async (
     assert.ok(css.includes(selector), `Destaque executivo ausente: ${selector}`);
   }
 
-  assert.match(css, /\.page-area \.module-heading[\s\S]*#ffffff/);
+  /* A asserção sobre `.module-heading` saiu na etapa 5D. O fundo branco
+     do cabeçalho claro agora é declarado no CSS Module do componente. */
   assert.ok(css.includes(".deadline-card"), "Agenda deve permanecer na cobertura clara");
   assert.match(css, /\.page-area \.deadline-heading[\s\S]*background:\s*#ffffff/);
   assert.match(css, /\.page-area \.deadline-list[\s\S]*background:\s*#ffffff/);

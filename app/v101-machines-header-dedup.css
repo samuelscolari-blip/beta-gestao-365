@@ -1,9 +1,5 @@
 /* V101 — remove somente o cabeçalho genérico duplicado da tela de Máquinas. */
 
-.machines-unified-active .module-heading {
-  display: none !important;
-}
-
 .machines-unified-active .page-stack {
   gap: 18px !important;
 }

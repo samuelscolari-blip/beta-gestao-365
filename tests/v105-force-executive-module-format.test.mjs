@@ -5,14 +5,33 @@ import test from "node:test";
 const css = readFileSync("app/v105-force-executive-module-format.css", "utf8");
 const layout = readFileSync("app/layout.tsx", "utf8");
 const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
-const v93 = readFileSync("app/v93-financial-header-approved.css", "utf8");
-const v94 = readFileSync("app/v94-global-header-standard.css", "utf8");
 const v52 = readFileSync("app/v52.css", "utf8");
 
 test("V105 aplica o azul executivo somente quando data-executive-module=true", () => {
-  assert.match(css, /\.page-area\[data-executive-module="true"\] \.module-heading/);
+  /*
+   * A asserção sobre `.module-heading` saiu na etapa 5D: o cabeçalho tem
+   * CSS próprio e nenhum elemento carrega mais essa classe, então a regra
+   * que o V105 mantinha para ele era código morto. O que o V105 ainda
+   * estiliza — a caixa de orientação e os KPIs — continua vivo e condicionado
+   * ao mesmo atributo.
+   */
   assert.match(css, /\.page-area\[data-executive-module="true"\] \.module-guide/);
   assert.match(css, /\.page-area\[data-executive-module="true"\] \.mini-kpis article/);
+});
+
+test("o V105 não estiliza mais o cabeçalho", () => {
+  /*
+   * A trava que impede o problema de voltar: se alguém reintroduzir uma
+   * regra global para `.module-heading` aqui, ela não teria efeito nenhum
+   * (a classe não é emitida) e voltaria a confundir quem lê o CSS
+   * procurando onde o cabeçalho é estilizado. O dono é
+   * `app/ui/ModuleHeader/ModuleHeader.module.css`.
+   */
+  assert.doesNotMatch(
+    css.replace(/\/\*[\s\S]*?\*\//g, ""),
+    /\.module-heading/,
+    "O cabeçalho pertence ao seu CSS Module. Estilize por lá.",
+  );
 });
 
 test("V105 não depende mais de :has(.v52-module-strip) (a faixa é renderizada fora da árvore de .page-area, então esse seletor nunca casava de verdade)", () => {
@@ -33,9 +52,19 @@ test("V105 não força o padrão executivo em telas sem a faixa (Admin, Manual, 
   assert.doesNotMatch(css, /^\.page-area \.mini-kpis/m);
 });
 
-test("V93 e V94 (cabeçalho claro) recuam explicitamente quando data-executive-module=true, para nunca disputar cor/fundo com o V105", () => {
-  assert.match(v93, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:has\(\.financial-center-tabs\) > \.module-heading/);
-  assert.match(v94, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:not\(:has\(\.financial-center-tabs\)\) > \.module-heading/);
+test("as folhas V93 e V94 deixaram de existir", () => {
+  /*
+   * Elas existiam só para o cabeçalho: 20 e 32 regras, todas apontando
+   * para `.module-heading`. Removidas essas, sobraram arquivos com
+   * comentários e nada mais, e o import de cada um permanecia no layout
+   * carregando ar.
+   *
+   * A disputa que este teste vigiava — V93 e V94 contra o V105 pelo fundo
+   * do cabeçalho — não existe mais porque nenhum dos três estiliza o
+   * cabeçalho. Quem estiliza é o CSS Module do componente, sozinho.
+   */
+  assert.doesNotMatch(layout, /v93-financial-header-approved\.css/);
+  assert.doesNotMatch(layout, /v94-global-header-standard\.css/);
 });
 
 test("V52 não força mais fundo claro no cabeçalho via body:has(.sidebar button.active span:nth-child(2)) — esse seletor tinha especificidade (0,4,3), maior que o V105 (0,3,0), e casava em praticamente qualquer tela (todo botão do menu é <svg/><span>, então o span é sempre o 2º filho)", () => {

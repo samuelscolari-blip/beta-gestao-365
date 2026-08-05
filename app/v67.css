@@ -16,15 +16,7 @@
   .construction-executive-v2,
   .management-center
 ),
-.integrated-view-stack > :is(
-  .machine-productivity-panel,
-  .machine-executive,
-  .construction-executive-v2,
-  .module-heading,
-  .mini-kpis,
-  .module-guide,
-  .table-card
-) {
+  .integrated-view-stack > :is(.machine-productivity-panel, .machine-executive, .construction-executive-v2, .mini-kpis, .module-guide, .table-card) {
   width: min(100%, var(--v67-editorial-width));
   min-width: 0;
   margin-inline: auto;
