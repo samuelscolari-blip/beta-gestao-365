@@ -53,38 +53,6 @@
 }
 
 /* Cabeçalho específico de cada módulo. */
-.page-area[data-executive-module="true"] .module-heading {
-  border: 1px solid var(--exec-line) !important;
-  color: var(--exec-text) !important;
-  background:
-    radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), transparent 34%),
-    linear-gradient(165deg, var(--exec-navy-950) 0%, #0b2f50 55%, var(--exec-navy-900) 100%) !important;
-  box-shadow: var(--exec-shadow) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading::after {
-  display: none !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading .module-big-icon {
-  border: 1px solid rgba(123, 208, 230, 0.32) !important;
-  color: var(--exec-cyan) !important;
-  background: rgba(123, 208, 230, 0.14) !important;
-  box-shadow: none !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading .eyebrow {
-  color: #80d0df !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading h1 {
-  color: var(--exec-title) !important;
-  font-size: clamp(24px, 1.9vw, 30px) !important;
-  font-weight: 900 !important;
-  line-height: 1.18 !important;
-  letter-spacing: -0.035em !important;
-  text-wrap: wrap;
-}
 
 /* Padroniza o peso/aperto das letras (não o tamanho) dos títulos em
    destaque das telas escuras com o estilo aprovado pelo usuário em
@@ -97,44 +65,7 @@
   letter-spacing: -0.035em !important;
 }
 
-.page-area[data-executive-module="true"] .module-heading :is(h2, h3) {
-  color: var(--exec-title) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading p {
-  color: var(--exec-muted) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading :is(.read-only-chip, .rule-version-chip, .sync-chip) {
-  border-color: rgba(123, 208, 230, 0.32) !important;
-  color: var(--exec-text) !important;
-  background: #0b2f50 !important;
-}
-
 /* Ações próprias do cabeçalho. */
-.page-area[data-executive-module="true"] .module-heading :is(.button.primary, .primary-button, .module-primary-action) {
-  border-color: #1688e1 !important;
-  color: #ffffff !important;
-  background: linear-gradient(135deg, #1688e1 0%, #0871c9 100%) !important;
-  box-shadow:
-    0 12px 26px rgba(4, 61, 108, 0.30),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)) {
-  border-color: rgba(123, 208, 230, 0.55) !important;
-  color: #061f33 !important;
-  background: #79d2e7 !important;
-  box-shadow: 0 10px 22px rgba(3, 31, 49, 0.22) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading :is(.button.primary, .primary-button, .module-primary-action):hover {
-  background: linear-gradient(135deg, #2499ef 0%, #0c79d5 100%) !important;
-}
-
-.page-area[data-executive-module="true"] .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)):hover {
-  background: #95dfef !important;
-}
 
 /* Caixa "Como usar esta tela". */
 .page-area[data-executive-module="true"] .module-guide {
@@ -245,7 +176,7 @@
 }
 
 @media (max-width: 720px) {
-  .page-area[data-executive-module="true"] :is(.module-heading, .module-guide, .mini-kpis article) {
+  .page-area[data-executive-module="true"] :is(.module-guide, .mini-kpis article) {
     border-radius: 18px !important;
   }
 }

@@ -5329,6 +5329,7 @@ function ModulePage({
   topNavigation,
   variant,
   hideHeading = false,
+  hidePrimaryAction = false,
 }: {
   module: ModuleDefinition;
   records: StoredRecord[];
@@ -5354,6 +5355,18 @@ function ModulePage({
    * remoção das classes globais.
    */
   hideHeading?: boolean;
+  /*
+   * A tela Administrativo concentra os cadastros no painel "Ações
+   * rápidas", logo abaixo — o botão do cabeçalho seria o mesmo comando
+   * duas vezes na mesma tela.
+   *
+   * Isso era feito por CSS, escondendo `.button.primary` dentro de
+   * `.module-heading`. A regra morreu junto com a classe global na etapa
+   * 5D, e a linha de base não teria acusado: ela roda em modo visitante,
+   * onde o cabeçalho mostra um selo de consulta e não há botão nenhum
+   * para esconder.
+   */
+  hidePrimaryAction?: boolean;
 }) {
   const { visible: showInternalCodes, toggle: toggleInternalCodes } =
     useContext(InternalCodeVisibilityContext);
@@ -5409,12 +5422,12 @@ function ModulePage({
           title={presentationModule.label}
           description={presentationModule.description}
           actions={
-            canEdit ? (
+            canEdit && !hidePrimaryAction ? (
               <button className="button primary" onClick={onNew}>
                 <Icon name="plus" size={18} />
                 {actionLabels[module.id] || "Novo registro"}
               </button>
-            ) : (
+            ) : canEdit ? null : (
               <span className="read-only-chip">
                 <Icon name="eye" size={16} /> Consulta protegida
               </span>
@@ -9256,6 +9269,8 @@ throw new Error(
                   variant="executive"
                   /* Obra e Máquinas já têm painel próprio acima. */
                   hideHeading={activeView === "works" || activeView === "assets"}
+                  /* Administrativo já oferece o cadastro em "Ações rápidas". */
+                  hidePrimaryAction={activeView === "people"}
                   module={activeModule}
                   records={moduleRecords}
                   search={search}

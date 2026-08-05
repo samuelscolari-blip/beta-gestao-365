@@ -6,10 +6,6 @@
    outro que ficam difíceis de ler juntos. Mantém somente o cabeçalho
    executivo próprio da obra. */
 
-.integrated-view-stack:has(.construction-executive.module-context) .module-heading {
-  display: none !important;
-}
-
 .integrated-view-stack:has(.construction-executive.module-context) .page-stack {
   gap: 18px !important;
 }

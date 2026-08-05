@@ -251,9 +251,6 @@
 }
 
 /* O cadastro continua nas Ações rápidas; apenas o CTA duplicado do cabeçalho sai. */
-.page-area:has(.v52-administrative-actions) .module-heading .button.primary {
-  display: none !important;
-}
 
 /* ==========================================================================
    3. RESPONSIVIDADE

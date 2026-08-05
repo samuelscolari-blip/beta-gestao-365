@@ -29,8 +29,19 @@ test("a tela de férias recebe marcador próprio sem alcançar outros módulos",
 test("o topo azul e a remoção do CTA ficam restritos à tela de férias", async () => {
   const css = await readFile(cssPath, "utf8");
 
-  assert.match(css, /\.page-stack\.vacations-page > \.module-heading/);
-  assert.match(css, /linear-gradient\(135deg, #082b46/);
+  /*
+   * O topo azul próprio de Férias saiu na etapa 5D, e a linha de base
+   * confirmou que a tela não mudou: desde a 5A o cabeçalho já não
+   * carregava `.module-heading`, então aquelas regras não aplicavam
+   * havia tempo — eram tinta em cima de tinta que ninguém via.
+   *
+   * O ajuste que continua valendo é o outro: esconder o bloco de ações
+   * vazio, que não depende do cabeçalho.
+   */
+  assert.doesNotMatch(
+    css.replace(/\/\*[\s\S]*?\*\//g, ""),
+    /\.module-heading/,
+    "O cabeçalho pertence ao seu CSS Module.",
+  );
   assert.match(css, /\.page-stack\.vacations-page \.empty-actions\s*\{[\s\S]*display:\s*none\s*!important/);
-  assert.doesNotMatch(css, /(^|\n)\.module-heading\s*\{/);
 });
