@@ -8,10 +8,14 @@
 
 :root {
   /* "var(--font-inter)" nunca foi definido (não há next/font nem @font-face
-     no projeto). Sem fallback dentro do var(), isso invalidava a lista
-     inteira e o navegador caía no serifado padrão (Times New Roman) — daí
-     títulos grandes com letter-spacing negativo (calibrado para uma fonte
-     estreita) ficarem com letras coladas/"quebradas". */
+     no projeto). Sem fallback dentro do var(), isso invalidava a declaração
+     inteira em quem usa --v86-font diretamente (ex.: .page-area). Na prática
+     isso é mascarado na maior parte da árvore porque font-family herda e o
+     <body> tem um font-family inline válido (layout.tsx) que vence a
+     cascata — mas continuava sendo uma referência morta e enganosa, então
+     foi removida por correção, não porque fosse a causa comprovada de
+     título com letras coladas (essa causa real foi a colisão V93/V94×V105,
+     corrigida à parte). */
   --v86-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Inter, sans-serif;
   --v86-ink: #12344d;

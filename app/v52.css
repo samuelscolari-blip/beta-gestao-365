@@ -486,13 +486,6 @@ body {
   font-size: 0.79rem !important;
 }
 
-.module-purchases .module-heading,
-body:has(.sidebar button.active span:nth-child(2)) .module-heading {
-  background:
-    radial-gradient(circle at 92% 10%, rgba(3, 105, 161, 0.12), transparent 34%),
-    linear-gradient(135deg, #fff, #f5fafc) !important;
-}
-
 @media (max-width: 1200px) {
   .v52-administrative-actions > div {
     grid-template-columns: repeat(2, minmax(0, 1fr));

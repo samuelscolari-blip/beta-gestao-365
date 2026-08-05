@@ -7,6 +7,7 @@ const layout = readFileSync("app/layout.tsx", "utf8");
 const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
 const v93 = readFileSync("app/v93-financial-header-approved.css", "utf8");
 const v94 = readFileSync("app/v94-global-header-standard.css", "utf8");
+const v52 = readFileSync("app/v52.css", "utf8");
 
 test("V105 aplica o azul executivo somente quando data-executive-module=true", () => {
   assert.match(css, /\.page-area\[data-executive-module="true"\] \.module-heading/);
@@ -35,6 +36,10 @@ test("V105 não força o padrão executivo em telas sem a faixa (Admin, Manual, 
 test("V93 e V94 (cabeçalho claro) recuam explicitamente quando data-executive-module=true, para nunca disputar cor/fundo com o V105", () => {
   assert.match(v93, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:has\(\.financial-center-tabs\) > \.module-heading/);
   assert.match(v94, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:not\(:has\(\.financial-center-tabs\)\) > \.module-heading/);
+});
+
+test("V52 não força mais fundo claro no cabeçalho via body:has(.sidebar button.active span:nth-child(2)) — esse seletor tinha especificidade (0,4,3), maior que o V105 (0,3,0), e casava em praticamente qualquer tela (todo botão do menu é <svg/><span>, então o span é sempre o 2º filho)", () => {
+  assert.doesNotMatch(v52, /body:has\(\.sidebar button\.active span:nth-child\(2\)\)/);
 });
 
 test("V105 reaproveita variáveis de cor únicas (--exec-*) em vez de valores soltos repetidos", () => {
