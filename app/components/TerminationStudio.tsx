@@ -11,6 +11,7 @@ import {
   type TerminationType,
 } from "../lib/termination";
 import { runTerminationValidationSuite } from "../lib/termination-validation";
+import ModuleHeader from "../ui/ModuleHeader/ModuleHeader";
 
 type StoredRecord = {
   id: number;
@@ -425,27 +426,29 @@ export default function TerminationStudio({
 
   return (
     <div className="page-stack payroll-page termination-page">
-      <section className="module-heading payroll-heading termination-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon termination-icon">R</span>
-          <div>
-            <span className="eyebrow">RH • PRÉVIA RESCISÓRIA</span>
-            <h1>Rescisão</h1>
-            <p>
-              Prévia completa por verba, integrada ao cadastro, histórico da
-              folha e parâmetros tributários da empresa.
-            </p>
+      <ModuleHeader
+        variantClass="payroll-heading termination-heading"
+        iconClass="termination-icon"
+        icon="R"
+        eyebrow="RH • PRÉVIA RESCISÓRIA"
+        title="Rescisão"
+        description={
+          <>
+            Prévia completa por verba, integrada ao cadastro, histórico da
+            folha e parâmetros tributários da empresa.
+          </>
+        }
+        actions={
+          <div className="payroll-heading-actions">
+            <span className="rules-chip">
+              Regras {terminationRules2026.version}
+            </span>
+            <span className="no-transmission-chip">
+              Não transmitida
+            </span>
           </div>
-        </div>
-        <div className="payroll-heading-actions">
-          <span className="rules-chip">
-            Regras {terminationRules2026.version}
-          </span>
-          <span className="no-transmission-chip">
-            Não transmitida
-          </span>
-        </div>
-      </section>
+        }
+      />
 
       <aside className="payroll-legal-note termination-legal-note">
         <span className="termination-alert-symbol">!</span>
