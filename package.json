@@ -14,6 +14,8 @@
     "diagnose:live": "node scripts/live-browser-diagnostic.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
     "lint": "bash scripts/cloudflare-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint:css:new": "stylelint \"app/styles/**/*.css\" \"app/**/*.module.css\" --allow-empty-input",
+    "audit:css-debt": "node scripts/audit-css-debt.mjs",
     "db:generate": "bash scripts/cloudflare-env.sh -- drizzle-kit generate",
     "db:migrate:remote": "wrangler d1 migrations apply beta-gestao-365-db --remote --config wrangler.jsonc",
     "deploy:cloudflare": "vinext deploy --skip-build"
@@ -38,6 +40,8 @@
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.12",
     "react-server-dom-webpack": "19.2.6",
+    "stylelint": "17.14.1",
+    "stylelint-config-standard": "40.0.0",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "vinext": "0.0.50",

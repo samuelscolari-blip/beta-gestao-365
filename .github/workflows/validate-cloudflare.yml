@@ -33,6 +33,12 @@ jobs:
       - name: Verificar qualidade do código
         run: npm run lint
 
+      - name: Verificar arquitetura do CSS novo
+        run: npm run lint:css:new
+
+      - name: Conferir que a dívida de CSS não aumentou
+        run: npm run audit:css-debt
+
       - name: Compilar versão final para Cloudflare
         run: npm run build
 
