@@ -69,11 +69,17 @@
 
 .page-area[data-executive-module="true"] .module-heading h1 {
   color: var(--exec-title) !important;
-  font-size: clamp(31px, 2.55vw, 43px) !important;
+  font-size: clamp(24px, 1.9vw, 30px) !important;
   font-weight: 800 !important;
-  line-height: 1.15 !important;
+  line-height: 1.2 !important;
   letter-spacing: -0.01em !important;
   text-wrap: wrap;
+}
+
+/* Título da faixa "VISÃO EXECUTIVA DA ÁREA" (.v52-module-strip h2) usa o
+   mesmo peso do título de módulo acima, para os dois ficarem consistentes. */
+.v52-module-strip h2 {
+  font-weight: 800 !important;
 }
 
 .page-area[data-executive-module="true"] .module-heading :is(h2, h3) {
