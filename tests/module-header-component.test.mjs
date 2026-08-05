@@ -7,23 +7,61 @@
  * uma eventual regressão. A troca por CSS Module vem na etapa seguinte.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import test from "node:test";
 
-const component = readFileSync("app/ui/ModuleHeader/ModuleHeader.tsx", "utf8");
-const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
+const COMPONENT_PATH = "app/ui/ModuleHeader/ModuleHeader.tsx";
+const component = readFileSync(COMPONENT_PATH, "utf8");
 
-test("todas as telas usam o componente, nenhuma monta o cabeçalho à mão", () => {
-  assert.doesNotMatch(
-    betaApp,
-    /<section className="module-heading/,
-    "Alguma tela voltou a montar o cabeçalho manualmente. Use <ModuleHeader>: " +
-      "com o HTML repetido em vários lugares, treze arquivos CSS disputavam a " +
-      "mesma classe global e ninguém conseguia prever qual regra venceria.",
+/** Percorre app/ inteiro: a versão anterior lia só o BetaApp.tsx. */
+function listTsxFiles(directory = "app") {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return listTsxFiles(path);
+    return entry.name.endsWith(".tsx") ? [path] : [];
+  });
+}
+
+test("nenhum arquivo monta o cabeçalho à mão, em lugar nenhum de app/", () => {
+  /*
+   * A versão anterior deste teste lia apenas o BetaApp.tsx e afirmava que
+   * "todas as telas usam o componente". Por isso não viu que o
+   * TerminationStudio.tsx continuava montando o cabeçalho manualmente — deu
+   * falsa segurança justamente sobre o que deveria garantir. Agora percorre
+   * app/ inteiro, recursivamente.
+   */
+  const manuais = listTsxFiles()
+    .filter((path) => path !== COMPONENT_PATH)
+    .filter((path) =>
+      /className\s*=\s*["'`][^"'`]*\bmodule-heading\b/.test(
+        readFileSync(path, "utf8"),
+      ),
+    );
+
+  assert.deepEqual(
+    manuais,
+    [],
+    "Cabeçalho montado à mão. Use <ModuleHeader>: com o HTML repetido em " +
+      "vários lugares, treze arquivos CSS disputam a mesma classe global e " +
+      "ninguém consegue prever qual regra vence.",
   );
+});
 
-  const usos = betaApp.match(/<ModuleHeader\b/g) ?? [];
-  assert.equal(usos.length, 7, "Esperados 7 pontos de renderização.");
+test("os oito pontos de renderização usam o componente", () => {
+  const usos = listTsxFiles()
+    .filter((path) => path !== COMPONENT_PATH)
+    .reduce(
+      (total, path) =>
+        total + (readFileSync(path, "utf8").match(/<ModuleHeader\b/g)?.length ?? 0),
+      0,
+    );
+
+  assert.equal(
+    usos,
+    8,
+    "Sete pontos vivem no BetaApp.tsx e um no TerminationStudio.tsx.",
+  );
 });
 
 test("o componente preserva a estrutura de DOM que o CSS existente espera", () => {
@@ -45,15 +83,22 @@ test("o componente preserva a estrutura de DOM que o CSS existente espera", () =
 });
 
 test("as classes semânticas de cada tela continuam sendo emitidas", () => {
+  const fontes = listTsxFiles()
+    .filter((path) => path !== COMPONENT_PATH)
+    .map((path) => readFileSync(path, "utf8"))
+    .join("\n");
+
   for (const variante of [
     "compliance-heading",
     "payroll-heading",
     "manual-heading",
     "admin-heading",
     "tax-heading",
+    // A Rescisão acumula duas classes na mesma tela.
+    "payroll-heading termination-heading",
   ]) {
     assert.ok(
-      betaApp.includes(`variantClass="${variante}"`),
+      fontes.includes(`variantClass="${variante}"`),
       `Variante perdida na extração: ${variante}`,
     );
   }
