@@ -2060,7 +2060,7 @@
           "fontWeight": "820"
         },
         "guide": null,
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 366
       },
       "768": {
@@ -2087,7 +2087,7 @@
           "fontWeight": "820"
         },
         "guide": null,
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 728
       },
       "1366": {
@@ -2114,7 +2114,7 @@
           "fontWeight": "820"
         },
         "guide": null,
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1010
       },
       "1536": {
@@ -2141,7 +2141,7 @@
           "fontWeight": "820"
         },
         "guide": null,
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1180
       },
       "1920": {
@@ -2168,7 +2168,7 @@
           "fontWeight": "820"
         },
         "guide": null,
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1564
       }
     },
@@ -2201,7 +2201,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(52, 85, 105)"
         },
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 366
       },
       "768": {
@@ -2232,7 +2232,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(52, 85, 105)"
         },
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 728
       },
       "1366": {
@@ -2263,7 +2263,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(52, 85, 105)"
         },
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1010
       },
       "1536": {
@@ -2294,7 +2294,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(52, 85, 105)"
         },
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1180
       },
       "1920": {
@@ -2325,7 +2325,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(52, 85, 105)"
         },
-        "overflowsHorizontally": true,
+        "overflowsHorizontally": false,
         "headingWidth": 1564
       }
     },
