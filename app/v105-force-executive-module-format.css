@@ -25,21 +25,31 @@
  * intactos.
  */
 
+/*
+ * Apelidos: os nomes --exec-* continuam valendo, mas agora apontam para os
+ * tokens oficiais de app/styles/tokens.css. Os valores computados são os
+ * mesmos de antes — a mudança é só de origem, não de resultado.
+ *
+ * Redefinições com escopo local continuam intactas e funcionando: o
+ * construction-v56.css redefine estes mesmos nomes dentro de
+ * `.construction-dashboard-v56` com uma paleta própria, e o escopo local
+ * segue vencendo dentro daquele painel.
+ */
 :root {
-  --exec-navy-950: #071a35;
-  --exec-navy-900: #08233e;
-  --exec-navy-850: #0a2b42;
-  --exec-navy-800: #0b3653;
-  --exec-navy-700: #14507c;
-  --exec-line: #1d5272;
-  --exec-title: #ffffff;
-  --exec-text: #d8edf5;
-  --exec-muted: #a9cbd4;
-  --exec-cyan: #7bd0e6;
+  --exec-navy-950: var(--color-navy-950);
+  --exec-navy-900: var(--color-navy-900);
+  --exec-navy-850: var(--color-navy-850);
+  --exec-navy-800: var(--color-navy-800);
+  --exec-navy-700: var(--color-navy-700);
+  --exec-line: var(--color-border-dark);
+  --exec-title: var(--color-text-on-dark);
+  --exec-text: var(--color-text-on-dark-soft);
+  --exec-muted: var(--color-text-on-dark-muted);
+  --exec-cyan: var(--color-accent-cyan);
   --exec-cyan-strong: #31c5e5;
-  --exec-green: #5edba5;
-  --exec-yellow: #f0ad31;
-  --exec-shadow: 0 20px 50px rgba(3, 20, 33, 0.20);
+  --exec-green: var(--color-status-success-bright);
+  --exec-yellow: var(--color-status-warning-bright);
+  --exec-shadow: var(--shadow-executive);
 }
 
 /* Cabeçalho específico de cada módulo. */

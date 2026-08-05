@@ -9,19 +9,19 @@
 :root {
   --v79-canvas: #041421;
   --v79-shell: #051827;
-  --v79-surface: #061c2e;
-  --v79-card: #0b2a44;
-  --v79-card-soft: #0e304b;
+  --v79-surface: var(--color-navy-surface);
+  --v79-card: var(--color-navy-card);
+  --v79-card-soft: var(--color-navy-card-soft);
   --v79-card-strong: #103552;
   --v79-line: #143c5d;
   --v79-line-soft: rgba(123, 208, 230, 0.16);
-  --v79-title: #ffffff;
+  --v79-title: var(--color-text-on-dark);
   --v79-text: #d4e8f0;
   --v79-muted: #8aaebf;
-  --v79-cyan: #7bd0e6;
-  --v79-cyan-strong: #38c8e3;
+  --v79-cyan: var(--color-accent-cyan);
+  --v79-cyan-strong: var(--color-accent-cyan-strong);
   --v79-green: #65dda7;
-  --v79-orange: #e8a838;
+  --v79-orange: var(--color-status-warning);
   --v79-red: #ff7972;
   --v79-shadow: 0 18px 44px rgba(0, 10, 19, 0.28);
 }

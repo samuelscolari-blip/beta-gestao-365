@@ -59,13 +59,49 @@ test("V79 cobre estrutura global, módulos, agenda, custos, obra e modais", asyn
 
 test("V79 preserva cores semânticas dentro da base escura", async () => {
   const css = await readFile(cssPath, "utf8");
+  const tokens = await readFile("app/styles/tokens.css", "utf8");
 
-  assert.match(css, /--v79-canvas:\s*#041421/);
-  assert.match(css, /--v79-card:\s*#0b2a44/);
-  assert.match(css, /--v79-cyan:\s*#7bd0e6/);
-  assert.match(css, /--v79-green:\s*#65dda7/);
-  assert.match(css, /--v79-orange:\s*#e8a838/);
-  assert.match(css, /--v79-red:\s*#ff7972/);
+  /*
+   * Parte destas cores agora vem por apelido dos tokens oficiais em
+   * app/styles/tokens.css. O valor final é o mesmo — o que mudou foi a
+   * origem, não o resultado. Por isso o teste segue a referência até o
+   * token quando o valor não está mais escrito literalmente aqui.
+   */
+  const resolve = (nome) => {
+    const literal = css.match(new RegExp(`${nome}:\\s*(#[0-9a-f]{3,8})`, "i"));
+    if (literal) return literal[1].toLowerCase();
+
+    const apelido = css.match(new RegExp(`${nome}:\\s*var\\((--[\\w-]+)\\)`));
+    if (!apelido) return null;
+
+    const token = tokens.match(
+      new RegExp(`${apelido[1]}:\\s*(#[0-9a-f]{3,8})`, "i"),
+    );
+    return token ? token[1].toLowerCase() : null;
+  };
+
+  /* #fff e #ffffff são o mesmo valor; normaliza para comparar. */
+  const igual = (obtido, esperado) =>
+    obtido === esperado ||
+    (obtido === "#fff" && esperado === "#ffffff") ||
+    (obtido === "#ffffff" && esperado === "#fff");
+
+  const esperado = {
+    "--v79-canvas": "#041421",
+    "--v79-card": "#0b2a44",
+    "--v79-cyan": "#7bd0e6",
+    "--v79-green": "#65dda7",
+    "--v79-orange": "#e8a838",
+    "--v79-red": "#ff7972",
+  };
+
+  for (const [nome, cor] of Object.entries(esperado)) {
+    const obtido = resolve(nome);
+    assert.ok(
+      igual(obtido, cor),
+      `${nome} deveria resultar em ${cor}, resultou em ${obtido}`,
+    );
+  }
 });
 
 test("textos principais mantêm contraste executivo legível", () => {

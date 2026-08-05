@@ -8,21 +8,21 @@
 
 :root {
   --v84-canvas: #eef3f6;
-  --v84-surface: #ffffff;
+  --v84-surface: var(--color-surface);
   --v84-surface-soft: #f7fafc;
   --v84-line: #d6e3e9;
   --v84-line-strong: #c7d8e1;
   --v84-title: #173b4f;
   --v84-text: #345569;
   --v84-muted: #6b8492;
-  --v84-navy: #061c2e;
-  --v84-navy-card: #0b2a44;
-  --v84-navy-soft: #0e304b;
-  --v84-cyan: #7bd0e6;
-  --v84-cyan-strong: #38c8e3;
-  --v84-green: #2fa66f;
+  --v84-navy: var(--color-navy-surface);
+  --v84-navy-card: var(--color-navy-card);
+  --v84-navy-soft: var(--color-navy-card-soft);
+  --v84-cyan: var(--color-accent-cyan);
+  --v84-cyan-strong: var(--color-accent-cyan-strong);
+  --v84-green: var(--color-status-success);
   --v84-orange: #d58a16;
-  --v84-red: #d94848;
+  --v84-red: var(--color-status-danger);
   --v84-light-shadow: 0 16px 42px rgba(20, 47, 63, 0.08);
   --v84-dark-shadow: 0 20px 50px rgba(3, 20, 33, 0.2);
 }

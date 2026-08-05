@@ -37,7 +37,15 @@ test("V84 mantém base clara e limita o escuro aos painéis executivos", async (
   const css = await readFile(cssPath, "utf8");
 
   assert.match(css, /--v84-canvas:\s*#eef3f6/);
-  assert.match(css, /--v84-surface:\s*#ffffff/);
+  /*
+   * --v84-surface passou a ser apelido do token oficial --color-surface.
+   * O valor final continua branco; o que mudou foi a origem.
+   */
+  assert.match(css, /--v84-surface:\s*var\(--color-surface\)/);
+  assert.match(
+    await readFile("app/styles/tokens.css", "utf8"),
+    /--color-surface:\s*#fff;/,
+  );
   assert.match(css, /body[\s\S]*background:\s*var\(--v84-canvas\)\s*!important/);
   assert.match(css, /\.page-area[\s\S]*#f5f8fa[\s\S]*var\(--v84-canvas\)/);
 

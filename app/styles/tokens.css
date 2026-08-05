@@ -1,0 +1,72 @@
+/*
+ * Tokens oficiais — fonte única de cores e medidas.
+ *
+ * Antes deste arquivo, o mesmo valor existia sob vários nomes diferentes:
+ * #ffffff era --surface, --exec-title, --v79-title, --v84-surface e
+ * --v86-surface ao mesmo tempo; #7bd0e6 era --exec-cyan, --v79-cyan e
+ * --v84-cyan. Nove valores estavam duplicados assim. Cada nova camada
+ * visual criava a sua própria família de variáveis em vez de reutilizar a
+ * existente, o que tornava impossível responder "qual é o azul do sistema?".
+ *
+ * Aqui os nomes descrevem a FUNÇÃO da cor, não a versão em que nasceram.
+ * Nomes com número de versão (--v79-*, --v84-*, --exec-*) continuam
+ * existindo como apelidos nos arquivos originais, apontando para estes
+ * tokens — nada foi removido, nenhum valor mudou.
+ *
+ * IMPORTANTE: redefinições com escopo local são legítimas e não devem ser
+ * unificadas. `construction-v56.css` redefine os --exec-* dentro de
+ * `.construction-dashboard-v56` com uma paleta própria de propósito;
+ * apagar isso mudaria o painel da obra.
+ */
+
+:root {
+  /* Azul-marinho executivo — fundo dos painéis e cabeçalhos escuros. */
+  --color-navy-950: #071a35;
+  --color-navy-900: #08233e;
+  --color-navy-850: #0a2b42;
+  --color-navy-800: #0b3653;
+  --color-navy-700: #14507c;
+
+  /* Superfícies escuras herdadas do painel executivo. */
+  --color-navy-surface: #061c2e;
+  --color-navy-card: #0b2a44;
+  --color-navy-card-soft: #0e304b;
+
+  /* Superfícies claras. */
+  --color-surface: #fff;
+  --color-surface-canvas: #f4f7f9;
+  --color-border: #d7e5ee;
+  --color-border-dark: #1d5272;
+
+  /* Texto. */
+  --color-text-primary: #12344d;
+  --color-text-secondary: #46677a;
+  --color-text-muted: #68879b;
+  --color-text-on-dark: #fff;
+  --color-text-on-dark-soft: #d8edf5;
+  --color-text-on-dark-muted: #a9cbd4;
+
+  /* Acentos e estados. */
+  --color-accent-cyan: #7bd0e6;
+  --color-accent-cyan-strong: #38c8e3;
+  --color-status-success: #2fa66f;
+  --color-status-success-bright: #5edba5;
+  --color-status-warning: #e8a838;
+  --color-status-warning-bright: #f0ad31;
+  --color-status-danger: #d94848;
+
+  /*
+   * Tipografia. A caixa dos nomes de fonte é preservada exatamente como
+   * estava antes desta etapa: o `--fix` do Stylelint minusculiza estes
+   * nomes, e a linha de base acusou a mudança no valor computado. Como esta
+   * etapa promete zero diferença visual, a regra é desligada aqui em vez de
+   * a linha de base ser regravada.
+   */
+  /* stylelint-disable value-keyword-case */
+  --font-family-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Inter, sans-serif;
+  /* stylelint-enable value-keyword-case */
+
+  /* Profundidade. */
+  --shadow-executive: 0 20px 50px rgb(3 20 33 / 20%);
+}

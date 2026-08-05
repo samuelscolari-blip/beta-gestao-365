@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+/* Tokens oficiais primeiro: as camadas seguintes apontam para eles. */
+import "./styles/tokens.css";
 import "./globals.css";
 import "./ibs-cbs.css";
 import "./v52.css";
