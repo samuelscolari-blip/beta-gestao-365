@@ -101,6 +101,62 @@ const vacationsDefinition: ModuleDefinition = {
   ],
 };
 
+/*
+ * Folga de Campo — 9 dias corridos em casa a cada 90 trabalhados, para quem
+ * mora fora da cidade da obra.
+ *
+ * Tela própria, e não uma variação de Férias, porque as regras não se
+ * parecem: férias têm período aquisitivo de 12 meses, 30 dias e terço
+ * constitucional; a Folga de Campo tem 90 dias, 9 dias e é benefício da
+ * empresa, sem reflexo no eSocial. Misturar as duas produziria número
+ * errado nos dois lados.
+ *
+ * Quem tem direito é definido no Cadastro de Funcionários, pela marcação
+ * "Residência fora da cidade da obra".
+ */
+const fieldLeaveDefinition: ModuleDefinition = {
+  id: "field_leave",
+  label: "Folga de Campo",
+  shortLabel: "Folga de Campo",
+  eyebrow: "RH • Folga de Campo",
+  description:
+    "Nove dias corridos em casa a cada noventa trabalhados, para quem mora fora da cidade da obra. Registra a viagem, o custo e a opção de compra da folga pela empresa.",
+  color: "#0f766e",
+  lightColor: "#effcf9",
+  titleField: "employeeName",
+  referenceField: "fieldLeaveId",
+  statusField: "status",
+  dateField: "leaveStart",
+  amountField: "totalCost",
+  spreadsheetSheets: [],
+  tableColumns: [
+    "employeeName",
+    "homeCity",
+    "leaveStart",
+    "leaveEnd",
+    "resolution",
+    "status",
+  ],
+  fields: [
+    { key: "fieldLeaveId", label: "Código do registro", type: "text", required: true, placeholder: "Ex.: FDC-2026-001" },
+    { key: "employeeName", label: "Colaborador", type: "text", required: true, placeholder: "Nome completo", help: "Precisa estar marcado como residência fora da cidade da obra no Cadastro de Funcionários." },
+    { key: "homeCity", label: "Cidade onde mora", type: "text", required: true, placeholder: "Ex.: Feira de Santana/BA", help: "Destino da viagem. Repita o que está no cadastro do colaborador." },
+    { key: "countFrom", label: "Contagem dos 90 dias a partir de", type: "date", required: true, help: "Na primeira folga, a admissão. Nas seguintes, o dia em que ele voltou da folga anterior." },
+    { key: "resolution", label: "Como a folga foi resolvida", type: "select", required: true, options: ["Folga concedida", "Comprada pela empresa"], help: "Comprada: a empresa paga o valor combinado e o colaborador segue na obra, sem viagem." },
+    { key: "leaveStart", label: "Primeiro dia da folga", type: "date", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "O sistema calcula o último dia: são 9 dias corridos contando este." },
+    { key: "leaveEnd", label: "Último dia da folga", type: "date", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "Confira contra o cálculo mostrado no resumo acima da lista." },
+    { key: "ticketOut", label: "Passagem — ida", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+    { key: "ticketReturn", label: "Passagem — volta", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+    { key: "mealsOut", label: "Alimentação no percurso — ida", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+    { key: "mealsReturn", label: "Alimentação no percurso — volta", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+    { key: "hotel", label: "Hotel", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "Somente quando o trajeto exige parada. Deixe vazio se não houve." },
+    { key: "purchaseAmount", label: "Valor pago pela compra", type: "number", showWhen: { field: "resolution", equals: "Comprada pela empresa" }, help: "Confirme com a contabilidade se este valor entra na base de INSS e IRRF antes de lançar na folha." },
+    { key: "totalCost", label: "Custo total do registro", type: "number", help: "Some as despesas acima, ou o valor da compra. O resumo acima da lista confere o total." },
+    { key: "status", label: "Situação", type: "select", required: true, options: ["Prevista", "Autorizada", "Em andamento", "Concluída", "Comprada"] },
+    { key: "notes", label: "Observações", type: "textarea", wide: true, placeholder: "Trajeto, companhia aérea ou rodoviária, comprovantes e o que mais precisar ficar registrado." },
+  ],
+};
+
 function ensureRhStructure() {
   const payroll = moduleMap.payroll;
   if (payroll) {
@@ -133,6 +189,16 @@ function ensureRhStructure() {
   (moduleTips as Record<string, string>).vacations =
     "Organize o colaborador, o período aquisitivo e a programação. O motor de férias será conectado aos dados salariais na próxima etapa.";
 
+  if (!moduleMap.field_leave) {
+    moduleDefinitions.push(fieldLeaveDefinition);
+    moduleMap.field_leave = fieldLeaveDefinition;
+  } else {
+    Object.assign(moduleMap.field_leave, fieldLeaveDefinition);
+  }
+
+  (moduleTips as Record<string, string>).field_leave =
+    "Nove dias corridos em casa a cada noventa trabalhados, para quem mora fora da cidade da obra. Não é férias e não entra no período aquisitivo.";
+
   const rhGroup = navigationGroups.find(
     (group) =>
       group.label === "ADMINISTRATIVO E RH" || group.label === "PESSOAS",
@@ -140,7 +206,9 @@ function ensureRhStructure() {
 
   if (!rhGroup) return;
 
-  const orderedItems = rhGroup.items.filter((item) => item !== "vacations");
+  const orderedItems = rhGroup.items.filter(
+    (item) => item !== "vacations" && item !== "field_leave",
+  );
   const payrollIndex = orderedItems.indexOf("payroll");
   const terminationIndex = orderedItems.indexOf("terminations");
   const insertionIndex =
@@ -150,7 +218,8 @@ function ensureRhStructure() {
         ? terminationIndex
         : orderedItems.length;
 
-  orderedItems.splice(insertionIndex, 0, "vacations");
+  /* Folga de Campo logo depois de Férias: são os dois afastamentos. */
+  orderedItems.splice(insertionIndex, 0, "vacations", "field_leave");
   rhGroup.items.splice(0, rhGroup.items.length, ...orderedItems);
 }
 

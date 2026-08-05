@@ -24,6 +24,7 @@ import {
   type ModuleDefinition,
   type ModuleField,
 } from "../lib/modules";
+import FieldLeaveSummary from "../ui/FieldLeaveSummary/FieldLeaveSummary";
 import ModuleHeader, {
   type ModuleHeaderVariant,
 } from "../ui/ModuleHeader/ModuleHeader";
@@ -1111,8 +1112,8 @@ const peopleFormSections = [
   {
     id: "contacts",
     label: "Contatos",
-    description: "Canais de contato, endereço residencial e acesso corporativo.",
-    fields: ["phone", "personalEmail", "corporateEmail", "emergencyContact", "address", "addressNumber", "addressComplement", "district", "city", "state", "postalCode", "accessProfile"],
+    description: "Canais de contato, endereço residencial, Folga de Campo e acesso corporativo.",
+    fields: ["phone", "personalEmail", "corporateEmail", "emergencyContact", "address", "addressNumber", "addressComplement", "district", "city", "state", "postalCode", "livesOutOfTown", "homeCity", "fieldLeaveCountFrom", "accessProfile"],
   },
   {
     id: "dependents",
@@ -1199,12 +1200,26 @@ function Modal({
         autoCalculatedWorklogFields.includes(field.key)
       ),
   );
-  const visibleFields =
+  const sectionFields =
     module.id === "people"
       ? availableFields.filter((field) =>
           (activePeopleSection.fields as readonly string[]).includes(field.key),
         )
       : availableFields;
+  /*
+   * Campos que só aparecem depois de uma resposta — hoje, a cidade de
+   * origem e a data-base da Folga de Campo, que só valem para quem mora
+   * fora da cidade da obra.
+   *
+   * O valor lido é o do formulário aberto, não o do registro salvo, para o
+   * campo surgir no mesmo instante em que a pessoa marca "Sim".
+   */
+  const visibleFields = sectionFields.filter(
+    (field) =>
+      !field.showWhen ||
+      String(payload[field.showWhen.field] ?? "").trim() ===
+        field.showWhen.equals,
+  );
   const isPeopleFieldStarted = (key: string) => {
     if (key === module.referenceField) return false;
     const field = module.fields.find((candidate) => candidate.key === key);
@@ -5447,6 +5462,10 @@ function ModulePage({
       </aside>
 
       {topNavigation}
+
+      {module.id === "field_leave" ? (
+        <FieldLeaveSummary records={records} />
+      ) : null}
 
       {module.id === "people" ? (
         <nav className="people-status-tabs" aria-label="Situação dos colaboradores">

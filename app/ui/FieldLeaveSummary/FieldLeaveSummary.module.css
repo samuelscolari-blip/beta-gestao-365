@@ -1,0 +1,118 @@
+/*
+ * Resumo da Folga de Campo.
+ *
+ * CSS Module, sem `!important` e sem classe global — o padrão que a reforma
+ * do cabeçalho estabeleceu. Este componente é dono da própria aparência, e
+ * nenhuma folha `vNN` alcança estas classes.
+ *
+ * Fica sobre fundo claro, como o resto da área de conteúdo, e por isso não
+ * repete as cores escuras do cabeçalho.
+ */
+
+.root {
+  display: grid;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1px solid #cfe7e2;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f6fdfb, #fff 70%);
+  box-shadow: 0 12px 32px rgb(15 118 110 / 7%);
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.numeros article {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid #dcefeb;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.numeros span {
+  color: #5c7d78;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.numeros strong {
+  color: #0f766e;
+  font-size: 1.45rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.bloco {
+  display: grid;
+  gap: 8px;
+}
+
+.bloco h3 {
+  margin: 0;
+  color: #14504a;
+  font-size: 0.82rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bloco ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 6px;
+  list-style: none;
+}
+
+.bloco li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 13px;
+  border: 1px solid #e2efec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.bloco li strong {
+  color: #1d4f4a;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.bloco li span {
+  color: #63807b;
+  font-size: 0.82rem;
+}
+
+/* Amarelo de atenção: são pendências de conferência, não erros do sistema. */
+.avisos li {
+  border-color: #f2dfae;
+  background: #fffcf3;
+}
+
+.avisos li span {
+  color: #8a6414;
+}
+
+.vazio {
+  margin: 0;
+  color: #4f6b67;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (width <= 720px) {
+  .numeros {
+    grid-template-columns: 1fr;
+  }
+}
