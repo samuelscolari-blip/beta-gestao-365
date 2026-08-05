@@ -12,7 +12,21 @@ body {
   font-size: 0.96rem;
 }
 
-.page-area p {
+/*
+ * O `:where()` não soma especificidade: a regra continua valendo
+ * exatamente como antes para todo o resto da área de página, e apenas
+ * deixa de alcançar o interior do cabeçalho de módulo.
+ *
+ * Sem essa ressalva, o `!important` daqui vence qualquer CSS Module e o
+ * componente nunca consegue ser dono do próprio parágrafo. Foi o que a
+ * medição flagrou: a variante clara precisa de 15px com entrelinha 1,65,
+ * e ao sair da classe global caía para os 0,91rem/1,62 desta regra.
+ *
+ * As duas variantes já migradas declaram o tamanho do parágrafo em
+ * `ModuleHeader.module.css`, com os valores medidos — por isso liberar
+ * aqui não muda nada à vista.
+ */
+.page-area p:not(:where([data-ui="module-header"] *)) {
   font-size: 0.91rem !important;
   line-height: 1.62 !important;
 }

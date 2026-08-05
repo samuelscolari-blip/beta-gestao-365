@@ -12,7 +12,7 @@ suposto) para que a etapa final seja executada sem redescobrir nada.
 | 3 — Tokens oficiais | publicada | zero diferença visual |
 | 4 — Extrair `<ModuleHeader>` | publicada | HTML renderizado idêntico em 6 de 6 telas |
 | 5A — CSS próprio da `executive` | publicada | linha de base sem diferença visual nas 12 telas |
-| 5B — CSS próprio da `financial` | **não iniciada** | — |
+| 5B — CSS próprio da `financial` | publicada | linha de base sem diferença visual nas 2 telas |
 | 5C — CSS próprio da `standard` e acentos | **não iniciada** | — |
 | 5D — remoção do legado | **não iniciada** | — |
 
@@ -143,9 +143,27 @@ o CSS Module, sem a classe global, e substituiu a deduplicação de Máquinas e
 Obra pela condição React (`hideHeading`). As outras variantes continuam no
 caminho legado.
 
-**5B — variante `financial`.** Altura, espaçamento e composição diferentes
-justificam variante própria, não um caso especial escondido dentro da
-executiva.
+**5B — variante `financial`. Concluída.** Migrou Fornecedores e Fiscal e
+Compliance. Apesar do nome, ela é escura como a executiva: fundo, borda,
+sombra e cor de texto medem igual nas cinco larguras. O que muda é a
+ESCALA — altura 164px contra 132px, ícone 64px contra 58px, olho 12px
+contra 11,52px, parágrafo 15px em 920px contra 14,56px em 780px, e recuo
+assimétrico contra uniforme. É diferença suficiente para variante própria,
+e não para um caso especial escondido dentro da executiva.
+
+Três coisas que a 5B ensinou, e que a 5C vai reencontrar:
+
+- **`rem` engana em 390px.** A raiz encolhe para 15px nessa largura, então
+  `0.75rem` não dá os 12px que o legado fixa. Onde o legado usa px
+  absoluto, o CSS Module também precisa usar.
+- **O `!important` do V52 vencia o CSS Module.** `.page-area p` alcançava o
+  parágrafo do cabeçalho e nenhuma declaração do componente conseguia
+  passar por cima. Resolvido com uma ressalva em `:where()`, que não soma
+  especificidade e por isso não muda nada fora do cabeçalho.
+- **O bloco de ações vem pronto de fora.** Selos e botões chegam com
+  classes globais próprias, e o V105 os adaptava ao fundo escuro exigindo
+  `.module-heading`. Ao migrar, a adaptação some junto. Daí o arquivo-ponte
+  `app/styles/legacy-bridge.module.css`, que deve morrer na 5D.
 
 **5C — variante `standard` e acentos.** Migra a estrutura em grid e declara
 os acentos semânticos por propriedade React (`accent="admin"`,

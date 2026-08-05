@@ -135,6 +135,13 @@ function readScreenStyles() {
   const title = heading?.querySelector("h1") ?? null;
   const eyebrow = heading?.querySelector('[data-ui="module-header-eyebrow"]') ?? null;
   const icon = heading?.querySelector('[data-ui="module-header-icon"]') ?? null;
+  /*
+   * O parágrafo de apoio, que faltava. O `v89-financial-ux.css` define
+   * largura máxima, cor, tamanho e altura de linha só dele — nada disso
+   * estava sendo medido, e a variante clara seria migrada sem retrato do
+   * texto que ocupa metade do cabeçalho.
+   */
+  const description = title?.nextElementSibling ?? null;
   /* Bloco de ações: tudo que vem depois do título, à direita. */
   const actions = heading?.children?.[1] ?? null;
   const guide = document.querySelector(".module-guide");
@@ -187,6 +194,39 @@ function readScreenStyles() {
       "backgroundColor",
     ]),
     actions: pick(actions, ["display", "flexDirection", "alignItems", "gap"]),
+
+    /*
+     * O CONTEÚDO do bloco de ações, não só o contêiner.
+     *
+     * Buraco descoberto ao preparar a migração da variante clara: o
+     * `v89-financial-ux.css` estiliza `.module-heading .button` e
+     * `.module-heading button` — botões e selos do cabeçalho dependem da
+     * classe global. Medir só o contêiner deixaria essa dependência
+     * invisível, e a migração aconteceria às cegas justamente onde já
+     * existe regra legada apontando.
+     *
+     * Vale para as três variantes: o mesmo furo existia na executiva, e
+     * só não cobrou preço porque lá as regras de botão não exigiam a
+     * classe global.
+     */
+    actionItems: actions
+      ? [...actions.children].map((child) => ({
+          tag: child.tagName.toLowerCase(),
+          ...pick(child, [
+            "display",
+            "minHeight",
+            "padding",
+            "borderRadius",
+            "borderTopColor",
+            "color",
+            "backgroundImage",
+            "backgroundColor",
+            "fontSize",
+            "fontWeight",
+            "boxShadow",
+          ]),
+        }))
+      : null,
     title: pick(title, [
       "color",
       "fontFamily",
@@ -197,6 +237,14 @@ function readScreenStyles() {
       "margin",
     ]),
     titleText: title?.textContent?.trim() ?? null,
+    description: pick(description, [
+      "color",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "maxWidth",
+      "margin",
+    ]),
     eyebrow: pick(eyebrow, ["color", "fontSize", "fontWeight", "letterSpacing"]),
     guide: pick(guide, ["backgroundImage", "backgroundColor", "color"]),
 
