@@ -103,7 +103,18 @@ export default function ModuleHeader({
    * classes ao mesmo tempo. Uma ou outra por variante é seguro; as duas
    * juntas recriariam a disputa que esta reforma existe para acabar.
    */
-  const migrada = variant === "executive" || variant === "financial";
+  /*
+   * Com a `standard` migrada, as três variantes têm CSS próprio e o
+   * caminho legado deixa de ser alcançado. Ele fica aqui de propósito
+   * até a etapa 5D: enquanto as 152 regras globais existirem, é a rede
+   * que permite voltar uma variante ao caminho antigo em uma linha, se
+   * alguma tela aparecer errada em produção.
+   *
+   * A lista continua explícita, e não `true`, porque é dela que
+   * `tests/module-header-variants.test.mjs` lê o que já migrou.
+   */
+  const migrada =
+    variant === "executive" || variant === "financial" || variant === "standard";
 
   /*
    * UM único ponto de decisão para as duas famílias de classe.
@@ -131,16 +142,16 @@ export default function ModuleHeader({
      * tudo. O acento segue declarado em `data-accent`, para a variante
      * clara usar.
      */
-    root:
-      variant === "financial"
-        ? /*
-           * Só a clara recebe a ponte: nela a medição mostrou o selo de
-           * consulta com fundo escuro, e sem isso ele volta a ser claro
-           * sobre o cabeçalho escuro. Na executiva o selo já vinha claro
-           * antes da migração, então aplicar aqui mudaria doze telas.
-           */
-          `${styles.root} ${styles.financial} ${bridge.darkActions}`
-        : `${styles.root} ${styles.executive}`,
+    root: `${styles.root} ${styles[variant]}${
+      /*
+       * Só a clara-escura recebe a ponte: nela a medição mostrou o selo
+       * de consulta com fundo escuro, e sem isso ele volta a ser claro
+       * sobre o cabeçalho escuro. Na executiva o selo já vinha claro
+       * antes da migração, e na `standard` o cabeçalho é claro de fato —
+       * aplicar em qualquer das duas mudaria telas que estão certas.
+       */
+      variant === "financial" ? ` ${bridge.darkActions}` : ""
+    }`,
     titleWrap: styles.titleWrap,
     /* Mesma razão: `payroll-icon` e `microsoft-icon` também vencem sem a
        classe global, e na variante executiva nunca tiveram efeito. */
