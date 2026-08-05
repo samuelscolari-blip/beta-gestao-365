@@ -91,12 +91,18 @@ test("a classe global continua valendo para as variantes ainda não migradas", (
     /root: variantClass \? `module-heading \$\{variantClass\}` : "module-heading"/,
   );
 
-  const migradas = component.match(/const migrada = variant === "(\w+)"/);
-  assert.ok(migradas, "O componente não declara mais qual variante migrou.");
-  assert.equal(
-    migradas[1],
-    "executive",
+  const linha = component.match(/const migrada = .+/)?.[0] ?? "";
+  const migradas = [...linha.matchAll(/variant === "(\w+)"/g)].map((m) => m[1]);
+
+  assert.deepEqual(
+    migradas.sort(),
+    ["executive", "financial"],
     "Ao migrar a próxima variante, atualize também este teste e a linha de " +
       "base — a equivalência visual precisa ser medida de novo.",
+  );
+  assert.ok(
+    !migradas.includes("standard"),
+    "A variante clara em grid ainda não foi migrada; enquanto isso, ela " +
+      "depende das regras legadas.",
   );
 });

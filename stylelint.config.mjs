@@ -68,7 +68,23 @@ const config = {
        * que ele cita.
        */
       files: [GLOBAL_ESCAPE_HATCH],
-      rules: { "selector-class-pattern": null },
+      rules: {
+        "selector-class-pattern": null,
+
+        /*
+         * O teto de 0,3,0 existe para o CSS novo, que é dono dos próprios
+         * elementos e não precisa brigar. O arquivo-ponte é o oposto por
+         * definição: ele repinta peças legadas dentro do cabeçalho, e
+         * precisa vencer regras do tipo `.button.primary:hover`, que já
+         * são 0,3,0. Com o mesmo teto, empataria e o vencedor passaria a
+         * depender da ordem de injeção do bundler — uma aposta, não uma
+         * decisão.
+         *
+         * A folga é de um degrau só, e vale exclusivamente aqui. Some
+         * junto com o arquivo, na etapa 5D.
+         */
+        "selector-max-specificity": "0,4,0",
+      },
     },
   ],
 };

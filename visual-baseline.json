@@ -13,8 +13,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -30,8 +32,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -47,8 +51,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -65,8 +71,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -82,8 +90,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -136,6 +146,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(216, 237, 245)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -146,6 +172,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -205,6 +239,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(216, 237, 245)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -215,6 +265,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -274,6 +332,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(216, 237, 245)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -284,6 +358,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -344,6 +426,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(216, 237, 245)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -354,6 +452,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -413,6 +519,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(216, 237, 245)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -423,6 +545,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -484,6 +614,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -494,6 +640,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -553,6 +707,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -563,6 +733,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -622,6 +800,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -632,6 +826,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -692,6 +894,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -702,6 +920,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -761,6 +987,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -771,6 +1013,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -797,8 +1047,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -818,8 +1070,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -839,8 +1093,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -861,8 +1117,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -882,8 +1140,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -940,6 +1200,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -950,6 +1226,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -1009,6 +1293,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1019,6 +1319,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1078,6 +1386,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1088,6 +1412,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1148,6 +1480,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1158,6 +1506,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1217,6 +1573,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1227,6 +1599,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1253,8 +1633,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1274,8 +1656,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1295,8 +1679,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1317,8 +1703,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1338,8 +1726,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1396,6 +1786,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1406,6 +1812,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -1465,6 +1879,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1475,6 +1905,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1534,6 +1972,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1544,6 +1998,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1604,6 +2066,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1614,6 +2092,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1673,6 +2159,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1683,6 +2185,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1744,6 +2254,36 @@
           "alignItems": "stretch",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "button",
+            "display": "grid",
+            "minHeight": "42px",
+            "padding": "7px 12px",
+            "borderRadius": "11px",
+            "borderTopColor": "rgb(203, 221, 229)",
+            "color": "rgb(18, 52, 77)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "fontSize": "13.05px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "11.7px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1754,6 +2294,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -1809,6 +2357,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "button",
+            "display": "grid",
+            "minHeight": "42px",
+            "padding": "7px 12px",
+            "borderRadius": "11px",
+            "borderTopColor": "rgb(203, 221, 229)",
+            "color": "rgb(18, 52, 77)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "fontSize": "13.92px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1819,6 +2397,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1874,6 +2460,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "button",
+            "display": "grid",
+            "minHeight": "42px",
+            "padding": "7px 12px",
+            "borderRadius": "11px",
+            "borderTopColor": "rgb(203, 221, 229)",
+            "color": "rgb(18, 52, 77)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "fontSize": "13.92px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1884,6 +2500,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -1940,6 +2564,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "button",
+            "display": "grid",
+            "minHeight": "42px",
+            "padding": "7px 12px",
+            "borderRadius": "11px",
+            "borderTopColor": "rgb(203, 221, 229)",
+            "color": "rgb(18, 52, 77)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "fontSize": "13.92px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -1950,6 +2604,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2005,6 +2667,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "button",
+            "display": "grid",
+            "minHeight": "42px",
+            "padding": "7px 12px",
+            "borderRadius": "11px",
+            "borderTopColor": "rgb(203, 221, 229)",
+            "color": "rgb(18, 52, 77)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 255, 255)",
+            "fontSize": "13.92px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2015,6 +2707,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2072,6 +2772,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2082,6 +2798,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -2141,6 +2865,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2151,6 +2891,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2210,6 +2958,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2220,6 +2984,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2280,6 +3052,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2290,6 +3078,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2349,6 +3145,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2359,6 +3171,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2420,6 +3240,36 @@
           "alignItems": "stretch",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "11.7px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 11px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(254, 215, 170)",
+            "color": "rgb(154, 52, 18)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 247, 237)",
+            "fontSize": "10.5px",
+            "fontWeight": "850",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2430,6 +3280,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -2485,6 +3343,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 11px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(254, 215, 170)",
+            "color": "rgb(154, 52, 18)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 247, 237)",
+            "fontSize": "11.2px",
+            "fontWeight": "850",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2495,6 +3383,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2550,6 +3446,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 11px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(254, 215, 170)",
+            "color": "rgb(154, 52, 18)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 247, 237)",
+            "fontSize": "11.2px",
+            "fontWeight": "850",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2560,6 +3486,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2616,6 +3550,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 11px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(254, 215, 170)",
+            "color": "rgb(154, 52, 18)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 247, 237)",
+            "fontSize": "11.2px",
+            "fontWeight": "850",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2626,6 +3590,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2681,6 +3653,36 @@
           "alignItems": "center",
           "gap": "10px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 12px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(188, 221, 232)",
+            "color": "rgb(11, 82, 106)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(232, 247, 251)",
+            "fontSize": "12.48px",
+            "fontWeight": "800",
+            "boxShadow": "none"
+          },
+          {
+            "tag": "span",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "8px 11px",
+            "borderRadius": "999px",
+            "borderTopColor": "rgb(254, 215, 170)",
+            "color": "rgb(154, 52, 18)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(255, 247, 237)",
+            "fontSize": "11.2px",
+            "fontWeight": "850",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2691,6 +3693,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -2748,6 +3758,22 @@
           "alignItems": "stretch",
           "gap": "9px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "flex",
+            "minHeight": "34px",
+            "padding": "0px 11px",
+            "borderRadius": "9px",
+            "borderTopColor": "rgba(123, 208, 230, 0.32)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(11, 47, 80)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2758,6 +3784,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -2813,6 +3847,22 @@
           "alignItems": "normal",
           "gap": "9px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "flex",
+            "minHeight": "34px",
+            "padding": "0px 11px",
+            "borderRadius": "9px",
+            "borderTopColor": "rgba(123, 208, 230, 0.32)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(11, 47, 80)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2823,6 +3873,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -2878,6 +3936,22 @@
           "alignItems": "normal",
           "gap": "9px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "flex",
+            "minHeight": "34px",
+            "padding": "0px 11px",
+            "borderRadius": "9px",
+            "borderTopColor": "rgba(123, 208, 230, 0.32)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(11, 47, 80)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2888,6 +3962,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -2944,6 +4026,22 @@
           "alignItems": "normal",
           "gap": "9px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "flex",
+            "minHeight": "34px",
+            "padding": "0px 11px",
+            "borderRadius": "9px",
+            "borderTopColor": "rgba(123, 208, 230, 0.32)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(11, 47, 80)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -2954,6 +4052,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -3009,6 +4115,22 @@
           "alignItems": "normal",
           "gap": "9px"
         },
+        "actionItems": [
+          {
+            "tag": "span",
+            "display": "flex",
+            "minHeight": "34px",
+            "padding": "0px 11px",
+            "borderRadius": "9px",
+            "borderTopColor": "rgba(123, 208, 230, 0.32)",
+            "color": "rgb(216, 237, 245)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgb(11, 47, 80)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3019,6 +4141,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24.75px",
+          "maxWidth": "920px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
@@ -3076,6 +4206,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3086,6 +4232,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -3145,6 +4299,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3155,6 +4325,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3214,6 +4392,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3224,6 +4418,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3284,6 +4486,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3294,6 +4512,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3353,6 +4579,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3363,6 +4605,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3424,6 +4674,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3434,6 +4700,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -3493,6 +4767,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3503,6 +4793,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3562,6 +4860,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3572,6 +4886,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3632,6 +4954,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3642,6 +4980,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3701,6 +5047,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3711,6 +5073,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3772,6 +5142,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3782,6 +5168,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -3841,6 +5235,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3851,6 +5261,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3910,6 +5328,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3920,6 +5354,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -3980,6 +5422,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -3990,6 +5448,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4049,6 +5515,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4059,6 +5541,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4120,6 +5610,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4130,6 +5636,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Integrações e publicação",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "13.65px",
+          "fontWeight": "400",
+          "lineHeight": "22.113px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
@@ -4185,6 +5699,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4195,6 +5725,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Integrações e publicação",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4250,6 +5788,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4260,6 +5814,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Integrações e publicação",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4316,6 +5878,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4326,6 +5904,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Integrações e publicação",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4381,6 +5967,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(85, 113, 125)",
+            "color": "rgb(85, 113, 125)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "10px",
+            "fontWeight": "700",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(255, 255, 255)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4391,6 +5993,14 @@
           "margin": "4px 0px 3px"
         },
         "titleText": "Integrações e publicação",
+        "description": {
+          "color": "rgb(169, 203, 212)",
+          "fontSize": "14.56px",
+          "fontWeight": "400",
+          "lineHeight": "23.5872px",
+          "maxWidth": "780px",
+          "margin": "0px"
+        },
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
@@ -4443,6 +6053,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)"
         },
         "actions": null,
+        "actionItems": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4453,6 +6064,14 @@
           "margin": "0px"
         },
         "titleText": "Manual do sistema",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "21.7px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4503,6 +6122,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)"
         },
         "actions": null,
+        "actionItems": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4513,6 +6133,14 @@
           "margin": "0px"
         },
         "titleText": "Manual do sistema",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4563,6 +6191,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)"
         },
         "actions": null,
+        "actionItems": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4573,6 +6202,14 @@
           "margin": "0px"
         },
         "titleText": "Manual do sistema",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4624,6 +6261,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)"
         },
         "actions": null,
+        "actionItems": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4634,6 +6272,14 @@
           "margin": "0px"
         },
         "titleText": "Manual do sistema",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4684,6 +6330,7 @@
           "backgroundColor": "rgba(0, 0, 0, 0)"
         },
         "actions": null,
+        "actionItems": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4694,6 +6341,14 @@
           "margin": "0px"
         },
         "titleText": "Manual do sistema",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4751,6 +6406,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(20, 116, 82)",
+            "color": "rgb(20, 116, 82)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "9px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4761,6 +6432,14 @@
           "margin": "0px"
         },
         "titleText": "Regime Tributário",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "21.7px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4820,6 +6499,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(20, 116, 82)",
+            "color": "rgb(20, 116, 82)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "9px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4830,6 +6525,14 @@
           "margin": "0px"
         },
         "titleText": "Regime Tributário",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4889,6 +6592,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(20, 116, 82)",
+            "color": "rgb(20, 116, 82)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "9px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4899,6 +6618,14 @@
           "margin": "0px"
         },
         "titleText": "Regime Tributário",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -4959,6 +6686,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(20, 116, 82)",
+            "color": "rgb(20, 116, 82)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "9px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -4969,6 +6712,14 @@
           "margin": "0px"
         },
         "titleText": "Regime Tributário",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -5028,6 +6779,22 @@
           "alignItems": "center",
           "gap": "7px"
         },
+        "actionItems": [
+          {
+            "tag": "svg",
+            "display": "block",
+            "minHeight": "auto",
+            "padding": "0px",
+            "borderRadius": "0px",
+            "borderTopColor": "rgb(20, 116, 82)",
+            "color": "rgb(20, 116, 82)",
+            "backgroundImage": "none",
+            "backgroundColor": "rgba(0, 0, 0, 0)",
+            "fontSize": "9px",
+            "fontWeight": "680",
+            "boxShadow": "none"
+          }
+        ],
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
@@ -5038,6 +6805,14 @@
           "margin": "0px"
         },
         "titleText": "Regime Tributário",
+        "description": {
+          "color": "rgb(93, 111, 130)",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "23.25px",
+          "maxWidth": "900px",
+          "margin": "12px 0px 0px"
+        },
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
@@ -5064,8 +6839,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -5081,8 +6858,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -5098,8 +6877,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -5116,8 +6897,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
@@ -5133,8 +6916,10 @@
         "heading": null,
         "icon": null,
         "actions": null,
+        "actionItems": null,
         "title": null,
         "titleText": null,
+        "description": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,

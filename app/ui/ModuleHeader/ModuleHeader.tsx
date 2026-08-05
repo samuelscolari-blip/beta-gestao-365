@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
+import bridge from "../../styles/legacy-bridge.module.css";
+
 import styles from "./ModuleHeader.module.css";
 
 /*
@@ -101,7 +103,7 @@ export default function ModuleHeader({
    * classes ao mesmo tempo. Uma ou outra por variante é seguro; as duas
    * juntas recriariam a disputa que esta reforma existe para acabar.
    */
-  const migrada = variant === "executive";
+  const migrada = variant === "executive" || variant === "financial";
 
   /*
    * UM único ponto de decisão para as duas famílias de classe.
@@ -129,7 +131,16 @@ export default function ModuleHeader({
      * tudo. O acento segue declarado em `data-accent`, para a variante
      * clara usar.
      */
-    root: `${styles.root} ${styles.executive}`,
+    root:
+      variant === "financial"
+        ? /*
+           * Só a clara recebe a ponte: nela a medição mostrou o selo de
+           * consulta com fundo escuro, e sem isso ele volta a ser claro
+           * sobre o cabeçalho escuro. Na executiva o selo já vinha claro
+           * antes da migração, então aplicar aqui mudaria doze telas.
+           */
+          `${styles.root} ${styles.financial} ${bridge.darkActions}`
+        : `${styles.root} ${styles.executive}`,
     titleWrap: styles.titleWrap,
     /* Mesma razão: `payroll-icon` e `microsoft-icon` também vencem sem a
        classe global, e na variante executiva nunca tiveram efeito. */

@@ -1,0 +1,74 @@
+/*
+ * Ponte para o conteúdo que o cabeçalho recebe pronto de fora.
+ *
+ * Único arquivo autorizado a usar `:global()`, e por um motivo estreito: o
+ * bloco de ações do cabeçalho (`actions`) é passado pelo React como
+ * conteúdo arbitrário — selos, botões, avisos —, com as classes globais
+ * que essas peças já têm no resto do sistema. O CSS Module do componente
+ * não tem como alcançá-las sem citar o nome global.
+ *
+ * O cabeçalho é escuro; um selo pensado para fundo claro fica ilegível
+ * dentro dele. Quem sabe disso é o contêiner, não a peça — por isso a
+ * adaptação mora aqui e não em cada tela.
+ *
+ * No legado esse papel era do `v105-force-executive-module-format.css`,
+ * que dependia da classe global `.module-heading`. Ao migrar uma variante,
+ * a classe some e a adaptação some junto: foi o que a linha de base
+ * acusou na Fiscal e Compliance, onde o selo de consulta voltou ao fundo
+ * claro sobre o cabeçalho escuro.
+ *
+ * ESTE ARQUIVO DEVE DESAPARECER NA ETAPA 5D, quando as peças receberem
+ * variantes próprias em vez de serem repintadas por fora.
+ */
+
+/*
+ * Aplicado apenas à variante clara, porque é a única em que a medição
+ * mostrou efeito. Na executiva o selo já vinha claro antes da migração —
+ * comprovado comparando a linha de base do estado anterior à etapa 5A —,
+ * então reproduzir o tratamento escuro aqui MUDARIA aquelas doze telas em
+ * vez de preservá-las.
+ */
+.darkActions :global(.read-only-chip),
+.darkActions :global(.rule-version-chip),
+.darkActions :global(.sync-chip) {
+  border-color: rgb(123 208 230 / 32%);
+  color: var(--color-text-on-dark-soft, #d8edf5);
+  background: #0b2f50;
+}
+
+/*
+ * Os botões não aparecem na linha de base: ela roda em modo visitante, e
+ * aí o cabeçalho mostra o selo de consulta no lugar deles. Estão aqui
+ * porque o V105 os adaptava pela mesma regra que o selo, e deixá-los de
+ * fora devolveria botão claro sobre fundo escuro para quem tem permissão
+ * de edição — um defeito que a medição, sozinha, não pegaria.
+ */
+.darkActions :global(.button.primary),
+.darkActions :global(.primary-button),
+.darkActions :global(.module-primary-action) {
+  border-color: #1688e1;
+  color: #fff;
+  background: linear-gradient(135deg, #1688e1 0%, #0871c9 100%);
+  box-shadow:
+    0 12px 26px rgb(4 61 108 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 20%);
+}
+
+.darkActions :global(.button.primary):hover,
+.darkActions :global(.primary-button):hover,
+.darkActions :global(.module-primary-action):hover {
+  background: linear-gradient(135deg, #2499ef 0%, #0c79d5 100%);
+}
+
+.darkActions :global(.button.secondary),
+.darkActions :global(.secondary-button) {
+  border-color: rgb(123 208 230 / 55%);
+  color: #061f33;
+  background: #79d2e7;
+  box-shadow: 0 10px 22px rgb(3 31 49 / 22%);
+}
+
+.darkActions :global(.button.secondary):hover,
+.darkActions :global(.secondary-button):hover {
+  background: #95dfef;
+}

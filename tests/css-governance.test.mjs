@@ -229,3 +229,28 @@ test("o arquivo-ponte pode citar nomes globais em kebab-case", async () => {
 
   assert.deepEqual(results[0].warnings, []);
 });
+
+test("o !important do V52 não alcança o interior do cabeçalho", () => {
+  /*
+   * `app/v52.css` aplica `.page-area p` com `!important`, e isso vence
+   * qualquer CSS Module — nem cascade layers protegem, como esta reforma
+   * já comprovou. Enquanto a regra alcançava o cabeçalho, o componente
+   * não conseguia ser dono do próprio parágrafo: a etapa 5A chegou a
+   * declarar 0,87rem e o texto saía com 0,91rem.
+   *
+   * A ressalva usa `:where()`, que não soma especificidade — a regra
+   * continua valendo igual para todo o resto da área de página. Sem ela,
+   * a variante clara perde os 15px/1,65 medidos e cai para 0,91rem/1,62
+   * em silêncio, porque o CSS-fonte continua parecendo correto.
+   */
+  const v52 = readFileSync("app/v52.css", "utf8");
+  const regra = v52.match(/^\.page-area p[^{]*\{/m)?.[0];
+
+  assert.ok(regra, "A regra de parágrafo do V52 sumiu ou mudou de forma.");
+  assert.match(
+    regra,
+    /:not\(:where\(\[data-ui="module-header"\] \*\)\)/,
+    "A regra voltou a alcançar o cabeçalho. O CSS Module do componente " +
+      "perde para o !important e o parágrafo muda de tamanho.",
+  );
+});

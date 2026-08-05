@@ -28,7 +28,27 @@
   border-radius: 22px;
 }
 
-.executive {
+/*
+ * A variante clara da Central Financeira e da Fiscal e Compliance.
+ *
+ * Apesar do nome, ela é escura como a executiva: fundo, borda, sombra e
+ * cor de texto são idênticos — a medição confirmou os mesmos valores nas
+ * cinco larguras. O que muda é a ESCALA, e por isso ela merece variante
+ * própria em vez de virar um caso especial dentro da executiva:
+ *
+ *   altura     164px contra 132px
+ *   ícone      64px  contra 58px
+ *   olho       12px  contra 11,52px
+ *   parágrafo  15px em 920px  contra 14,56px em 780px
+ *   recuo      assimétrico (30/32) contra uniforme
+ */
+.financial {
+  min-height: 164px;
+  padding: 30px 32px;
+}
+
+.executive,
+.financial {
   border: 1px solid #1d5272;
   color: var(--color-text-on-dark-soft, #d8edf5);
   background:
@@ -75,10 +95,18 @@
   font-weight: 950;
 }
 
-.executive .icon {
+.executive .icon,
+.financial .icon {
   border: 1px solid rgb(123 208 230 / 32%);
   color: var(--color-accent-cyan, #7bd0e6);
   background: rgb(123 208 230 / 14%);
+}
+
+/* A clara usa um quadrado maior: 64px medidos contra os 58px da executiva. */
+.financial .icon {
+  width: 64px;
+  height: 64px;
+  flex-basis: 64px;
 }
 
 .eyebrow {
@@ -89,8 +117,18 @@
   letter-spacing: 0.13em;
 }
 
-.executive .eyebrow {
+.executive .eyebrow,
+.financial .eyebrow {
   color: #80d0df;
+}
+
+/*
+ * 12px medidos, contra os 11,52px da executiva. Aqui é px e não rem de
+ * propósito: o legado fixa 12px, e em 390px a raiz encolhe para 15px —
+ * `0.75rem` daria 11,25px e mudaria o cabeçalho no celular.
+ */
+.financial .eyebrow {
+  font-size: 12px;
 }
 
 .title {
@@ -102,19 +140,46 @@
   text-wrap: wrap;
 }
 
-.executive .title {
+.executive .title,
+.financial .title {
   color: var(--color-text-on-dark, #fff);
 }
 
+/*
+ * Tamanho e altura de linha vêm da MEDIÇÃO, não do que parecia certo.
+ *
+ * A etapa 5A declarava aqui `0.87rem` e `1.5`, e o parágrafo continuava
+ * saindo com 0.91rem e 1.62 — quem manda é `app/v52.css`, que aplica
+ * `.page-area p` com `!important` e vence qualquer CSS Module. A linha de
+ * base não acusou porque ainda não media o parágrafo; passou a medir, e
+ * a comparação com o estado anterior à 5A confirmou que nada mudou de
+ * fato. O que estava errado era só a declaração, que dizia uma coisa e
+ * produzia outra.
+ *
+ * Declarar o valor real é o que permite remover aquele `!important` na
+ * etapa 5D sem que o texto mude de tamanho.
+ */
 .description {
   max-width: 780px;
   margin: 0;
-  font-size: 0.87rem;
-  line-height: 1.5;
+  font-size: 0.91rem;
+  line-height: 1.62;
 }
 
-.executive .description {
+.executive .description,
+.financial .description {
   color: var(--color-text-on-dark-muted, #a9cbd4);
+}
+
+/*
+ * Parágrafo maior e mais solto, em coluna mais larga. Em px pelo mesmo
+ * motivo do olho: o legado fixa 15px, e em 390px a raiz encolhe para
+ * 15px — `0.9375rem` daria 14,06px e mudaria o cabeçalho no celular.
+ */
+.financial .description {
+  max-width: 920px;
+  font-size: 15px;
+  line-height: 1.65;
 }
 
 .actions {
@@ -131,6 +196,13 @@
   }
 }
 
+/* Em 768px a clara aperta o recuo antes da executiva. */
+@media (width <= 980px) {
+  .financial {
+    padding: 26px 24px;
+  }
+}
+
 @media (width <= 720px) {
   .root {
     border-radius: 18px;
@@ -142,5 +214,20 @@
   .root {
     flex-direction: column;
     padding: 20px;
+  }
+
+  /*
+   * Em 390px a clara larga a altura mínima: o conteúdo empilhado já passa
+   * de 164px, e manter o piso só criaria espaço vazio. Medido em 0px.
+   */
+  .financial {
+    min-height: 0;
+    padding: 22px 19px;
+  }
+
+  .financial .icon {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
   }
 }
