@@ -8992,6 +8992,9 @@ throw new Error(
                   <button
                     key={item}
                     className={activeView === item ? "active" : ""}
+                    /* Âncora estável para testes: navegar comparando o texto
+                       do botão quebra quando um rótulo é renomeado. */
+                    data-view={item}
                     onClick={() => navigate(item)}
                   >
                     <Icon name={item === "tax-profile" ? "taxes" : item} size={19} />

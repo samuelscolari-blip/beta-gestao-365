@@ -11,14 +11,18 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { SCREENS, WIDTHS } from "../scripts/visual-baseline.mjs";
+import {
+  SCREENS,
+  SCREENS_WITHOUT_GENERIC_HEADER,
+  WIDTHS,
+} from "../scripts/visual-baseline.mjs";
 
 const baseline = JSON.parse(readFileSync("visual-baseline.json", "utf8"));
 
 test("a linha de base cobre todas as telas críticas em todas as larguras", () => {
   const faltando = [];
 
-  for (const tela of SCREENS) {
+  for (const tela of Object.keys(SCREENS)) {
     const capturas = baseline.screens[tela];
     if (!capturas) {
       faltando.push(tela);
@@ -93,6 +97,59 @@ test("nenhuma tela transborda horizontalmente", () => {
       "fora do fluxo sem pai com `position: relative` — foi essa a causa da " +
       "última vez — ou de tabela estourando a largura disponível.",
   );
+});
+
+test("nenhuma tela exibe mais de um cabeçalho ao mesmo tempo", () => {
+  /*
+   * Cabeçalho duplicado foi um defeito real deste projeto: telas com painel
+   * próprio mostravam também o cabeçalho genérico, e a correção da época foi
+   * escondê-lo por CSS — no V101 com uma classe posta por JavaScript, no
+   * V107 com `:has()`. As duas folhas somem na etapa final, quando a
+   * condição passa a ser declarada pelo React; esta verificação é o que
+   * garante que os títulos duplicados não voltem junto.
+   */
+  const duplicados = [];
+  const inesperadamenteAusentes = [];
+
+  for (const [tela, larguras] of Object.entries(baseline.screens)) {
+    for (const [largura, captura] of Object.entries(larguras)) {
+      const visiveis = captura.visibleHeaderCount;
+      if (visiveis === undefined) continue;
+
+      if (visiveis > 1) duplicados.push(`${tela} @ ${largura}: ${visiveis}`);
+      if (visiveis === 0 && !SCREENS_WITHOUT_GENERIC_HEADER.has(tela)) {
+        /* Sem cabeçalho só é aceitável onde há painel próprio no lugar. */
+        inesperadamenteAusentes.push(`${tela} @ ${largura}`);
+      }
+    }
+  }
+
+  assert.deepEqual(duplicados, [], "Tela com mais de um cabeçalho visível.");
+  assert.deepEqual(
+    inesperadamenteAusentes,
+    [],
+    "Tela sem cabeçalho visível e sem painel próprio declarado.",
+  );
+});
+
+test("a linha de base registra a geometria que distingue as três variantes", () => {
+  /*
+   * Cor não distingue as variantes; geometria sim. Sem estes campos
+   * gravados, "ficou igual" na migração seria opinião, não medição.
+   */
+  const captura = baseline.screens["Cartão Corporativo"]?.["1366"];
+  assert.ok(captura, "Tela de referência ausente da linha de base.");
+
+  for (const campo of ["display", "paddingTop", "minHeight", "borderRadius"]) {
+    assert.ok(
+      captura.heading?.[campo],
+      `Geometria do cabeçalho não registrada: ${campo}`,
+    );
+  }
+  for (const campo of ["width", "height", "borderRadius"]) {
+    assert.ok(captura.icon?.[campo], `Geometria do ícone não registrada: ${campo}`);
+  }
+  assert.ok(captura.variant, "Variante não registrada na linha de base.");
 });
 
 test("os títulos capturados têm cor, peso e tamanho registrados", () => {

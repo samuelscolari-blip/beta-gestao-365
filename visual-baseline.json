@@ -5,7 +5,14 @@
     "Visão geral": {
       "390": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -15,7 +22,14 @@
       },
       "768": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -25,17 +39,32 @@
       },
       "1366": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": null
+        "headingWidth": null,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -45,7 +74,14 @@
       },
       "1920": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -57,12 +93,48 @@
     "Fornecedores": {
       "390": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "none",
+        "moduleId": "expenses",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "19px",
+          "paddingBottom": "22px",
+          "paddingLeft": "19px",
+          "minHeight": "0px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "54px",
+          "height": "54px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -70,13 +142,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -88,12 +162,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "none",
+        "moduleId": "expenses",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "26px",
+          "paddingRight": "24px",
+          "paddingBottom": "26px",
+          "paddingLeft": "24px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -101,13 +211,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -119,12 +231,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "none",
+        "moduleId": "expenses",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -132,13 +280,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -146,16 +296,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "none",
+        "moduleId": "expenses",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -163,13 +350,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -181,12 +370,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "none",
+        "moduleId": "expenses",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -194,13 +419,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Financeira e Fornecedores",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -214,12 +441,48 @@
     "Cartão Corporativo": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "cards",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -227,13 +490,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -245,12 +510,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "cards",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -258,13 +559,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -276,12 +579,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "cards",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -289,13 +628,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -303,16 +644,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "cards",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -320,13 +698,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -338,12 +718,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "cards",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -351,13 +767,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Despesas de Cartão Corporativo",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -371,169 +789,156 @@
     "Execução da Obra": {
       "390": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "24px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
-        },
-        "titleText": "Execução da Obra e Produtividade",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "10.8px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "768": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "24px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
-        },
-        "titleText": "Execução da Obra e Produtividade",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "1366": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "25.954px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
-        },
-        "titleText": "Execução da Obra e Produtividade",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "29.184px",
-          "fontWeight": "900",
-          "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
-        },
-        "titleText": "Execução da Obra e Produtividade",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "1920": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "30px",
-          "fontWeight": "900",
-          "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
-        },
-        "titleText": "Execução da Obra e Produtividade",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       }
     },
     "Diário de obra": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "worklogs",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -541,13 +946,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -559,12 +966,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "worklogs",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -572,13 +1015,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -590,12 +1035,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "worklogs",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -603,13 +1084,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -617,16 +1100,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "worklogs",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -634,13 +1154,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -652,12 +1174,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "worklogs",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -665,13 +1223,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Diário de produtividade da obra",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -685,169 +1245,156 @@
     "Máquinas": {
       "390": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "24px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
-        },
-        "titleText": "Máquinas",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "10.8px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "768": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "24px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
-        },
-        "titleText": "Máquinas",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "1366": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "25.954px",
-          "fontWeight": "900",
-          "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
-        },
-        "titleText": "Máquinas",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "29.184px",
-          "fontWeight": "900",
-          "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
-        },
-        "titleText": "Máquinas",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       },
       "1920": {
         "executiveModule": "true",
-        "heading": {
-          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
-          "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
-        },
-        "title": {
-          "color": "rgb(255, 255, 255)",
-          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
-          "fontSize": "30px",
-          "fontWeight": "900",
-          "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
-        },
-        "titleText": "Máquinas",
-        "eyebrow": {
-          "color": "rgb(128, 208, 223)",
-          "fontSize": "11.52px",
-          "fontWeight": "850"
-        },
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 0,
+        "heading": null,
+        "icon": null,
+        "actions": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
           "backgroundColor": "rgba(0, 0, 0, 0)",
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 0
+        "headingWidth": null
       }
     },
     "Administrativo": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "people",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -855,13 +1402,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -873,12 +1422,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "people",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -886,13 +1471,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -904,12 +1491,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "people",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -917,13 +1540,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -931,16 +1556,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "people",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -948,13 +1610,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -966,12 +1630,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "people",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -979,13 +1679,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Administrativo e Pessoas",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -999,12 +1701,48 @@
     "Cálculo de Salário": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "stretch",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1012,13 +1750,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1026,12 +1766,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1039,13 +1815,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1053,12 +1831,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1066,26 +1880,65 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1093,13 +1946,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1107,12 +1962,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1120,13 +2011,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Salário",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1136,12 +2029,48 @@
     "Cálculo de Férias": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "vacations",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1149,13 +2078,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1167,12 +2098,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "vacations",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1180,13 +2147,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1198,12 +2167,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "vacations",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1211,13 +2216,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1225,16 +2232,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "vacations",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1242,13 +2286,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1260,12 +2306,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "vacations",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1273,13 +2355,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Cálculo de Férias",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1293,12 +2377,48 @@
     "Rescisão": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "stretch",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1306,13 +2426,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1320,12 +2442,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "16px",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1333,13 +2491,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1347,12 +2507,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "16px",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1360,26 +2556,65 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "16px",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1387,13 +2622,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1401,12 +2638,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "payroll",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "16px",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "10px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1414,13 +2687,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Rescisão",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1430,12 +2705,48 @@
     "Fiscal e Compliance": {
       "390": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "compliance",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "19px",
+          "paddingBottom": "22px",
+          "paddingLeft": "19px",
+          "minHeight": "0px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "54px",
+          "height": "54px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "stretch",
+          "gap": "9px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1443,13 +2754,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1457,12 +2770,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "compliance",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "26px",
+          "paddingRight": "24px",
+          "paddingBottom": "26px",
+          "paddingLeft": "24px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "normal",
+          "gap": "9px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1470,13 +2819,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1484,12 +2835,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "compliance",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "normal",
+          "gap": "9px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1497,26 +2884,65 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "compliance",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "normal",
+          "gap": "9px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1524,13 +2950,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1538,12 +2966,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "financial",
+        "accent": "compliance",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "30px",
+          "paddingRight": "32px",
+          "paddingBottom": "30px",
+          "paddingLeft": "32px",
+          "minHeight": "164px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "64px",
+          "height": "64px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "normal",
+          "gap": "9px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1551,13 +3015,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Central Fiscal & Compliance",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "12px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.56px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -1567,12 +3033,48 @@
     "Impostos": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "taxes",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1580,13 +3082,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1598,12 +3102,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "taxes",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1611,13 +3151,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1629,12 +3171,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "taxes",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1642,13 +3220,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1656,16 +3236,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "taxes",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1673,13 +3290,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1691,12 +3310,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "taxes",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1704,13 +3359,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Impostos e obrigações",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1724,12 +3381,48 @@
     "Aluguéis": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "rentals",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1737,13 +3430,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1755,12 +3450,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "rentals",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1768,13 +3499,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1786,12 +3519,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "rentals",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1799,13 +3568,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1813,16 +3584,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "rentals",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1830,13 +3638,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1848,12 +3658,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "rentals",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1861,13 +3707,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Gestão de Imóveis e Aluguéis",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1881,12 +3729,48 @@
     "Documentos": {
       "390": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "documents",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "18px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1894,13 +3778,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "10.8px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1912,12 +3798,48 @@
       },
       "768": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "documents",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1925,13 +3847,15 @@
           "fontSize": "24px",
           "fontWeight": "900",
           "letterSpacing": "-0.84px",
-          "lineHeight": "28.32px"
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1943,12 +3867,48 @@
       },
       "1366": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "documents",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1956,13 +3916,15 @@
           "fontSize": "25.954px",
           "fontWeight": "900",
           "letterSpacing": "-0.90839px",
-          "lineHeight": "30.6257px"
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -1970,16 +3932,53 @@
           "color": "rgb(216, 237, 245)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "documents",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -1987,13 +3986,15 @@
           "fontSize": "29.184px",
           "fontWeight": "900",
           "letterSpacing": "-1.02144px",
-          "lineHeight": "34.4371px"
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -2005,12 +4006,48 @@
       },
       "1920": {
         "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": "documents",
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
           "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(29, 82, 114)",
-          "borderRadius": "22px",
-          "color": "rgb(216, 237, 245)"
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(255, 255, 255)",
@@ -2018,13 +4055,15 @@
           "fontSize": "30px",
           "fontWeight": "900",
           "letterSpacing": "-1.05px",
-          "lineHeight": "35.4px"
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
         },
         "titleText": "Documentos e links",
         "eyebrow": {
           "color": "rgb(128, 208, 223)",
           "fontSize": "11.52px",
-          "fontWeight": "850"
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
@@ -2035,29 +4074,390 @@
         "headingWidth": 1564
       }
     },
+    "Integrações": {
+      "390": {
+        "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
+        "heading": {
+          "display": "flex",
+          "flexDirection": "column",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "20px",
+          "paddingRight": "20px",
+          "paddingBottom": "20px",
+          "paddingLeft": "20px",
+          "minHeight": "132px",
+          "borderRadius": "18px",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
+        },
+        "titleText": "Integrações e publicação",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850",
+          "letterSpacing": "1.404px"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
+        "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "stretch",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "22px",
+          "paddingRight": "22px",
+          "paddingBottom": "22px",
+          "paddingLeft": "22px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px",
+          "margin": "4px 0px 3px"
+        },
+        "titleText": "Integrações e publicação",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
+        "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px",
+          "margin": "4px 0px 3px"
+        },
+        "titleText": "Integrações e publicação",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1010,
+        "interactive": null
+      },
+      "1536": {
+        "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
+        "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px",
+          "margin": "4px 0px 3px"
+        },
+        "titleText": "Integrações e publicação",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "variant": "executive",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
+        "heading": {
+          "display": "flex",
+          "flexDirection": "row",
+          "gridTemplateColumns": "none",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "24px",
+          "paddingTop": "32px",
+          "paddingRight": "32px",
+          "paddingBottom": "32px",
+          "paddingLeft": "32px",
+          "minHeight": "132px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)",
+          "boxShadow": "rgba(3, 20, 33, 0.2) 0px 20px 50px 0px"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "16px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(123, 208, 230)",
+          "backgroundImage": "none",
+          "backgroundColor": "rgba(123, 208, 230, 0.14)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px",
+          "margin": "4px 0px 3px"
+        },
+        "titleText": "Integrações e publicação",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850",
+          "letterSpacing": "1.4976px"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
     "Manual do sistema": {
       "390": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "column",
+          "gridTemplateColumns": "320px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "22px",
+          "paddingTop": "24px",
+          "paddingRight": "22px",
+          "paddingBottom": "24px",
+          "paddingLeft": "22px",
+          "minHeight": "0px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "22px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
         },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "18px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
           "fontSize": "31.2px",
           "fontWeight": "790",
           "letterSpacing": "-1.248px",
-          "lineHeight": "33.696px"
+          "lineHeight": "33.696px",
+          "margin": "0px"
         },
         "titleText": "Manual do sistema",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -2065,26 +4465,59 @@
       },
       "768": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "658px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "22px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
         },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
           "fontSize": "31px",
           "fontWeight": "790",
           "letterSpacing": "-1.24px",
-          "lineHeight": "33.48px"
+          "lineHeight": "33.48px",
+          "margin": "0px"
         },
         "titleText": "Manual do sistema",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -2092,53 +4525,120 @@
       },
       "1366": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "910px 0px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
         },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
           "fontSize": "34.833px",
           "fontWeight": "790",
           "letterSpacing": "-1.39332px",
-          "lineHeight": "37.6196px"
+          "lineHeight": "37.6196px",
+          "margin": "0px"
         },
         "titleText": "Manual do sistema",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "1080px 0px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
         },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
           "fontSize": "39.168px",
           "fontWeight": "790",
           "letterSpacing": "-1.56672px",
-          "lineHeight": "42.3014px"
+          "lineHeight": "42.3014px",
+          "margin": "0px"
         },
         "titleText": "Manual do sistema",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -2146,26 +4646,59 @@
       },
       "1920": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "none",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "1464px 0px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
         },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": null,
         "title": {
           "color": "rgb(7, 29, 85)",
           "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
           "fontSize": "43px",
           "fontWeight": "790",
           "letterSpacing": "-1.72px",
-          "lineHeight": "46.44px"
+          "lineHeight": "46.44px",
+          "margin": "0px"
         },
         "titleText": "Manual do sistema",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": null,
         "overflowsHorizontally": false,
@@ -2175,12 +4708,48 @@
     "Regime Tributário": {
       "390": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "tax",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "column",
+          "gridTemplateColumns": "320px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "22px",
+          "paddingTop": "24px",
+          "paddingRight": "22px",
+          "paddingBottom": "24px",
+          "paddingLeft": "22px",
+          "minHeight": "0px",
+          "borderRadius": "22px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "22px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "58px",
+          "height": "58px",
+          "minWidth": "auto",
+          "borderRadius": "18px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(7, 29, 85)",
@@ -2188,13 +4757,15 @@
           "fontSize": "31.2px",
           "fontWeight": "790",
           "letterSpacing": "-1.248px",
-          "lineHeight": "33.696px"
+          "lineHeight": "33.696px",
+          "margin": "0px"
         },
         "titleText": "Regime Tributário",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
@@ -2206,12 +4777,48 @@
       },
       "768": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "tax",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "658px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "22px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(7, 29, 85)",
@@ -2219,13 +4826,15 @@
           "fontSize": "31px",
           "fontWeight": "790",
           "letterSpacing": "-1.24px",
-          "lineHeight": "33.48px"
+          "lineHeight": "33.48px",
+          "margin": "0px"
         },
         "titleText": "Regime Tributário",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
@@ -2237,12 +4846,48 @@
       },
       "1366": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "tax",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "796.328px 113.672px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(7, 29, 85)",
@@ -2250,13 +4895,15 @@
           "fontSize": "34.833px",
           "fontWeight": "790",
           "letterSpacing": "-1.39332px",
-          "lineHeight": "37.6196px"
+          "lineHeight": "37.6196px",
+          "margin": "0px"
         },
         "titleText": "Regime Tributário",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
@@ -2264,16 +4911,53 @@
           "color": "rgb(52, 85, 105)"
         },
         "overflowsHorizontally": false,
-        "headingWidth": 1010
+        "headingWidth": 1010,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "tax",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "966.328px 113.672px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(7, 29, 85)",
@@ -2281,13 +4965,15 @@
           "fontSize": "39.168px",
           "fontWeight": "790",
           "letterSpacing": "-1.56672px",
-          "lineHeight": "42.3014px"
+          "lineHeight": "42.3014px",
+          "margin": "0px"
         },
         "titleText": "Regime Tributário",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
@@ -2299,12 +4985,48 @@
       },
       "1920": {
         "executiveModule": "false",
+        "variant": "standard",
+        "accent": "tax",
+        "moduleId": null,
+        "headerCount": 1,
+        "visibleHeaderCount": 1,
         "heading": {
+          "display": "grid",
+          "flexDirection": "row",
+          "gridTemplateColumns": "1350.33px 113.672px",
+          "alignItems": "center",
+          "justifyContent": "space-between",
+          "gap": "30px",
+          "paddingTop": "30px",
+          "paddingRight": "34px",
+          "paddingBottom": "30px",
+          "paddingLeft": "34px",
+          "minHeight": "166px",
+          "borderRadius": "26px",
+          "borderTopColor": "rgb(191, 217, 238)",
           "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
           "backgroundColor": "rgba(0, 0, 0, 0)",
-          "borderTopColor": "rgb(191, 217, 238)",
-          "borderRadius": "26px",
-          "color": "rgb(52, 85, 105)"
+          "color": "rgb(52, 85, 105)",
+          "boxShadow": "rgba(30, 83, 127, 0.11) 0px 18px 46px 0px, rgba(255, 255, 255, 0.96) 0px 1px 0px 0px inset"
+        },
+        "icon": {
+          "display": "grid",
+          "width": "78px",
+          "height": "78px",
+          "minWidth": "auto",
+          "borderRadius": "21px",
+          "fontSize": "15px",
+          "alignItems": "center",
+          "justifyContent": "normal",
+          "color": "rgb(20, 119, 201)",
+          "backgroundImage": "linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgb(237, 247, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "actions": {
+          "display": "flex",
+          "flexDirection": "row",
+          "alignItems": "center",
+          "gap": "7px"
         },
         "title": {
           "color": "rgb(7, 29, 85)",
@@ -2312,13 +5034,15 @@
           "fontSize": "43px",
           "fontWeight": "790",
           "letterSpacing": "-1.72px",
-          "lineHeight": "46.44px"
+          "lineHeight": "46.44px",
+          "margin": "0px"
         },
         "titleText": "Regime Tributário",
         "eyebrow": {
           "color": "rgb(20, 119, 201)",
           "fontSize": "12px",
-          "fontWeight": "820"
+          "fontWeight": "820",
+          "letterSpacing": "0.84px"
         },
         "guide": {
           "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
@@ -2332,7 +5056,14 @@
     "Infraestrutura ERP": {
       "390": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -2342,7 +5073,14 @@
       },
       "768": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -2352,17 +5090,32 @@
       },
       "1366": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
         "guide": null,
         "overflowsHorizontally": false,
-        "headingWidth": null
+        "headingWidth": null,
+        "interactive": null
       },
       "1536": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,
@@ -2372,7 +5125,14 @@
       },
       "1920": {
         "executiveModule": "false",
+        "variant": null,
+        "accent": null,
+        "moduleId": null,
+        "headerCount": 0,
+        "visibleHeaderCount": 0,
         "heading": null,
+        "icon": null,
+        "actions": null,
         "title": null,
         "titleText": null,
         "eyebrow": null,

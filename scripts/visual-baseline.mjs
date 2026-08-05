@@ -43,30 +43,67 @@ const PLAYWRIGHT = "/opt/node22/lib/node_modules/playwright";
  * exclusivas de administrador (ex.: Administração) não entram. Elas
  * continuam dependendo de conferência manual.
  */
-export const SCREENS = [
-  "Visão geral",
-  "Fornecedores",
-  "Cartão Corporativo",
+export const SCREENS = {
+  "Visão geral": "dashboard",
+  Fornecedores: "expenses",
+  "Cartão Corporativo": "cards",
+  "Execução da Obra": "works",
+  "Diário de obra": "worklogs",
+  Máquinas: "assets",
+  Administrativo: "people",
+  "Cálculo de Salário": "payroll",
+  "Cálculo de Férias": "vacations",
+  Rescisão: "terminations",
+  "Fiscal e Compliance": "compliance",
+  Impostos: "taxes",
+  Aluguéis: "rentals",
+  Documentos: "documents",
+  Integrações: "m365",
+  "Manual do sistema": "manual",
+  "Regime Tributário": "tax-profile",
+  "Infraestrutura ERP": "infrastructure",
+};
+
+/*
+ * Telas em que `visibleHeaderCount` igual a zero é o resultado correto, por
+ * dois motivos diferentes:
+ *
+ *  - Execução da Obra e Máquinas ESCONDEM o cabeçalho genérico, porque já
+ *    têm painel próprio acima. Hoje isso é feito por CSS (V101 e V107); na
+ *    etapa final passa a ser uma condição declarada pelo React;
+ *  - Visão geral e Infraestrutura ERP simplesmente não são telas de módulo
+ *    e nunca tiveram cabeçalho.
+ *
+ * A distinção importa: a primeira dupla precisa continuar escondendo o
+ * cabeçalho depois da migração, e a segunda não tem nada a preservar.
+ */
+export const SCREENS_WITH_HIDDEN_HEADER = new Set([
   "Execução da Obra",
-  "Diário de obra",
   "Máquinas",
-  "Administrativo",
-  "Cálculo de Salário",
-  "Cálculo de Férias",
-  "Rescisão",
-  "Fiscal e Compliance",
-  "Impostos",
-  "Aluguéis",
-  "Documentos",
-  "Manual do sistema",
-  "Regime Tributário",
+]);
+
+export const SCREENS_WITHOUT_MODULE_HEADER = new Set([
+  "Visão geral",
   "Infraestrutura ERP",
-];
+]);
+
+/** Todas as telas em que não haver cabeçalho visível é esperado. */
+export const SCREENS_WITHOUT_GENERIC_HEADER = new Set([
+  ...SCREENS_WITH_HIDDEN_HEADER,
+  ...SCREENS_WITHOUT_MODULE_HEADER,
+]);
 
 /** Desktop comum, desktop largo, notebook com escala, tablet e celular. */
 export const WIDTHS = [1920, 1536, 1366, 768, 390];
 
-/* Executado dentro do navegador: lê o resultado final da cascata. */
+/*
+ * Executado dentro do navegador: lê o resultado final da cascata.
+ *
+ * O detalhe aqui é proposital. As três variantes do cabeçalho se distinguem
+ * por GEOMETRIA, não por cor: a clara usa grid onde as outras usam flex, com
+ * ícone de 78px contra 64px. Reconstruí-las nas etapas seguintes exige ter
+ * esses números registrados de antes, senão "ficou igual" vira opinião.
+ */
 function readScreenStyles() {
   const pick = (element, properties) => {
     if (!element) return null;
@@ -74,21 +111,76 @@ function readScreenStyles() {
     return Object.fromEntries(properties.map((p) => [p, computed[p]]));
   };
 
-  const heading = document.querySelector(".module-heading");
-  const title = document.querySelector(".module-heading h1");
-  const eyebrow = document.querySelector(".module-heading .eyebrow");
+  const visivel = (element) => {
+    const computed = getComputedStyle(element);
+    const box = element.getBoundingClientRect();
+    return (
+      computed.display !== "none" &&
+      computed.visibility !== "hidden" &&
+      box.width > 0 &&
+      box.height > 0
+    );
+  };
+
+  const headers = [...document.querySelectorAll('[data-ui="module-header"]')];
+  const visibleHeaders = headers.filter(visivel);
+  const heading = visibleHeaders[0] ?? null;
+
+  const title = heading?.querySelector("h1") ?? null;
+  const eyebrow = heading?.querySelector(".eyebrow") ?? null;
+  const icon = heading?.querySelector(".module-big-icon") ?? null;
+  /* Bloco de ações: tudo que vem depois do título, à direita. */
+  const actions = heading?.children?.[1] ?? null;
   const guide = document.querySelector(".module-guide");
   const pageArea = document.querySelector(".page-area");
 
   return {
     executiveModule: pageArea?.getAttribute("data-executive-module") ?? null,
+    variant: heading?.dataset?.variant ?? null,
+    accent: heading?.dataset?.accent ?? null,
+    moduleId: heading?.dataset?.module ?? null,
+
+    /*
+     * Execução da Obra e Máquinas escondem o cabeçalho genérico de
+     * propósito, porque já têm painel próprio acima — nessas telas o
+     * esperado é zero. Mais de um visível significa cabeçalho duplicado.
+     */
+    headerCount: headers.length,
+    visibleHeaderCount: visibleHeaders.length,
+
     heading: pick(heading, [
+      "display",
+      "flexDirection",
+      "gridTemplateColumns",
+      "alignItems",
+      "justifyContent",
+      "gap",
+      "paddingTop",
+      "paddingRight",
+      "paddingBottom",
+      "paddingLeft",
+      "minHeight",
+      "borderRadius",
+      "borderTopColor",
       "backgroundImage",
       "backgroundColor",
-      "borderTopColor",
-      "borderRadius",
       "color",
+      "boxShadow",
     ]),
+    icon: pick(icon, [
+      "display",
+      "width",
+      "height",
+      "minWidth",
+      "borderRadius",
+      "fontSize",
+      "alignItems",
+      "justifyContent",
+      "color",
+      "backgroundImage",
+      "backgroundColor",
+    ]),
+    actions: pick(actions, ["display", "flexDirection", "alignItems", "gap"]),
     title: pick(title, [
       "color",
       "fontFamily",
@@ -96,15 +188,52 @@ function readScreenStyles() {
       "fontWeight",
       "letterSpacing",
       "lineHeight",
+      "margin",
     ]),
     titleText: title?.textContent?.trim() ?? null,
-    eyebrow: pick(eyebrow, ["color", "fontSize", "fontWeight"]),
+    eyebrow: pick(eyebrow, ["color", "fontSize", "fontWeight", "letterSpacing"]),
     guide: pick(guide, ["backgroundImage", "backgroundColor", "color"]),
+
     /* Transbordo horizontal: sintoma clássico de cabeçalho quebrado. */
     overflowsHorizontally:
       document.documentElement.scrollWidth > document.documentElement.clientWidth,
     headingWidth: heading ? Math.round(heading.getBoundingClientRect().width) : null,
   };
+}
+
+/*
+ * Estados interativos do botão de ação, medidos separadamente porque exigem
+ * hover e foco reais.
+ *
+ * Em modo visitante o botão primário não existe — o cabeçalho renderiza um
+ * selo de consulta no lugar. Nesse caso não há o que medir, e devolver nulo
+ * é o resultado correto, não uma falha.
+ */
+async function readInteractiveStates(page) {
+  const seletor = '[data-ui="module-header"] .button.primary';
+  const botao = page.locator(seletor).first();
+  if ((await botao.count()) === 0) return null;
+
+  const repouso = await page.evaluate((s) => {
+    const c = getComputedStyle(document.querySelector(s));
+    return { background: c.backgroundImage, color: c.color, border: c.borderTopColor };
+  }, seletor);
+
+  await botao.hover();
+  await page.waitForTimeout(250);
+  const hover = await page.evaluate((s) => {
+    const c = getComputedStyle(document.querySelector(s));
+    return { background: c.backgroundImage, color: c.color, border: c.borderTopColor };
+  }, seletor);
+
+  await botao.focus();
+  await page.waitForTimeout(150);
+  const foco = await page.evaluate((s) => {
+    const c = getComputedStyle(document.querySelector(s));
+    return { outline: c.outline, outlineOffset: c.outlineOffset, boxShadow: c.boxShadow };
+  }, seletor);
+
+  return { repouso, hover, foco };
 }
 
 async function startDevServer() {
@@ -142,27 +271,46 @@ export async function capture({ screenshots = false } = {}) {
       await page.goto(ORIGIN, { waitUntil: "networkidle", timeout: 60_000 });
       await page.waitForTimeout(2500);
 
-      for (const screen of SCREENS) {
+      for (const [screen, viewId] of Object.entries(SCREENS)) {
         /*
-         * Navega pelo próprio DOM em vez de clique físico: em larguras
-         * estreitas a barra lateral fica fora da viewport e o clique real
-         * falharia. O que se quer medir aqui é a renderização da tela, não
-         * a acessibilidade do botão.
+         * Navega pelo próprio DOM, por `data-view`, em vez de clique físico
+         * sobre o texto do botão. Dois motivos: em larguras estreitas a
+         * barra lateral sai da viewport e o clique real falharia; e comparar
+         * o rótulo faria a medição quebrar assim que uma tela fosse
+         * renomeada — que é o mesmo defeito que a tela de Férias tinha.
          */
-        const navigated = await page.evaluate((label) => {
-          const button = [...document.querySelectorAll(".sidebar nav button")].find(
-            (candidate) => candidate.textContent?.includes(label),
-          );
+        const navigated = await page.evaluate((id) => {
+          const button = document.querySelector(`.sidebar nav button[data-view="${id}"]`);
           if (!button) return false;
           button.click();
           return true;
-        }, screen);
+        }, viewId);
 
         if (!navigated) continue;
-        await page.waitForTimeout(1200);
+
+        /*
+         * Espera a tela certa aparecer em vez de dormir um tempo fixo. Sem
+         * isso, uma máquina lenta mediria a tela anterior e gravaria o
+         * resultado errado como se fosse verdade.
+         */
+        await page
+          .waitForFunction(
+            (id) => {
+              const active = document.querySelector(".sidebar nav button.active");
+              return active?.getAttribute("data-view") === id;
+            },
+            viewId,
+            { timeout: 15_000 },
+          )
+          .catch(() => {});
+        await page.waitForTimeout(700);
 
         result[screen] ??= {};
-        result[screen][String(width)] = await page.evaluate(readScreenStyles);
+        result[screen][String(width)] = {
+          ...(await page.evaluate(readScreenStyles)),
+          /* Estados interativos só no tamanho de referência: exigem hover real. */
+          interactive: width === 1366 ? await readInteractiveStates(page) : undefined,
+        };
 
         if (screenshots && width === 1366) {
           const safe = screen.normalize("NFD").replace(/[^\w]+/g, "-").toLowerCase();
