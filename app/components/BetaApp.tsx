@@ -24,6 +24,7 @@ import {
   type ModuleDefinition,
   type ModuleField,
 } from "../lib/modules";
+import ModuleHeader from "../ui/ModuleHeader/ModuleHeader";
 import {
   exportAllWorkbook,
   exportModuleWorkbook,
@@ -5381,34 +5382,28 @@ function ModulePage({
 
   return (
     <div className="page-stack">
-      <section className="module-heading">
-        <div className="module-title-wrap">
-          <span
-            className="module-big-icon"
-            style={{
-              color: presentationModule.color,
-              backgroundColor: presentationModule.lightColor,
-            }}
-          >
-            <Icon name={presentationModule.id} size={26} />
-          </span>
-          <div>
-            <span className="eyebrow">{presentationModule.eyebrow}</span>
-            <h1>{presentationModule.label}</h1>
-            <p>{presentationModule.description}</p>
-          </div>
-        </div>
-        {canEdit ? (
-          <button className="button primary" onClick={onNew}>
-            <Icon name="plus" size={18} />
-            {actionLabels[module.id] || "Novo registro"}
-          </button>
-        ) : (
-          <span className="read-only-chip">
-            <Icon name="eye" size={16} /> Consulta protegida
-          </span>
-        )}
-      </section>
+      <ModuleHeader
+        iconStyle={{
+          color: presentationModule.color,
+          backgroundColor: presentationModule.lightColor,
+        }}
+        icon={<Icon name={presentationModule.id} size={26} />}
+        eyebrow={presentationModule.eyebrow}
+        title={presentationModule.label}
+        description={presentationModule.description}
+        actions={
+          canEdit ? (
+            <button className="button primary" onClick={onNew}>
+              <Icon name="plus" size={18} />
+              {actionLabels[module.id] || "Novo registro"}
+            </button>
+          ) : (
+            <span className="read-only-chip">
+              <Icon name="eye" size={16} /> Consulta protegida
+            </span>
+          )
+        }
+      />
 
       <aside className="module-guide">
         <span className="guide-icon">
@@ -5890,30 +5885,29 @@ function IntegrationHub({
 
   return (
     <div className="page-stack">
-      <section className="module-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon microsoft-icon">
-            <Icon name="m365" size={26} />
-          </span>
-          <div>
-            <span className="eyebrow">MICROSOFT 365</span>
-            <h1>Integrações e publicação</h1>
-            <p>
-              Conecte o sistema às bases, documentos, equipes e caixas postais
-              oficiais da Beta.
-            </p>
-          </div>
-        </div>
-        {canEdit ? (
-          <button className="button primary" onClick={onNew}>
-            <Icon name="plus" size={18} /> Registrar integração
-          </button>
-        ) : (
-          <span className="read-only-chip">
-            <Icon name="eye" size={16} /> Catálogo em consulta
-          </span>
-        )}
-      </section>
+      <ModuleHeader
+        iconClass="microsoft-icon"
+        icon={<Icon name="m365" size={26} />}
+        eyebrow="MICROSOFT 365"
+        title="Integrações e publicação"
+        description={
+          <>
+            Conecte o sistema às bases, documentos, equipes e caixas postais
+            oficiais da Beta.
+          </>
+        }
+        actions={
+          canEdit ? (
+            <button className="button primary" onClick={onNew}>
+              <Icon name="plus" size={18} /> Registrar integração
+            </button>
+          ) : (
+            <span className="read-only-chip">
+              <Icon name="eye" size={16} /> Catálogo em consulta
+            </span>
+          )
+        }
+      />
 
       <section className="integration-hero">
         <div>
@@ -6263,37 +6257,37 @@ function ComplianceCenter({
 
   return (
     <div className="page-stack compliance-page">
-      <section className="module-heading compliance-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon compliance-icon">
-            <Icon name="compliance" size={27} />
-          </span>
-          <div>
-            <span className="eyebrow">FISCAL • REGRAS • OBRIGAÇÕES DIGITAIS</span>
-            <h1>Central Fiscal & Compliance</h1>
-            <p>
-              Controle de leiautes, vigências, eventos, protocolos, recibos,
-              CNO e evidências de homologação em uma trilha única.
-            </p>
+      <ModuleHeader
+        variantClass="compliance-heading"
+        iconClass="compliance-icon"
+        icon={<Icon name="compliance" size={27} />}
+        eyebrow="FISCAL • REGRAS • OBRIGAÇÕES DIGITAIS"
+        title="Central Fiscal & Compliance"
+        description={
+          <>
+            Controle de leiautes, vigências, eventos, protocolos, recibos,
+            CNO e evidências de homologação em uma trilha única.
+          </>
+        }
+        actions={
+          <div className="compliance-heading-actions">
+            {canEdit ? (
+              <>
+                <button className="button primary" onClick={() => onNew("compliance")}>
+                  <Icon name="plus" size={17} /> Preparar evento
+                </button>
+                <button className="button secondary" onClick={() => onNew("rules")}>
+                  <Icon name="rules" size={17} /> Cadastrar regra
+                </button>
+              </>
+            ) : (
+              <span className="read-only-chip">
+                <Icon name="eye" size={16} /> Visão demonstrativa
+              </span>
+            )}
           </div>
-        </div>
-        <div className="compliance-heading-actions">
-          {canEdit ? (
-            <>
-              <button className="button primary" onClick={() => onNew("compliance")}>
-                <Icon name="plus" size={17} /> Preparar evento
-              </button>
-              <button className="button secondary" onClick={() => onNew("rules")}>
-                <Icon name="rules" size={17} /> Cadastrar regra
-              </button>
-            </>
-          ) : (
-            <span className="read-only-chip">
-              <Icon name="eye" size={16} /> Visão demonstrativa
-            </span>
-          )}
-        </div>
-      </section>
+        }
+      />
 
       {complianceTabs}
 
@@ -6669,31 +6663,31 @@ function PayrollStudio({
 
   return (
     <div className="page-stack payroll-page">
-      <section className="module-heading payroll-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon payroll-icon">
-            <Icon name="payroll" size={27} />
-          </span>
-          <div>
-            <span className="eyebrow">RH • MOTOR DE CÁLCULO</span>
-            <h1>Cálculo de Folha</h1>
-            <p>
-              Simulação mensal com INSS progressivo, IRRF 2026, redução mensal,
-              FGTS, encargos e memória de cálculo.
-            </p>
+      <ModuleHeader
+        variantClass="payroll-heading"
+        iconClass="payroll-icon"
+        icon={<Icon name="payroll" size={27} />}
+        eyebrow="RH • MOTOR DE CÁLCULO"
+        title="Cálculo de Folha"
+        description={
+          <>
+            Simulação mensal com INSS progressivo, IRRF 2026, redução mensal,
+            FGTS, encargos e memória de cálculo.
+          </>
+        }
+        actions={
+          <div className="payroll-heading-actions">
+            <button className="time-sync-button" onClick={() => setSyncInfo((current) => !current)}>
+              <Icon name="refresh" size={17} />
+              Sincronizar com o ponto
+              <small>Integração futura</small>
+            </button>
+            <span className="rules-chip">
+              Regras {payrollRules2026.version}
+            </span>
           </div>
-        </div>
-        <div className="payroll-heading-actions">
-          <button className="time-sync-button" onClick={() => setSyncInfo((current) => !current)}>
-            <Icon name="refresh" size={17} />
-            Sincronizar com o ponto
-            <small>Integração futura</small>
-          </button>
-          <span className="rules-chip">
-            Regras {payrollRules2026.version}
-          </span>
-        </div>
-      </section>
+        }
+      />
 
       {syncInfo ? (
         <aside className="future-sync-panel">
@@ -7376,21 +7370,19 @@ const manualEntries: ManualEntry[] = [
 function SystemManualPage() {
   return (
     <div className="page-stack">
-      <section className="module-heading manual-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon manual-icon">
-            <Icon name="manual" size={26} />
-          </span>
-          <div>
-            <span className="eyebrow">COMO O SISTEMA FUNCIONA</span>
-            <h1>Manual do sistema</h1>
-            <p>
-              Explicações das regras de negócio que orientam o uso do sistema
-              no dia a dia, reunidas aqui para consulta sempre que precisar.
-            </p>
-          </div>
-        </div>
-      </section>
+      <ModuleHeader
+        variantClass="manual-heading"
+        iconClass="manual-icon"
+        icon={<Icon name="manual" size={26} />}
+        eyebrow="COMO O SISTEMA FUNCIONA"
+        title="Manual do sistema"
+        description={
+          <>
+            Explicações das regras de negócio que orientam o uso do sistema
+            no dia a dia, reunidas aqui para consulta sempre que precisar.
+          </>
+        }
+      />
 
       {manualEntries.map((entry, index) => (
         <section className="settings-card manual-entry-card" key={entry.title}>
@@ -7436,24 +7428,24 @@ function AdminPanel({
 
   return (
     <div className="page-stack">
-      <section className="module-heading admin-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon admin-icon">
-            <Icon name="admin" size={26} />
+      <ModuleHeader
+        variantClass="admin-heading"
+        iconClass="admin-icon"
+        icon={<Icon name="admin" size={26} />}
+        eyebrow="ACESSO EXCLUSIVO"
+        title="Administração do sistema"
+        description={
+          <>
+            Personalize a apresentação do sistema sem alterar os cadastros da
+            empresa.
+          </>
+        }
+        actions={
+          <span className="admin-lock">
+            <Icon name="check" size={16} /> Somente administrador
           </span>
-          <div>
-            <span className="eyebrow">ACESSO EXCLUSIVO</span>
-            <h1>Administração do sistema</h1>
-            <p>
-              Personalize a apresentação do sistema sem alterar os cadastros da
-              empresa.
-            </p>
-          </div>
-        </div>
-        <span className="admin-lock">
-          <Icon name="check" size={16} /> Somente administrador
-        </span>
-      </section>
+        }
+      />
 
       <aside className="admin-security-note">
         <span>
@@ -7766,24 +7758,22 @@ function TaxProfilePanel({
 
   return (
     <div className="page-stack tax-profile-page">
-      <section className="module-heading tax-heading">
-        <div className="module-title-wrap">
-          <span className="module-big-icon tax-icon">
-            <Icon name="taxes" size={26} />
+      <ModuleHeader
+        variantClass="tax-heading"
+        iconClass="tax-icon"
+        icon={<Icon name="taxes" size={26} />}
+        eyebrow="EMPRESA • ENQUADRAMENTO"
+        title="Regime Tributário"
+        description="Dados fiscais e previdenciários utilizados nas estimativas da folha."
+        actions={
+          <span className="tax-regime-badge">
+            <Icon name={draft.taxRegime === "Não informado" ? "alert" : "check"} size={16} />
+            {draft.taxRegime === "Não informado"
+              ? "Enquadramento pendente"
+              : `Enquadrado: ${draft.taxRegime}`}
           </span>
-          <div>
-            <span className="eyebrow">EMPRESA • ENQUADRAMENTO</span>
-            <h1>Regime Tributário</h1>
-            <p>Dados fiscais e previdenciários utilizados nas estimativas da folha.</p>
-          </div>
-        </div>
-        <span className="tax-regime-badge">
-          <Icon name={draft.taxRegime === "Não informado" ? "alert" : "check"} size={16} />
-          {draft.taxRegime === "Não informado"
-            ? "Enquadramento pendente"
-            : `Enquadrado: ${draft.taxRegime}`}
-        </span>
-      </section>
+        }
+      />
 
       <aside className="module-guide">
         <span className="guide-icon"><Icon name="check" size={18} /></span>
