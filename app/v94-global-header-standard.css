@@ -21,6 +21,15 @@
   min-width: 0;
   min-height: 166px !important;
   padding: 30px 34px !important;
+  /*
+   * Ancora o círculo decorativo do ::after, que usa `right: -56px`.
+   * Sem isto, o pseudo-elemento se posicionava em relação à viewport e o
+   * `overflow: hidden` abaixo não o cortava — `overflow` só recorta
+   * descendentes cujo bloco de contenção esteja dentro do elemento. O
+   * resultado eram exatamente 56px de rolagem horizontal nas telas claras,
+   * em todas as larguras.
+   */
+  position: relative;
   overflow: hidden;
   border: 1px solid #bfd9ee !important;
   border-radius: 26px !important;

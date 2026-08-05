@@ -67,40 +67,31 @@ test("a linha de base registra as telas claras que já quebraram antes", () => {
 });
 
 /*
- * Transbordo horizontal já existente, encontrado por esta linha de base.
+ * Nenhuma tela pode ter rolagem horizontal.
  *
- * "Manual do sistema" e "Regime Tributário" produzem barra de rolagem
- * lateral em TODAS as larguras medidas, inclusive 1920px. É defeito real e
- * anterior a este trabalho — as mesmas duas telas que o V105 já havia
- * danificado, aparentemente as menos conferidas do sistema.
- *
- * Não é corrigido aqui de propósito: esta etapa é só instrumentação e não
- * altera CSS. Fica registrado para que o teste continue pegando qualquer
- * transbordo NOVO, sem esconder estes.
+ * Quando esta linha de base foi criada, "Manual do sistema" e "Regime
+ * Tributário" transbordavam em todas as larguras, inclusive 1920px, e o
+ * defeito ficou registrado aqui como exceção conhecida. A causa era o
+ * círculo decorativo do `::after` no cabeçalho claro: ele usa
+ * `right: -56px`, mas o elemento pai não tinha `position: relative`, então
+ * o pseudo-elemento se ancorava na viewport e o `overflow: hidden` do pai
+ * não o cortava. Corrigido no V94; a exceção deixou de ser necessária.
  */
-const TRANSBORDOS_CONHECIDOS = new Set(
-  ["Manual do sistema", "Regime Tributário"].flatMap((tela) =>
-    WIDTHS.map((largura) => `${tela} @ ${largura}`),
-  ),
-);
-
-test("nenhuma tela nova passou a transbordar horizontalmente", () => {
-  const novos = [];
+test("nenhuma tela transborda horizontalmente", () => {
+  const transbordos = [];
 
   for (const [tela, larguras] of Object.entries(baseline.screens)) {
     for (const [largura, captura] of Object.entries(larguras)) {
-      const chave = `${tela} @ ${largura}`;
-      if (captura.overflowsHorizontally && !TRANSBORDOS_CONHECIDOS.has(chave)) {
-        novos.push(chave);
-      }
+      if (captura.overflowsHorizontally) transbordos.push(`${tela} @ ${largura}`);
     }
   }
 
   assert.deepEqual(
-    novos,
+    transbordos,
     [],
-    "Tela nova com barra de rolagem horizontal — provavelmente um cabeçalho " +
-      "ou tabela estourando a largura disponível.",
+    "Tela com barra de rolagem horizontal. Suspeite de elemento posicionado " +
+      "fora do fluxo sem pai com `position: relative` — foi essa a causa da " +
+      "última vez — ou de tabela estourando a largura disponível.",
   );
 });
 
