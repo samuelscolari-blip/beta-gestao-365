@@ -16,18 +16,18 @@
      foi removida por correção, não porque fosse a causa comprovada de
      título com letras coladas (essa causa real foi a colisão V93/V94×V105,
      corrigida à parte). */
-  --v86-font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Inter, sans-serif;
-  --v86-ink: #12344d;
-  --v86-copy: #46677a;
-  --v86-muted: #68879b;
-  --v86-line: #d7e5ee;
-  --v86-surface: #ffffff;
-  --v86-canvas: #f4f7f9;
-  --v86-cyan: #38c8e3;
-  --v86-warning: #e8a838;
-  --v86-danger: #d94848;
-  --v86-success: #2fa66f;
+  /* Apelidos para os tokens oficiais de app/styles/tokens.css. */
+  --v86-font: var(--font-family-sans);
+  --v86-ink: var(--color-text-primary);
+  --v86-copy: var(--color-text-secondary);
+  --v86-muted: var(--color-text-muted);
+  --v86-line: var(--color-border);
+  --v86-surface: var(--color-surface);
+  --v86-canvas: var(--color-surface-canvas);
+  --v86-cyan: var(--color-accent-cyan-strong);
+  --v86-warning: var(--color-status-warning);
+  --v86-danger: var(--color-status-danger);
+  --v86-success: var(--color-status-success);
 }
 
 /* PARTE 1 — tipografia global, sem importação externa em runtime. */
