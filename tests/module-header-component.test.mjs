@@ -106,10 +106,23 @@ test("as classes semânticas de cada tela continuam sendo emitidas", () => {
 
 test("o componente não introduz envoltório extra nem !important", () => {
   assert.doesNotMatch(component, /!important/);
-  // Um <div> a mais entre a section e o module-title-wrap mudaria o
-  // resultado de seletores com combinador filho no CSS legado.
-  assert.match(
-    component,
-    /<section[\s\S]{0,220}<div className="module-title-wrap">/,
+
+  /*
+   * Um elemento a mais entre a <section> e o .module-title-wrap mudaria o
+   * resultado de seletores com combinador filho no CSS legado.
+   *
+   * A versão anterior media a DISTÂNCIA em caracteres entre os dois, o que
+   * é apenas um proxy: quebrou ao serem acrescentados atributos e um
+   * comentário, sem que nenhum elemento tivesse sido criado. Agora verifica
+   * a intenção diretamente — não existe tag de abertura entre eles.
+   */
+  const inicio = component.indexOf("<section");
+  const wrap = component.indexOf('<div className="module-title-wrap">');
+
+  assert.ok(inicio > -1 && wrap > inicio, "Estrutura esperada não encontrada.");
+  assert.doesNotMatch(
+    component.slice(component.indexOf(">", inicio) + 1, wrap),
+    /<[a-zA-Z]/,
+    "Existe um elemento entre a <section> e o .module-title-wrap.",
   );
 });

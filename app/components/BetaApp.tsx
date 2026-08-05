@@ -24,7 +24,9 @@ import {
   type ModuleDefinition,
   type ModuleField,
 } from "../lib/modules";
-import ModuleHeader from "../ui/ModuleHeader/ModuleHeader";
+import ModuleHeader, {
+  type ModuleHeaderVariant,
+} from "../ui/ModuleHeader/ModuleHeader";
 import {
   exportAllWorkbook,
   exportModuleWorkbook,
@@ -5325,6 +5327,7 @@ function ModulePage({
   canEdit,
   headerModule,
   topNavigation,
+  variant,
 }: {
   module: ModuleDefinition;
   records: StoredRecord[];
@@ -5340,6 +5343,8 @@ function ModulePage({
   canEdit: boolean;
   headerModule?: ModuleDefinition;
   topNavigation?: ReactNode;
+  /* Quem renderiza sabe a estrutura; o ModulePage não deduz. */
+  variant: ModuleHeaderVariant;
 }) {
   const { visible: showInternalCodes, toggle: toggleInternalCodes } =
     useContext(InternalCodeVisibilityContext);
@@ -5383,6 +5388,7 @@ function ModulePage({
   return (
     <div className="page-stack">
       <ModuleHeader
+        variant={variant}
         iconStyle={{
           color: presentationModule.color,
           backgroundColor: presentationModule.lightColor,
@@ -5764,6 +5770,7 @@ function FinancialCenterPage({
 
   return (
     <ModulePage
+      variant="financial"
       module={selectedModule}
       headerModule={moduleMap.expenses}
       records={selectedRecords}
@@ -5886,6 +5893,7 @@ function IntegrationHub({
   return (
     <div className="page-stack">
       <ModuleHeader
+        variant="executive"
         iconClass="microsoft-icon"
         icon={<Icon name="m365" size={26} />}
         eyebrow="MICROSOFT 365"
@@ -6238,6 +6246,7 @@ function ComplianceCenter({
   if (tab === "rules") {
     return (
       <ModulePage
+        variant="financial"
         module={moduleMap.rules}
         records={rules}
         search={search}
@@ -6258,6 +6267,8 @@ function ComplianceCenter({
   return (
     <div className="page-stack compliance-page">
       <ModuleHeader
+        variant="financial"
+        accent="compliance"
         variantClass="compliance-heading"
         iconClass="compliance-icon"
         icon={<Icon name="compliance" size={27} />}
@@ -6664,6 +6675,8 @@ function PayrollStudio({
   return (
     <div className="page-stack payroll-page">
       <ModuleHeader
+        variant="executive"
+        accent="payroll"
         variantClass="payroll-heading"
         iconClass="payroll-icon"
         icon={<Icon name="payroll" size={27} />}
@@ -7371,6 +7384,7 @@ function SystemManualPage() {
   return (
     <div className="page-stack">
       <ModuleHeader
+        variant="standard"
         variantClass="manual-heading"
         iconClass="manual-icon"
         icon={<Icon name="manual" size={26} />}
@@ -7429,6 +7443,8 @@ function AdminPanel({
   return (
     <div className="page-stack">
       <ModuleHeader
+        variant="standard"
+        accent="admin"
         variantClass="admin-heading"
         iconClass="admin-icon"
         icon={<Icon name="admin" size={26} />}
@@ -7759,6 +7775,8 @@ function TaxProfilePanel({
   return (
     <div className="page-stack tax-profile-page">
       <ModuleHeader
+        variant="standard"
+        accent="tax"
         variantClass="tax-heading"
         iconClass="tax-icon"
         icon={<Icon name="taxes" size={26} />}
@@ -9220,6 +9238,7 @@ throw new Error(
                 />
               ) : (
                 <ModulePage
+                  variant="executive"
                   module={activeModule}
                   records={moduleRecords}
                   search={search}
