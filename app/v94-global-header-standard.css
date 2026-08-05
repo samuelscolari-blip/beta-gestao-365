@@ -8,7 +8,7 @@
  * - conserva acentos semânticos de Folha, Compliance, Administração e Impostos.
  */
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading {
   --module-accent: #1477c9;
   --module-accent-deep: #0868c5;
   --module-accent-soft: #edf7ff;
@@ -34,7 +34,7 @@
   isolation: isolate;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading::after {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading::after {
   position: absolute;
   z-index: -1;
   right: -56px;
@@ -46,7 +46,7 @@
   content: "";
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
   display: grid !important;
   grid-template-columns: 78px minmax(0, 1fr);
   align-items: center;
@@ -54,7 +54,7 @@
   min-width: 0;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
   display: grid !important;
   width: 78px !important;
   height: 78px !important;
@@ -70,13 +70,13 @@
     inset 0 1px 0 #ffffff !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon svg {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon svg {
   width: 34px !important;
   height: 34px !important;
   stroke-width: 1.9;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .eyebrow {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .eyebrow {
   display: block;
   margin: 0 0 7px !important;
   color: var(--module-accent) !important;
@@ -86,7 +86,7 @@
   letter-spacing: 0.07em !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading h1 {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading h1 {
   max-width: 980px;
   margin: 0 !important;
   color: #071d55 !important;
@@ -95,10 +95,10 @@
   line-height: 1.08 !important;
   letter-spacing: -0.04em !important;
   overflow-wrap: anywhere;
-  text-wrap: pretty;
+  text-wrap: wrap;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading p {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading p {
   max-width: 900px;
   margin: 12px 0 0 !important;
   color: #5d6f82 !important;
@@ -108,13 +108,13 @@
   overflow-wrap: anywhere;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading > .button,
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading > .module-heading-actions {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .button,
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .module-heading-actions {
   justify-self: end;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-heading-actions,
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-heading-actions,
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -122,7 +122,7 @@
   gap: 10px;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button {
   min-height: 52px;
   justify-content: center;
   padding: 0 21px !important;
@@ -138,7 +138,7 @@
     background 0.18s ease;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button.primary {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button.primary {
   border: 1px solid var(--module-accent-deep) !important;
   color: #ffffff !important;
   background:
@@ -148,30 +148,30 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:not(.primary) {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:not(.primary) {
   border: 1px solid #c5d9e9 !important;
   color: #173f67 !important;
   background: rgba(255, 255, 255, 0.9) !important;
   box-shadow: 0 8px 20px rgba(31, 85, 128, 0.08) !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:hover {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:hover {
   transform: translateY(-2px);
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button.primary:hover {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button.primary:hover {
   box-shadow:
     0 16px 30px rgba(8, 104, 197, 0.29),
     inset 0 1px 0 rgba(255, 255, 255, 0.26) !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:not(.primary):hover {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:not(.primary):hover {
   border-color: #94b9d8 !important;
   background: #ffffff !important;
   box-shadow: 0 12px 25px rgba(31, 85, 128, 0.12) !important;
 }
 
-.page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:focus-visible {
+.page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button:focus-visible {
   outline: 3px solid rgba(20, 119, 201, 0.25);
   outline-offset: 3px;
 }
@@ -206,14 +206,14 @@
 }
 
 @media (max-width: 1100px) {
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading {
     grid-template-columns: 1fr;
     gap: 22px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .button,
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .module-heading-actions,
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .button,
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading > .module-heading-actions,
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions {
     width: 100%;
     justify-self: stretch;
     justify-content: flex-start;
@@ -221,51 +221,51 @@
 }
 
 @media (max-width: 720px) {
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading {
     min-height: 0 !important;
     padding: 24px 22px !important;
     border-radius: 22px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
     grid-template-columns: 64px minmax(0, 1fr);
     align-items: start;
     gap: 16px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
     width: 64px !important;
     height: 64px !important;
     flex-basis: 64px;
     border-radius: 18px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon svg {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon svg {
     width: 28px !important;
     height: 28px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading h1 {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading h1 {
     font-size: clamp(28px, 8vw, 37px) !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading p {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading p {
     font-size: 14px !important;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button,
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-heading-actions .button,
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions .button {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .button,
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-heading-actions .button,
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .compliance-heading-actions .button {
     width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-title-wrap {
     grid-template-columns: 1fr;
   }
 
-  .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
+  .page-area:not([data-executive-module="true"]) .page-stack:not(:has(.financial-center-tabs)) > .module-heading .module-big-icon {
     width: 58px !important;
     height: 58px !important;
   }

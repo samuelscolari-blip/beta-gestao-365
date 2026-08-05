@@ -8,8 +8,18 @@
  * Regime Tributário) — isso apagava a cor de destaque própria dessas telas
  * e deixava um cabeçalho escuro "flutuando" sem a faixa correspondente.
  *
- * Esta camada só se aplica quando `.v52-module-strip` está presente na
- * mesma `.page-area`, preservando as telas que nunca tiveram a faixa.
+ * Esta camada usava `.page-area:has(.v52-module-strip)` para decidir quando
+ * aplicar o tema escuro, mas a faixa é renderizada por um componente React
+ * irmão de quem desenha `.page-area` (V52Enhancer, fora da árvore de DOM de
+ * `.page-area`) — então esse `:has()` nunca chegava a casar de verdade, e o
+ * cabeçalho ficava dividido entre esta camada e o padrão claro do V93/V94
+ * (ex.: texto branco do V105 sobre o fundo claro do V94, que "ganhava" o
+ * fundo por não haver mais nada disputando aquela propriedade). A tela já
+ * sabe, via React, se é uma tela de módulo (activeModule em BetaApp.tsx);
+ * esse estado agora vira o atributo `data-executive-module` em `.page-area`,
+ * e todo o CSS abaixo lê esse atributo em vez de adivinhar pela presença
+ * visual de outro elemento fora da árvore.
+ *
  * Altera somente apresentação visual: cabeçalhos, instruções, abas e KPIs.
  * Textos, dados, ações, cálculos, tabelas, formulários e regras permanecem
  * intactos.
@@ -33,7 +43,7 @@
 }
 
 /* Cabeçalho específico de cada módulo. */
-.page-area:has(.v52-module-strip) .module-heading {
+.page-area[data-executive-module="true"] .module-heading {
   border: 1px solid var(--exec-line) !important;
   color: var(--exec-text) !important;
   background:
@@ -42,37 +52,37 @@
   box-shadow: var(--exec-shadow) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading::after {
+.page-area[data-executive-module="true"] .module-heading::after {
   display: none !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading .module-big-icon {
+.page-area[data-executive-module="true"] .module-heading .module-big-icon {
   border: 1px solid rgba(123, 208, 230, 0.32) !important;
   color: var(--exec-cyan) !important;
   background: rgba(123, 208, 230, 0.14) !important;
   box-shadow: none !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading .eyebrow {
+.page-area[data-executive-module="true"] .module-heading .eyebrow {
   color: #80d0df !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading :is(h1, h2, h3) {
+.page-area[data-executive-module="true"] .module-heading :is(h1, h2, h3) {
   color: var(--exec-title) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading p {
+.page-area[data-executive-module="true"] .module-heading p {
   color: var(--exec-muted) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading :is(.read-only-chip, .rule-version-chip, .sync-chip) {
+.page-area[data-executive-module="true"] .module-heading :is(.read-only-chip, .rule-version-chip, .sync-chip) {
   border-color: rgba(123, 208, 230, 0.32) !important;
   color: var(--exec-text) !important;
   background: #0b2f50 !important;
 }
 
 /* Ações próprias do cabeçalho. */
-.page-area:has(.v52-module-strip) .module-heading :is(.button.primary, .primary-button, .module-primary-action) {
+.page-area[data-executive-module="true"] .module-heading :is(.button.primary, .primary-button, .module-primary-action) {
   border-color: #1688e1 !important;
   color: #ffffff !important;
   background: linear-gradient(135deg, #1688e1 0%, #0871c9 100%) !important;
@@ -81,74 +91,74 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.20) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)) {
+.page-area[data-executive-module="true"] .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)) {
   border-color: rgba(123, 208, 230, 0.55) !important;
   color: #061f33 !important;
   background: #79d2e7 !important;
   box-shadow: 0 10px 22px rgba(3, 31, 49, 0.22) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading :is(.button.primary, .primary-button, .module-primary-action):hover {
+.page-area[data-executive-module="true"] .module-heading :is(.button.primary, .primary-button, .module-primary-action):hover {
   background: linear-gradient(135deg, #2499ef 0%, #0c79d5 100%) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)):hover {
+.page-area[data-executive-module="true"] .module-heading :is(.button.secondary, .secondary-button, .button:not(.primary)):hover {
   background: #95dfef !important;
 }
 
 /* Caixa "Como usar esta tela". */
-.page-area:has(.v52-module-strip) .module-guide {
+.page-area[data-executive-module="true"] .module-guide {
   border: 1px solid var(--exec-line) !important;
   color: var(--exec-text) !important;
   background: linear-gradient(135deg, var(--exec-navy-850), var(--exec-navy-800)) !important;
   box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-guide .guide-icon {
+.page-area[data-executive-module="true"] .module-guide .guide-icon {
   border-color: rgba(123, 208, 230, 0.30) !important;
   color: var(--exec-cyan) !important;
   background: rgba(123, 208, 230, 0.16) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-guide strong {
+.page-area[data-executive-module="true"] .module-guide strong {
   color: var(--exec-title) !important;
 }
 
-.page-area:has(.v52-module-strip) .module-guide p {
+.page-area[data-executive-module="true"] .module-guide p {
   color: var(--exec-muted) !important;
 }
 
 /* KPIs simples próprios do módulo. */
-.page-area:has(.v52-module-strip) .mini-kpis article {
+.page-area[data-executive-module="true"] .mini-kpis article {
   border-color: var(--exec-line) !important;
   color: var(--exec-text) !important;
   background: linear-gradient(135deg, var(--exec-navy-850), var(--exec-navy-800)) !important;
   box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
 }
 
-.page-area:has(.v52-module-strip) .mini-kpis article:nth-child(2) {
+.page-area[data-executive-module="true"] .mini-kpis article:nth-child(2) {
   border-bottom: 4px solid var(--exec-yellow) !important;
 }
 
-.page-area:has(.v52-module-strip) .mini-kpis article:nth-child(3) {
+.page-area[data-executive-module="true"] .mini-kpis article:nth-child(3) {
   border-bottom: 4px solid var(--exec-cyan-strong) !important;
 }
 
-.page-area:has(.v52-module-strip) .mini-kpis article:nth-child(4) {
+.page-area[data-executive-module="true"] .mini-kpis article:nth-child(4) {
   border-bottom: 4px solid var(--exec-green) !important;
 }
 
-.page-area:has(.v52-module-strip) .mini-kpis span,
-.page-area:has(.v52-module-strip) .mini-kpis small {
+.page-area[data-executive-module="true"] .mini-kpis span,
+.page-area[data-executive-module="true"] .mini-kpis small {
   color: var(--exec-muted) !important;
 }
 
-.page-area:has(.v52-module-strip) .mini-kpis strong {
+.page-area[data-executive-module="true"] .mini-kpis strong {
   color: var(--exec-title) !important;
 }
 
 /* Abas internas encontradas nos diferentes módulos. */
-.page-area:has(.v52-module-strip) :is(
+.page-area[data-executive-module="true"] :is(
   .financial-center-tabs,
   .people-status-tabs,
   .management-tabs,
@@ -168,7 +178,7 @@
   box-shadow: 0 10px 26px rgba(3, 20, 33, 0.16) !important;
 }
 
-.page-area:has(.v52-module-strip) :is(
+.page-area[data-executive-module="true"] :is(
   .financial-center-tabs,
   .people-status-tabs,
   .management-tabs,
@@ -185,7 +195,7 @@
   color: var(--exec-muted) !important;
 }
 
-.page-area:has(.v52-module-strip) :is(
+.page-area[data-executive-module="true"] :is(
   .financial-center-tabs,
   .people-status-tabs,
   .management-tabs,
@@ -205,7 +215,7 @@
 }
 
 @media (max-width: 720px) {
-  .page-area:has(.v52-module-strip) :is(.module-heading, .module-guide, .mini-kpis article) {
+  .page-area[data-executive-module="true"] :is(.module-heading, .module-guide, .mini-kpis article) {
     border-radius: 18px !important;
   }
 }
