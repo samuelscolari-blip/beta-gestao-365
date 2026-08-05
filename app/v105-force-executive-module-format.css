@@ -70,16 +70,21 @@
 .page-area[data-executive-module="true"] .module-heading h1 {
   color: var(--exec-title) !important;
   font-size: clamp(24px, 1.9vw, 30px) !important;
-  font-weight: 800 !important;
-  line-height: 1.2 !important;
-  letter-spacing: -0.01em !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.035em !important;
   text-wrap: wrap;
 }
 
-/* Título da faixa "VISÃO EXECUTIVA DA ÁREA" (.v52-module-strip h2) usa o
-   mesmo peso do título de módulo acima, para os dois ficarem consistentes. */
+/* Padroniza o peso/aperto das letras (não o tamanho) dos títulos em
+   destaque das telas escuras com o estilo aprovado pelo usuário em
+   .construction-stage-roadmap h3 ("Onde a obra está e o que vem
+   depois"): negrito 900 e letter-spacing -0.035em. Cada título mantém
+   seu próprio tamanho — o da faixa continua o maior, por ser o título
+   principal da tela. */
 .v52-module-strip h2 {
-  font-weight: 800 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.035em !important;
 }
 
 .page-area[data-executive-module="true"] .module-heading :is(h2, h3) {
