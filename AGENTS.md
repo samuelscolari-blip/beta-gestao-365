@@ -64,6 +64,34 @@ existe no app** (ex.: `.module-heading`, `.v52-module-strip`, `.page-area`,
    tela "vizinha" que compartilha a mesma classe/seletor (para não repetir o
    caso do V105 que vazou para Admin/Manual/Regime Tributário).
 
+## Governança de CSS (verificada pelo CI)
+
+Estas regras são checadas automaticamente por `tests/css-governance.test.mjs`,
+`npm run lint:css:new` e `npm run audit:css-debt`.
+
+- Não crie arquivos CSS versionados (`vNN` em qualquer posição do nome).
+- Não adicione camadas CSS globais novas ao `app/layout.tsx`. CSS novo vive em
+  `app/styles/` ou num CSS Module do próprio componente.
+- Não adicione `!important` em código novo.
+- Não aumente o teto de `!important`, `:has()` ou imports legados em
+  `css-debt-baseline.json`. **Esses números existem para cair.** Se o CI
+  reclamar, o certo é remover a regra antiga que está disputando o elemento,
+  não elevar o teto.
+- Não use a barra lateral, o item de menu ativo ou qualquer estrutura distante
+  do DOM para estilizar um componente.
+- Não use `:has()` para descobrir o módulo ativo ou o estado da aplicação.
+  Estado visual é declarado pelo React, por props, variantes ou atributos.
+- Componentes visuais novos usam CSS Modules, não classes globais.
+- Ao migrar um componente, remova as regras legadas dele **no mesmo trabalho**.
+  Componente novo convivendo com as regras antigas é pior que não migrar: os
+  dois passam a disputar o mesmo elemento.
+- Não introduza cascade layers enquanto o legado concentrar `!important`.
+  Foi medido neste projeto: com o legado em `@layer`, as regras `!important`
+  antigas continuam vencendo o componente novo, porque para declarações
+  `!important` a ordem das camadas se inverte. Layers só ajudam depois que a
+  dívida cair. Quando entrarem, os nomes precisam ser prefixados — o Tailwind
+  já ocupa `base`, `components`, `properties`, `theme` e `utilities`.
+
 ## Regras do produto
 
 - Códigos internos permanecem ocultos por padrão.
