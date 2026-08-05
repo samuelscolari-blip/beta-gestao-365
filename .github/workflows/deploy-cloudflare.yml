@@ -122,7 +122,21 @@ jobs:
           expected="commit=$TARGET_SHA"
           marker=""
           for attempt in $(seq 1 24); do
-            marker="$(curl --silent --show-error --location --max-time 30 'https://beta-gestao-365.scolarisamuel.workers.dev/deployment-version.txt' || true)"
+            #
+            # A query única e o cabeçalho de revalidação existem porque a
+            # janela anterior, de 2 minutos, foi consumida INTEIRA (122s
+            # medidos) recebendo sempre o mesmo valor antigo. Propagação
+            # gradual não se comporta assim: alguma das 24 tentativas teria
+            # acertado. Receber o valor velho 24 vezes seguidas é cache.
+            #
+            # O arquivo é gerado antes do build e empacotado junto, então o
+            # Worker publicado serve o valor certo — quem estava guardando
+            # o antigo era a borda, que trata o .txt como asset estático.
+            #
+            marker="$(curl --silent --show-error --location --max-time 30 \
+              --header 'Cache-Control: no-cache' \
+              --header 'Pragma: no-cache' \
+              "https://beta-gestao-365.scolarisamuel.workers.dev/deployment-version.txt?cache_bust=${GITHUB_RUN_ID}-${attempt}" || true)"
             if grep --fixed-strings --quiet "$expected" <<< "$marker"; then
               echo "$marker"
               exit 0

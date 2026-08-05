@@ -159,3 +159,32 @@ test("a confirmação do commit publicado espera a propagação", async () => {
       "'ainda propagando' de 'publicou a revisão errada'.",
   );
 });
+
+test("a confirmação não aceita resposta de cache", async () => {
+  /*
+   * Comprovado na publicação da PR #119: a janela de 2 minutos foi
+   * consumida INTEIRA (122s medidos entre o início e o fim do passo)
+   * recebendo sempre o mesmo valor antigo.
+   *
+   * Propagação gradual não se comporta assim — alguma das 24 tentativas
+   * teria acertado. Receber o valor velho 24 vezes seguidas é cache, e
+   * aumentar a janela de novo só faria a falha demorar mais para chegar.
+   *
+   * O arquivo é gerado ANTES do build e empacotado junto com ele, então o
+   * Worker publicado serve o commit certo. Quem guardava o antigo era a
+   * borda, que trata um .txt como asset estático.
+   */
+  const content = await deployWorkflow();
+  const passo = content.slice(
+    content.indexOf("Confirmar o commit exato publicado"),
+    content.indexOf("Confirmar interface em navegador real"),
+  );
+
+  assert.match(
+    passo,
+    /cache_bust=/,
+    "Sem query única, a borda pode devolver a versão anterior do arquivo " +
+      "e a publicação correta é reprovada por engano.",
+  );
+  assert.match(passo, /Cache-Control: no-cache/);
+});
