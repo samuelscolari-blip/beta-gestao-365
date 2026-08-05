@@ -13,6 +13,15 @@ export const DIAS_PARA_NOVA_FOLGA: 90;
 /** Duração da folga, em dias corridos — inclui o primeiro e o último. */
 export const DIAS_DE_FOLGA: 9;
 
+/**
+ * Se o valor pago pela compra compõe base de INSS e IRRF.
+ *
+ * Definição de Samuel Scolari, tomada em 2026-08: NÃO compõe. Não é uma
+ * conclusão fiscal do sistema, e por isso mora numa constante só, fácil de
+ * revisar quando a contabilidade se pronunciar.
+ */
+export const COMPRA_COMPOE_BASE_DE_IMPOSTOS: boolean;
+
 export type FieldLeaveResolution = "Folga concedida" | "Comprada pela empresa";
 
 export type FieldLeaveInput = {
@@ -31,6 +40,8 @@ export type FieldLeaveInput = {
 };
 
 export type FieldLeaveResult = {
+  /** Se o valor da compra deve ser lançado na folha como verba tributável. */
+  compraIncideNaFolha: boolean;
   /** Data em que o direito nasce: 90 dias após o marco inicial. */
   direitoEm: string;
   /** Último dia da folga, quando há data de início. */
