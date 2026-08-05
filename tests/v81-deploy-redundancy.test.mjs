@@ -87,6 +87,32 @@ test("build, testes, D1 e diagnóstico precedem a conclusão", async () => {
   assert.ok(browser > marker);
 });
 
+test("a verificação pós-deploy espera o Worker esquentar", async () => {
+  /*
+   * Comprovado, não suposto: com 45s, três publicações seguidas (#113,
+   * #114 e #115) ficaram vermelhas mesmo tendo publicado — os passos
+   * "Publicar o Worker" e "Confirmar o commit exato publicado" passaram
+   * nas três. O mesmo diagnóstico, disparado à mão contra a MESMA
+   * produção com 90s, passou.
+   *
+   * A espera curta transformava toda mesclagem num deploy vermelho por
+   * um motivo que não era defeito. Sinal que sempre falha é sinal que se
+   * aprende a ignorar, e aí a verificação deixa de proteger.
+   */
+  const content = await deployWorkflow();
+  const esperas = [...content.matchAll(/DIAGNOSTIC_WAIT_MS: "(\d+)"/g)].map(
+    (m) => Number(m[1]),
+  );
+
+  assert.ok(esperas.length >= 2, "Os dois diagnósticos pós-deploy sumiram.");
+  for (const espera of esperas) {
+    assert.ok(
+      espera >= 90_000,
+      `Espera de ${espera}ms é curta demais para um Worker recém-publicado.`,
+    );
+  }
+});
+
 test("a validação da PR testa o comando descrito sem publicar", async () => {
   const content = await validationWorkflow();
 
