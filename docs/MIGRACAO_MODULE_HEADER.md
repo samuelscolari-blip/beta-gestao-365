@@ -24,13 +24,22 @@ mesmo nome. Medido no navegador, a 1366px:
 
 | Variante | Layout | Padding | Altura mín. | Ícone | Título |
 |---|---|---|---|---|---|
-| `executive` | flex | `32px` | `132px` | 64px, raio 16px | branco, 900 |
+| `executive` | flex | `32px` | `132px` | **58px**, raio 16px | branco, 900 |
 | `financial` | flex | `30px 32px` | `164px` | 64px, raio 16px | branco, 900 |
 | `standard` | **grid** | `30px 34px` | `166px` | **78px**, raio 21px | `#071d55`, 790 |
 
 Não é ajuste fino: `standard` usa **grid** onde as outras usam **flex**, e o
 ícone tem tamanho e raio diferentes. Tratar como uma variante só, com
 condicionais, recria exatamente o problema que a reforma quer eliminar.
+
+> **Correção.** Uma versão anterior deste documento registrava 64px para o
+> ícone da variante `executive`. Estava errado: são **58px**, vindos de
+> `app/v52.css` (`width: 58px !important`), que vence porque as regras do
+> V93/V94 se excluem em telas executivas e a do V89 exige abas financeiras.
+> O número errado veio de uma medição feita com consulta global ao ícone e
+> espera por tempo fixo, que podia capturar a tela anterior. A linha de base
+> reforçada — escopada ao cabeçalho visível e sincronizada com a navegação —
+> corrigiu o valor. Os números desta tabela agora saem de `visual-baseline.json`.
 
 ## Mapa de telas por variante (medido, não suposto)
 
