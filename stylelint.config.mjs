@@ -9,7 +9,7 @@
  * A dívida do legado é controlada pela catraca em `scripts/audit-css-debt.mjs`,
  * que impede o problema de crescer enquanto a migração acontece.
  */
-export default {
+const config = {
   extends: ["stylelint-config-standard"],
   rules: {
     /* As quatro regras que impedem o CSS novo de repetir o problema atual. */
@@ -31,3 +31,5 @@ export default {
     ],
   },
 };
+
+export default config;
