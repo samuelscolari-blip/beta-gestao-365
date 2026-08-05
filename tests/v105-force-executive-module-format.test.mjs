@@ -4,17 +4,37 @@ import test from "node:test";
 
 const css = readFileSync("app/v105-force-executive-module-format.css", "utf8");
 const layout = readFileSync("app/layout.tsx", "utf8");
+const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
+const v93 = readFileSync("app/v93-financial-header-approved.css", "utf8");
+const v94 = readFileSync("app/v94-global-header-standard.css", "utf8");
 
-test("V105 aplica o azul executivo somente quando a faixa executiva está presente", () => {
-  assert.match(css, /\.page-area:has\(\.v52-module-strip\) \.module-heading/);
-  assert.match(css, /\.page-area:has\(\.v52-module-strip\) \.module-guide/);
-  assert.match(css, /\.page-area:has\(\.v52-module-strip\) \.mini-kpis article/);
+test("V105 aplica o azul executivo somente quando data-executive-module=true", () => {
+  assert.match(css, /\.page-area\[data-executive-module="true"\] \.module-heading/);
+  assert.match(css, /\.page-area\[data-executive-module="true"\] \.module-guide/);
+  assert.match(css, /\.page-area\[data-executive-module="true"\] \.mini-kpis article/);
+});
+
+test("V105 não depende mais de :has(.v52-module-strip) (a faixa é renderizada fora da árvore de .page-area, então esse seletor nunca casava de verdade)", () => {
+  const cssWithoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  assert.doesNotMatch(cssWithoutComments, /:has\(\.v52-module-strip\)/);
+});
+
+test("BetaApp expõe data-executive-module em .page-area usando o mesmo estado (activeModule) que decide a faixa executiva", () => {
+  assert.match(
+    betaApp,
+    /<div className="page-area" data-executive-module=\{activeModule \? "true" : "false"\}>/,
+  );
 });
 
 test("V105 não força o padrão executivo em telas sem a faixa (Admin, Manual, Regime Tributário)", () => {
   assert.doesNotMatch(css, /^\.page-area \.module-heading/m);
   assert.doesNotMatch(css, /^\.page-area \.module-guide/m);
   assert.doesNotMatch(css, /^\.page-area \.mini-kpis/m);
+});
+
+test("V93 e V94 (cabeçalho claro) recuam explicitamente quando data-executive-module=true, para nunca disputar cor/fundo com o V105", () => {
+  assert.match(v93, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:has\(\.financial-center-tabs\) > \.module-heading/);
+  assert.match(v94, /\.page-area:not\(\[data-executive-module="true"\]\) \.page-stack:not\(:has\(\.financial-center-tabs\)\) > \.module-heading/);
 });
 
 test("V105 reaproveita variáveis de cor únicas (--exec-*) em vez de valores soltos repetidos", () => {

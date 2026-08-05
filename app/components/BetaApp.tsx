@@ -9101,7 +9101,7 @@ throw new Error(
           </div>
         ) : null}
 
-        <div className="page-area">
+        <div className="page-area" data-executive-module={activeModule ? "true" : "false"}>
           {loading ? (
             <LoadingState />
           ) : activeView === "dashboard" ? (
