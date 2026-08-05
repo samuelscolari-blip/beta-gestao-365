@@ -92,6 +92,20 @@ Estas regras são checadas automaticamente por `tests/css-governance.test.mjs`,
   dívida cair. Quando entrarem, os nomes precisam ser prefixados — o Tailwind
   já ocupa `base`, `components`, `properties`, `theme` e `utilities`.
 
+## Linha de base visual
+
+`visual-baseline.json` guarda o resultado visual aprovado: estilo computado
+do cabeçalho de 17 telas em 5 larguras, medido no navegador de verdade.
+
+- **Antes de mesclar qualquer PR que mexa em CSS ou em componente visual,
+  rode `npm run baseline:check`.** Ele sobe o app, remede tudo e aponta cada
+  diferença. Leva alguns minutos, por isso não roda no `npm test`.
+- Se a mudança visual for intencional, regrave com `npm run baseline:capture`
+  e trate o diff do JSON como parte da revisão — ele mostra exatamente o que
+  mudou, em qual tela e em qual largura.
+- Regravar a linha de base para "fazer passar" uma mudança que você não
+  entendeu é o mesmo erro que elevar o teto da catraca.
+
 ## Regras do produto
 
 - Códigos internos permanecem ocultos por padrão.

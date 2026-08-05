@@ -1,0 +1,2385 @@
+{
+  "_comentario": "Retrato do resultado visual aprovado. Regravar apenas quando a mudança visual for intencional e revisada.",
+  "capturadoEm": "2026-08-05",
+  "screens": {
+    "Visão geral": {
+      "390": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "768": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1366": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1536": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1920": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      }
+    },
+    "Fornecedores": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Central Financeira e Fornecedores",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Central Financeira e Fornecedores",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Central Financeira e Fornecedores",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Central Financeira e Fornecedores",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Central Financeira e Fornecedores",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Cartão Corporativo": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Despesas de Cartão Corporativo",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Despesas de Cartão Corporativo",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Despesas de Cartão Corporativo",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Despesas de Cartão Corporativo",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Despesas de Cartão Corporativo",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Execução da Obra": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Execução da Obra e Produtividade",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Execução da Obra e Produtividade",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Execução da Obra e Produtividade",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Execução da Obra e Produtividade",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Execução da Obra e Produtividade",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      }
+    },
+    "Diário de obra": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Diário de produtividade da obra",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Diário de produtividade da obra",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Diário de produtividade da obra",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Diário de produtividade da obra",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Diário de produtividade da obra",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Máquinas": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Máquinas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Máquinas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Máquinas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Máquinas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Máquinas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 0
+      }
+    },
+    "Administrativo": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Administrativo e Pessoas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Administrativo e Pessoas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Administrativo e Pessoas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Administrativo e Pessoas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Administrativo e Pessoas",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Cálculo de Salário": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Cálculo de Salário",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Cálculo de Salário",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Cálculo de Salário",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Cálculo de Salário",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Cálculo de Salário",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Cálculo de Férias": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Cálculo de Férias",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Cálculo de Férias",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Cálculo de Férias",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Cálculo de Férias",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Cálculo de Férias",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Rescisão": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Rescisão",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Rescisão",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Rescisão",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Rescisão",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Rescisão",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Fiscal e Compliance": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Central Fiscal & Compliance",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Central Fiscal & Compliance",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Central Fiscal & Compliance",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Central Fiscal & Compliance",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Central Fiscal & Compliance",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "12px",
+          "fontWeight": "850"
+        },
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Impostos": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Impostos e obrigações",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Impostos e obrigações",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Impostos e obrigações",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Impostos e obrigações",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Impostos e obrigações",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Aluguéis": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Gestão de Imóveis e Aluguéis",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Gestão de Imóveis e Aluguéis",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Gestão de Imóveis e Aluguéis",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Gestão de Imóveis e Aluguéis",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Gestão de Imóveis e Aluguéis",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Documentos": {
+      "390": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "18px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Documentos e links",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "10.8px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "24px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.84px",
+          "lineHeight": "28.32px"
+        },
+        "titleText": "Documentos e links",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "25.954px",
+          "fontWeight": "900",
+          "letterSpacing": "-0.90839px",
+          "lineHeight": "30.6257px"
+        },
+        "titleText": "Documentos e links",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "29.184px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.02144px",
+          "lineHeight": "34.4371px"
+        },
+        "titleText": "Documentos e links",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "true",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 92% 8%, rgba(56, 200, 227, 0.13), rgba(0, 0, 0, 0) 34%), linear-gradient(165deg, rgb(7, 26, 53) 0%, rgb(11, 47, 80) 55%, rgb(8, 35, 62) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(29, 82, 114)",
+          "borderRadius": "22px",
+          "color": "rgb(216, 237, 245)"
+        },
+        "title": {
+          "color": "rgb(255, 255, 255)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "30px",
+          "fontWeight": "900",
+          "letterSpacing": "-1.05px",
+          "lineHeight": "35.4px"
+        },
+        "titleText": "Documentos e links",
+        "eyebrow": {
+          "color": "rgb(128, 208, 223)",
+          "fontSize": "11.52px",
+          "fontWeight": "850"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(135deg, rgb(10, 43, 66), rgb(11, 54, 83))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(216, 237, 245)"
+        },
+        "overflowsHorizontally": false,
+        "headingWidth": 1564
+      }
+    },
+    "Manual do sistema": {
+      "390": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "22px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "31.2px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.248px",
+          "lineHeight": "33.696px"
+        },
+        "titleText": "Manual do sistema",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": null,
+        "overflowsHorizontally": true,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "31px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.24px",
+          "lineHeight": "33.48px"
+        },
+        "titleText": "Manual do sistema",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": null,
+        "overflowsHorizontally": true,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "34.833px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.39332px",
+          "lineHeight": "37.6196px"
+        },
+        "titleText": "Manual do sistema",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": null,
+        "overflowsHorizontally": true,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "39.168px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.56672px",
+          "lineHeight": "42.3014px"
+        },
+        "titleText": "Manual do sistema",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": null,
+        "overflowsHorizontally": true,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "43px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.72px",
+          "lineHeight": "46.44px"
+        },
+        "titleText": "Manual do sistema",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": null,
+        "overflowsHorizontally": true,
+        "headingWidth": 1564
+      }
+    },
+    "Regime Tributário": {
+      "390": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "22px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "31.2px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.248px",
+          "lineHeight": "33.696px"
+        },
+        "titleText": "Regime Tributário",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(52, 85, 105)"
+        },
+        "overflowsHorizontally": true,
+        "headingWidth": 366
+      },
+      "768": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "31px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.24px",
+          "lineHeight": "33.48px"
+        },
+        "titleText": "Regime Tributário",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(52, 85, 105)"
+        },
+        "overflowsHorizontally": true,
+        "headingWidth": 728
+      },
+      "1366": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "34.833px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.39332px",
+          "lineHeight": "37.6196px"
+        },
+        "titleText": "Regime Tributário",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(52, 85, 105)"
+        },
+        "overflowsHorizontally": true,
+        "headingWidth": 1010
+      },
+      "1536": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "39.168px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.56672px",
+          "lineHeight": "42.3014px"
+        },
+        "titleText": "Regime Tributário",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(52, 85, 105)"
+        },
+        "overflowsHorizontally": true,
+        "headingWidth": 1180
+      },
+      "1920": {
+        "executiveModule": "false",
+        "heading": {
+          "backgroundImage": "radial-gradient(circle at 95% 4%, rgba(60, 146, 224, 0.13), rgba(0, 0, 0, 0) 28%), radial-gradient(at 83% 112%, rgba(115, 203, 229, 0.17), rgba(0, 0, 0, 0) 42%), linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(251, 253, 255) 58%, rgb(239, 248, 255) 100%)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderTopColor": "rgb(191, 217, 238)",
+          "borderRadius": "26px",
+          "color": "rgb(52, 85, 105)"
+        },
+        "title": {
+          "color": "rgb(7, 29, 85)",
+          "fontFamily": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Inter, sans-serif",
+          "fontSize": "43px",
+          "fontWeight": "790",
+          "letterSpacing": "-1.72px",
+          "lineHeight": "46.44px"
+        },
+        "titleText": "Regime Tributário",
+        "eyebrow": {
+          "color": "rgb(20, 119, 201)",
+          "fontSize": "12px",
+          "fontWeight": "820"
+        },
+        "guide": {
+          "backgroundImage": "linear-gradient(145deg, rgb(244, 250, 252), rgb(255, 255, 255))",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(52, 85, 105)"
+        },
+        "overflowsHorizontally": true,
+        "headingWidth": 1564
+      }
+    },
+    "Infraestrutura ERP": {
+      "390": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "768": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1366": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1536": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      },
+      "1920": {
+        "executiveModule": "false",
+        "heading": null,
+        "title": null,
+        "titleText": null,
+        "eyebrow": null,
+        "guide": null,
+        "overflowsHorizontally": false,
+        "headingWidth": null
+      }
+    }
+  }
+}

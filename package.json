@@ -16,6 +16,8 @@
     "lint": "bash scripts/cloudflare-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "lint:css:new": "stylelint \"app/styles/**/*.css\" \"app/**/*.module.css\" --allow-empty-input",
     "audit:css-debt": "node scripts/audit-css-debt.mjs",
+    "baseline:capture": "node scripts/visual-baseline.mjs",
+    "baseline:check": "node scripts/visual-baseline.mjs --check",
     "db:generate": "bash scripts/cloudflare-env.sh -- drizzle-kit generate",
     "db:migrate:remote": "wrangler d1 migrations apply beta-gestao-365-db --remote --config wrangler.jsonc",
     "deploy:cloudflare": "vinext deploy --skip-build"
