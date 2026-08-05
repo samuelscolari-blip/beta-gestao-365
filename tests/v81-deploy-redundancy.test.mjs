@@ -128,3 +128,34 @@ test("a validação da PR testa o comando descrito sem publicar", async () => {
   assert.match(content, /--config dist\/server\/wrangler\.json/);
   assert.match(content, /--message "\$deploy_message"/);
 });
+
+test("a confirmação do commit publicado espera a propagação", async () => {
+  /*
+   * Comprovado na publicação da PR #117: a janela de 40s (8 tentativas de
+   * 5s) esgotou com o passo anterior, "Publicar o Worker de produção", em
+   * verde. O Worker tinha ido ao ar; o que faltou foi a borda terminar de
+   * propagar.
+   *
+   * A verificação continua valendo para o defeito que importa — publicar
+   * um commit diferente do esperado —, porque ela compara o SHA. Esperar
+   * mais só evita chamar de defeito o tempo normal de propagação.
+   */
+  const content = await deployWorkflow();
+  const tentativas = Number(
+    content.match(/for attempt in \$\(seq 1 (\d+)\); do/)?.[1] ?? 0,
+  );
+  const intervalo = Number(
+    content.match(/exit 0\s*\n\s*fi\s*\n\s*sleep (\d+)/)?.[1] ?? 0,
+  );
+
+  assert.ok(
+    tentativas * intervalo >= 120,
+    `Janela de ${tentativas * intervalo}s é curta demais para a propagação.`,
+  );
+  assert.match(
+    content,
+    /Último valor lido/,
+    "O erro precisa dizer qual commit estava publicado — é o que separa " +
+      "'ainda propagando' de 'publicou a revisão errada'.",
+  );
+});
