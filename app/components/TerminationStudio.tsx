@@ -427,6 +427,8 @@ export default function TerminationStudio({
   return (
     <div className="page-stack payroll-page termination-page">
       <ModuleHeader
+        variant="executive"
+        accent="payroll"
         variantClass="payroll-heading termination-heading"
         iconClass="termination-icon"
         icon="R"
