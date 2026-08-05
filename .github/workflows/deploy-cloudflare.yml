@@ -102,11 +102,26 @@ jobs:
             --config dist/server/wrangler.json \
             --message "$DEPLOY_MESSAGE"
 
+      # A janela era de 40s (8 tentativas de 5s) e não bastou: a publicação
+      # da PR #117 gastou os 40s inteiros e falhou aqui, com o passo
+      # anterior — "Publicar o Worker de produção" — em verde. A propagação
+      # até a borda simplesmente demora mais do que isso às vezes.
+      #
+      # Agora são 24 tentativas: 2 minutos. Continua falhando se o commit
+      # publicado for OUTRO, que é o defeito real que este passo existe
+      # para pegar; o que muda é só parar de chamar de defeito o tempo
+      # normal de propagação.
+      #
+      # O último valor lido é impresso no erro. Sem isso a mensagem dizia
+      # apenas que o commit não era o esperado, sem dizer qual era — que é
+      # justamente o dado que separa "ainda propagando" de "publicou a
+      # revisão errada".
       - name: Confirmar o commit exato publicado
         shell: bash
         run: |
           expected="commit=$TARGET_SHA"
-          for attempt in 1 2 3 4 5 6 7 8; do
+          marker=""
+          for attempt in $(seq 1 24); do
             marker="$(curl --silent --show-error --location --max-time 30 'https://beta-gestao-365.scolarisamuel.workers.dev/deployment-version.txt' || true)"
             if grep --fixed-strings --quiet "$expected" <<< "$marker"; then
               echo "$marker"
@@ -115,6 +130,7 @@ jobs:
             sleep 5
           done
           echo "A Cloudflare respondeu, mas não publicou o commit esperado: $TARGET_SHA" >&2
+          echo "Último valor lido em /deployment-version.txt: ${marker:-(vazio)}" >&2
           exit 1
 
       # Os 90s não são folga por precaução: com 45s, três publicações
