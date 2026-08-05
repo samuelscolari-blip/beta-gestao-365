@@ -114,7 +114,7 @@ function openSupplierModule(create: boolean) {
   if (create) {
     window.setTimeout(() => {
       document
-        .querySelector<HTMLButtonElement>(".module-heading .button.primary")
+        .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
         ?.click();
     }, 100);
   }

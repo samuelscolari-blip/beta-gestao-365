@@ -525,7 +525,7 @@ function openPurchasesTab(thenCreate: boolean) {
     if (thenCreate) {
       window.setTimeout(() => {
         document
-          .querySelector<HTMLButtonElement>(".module-heading .button.primary")
+          .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
           ?.click();
       }, 80);
     }
@@ -542,7 +542,7 @@ function navigateAndCreate(moduleId: string) {
   navButton?.click();
   window.setTimeout(() => {
     document
-      .querySelector<HTMLButtonElement>(".module-heading .button.primary")
+      .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
       ?.click();
   }, 80);
 }
