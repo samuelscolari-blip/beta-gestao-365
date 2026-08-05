@@ -67,7 +67,16 @@
   color: #80d0df !important;
 }
 
-.page-area[data-executive-module="true"] .module-heading :is(h1, h2, h3) {
+.page-area[data-executive-module="true"] .module-heading h1 {
+  color: var(--exec-title) !important;
+  font-size: clamp(31px, 2.55vw, 43px) !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.01em !important;
+  text-wrap: wrap;
+}
+
+.page-area[data-executive-module="true"] .module-heading :is(h2, h3) {
   color: var(--exec-title) !important;
 }
 
