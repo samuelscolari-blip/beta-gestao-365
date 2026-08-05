@@ -77,32 +77,60 @@ test("nenhum ponto de renderização deixa de declarar a estrutura", () => {
   );
 });
 
-test("a classe global continua valendo para as variantes ainda não migradas", () => {
+test("as três variantes têm CSS próprio", () => {
   /*
-   * As 152 regras legadas dependem de `.module-heading`. Enquanto `financial`
-   * e `standard` não tiverem CSS próprio, elas precisam continuar recebendo a
-   * classe — tirá-la antes da hora deixaria essas telas sem estilo nenhum.
-   *
-   * A `executive` já saiu do caminho antigo, e é justamente por isso que a
-   * verificação não pode mais ser "a classe é sempre emitida".
+   * A migração terminou de subir: nenhuma variante depende mais das 152
+   * regras globais. O caminho legado continua no arquivo como rede — se
+   * alguma tela aparecer errada em produção, tirar uma variante da lista
+   * abaixo devolve ela ao comportamento antigo em uma linha. Some na
+   * etapa 5D, junto com as regras.
    */
-  assert.match(
-    component,
-    /root: variantClass \? `module-heading \$\{variantClass\}` : "module-heading"/,
-  );
-
-  const linha = component.match(/const migrada = .+/)?.[0] ?? "";
+  const linha = component.match(/const migrada =[\s\S]*?;/)?.[0] ?? "";
   const migradas = [...linha.matchAll(/variant === "(\w+)"/g)].map((m) => m[1]);
 
   assert.deepEqual(
     migradas.sort(),
-    ["executive", "financial"],
-    "Ao migrar a próxima variante, atualize também este teste e a linha de " +
-      "base — a equivalência visual precisa ser medida de novo.",
+    ["executive", "financial", "standard"],
+    "Toda variante precisa de CSS próprio. Uma que fique de fora volta a " +
+      "depender das regras globais, que é o problema que a reforma resolve.",
   );
-  assert.ok(
-    !migradas.includes("standard"),
-    "A variante clara em grid ainda não foi migrada; enquanto isso, ela " +
-      "depende das regras legadas.",
+
+  // A rede: enquanto as regras legadas existirem, o caminho antigo fica.
+  assert.match(
+    component,
+    /root: variantClass \? `module-heading \$\{variantClass\}` : "module-heading"/,
   );
+});
+
+test("cada variante declarada tem um bloco no CSS Module", () => {
+  /*
+   * O componente escolhe a classe por `styles[variant]`. Se um nome de
+   * variante não existir no CSS Module, isso vira `undefined` em silêncio
+   * e a tela sai sem estilo nenhum — sem erro de compilação, sem aviso.
+   */
+  const css = readFileSync(
+    "app/ui/ModuleHeader/ModuleHeader.module.css",
+    "utf8",
+  );
+  const declaradas =
+    component
+      .match(/ModuleHeaderVariant\s*=\s*([^;]+);/)?.[1]
+      .match(/"(\w+)"/g)
+      ?.map((v) => v.replaceAll('"', "")) ?? [];
+
+  assert.ok(declaradas.length === 3, "As três variantes sumiram do tipo.");
+  for (const variante of declaradas) {
+    /*
+     * Basta a classe existir em ALGUM seletor: `.executive` mora num
+     * seletor agrupado com `.financial`, porque as duas compartilham
+     * fundo e sombra, e um CSS Module exporta a classe do mesmo jeito.
+     * Exigir bloco exclusivo reprovaria um agrupamento correto.
+     */
+    assert.match(
+      css,
+      new RegExp(`\\.${variante}[\\s,:.{]`),
+      `A variante "${variante}" não aparece no CSS Module: styles.` +
+        `${variante} sairia undefined e a tela ficaria sem estilo.`,
+    );
+  }
 });

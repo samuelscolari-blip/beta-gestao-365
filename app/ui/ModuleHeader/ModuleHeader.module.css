@@ -182,6 +182,93 @@
   line-height: 1.65;
 }
 
+/*
+ * A terceira estrutura, e a única realmente diferente: GRID onde as
+ * outras são flex, e clara onde as outras são escuras.
+ *
+ * `position: relative` não é enfeite. O `::after` abaixo usa
+ * `right: -56px`, e sem um bloco de contenção aqui ele se posiciona em
+ * relação à viewport — aí `overflow: hidden` não o recorta, porque
+ * `overflow` só corta descendentes contidos pelo próprio elemento. O
+ * resultado eram exatamente 56px de rolagem horizontal nas telas claras,
+ * em todas as larguras. A linha de base vigia isso em
+ * `overflowsHorizontally`.
+ */
+.standard {
+  display: grid;
+  position: relative;
+  overflow: hidden;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 166px;
+  gap: 30px;
+  padding: 30px 34px;
+  border: 1px solid #bfd9ee;
+  border-radius: 26px;
+  color: #345569;
+  background:
+    radial-gradient(circle at 95% 4%, rgb(60 146 224 / 13%), transparent 28%),
+    radial-gradient(ellipse at 83% 112%, rgb(115 203 229 / 17%), transparent 42%),
+    linear-gradient(135deg, #fff 0%, #fbfdff 58%, #eff8ff 100%);
+  box-shadow:
+    0 18px 46px rgb(30 83 127 / 11%),
+    inset 0 1px 0 rgb(255 255 255 / 96%);
+  isolation: isolate;
+}
+
+/* Círculo decorativo no canto inferior direito, recortado pelo overflow. */
+.standard::after {
+  position: absolute;
+  z-index: -1;
+  right: -56px;
+  bottom: -76px;
+  width: 230px;
+  height: 230px;
+  border: 1px solid rgb(63 145 215 / 9%);
+  border-radius: 50%;
+  content: "";
+}
+
+.standard .titleWrap {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.standard .icon {
+  width: 78px;
+  height: 78px;
+  border: 1px solid #bad9f3;
+  border-radius: 21px;
+  color: #1477c9;
+  background: linear-gradient(145deg, rgb(255 255 255 / 99%), #edf7ff);
+}
+
+.standard .eyebrow {
+  color: #1477c9;
+  font-size: 12px;
+  font-weight: 820;
+  letter-spacing: 0.07em;
+}
+
+.standard .title {
+  margin: 0;
+  color: #071d55;
+  font-size: clamp(31px, 2.55vw, 43px);
+  font-weight: 790;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.standard .description {
+  max-width: 900px;
+  margin: 12px 0 0;
+  color: #5d6f82;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
 .actions {
   display: flex;
   flex-direction: row;
@@ -189,10 +276,23 @@
   gap: 7px;
 }
 
-/* Abaixo de 980px o conteúdo passa a ocupar a largura toda. */
+/*
+ * Abaixo de 980px o conteúdo passa a ocupar a largura toda — nas duas
+ * variantes escuras. A clara é grid e mantém `center` em toda largura;
+ * aplicar `stretch` nela esticava o conteúdo e a linha de base acusou.
+ */
 @media (width <= 980px) {
-  .root {
+  .executive,
+  .financial {
     align-items: stretch;
+  }
+}
+
+/* A clara empilha bem antes: abaixo de 1100px vira coluna única. */
+@media (width <= 1100px) {
+  .standard {
+    grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 
@@ -229,5 +329,50 @@
     width: 54px;
     height: 54px;
     flex-basis: 54px;
+  }
+}
+
+/*
+ * A clara quebra em 720px, e não em 640 como as escuras. O título troca
+ * de fórmula: `8vw` é o que produz os 31,2px medidos em 390px, valor que
+ * o `clamp` do desktop não alcança.
+ */
+@media (width <= 720px) {
+  .standard {
+    min-height: 0;
+    padding: 24px 22px;
+    border-radius: 22px;
+  }
+
+  .standard .titleWrap {
+    align-items: start;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .standard .icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+
+  .standard .title {
+    font-size: clamp(28px, 8vw, 37px);
+  }
+
+  .standard .description {
+    font-size: 14px;
+  }
+}
+
+/* No celular o ícone sai de cima do título e encolhe mais. */
+@media (width <= 480px) {
+  .standard .titleWrap {
+    grid-template-columns: 1fr;
+  }
+
+  .standard .icon {
+    width: 58px;
+    height: 58px;
   }
 }

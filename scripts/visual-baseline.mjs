@@ -136,6 +136,14 @@ function readScreenStyles() {
   const eyebrow = heading?.querySelector('[data-ui="module-header-eyebrow"]') ?? null;
   const icon = heading?.querySelector('[data-ui="module-header-icon"]') ?? null;
   /*
+   * O invólucro do título, que também não era medido. Nas duas variantes
+   * escuras ele é flex; na clara o `v94-global-header-standard.css` faz
+   * dele um GRID de `78px minmax(0, 1fr)`. Sem medir, a diferença de
+   * estrutura mais marcante da variante passaria despercebida.
+   */
+  const titleWrap =
+    heading?.querySelector('[data-ui="module-header-title-wrap"]') ?? null;
+  /*
    * O parágrafo de apoio, que faltava. O `v89-financial-ux.css` define
    * largura máxima, cor, tamanho e altura de linha só dele — nada disso
    * estava sendo medido, e a variante clara seria migrada sem retrato do
@@ -179,6 +187,13 @@ function readScreenStyles() {
       "backgroundColor",
       "color",
       "boxShadow",
+    ]),
+    titleWrap: pick(titleWrap, [
+      "display",
+      "gridTemplateColumns",
+      "alignItems",
+      "gap",
+      "minWidth",
     ]),
     icon: pick(icon, [
       "display",

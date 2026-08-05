@@ -13,7 +13,7 @@ suposto) para que a etapa final seja executada sem redescobrir nada.
 | 4 — Extrair `<ModuleHeader>` | publicada | HTML renderizado idêntico em 6 de 6 telas |
 | 5A — CSS próprio da `executive` | publicada | linha de base sem diferença visual nas 12 telas |
 | 5B — CSS próprio da `financial` | publicada | linha de base sem diferença visual nas 2 telas |
-| 5C — CSS próprio da `standard` e acentos | **não iniciada** | — |
+| 5C — CSS próprio da `standard` | publicada | linha de base sem diferença visual nas 2 telas |
 | 5D — remoção do legado | **não iniciada** | — |
 
 A etapa 4 deixou o componente ainda emitindo a classe global
@@ -165,16 +165,38 @@ Três coisas que a 5B ensinou, e que a 5C vai reencontrar:
   `.module-heading`. Ao migrar, a adaptação some junto. Daí o arquivo-ponte
   `app/styles/legacy-bridge.module.css`, que deve morrer na 5D.
 
-**5C — variante `standard` e acentos.** Migra a estrutura em grid e declara
-os acentos semânticos por propriedade React (`accent="admin"`,
-`"compliance"`, `"payroll"`, `"tax"`). Os acentos devem mudar **tokens
-pontuais** — cor do ícone, borda, detalhe — e nunca criar quatro
-arquiteturas completas.
+**5C — variante `standard`. Concluída.** Migrou Manual do sistema e Regime
+Tributário: a estrutura em grid, clara, com o círculo decorativo do
+`::after`. Com ela, as três variantes têm CSS próprio e nenhuma tela
+depende mais das regras globais.
 
-**5D — remoção do legado.** Só depois das três migradas: elimina
-`.module-heading` do JSX, apaga as 126 regras, remove as folhas de dedup
-obsoletas, confirma que nenhuma regra global alcança o componente e atualiza
-a catraca com a redução real.
+**Os acentos semânticos não foram implementados, de propósito.** O plano
+previa mudar tokens pontuais por `accent="tax"`, `"admin"` e afins. A
+medição desautorizou: Manual (`accent="none"`) e Regime Tributário
+(`accent="tax"`) computam valores IDÊNTICOS em ícone, título, olho e
+parágrafo, nas cinco larguras. O mesmo já valia para a executiva. Ou seja,
+os acentos não têm efeito visual em nenhuma tela coberta pela linha de
+base — implementá-los agora seria inventar aparência nova, não preservar a
+existente. O `data-accent` continua no DOM, pronto para quando houver uma
+distinção real a fazer.
+
+O único ponto que exige atenção nesta variante é o `position: relative`.
+O `::after` usa `right: -56px`, e sem bloco de contenção próprio ele se
+posiciona pela viewport — aí `overflow: hidden` não o recorta, porque
+`overflow` só corta descendentes contidos pelo próprio elemento. Eram
+exatamente 56px de rolagem horizontal, em todas as larguras. A linha de
+base vigia isso em `overflowsHorizontally`.
+
+**5D — remoção do legado.** As três já estão migradas, então esta etapa
+está liberada. Ela elimina `.module-heading` do JSX, apaga as regras
+legadas, remove as folhas de dedup obsoletas, mata o arquivo-ponte
+`app/styles/legacy-bridge.module.css`, devolve o teto de especificidade
+dele a 0,3,0 e atualiza a catraca com a redução real.
+
+O caminho legado segue no componente até lá, de propósito: tirar uma
+variante da lista em `const migrada = …` devolve aquelas telas ao
+comportamento antigo em uma linha, se algo aparecer errado em produção.
+É a rede que torna a 5D segura.
 
 ### Padrão transitório, obrigatoriamente temporário
 
