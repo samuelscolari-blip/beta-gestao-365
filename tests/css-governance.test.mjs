@@ -21,9 +21,12 @@ import {
   countHasSelectors,
   countImportant,
   extractLegacyImports,
+  findStrayCssImports,
+  listCssFiles,
   listLegacyCssFiles,
   readBaseline,
 } from "../scripts/audit-css-debt.mjs";
+import { GLOBAL_ESCAPE_HATCH } from "../stylelint.config.mjs";
 
 const baseline = readBaseline();
 const layout = readFileSync("app/layout.tsx", "utf8");
@@ -64,6 +67,64 @@ test("o bloqueio pega versão em qualquer posição do nome, não só no início
   assert.ok(VERSIONED_NAME.test("novo-painel-v108.css"));
   assert.ok(!VERSIONED_NAME.test("tokens.css"));
   assert.ok(!VERSIONED_NAME.test("ModuleHeader.module.css"));
+});
+
+test("a varredura enxerga CSS em subpastas, não só no primeiro nível", () => {
+  /*
+   * Furo comprovado antes da correção: um `app/legacy/v108.css` com
+   * `!important` não era contado, porque a varredura usava
+   * `readdirSync(appDir)` sem descer nos diretórios. Um subdiretório era
+   * todo o disfarce necessário para escapar da catraca.
+   *
+   * A verificação é indireta de propósito: criar um arquivo de teste no
+   * repositório para provar isso deixaria lixo versionado. Basta confirmar
+   * que a varredura encontra arquivos abaixo do primeiro nível.
+   */
+  const todos = listCssFiles();
+  const emSubpasta = todos.filter((path) => path.split("/").length > 2);
+
+  assert.ok(
+    emSubpasta.length > 0,
+    "A varredura não está descendo em subdiretórios de app/.",
+  );
+  assert.ok(
+    emSubpasta.every((path) => path.startsWith("app/styles/")),
+    `CSS em subpasta fora da arquitetura nova: ${emSubpasta.join(", ")}`,
+  );
+});
+
+test("nenhum componente importa CSS global por fora do layout", () => {
+  /*
+   * A auditoria original lia apenas o `app/layout.tsx`. Bastava importar
+   * uma folha global direto num componente para escapar da lista congelada,
+   * da catraca e de toda a governança de uma vez.
+   */
+  assert.deepEqual(
+    findStrayCssImports(),
+    [],
+    "CSS global importado fora do layout. Só são aceitos CSS Modules " +
+      "(*.module.css) e arquivos de app/styles/.",
+  );
+});
+
+test(":global() fica restrito ao arquivo-ponte temporário", () => {
+  /*
+   * O Stylelint reconhece `:global()` para não reprovar CSS Modules
+   * válidos, mas liberá-lo em qualquer lugar permitiria a um módulo voltar
+   * a estilizar classes globais — um `:global(.module-heading) { … }`
+   * recriaria exatamente a disputa que a migração existe para acabar.
+   */
+  const infratores = listCssFiles()
+    .filter((path) => path.endsWith(".module.css"))
+    .filter((path) => path !== GLOBAL_ESCAPE_HATCH)
+    .filter((path) => readFileSync(path, "utf8").includes(":global("));
+
+  assert.deepEqual(
+    infratores,
+    [],
+    `:global() usado fora de ${GLOBAL_ESCAPE_HATCH}. Estilize pelo próprio ` +
+      "CSS Module do componente em vez de alcançar classes globais.",
+  );
 });
 
 test("a dívida de CSS não aumentou em relação ao teto", () => {
