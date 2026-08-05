@@ -431,6 +431,7 @@ export default function TerminationStudio({
         accent="payroll"
         variantClass="payroll-heading termination-heading"
         iconClass="termination-icon"
+        iconKind="letter"
         icon="R"
         eyebrow="RH • PRÉVIA RESCISÓRIA"
         title="Rescisão"

@@ -87,9 +87,21 @@ test("a varredura enxerga CSS em subpastas, não só no primeiro nível", () => 
     emSubpasta.length > 0,
     "A varredura não está descendo em subdiretórios de app/.",
   );
+
+  /*
+   * Dois lugares legítimos, e só dois: os tokens compartilhados em
+   * `app/styles/`, e o CSS Module de um componente, que mora ao lado do
+   * componente em `app/ui/`. Qualquer outra folha em subpasta é um
+   * arquivo legado se escondendo da catraca — foi exatamente assim que o
+   * `app/legacy/v108-fuga.css` escapou na comprovação do furo.
+   */
+  const permitido = (path) =>
+    path.startsWith("app/styles/") ||
+    (path.startsWith("app/ui/") && path.endsWith(".module.css"));
+
   assert.ok(
-    emSubpasta.every((path) => path.startsWith("app/styles/")),
-    `CSS em subpasta fora da arquitetura nova: ${emSubpasta.join(", ")}`,
+    emSubpasta.every(permitido),
+    `CSS em subpasta fora da arquitetura nova: ${emSubpasta.filter((p) => !permitido(p)).join(", ")}`,
   );
 });
 
@@ -175,8 +187,8 @@ test("o Stylelint reprova CSS novo que repete os problemas do legado", async () 
 });
 
 test("o Stylelint aceita a sintaxe legítima de CSS Modules", async () => {
-  // Sem as liberações de `composes` e `:global()`, a própria migração de
-  // componentes seria bloqueada pelo linter.
+  // Sem a liberação de `composes`, a própria migração de componentes
+  // seria bloqueada pelo linter.
   const { results } = await stylelint.lint({
     code: [
       ".root {",
@@ -184,18 +196,35 @@ test("o Stylelint aceita a sintaxe legítima de CSS Modules", async () => {
       "  gap: var(--space-6);",
       "}",
       "",
-      ".title {",
+      ".titleWrap {",
       "  composes: root;",
       "  margin: 0;",
-      "}",
-      "",
-      ":global(.legacy-hook) .title {",
-      "  color: inherit;",
       "}",
       "",
     ].join("\n"),
     configFile: "stylelint.config.mjs",
     codeFilename: "app/ui/Exemplo/Exemplo.module.css",
+  });
+
+  assert.deepEqual(results[0].warnings, []);
+});
+
+test("o arquivo-ponte pode citar nomes globais em kebab-case", async () => {
+  /*
+   * Furo comprovado: a exigência de camelCase valia para o arquivo inteiro
+   * e reprovava `:global(.legacy-hook)`. Mas esse nome não é definido pelo
+   * CSS Module — é uma classe que já existe no HTML legado, e renomeá-la
+   * para agradar o linter faria a regra deixar de casar com coisa alguma.
+   *
+   * A exigência vale para as classes que o módulo DEFINE. Citar as do
+   * legado é justamente a função do arquivo-ponte.
+   */
+  const { results } = await stylelint.lint({
+    code: [":global(.legacy-hook) .title {", "  color: inherit;", "}", ""].join(
+      "\n",
+    ),
+    configFile: "stylelint.config.mjs",
+    codeFilename: GLOBAL_ESCAPE_HATCH,
   });
 
   assert.deepEqual(results[0].warnings, []);

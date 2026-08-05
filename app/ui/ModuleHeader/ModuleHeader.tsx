@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
+import styles from "./ModuleHeader.module.css";
+
 /*
  * ModuleHeader — o cabeçalho que abre cada tela do sistema.
  *
@@ -57,6 +59,13 @@ export type ModuleHeaderProps = {
   variantClass?: string;
   /** Classe extra do ícone: `payroll-icon`, `microsoft-icon`, etc. */
   iconClass?: string;
+  /**
+   * Natureza do ícone. Quase todos são desenhos; o da Rescisão é a letra
+   * "R", e letra pede tamanho e peso próprios para não ficar franzina
+   * dentro do quadrado. No legado isso vinha embutido na classe
+   * `termination-icon`; declarar aqui torna a exceção visível.
+   */
+  iconKind?: "glyph" | "letter";
   /** Cores do ícone vindas da definição do módulo, quando existem. */
   iconStyle?: CSSProperties;
   icon: ReactNode;
@@ -73,6 +82,7 @@ export default function ModuleHeader({
   moduleId,
   variantClass,
   iconClass,
+  iconKind = "glyph",
   iconStyle,
   icon,
   eyebrow,
@@ -80,31 +90,95 @@ export default function ModuleHeader({
   description,
   actions,
 }: ModuleHeaderProps) {
+  /*
+   * Migração em andamento, uma variante por vez.
+   *
+   * A `executive` já tem CSS próprio e por isso NÃO emite mais a classe
+   * global — é o que a desliga das 152 regras legadas. As outras duas
+   * continuam no caminho antigo até serem migradas.
+   *
+   * A regra que não pode ser quebrada: um elemento nunca carrega as duas
+   * classes ao mesmo tempo. Uma ou outra por variante é seguro; as duas
+   * juntas recriariam a disputa que esta reforma existe para acabar.
+   */
+  const migrada = variant === "executive";
+
+  /*
+   * UM único ponto de decisão para as duas famílias de classe.
+   *
+   * A primeira versão espalhava a escolha por três ternários dentro do
+   * JSX. Funcionava, mas deixava o erro perigoso a uma distração de
+   * distância: bastava um deles emitir os dois nomes juntos para as regras
+   * legadas voltarem a valer por cima do CSS Module — que é exatamente a
+   * disputa que esta reforma existe para acabar.
+   *
+   * Com as duas famílias declaradas em objetos separados, elas não têm
+   * como se misturar, e `tests/module-header-component.test.mjs` consegue
+   * conferir isso lendo o arquivo, sem navegador.
+   */
+  const proprias = {
+    /*
+     * A variante migrada NÃO emite a classe semântica legada
+     * (payroll-heading, tax-heading...). Elas são estilizadas por folhas
+     * que não exigem a classe global, então continuariam valendo e
+     * repintariam o cabeçalho de claro — foi o que a linha de base
+     * acusou em Cálculo de Salário e Rescisão.
+     *
+     * Nada se perde: a medição mostrou que, na variante executiva, o
+     * acento não tinha efeito visual algum, porque o V105 já sobrepunha
+     * tudo. O acento segue declarado em `data-accent`, para a variante
+     * clara usar.
+     */
+    root: `${styles.root} ${styles.executive}`,
+    titleWrap: styles.titleWrap,
+    /* Mesma razão: `payroll-icon` e `microsoft-icon` também vencem sem a
+       classe global, e na variante executiva nunca tiveram efeito. */
+    icon: `${styles.icon}${iconKind === "letter" ? ` ${styles.letterIcon}` : ""}`,
+    eyebrow: styles.eyebrow,
+    title: styles.title,
+    description: styles.description,
+  };
+
+  const legadas = {
+    root: variantClass ? `module-heading ${variantClass}` : "module-heading",
+    titleWrap: "module-title-wrap",
+    icon: `module-big-icon${iconClass ? ` ${iconClass}` : ""}`,
+    eyebrow: "eyebrow",
+    title: undefined,
+    description: undefined,
+  };
+
+  const cls = migrada ? proprias : legadas;
+
   return (
     <section
-      /*
-       * A classe global continua sendo emitida nesta etapa, de propósito:
-       * as 152 regras legadas ainda dependem dela. Os atributos abaixo são
-       * preparação — dão ao componente uma identidade estável para testes e
-       * para o CSS Module das etapas seguintes, sem mudar nada agora.
-       */
-      className={variantClass ? `module-heading ${variantClass}` : "module-heading"}
+      className={cls.root}
       data-ui="module-header"
       data-variant={variant}
       data-accent={accent}
       data-module={moduleId}
     >
-      <div className="module-title-wrap">
+      <div className={cls.titleWrap} data-ui="module-header-title-wrap">
         <span
-          className={iconClass ? `module-big-icon ${iconClass}` : "module-big-icon"}
-          style={iconStyle}
+          className={cls.icon}
+          /*
+           * Na variante migrada o CSS Module é o dono das cores do ícone.
+           * O estilo inline vinha da definição do módulo e venceria
+           * qualquer classe — antes ele era sobreposto pelo V105. Sem essa
+           * sobreposição, a única forma correta de o componente mandar na
+           * própria aparência é não receber o inline.
+           */
+          style={migrada ? undefined : iconStyle}
+          data-ui="module-header-icon"
         >
           {icon}
         </span>
         <div>
-          <span className="eyebrow">{eyebrow}</span>
-          <h1>{title}</h1>
-          <p>{description}</p>
+          <span className={cls.eyebrow} data-ui="module-header-eyebrow">
+            {eyebrow}
+          </span>
+          <h1 className={cls.title}>{title}</h1>
+          <p className={cls.description}>{description}</p>
         </div>
       </div>
       {actions}

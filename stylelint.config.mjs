@@ -9,6 +9,12 @@
  * A dívida do legado é controlada pela catraca em `scripts/audit-css-debt.mjs`,
  * que impede o problema de crescer enquanto a migração acontece.
  */
+/**
+ * Único arquivo autorizado a usar `:global()`, e apenas enquanto a migração
+ * do cabeçalho estiver em andamento. Deve desaparecer ao fim dela.
+ */
+export const GLOBAL_ESCAPE_HATCH = "app/styles/legacy-bridge.module.css";
+
 const config = {
   extends: ["stylelint-config-standard"],
   rules: {
@@ -36,12 +42,35 @@ const config = {
       { ignorePseudoClasses: ["global", "local"] },
     ],
   },
+  overrides: [
+    {
+      /*
+       * CSS Modules nomeiam classes em camelCase por convenção, porque elas
+       * são acessadas como `styles.titleWrap` no componente. O padrão
+       * kebab-case do config base obrigaria `styles["title-wrap"]` em toda
+       * referência, sem ganho nenhum.
+       */
+      files: ["**/*.module.css"],
+      rules: {
+        "selector-class-pattern": [
+          "^[a-z][a-zA-Z0-9]*$",
+          { message: "Use camelCase nas classes de CSS Modules." },
+        ],
+      },
+    },
+    {
+      /*
+       * O arquivo-ponte é o único que cita nomes de classes globais do
+       * legado, dentro de `:global()`. Esses nomes são kebab-case porque
+       * já existem — `legacy-hook` não pode virar `legacyHook` só para
+       * agradar o linter, ou deixa de casar com o HTML. A exigência de
+       * camelCase vale para classes que o CSS Module DEFINE, não para as
+       * que ele cita.
+       */
+      files: [GLOBAL_ESCAPE_HATCH],
+      rules: { "selector-class-pattern": null },
+    },
+  ],
 };
-
-/**
- * Único arquivo autorizado a usar `:global()`, e apenas enquanto a migração
- * do cabeçalho estiver em andamento. Deve desaparecer ao fim dela.
- */
-export const GLOBAL_ESCAPE_HATCH = "app/styles/legacy-bridge.module.css";
 
 export default config;

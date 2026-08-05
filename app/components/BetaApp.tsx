@@ -5328,6 +5328,7 @@ function ModulePage({
   headerModule,
   topNavigation,
   variant,
+  hideHeading = false,
 }: {
   module: ModuleDefinition;
   records: StoredRecord[];
@@ -5345,6 +5346,14 @@ function ModulePage({
   topNavigation?: ReactNode;
   /* Quem renderiza sabe a estrutura; o ModulePage não deduz. */
   variant: ModuleHeaderVariant;
+  /*
+   * Telas com painel próprio acima (Obra e Máquinas) não mostram o
+   * cabeçalho genérico. Isso era feito escondendo-o por CSS — no V101 com
+   * uma classe posta por JavaScript, no V107 com `:has()`. Agora é uma
+   * condição declarada por quem renderiza: mais simples de ler, e imune à
+   * remoção das classes globais.
+   */
+  hideHeading?: boolean;
 }) {
   const { visible: showInternalCodes, toggle: toggleInternalCodes } =
     useContext(InternalCodeVisibilityContext);
@@ -5387,30 +5396,32 @@ function ModulePage({
 
   return (
     <div className="page-stack">
-      <ModuleHeader
-        variant={variant}
-        moduleId={presentationModule.id}
-        iconStyle={{
-          color: presentationModule.color,
-          backgroundColor: presentationModule.lightColor,
-        }}
-        icon={<Icon name={presentationModule.id} size={26} />}
-        eyebrow={presentationModule.eyebrow}
-        title={presentationModule.label}
-        description={presentationModule.description}
-        actions={
-          canEdit ? (
-            <button className="button primary" onClick={onNew}>
-              <Icon name="plus" size={18} />
-              {actionLabels[module.id] || "Novo registro"}
-            </button>
-          ) : (
-            <span className="read-only-chip">
-              <Icon name="eye" size={16} /> Consulta protegida
-            </span>
-          )
-        }
-      />
+      {hideHeading ? null : (
+        <ModuleHeader
+          variant={variant}
+          moduleId={presentationModule.id}
+          iconStyle={{
+            color: presentationModule.color,
+            backgroundColor: presentationModule.lightColor,
+          }}
+          icon={<Icon name={presentationModule.id} size={26} />}
+          eyebrow={presentationModule.eyebrow}
+          title={presentationModule.label}
+          description={presentationModule.description}
+          actions={
+            canEdit ? (
+              <button className="button primary" onClick={onNew}>
+                <Icon name="plus" size={18} />
+                {actionLabels[module.id] || "Novo registro"}
+              </button>
+            ) : (
+              <span className="read-only-chip">
+                <Icon name="eye" size={16} /> Consulta protegida
+              </span>
+            )
+          }
+        />
+      )}
 
       <aside className="module-guide">
         <span className="guide-icon">
@@ -9243,6 +9254,8 @@ throw new Error(
               ) : (
                 <ModulePage
                   variant="executive"
+                  /* Obra e Máquinas já têm painel próprio acima. */
+                  hideHeading={activeView === "works" || activeView === "assets"}
                   module={activeModule}
                   records={moduleRecords}
                   search={search}

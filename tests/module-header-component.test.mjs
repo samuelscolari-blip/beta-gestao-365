@@ -12,6 +12,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 const COMPONENT_PATH = "app/ui/ModuleHeader/ModuleHeader.tsx";
+const STYLES_PATH = "app/ui/ModuleHeader/ModuleHeader.module.css";
 const component = readFileSync(COMPONENT_PATH, "utf8");
 
 /** Percorre app/ inteiro: a versão anterior lia só o BetaApp.tsx. */
@@ -64,22 +65,116 @@ test("os oito pontos de renderização usam o componente", () => {
   );
 });
 
+/** Remove comentários antes de procurar código: um `!important` citado em
+ *  comentário não é um `!important` aplicado. Foi assim que a auditoria de
+ *  dívida também contava errado, antes de passar a usar o parser. */
+const semComentarios = (fonte) =>
+  fonte.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+
+/** As quatro classes globais das quais o CSS legado depende. */
+const CLASSES_LEGADAS = [
+  "module-heading",
+  "module-title-wrap",
+  "module-big-icon",
+  "eyebrow",
+];
+
+/*
+ * Junta apenas o TEXTO que o componente pode emitir como classe: o conteúdo
+ * de aspas e de crases, sem comentários.
+ *
+ * Procurar o nome no arquivo inteiro não serve: `eyebrow` aparece também em
+ * `styles.eyebrow`, que é o caminho migrado — o oposto do que se quer achar.
+ * Sobrar um pedaço de expressão de dentro de `${...}` não atrapalha: se um
+ * nome legado aparecer ali, é justamente o caso a acusar.
+ */
+const literaisDe = (fonte) =>
+  (semComentarios(fonte).match(/"[^"]*"|`[^`]*`/g) ?? []).join(" ");
+
 test("o componente preserva a estrutura de DOM que o CSS existente espera", () => {
-  // A cascata atual depende desta árvore exata. Alterá-la agora quebraria
-  // regras de treze arquivos ao mesmo tempo.
-  for (const marcador of [
-    'className="module-title-wrap"',
-    "`module-heading ${variantClass}`",
-    "`module-big-icon ${iconClass}`",
-    "<h1>{title}</h1>",
-    "<p>{description}</p>",
-    'className="eyebrow"',
+  /*
+   * A versão anterior deste teste procurava os literais exatos do JSX
+   * (`className="module-title-wrap"`, `<h1>{title}</h1>`). Isso amarrava o
+   * teste à ESCRITA e não à estrutura: assim que a variante migrada passou
+   * a escolher a classe em tempo de execução, ele falhou sem que nenhum
+   * elemento tivesse mudado de lugar. É o mesmo erro de proxy frágil que
+   * já custou uma correção no teste de envoltório, logo abaixo.
+   *
+   * O que importa é o contrato, e ele tem duas metades:
+   */
+
+  // 1. Os pontos de ancoragem no DOM, que não dependem de classe nenhuma.
+  //    São eles que os consumidores em JS e a linha de base usam.
+  for (const ancora of [
+    "module-header",
+    "module-header-title-wrap",
+    "module-header-icon",
+    "module-header-eyebrow",
   ]) {
-    assert.ok(
-      component.includes(marcador),
-      `Estrutura esperada ausente do componente: ${marcador}`,
+    assert.match(
+      component,
+      new RegExp(`data-ui="${ancora}"`),
+      `Âncora de DOM ausente do componente: data-ui="${ancora}"`,
     );
   }
+
+  // 2. As classes globais que as variantes AINDA não migradas precisam
+  //    receber — 152 regras legadas dependem delas. Só desaparecem quando
+  //    a última variante sair do caminho antigo.
+  for (const classeLegada of CLASSES_LEGADAS) {
+    assert.ok(
+      literaisDe(component).includes(classeLegada),
+      `Classe legada perdida: ${classeLegada}. As variantes ainda não ` +
+        "migradas dependem dela.",
+    );
+  }
+});
+
+test("nenhum elemento recebe as classes do módulo e a global ao mesmo tempo", () => {
+  /*
+   * A regra que sustenta a migração fatiada: uma variante usa o CSS Module
+   * OU a classe global, nunca as duas. Juntas, recriariam exatamente a
+   * disputa de regras que esta reforma existe para acabar — o cabeçalho
+   * com fundo claro e texto branco nasceu assim.
+   *
+   * A conferência só é simples porque o componente concentra a escolha em
+   * dois objetos, `proprias` e `legadas`. Se a escolha voltar a se espalhar
+   * pelo JSX, este teste falha por não achar os blocos, que é o aviso certo.
+   */
+  const bloco = (nome) =>
+    component.match(new RegExp(`const ${nome} = \\{[\\s\\S]*?\\n  \\};`))?.[0];
+
+  const proprias = bloco("proprias");
+  const legadas = bloco("legadas");
+
+  assert.ok(
+    proprias && legadas,
+    "O componente não declara mais as duas famílias de classe em blocos " +
+      "separados. Sem isso não há como garantir que não se misturem.",
+  );
+
+  for (const classeLegada of CLASSES_LEGADAS) {
+    assert.ok(
+      !literaisDe(proprias).includes(classeLegada),
+      `A variante migrada emite a classe global "${classeLegada}": as ` +
+        "regras legadas voltariam a valer por cima do CSS Module.",
+    );
+  }
+  assert.doesNotMatch(
+    legadas,
+    /styles\.\w+/,
+    "A variante legada recebeu classe do CSS Module.",
+  );
+
+  /* E o JSX não pode contornar os dois blocos escrevendo classe à mão. */
+  const jsx = component.slice(component.indexOf("return ("));
+  const manuais = jsx.match(/className=\{(?!cls\.\w+\})[^}]*\}/g) ?? [];
+  assert.deepEqual(
+    manuais,
+    [],
+    "Classe montada fora dos dois blocos — use cls.*, ou a garantia acima " +
+      "deixa de valer.",
+  );
 });
 
 test("as classes semânticas de cada tela continuam sendo emitidas", () => {
@@ -105,24 +200,36 @@ test("as classes semânticas de cada tela continuam sendo emitidas", () => {
 });
 
 test("o componente não introduz envoltório extra nem !important", () => {
-  assert.doesNotMatch(component, /!important/);
+  assert.doesNotMatch(semComentarios(component), /!important/);
+  assert.doesNotMatch(
+    semComentarios(readFileSync(STYLES_PATH, "utf8")),
+    /!important/,
+    "O CSS Module do componente precisa vencer por ser o dono do elemento, " +
+      "não por !important.",
+  );
 
   /*
-   * Um elemento a mais entre a <section> e o .module-title-wrap mudaria o
+   * Um elemento a mais entre a <section> e o wrapper do título mudaria o
    * resultado de seletores com combinador filho no CSS legado.
    *
-   * A versão anterior media a DISTÂNCIA em caracteres entre os dois, o que
-   * é apenas um proxy: quebrou ao serem acrescentados atributos e um
-   * comentário, sem que nenhum elemento tivesse sido criado. Agora verifica
-   * a intenção diretamente — não existe tag de abertura entre eles.
+   * Duas versões anteriores erraram aqui por medir proxies: primeiro a
+   * DISTÂNCIA em caracteres entre os dois, depois o literal da classe —
+   * ambos quebraram sem que nenhum elemento tivesse mudado de lugar. A
+   * âncora `data-ui` não muda com a migração, e é a que os consumidores
+   * usam de verdade.
    */
   const inicio = component.indexOf("<section");
-  const wrap = component.indexOf('<div className="module-title-wrap">');
+  const wrap = component.indexOf('data-ui="module-header-title-wrap"');
 
   assert.ok(inicio > -1 && wrap > inicio, "Estrutura esperada não encontrada.");
   assert.doesNotMatch(
-    component.slice(component.indexOf(">", inicio) + 1, wrap),
+    semComentarios(
+      component.slice(
+        component.indexOf(">", component.indexOf("data-module=", inicio)) + 1,
+        component.lastIndexOf("<div", wrap),
+      ),
+    ),
     /<[a-zA-Z]/,
-    "Existe um elemento entre a <section> e o .module-title-wrap.",
+    "Existe um elemento entre a <section> e o wrapper do título.",
   );
 });

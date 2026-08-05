@@ -77,11 +77,26 @@ test("nenhum ponto de renderização deixa de declarar a estrutura", () => {
   );
 });
 
-test("a classe global continua sendo emitida nesta etapa", () => {
+test("a classe global continua valendo para as variantes ainda não migradas", () => {
   /*
-   * Ainda é preparação: as 152 regras legadas dependem de `.module-heading`.
-   * Remover a classe aqui, antes de o CSS Module existir, quebraria todas as
-   * telas de uma vez. A troca acontece variante por variante.
+   * As 152 regras legadas dependem de `.module-heading`. Enquanto `financial`
+   * e `standard` não tiverem CSS próprio, elas precisam continuar recebendo a
+   * classe — tirá-la antes da hora deixaria essas telas sem estilo nenhum.
+   *
+   * A `executive` já saiu do caminho antigo, e é justamente por isso que a
+   * verificação não pode mais ser "a classe é sempre emitida".
    */
-  assert.match(component, /className=\{variantClass \? `module-heading /);
+  assert.match(
+    component,
+    /root: variantClass \? `module-heading \$\{variantClass\}` : "module-heading"/,
+  );
+
+  const migradas = component.match(/const migrada = variant === "(\w+)"/);
+  assert.ok(migradas, "O componente não declara mais qual variante migrou.");
+  assert.equal(
+    migradas[1],
+    "executive",
+    "Ao migrar a próxima variante, atualize também este teste e a linha de " +
+      "base — a equivalência visual precisa ser medida de novo.",
+  );
 });
