@@ -117,17 +117,28 @@ jobs:
           echo "A Cloudflare respondeu, mas não publicou o commit esperado: $TARGET_SHA" >&2
           exit 1
 
+      # Os 90s não são folga por precaução: com 45s, três publicações
+      # seguidas (#113, #114 e #115) ficaram vermelhas mesmo tendo
+      # publicado — os passos "Publicar o Worker" e "Confirmar o commit
+      # exato publicado" acima passaram nas três. O mesmo diagnóstico,
+      # disparado à mão contra a MESMA produção com 90s, passou. O Worker
+      # recém-publicado começa frio e não termina de montar a interface a
+      # tempo.
+      #
+      # Um deploy vermelho a cada mesclagem, por um motivo que não é
+      # defeito, ensina a ignorar o sinal — que é pior do que não ter
+      # sinal nenhum.
       - name: Confirmar interface em navegador real
         run: npm run diagnose:live
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
-          DIAGNOSTIC_WAIT_MS: "45000"
+          DIAGNOSTIC_WAIT_MS: "90000"
 
       - name: Confirmar frota em desktop largo
         run: node scripts/live-fleet-wide-diagnostic.mjs
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
-          DIAGNOSTIC_WAIT_MS: "45000"
+          DIAGNOSTIC_WAIT_MS: "90000"
 
       - name: Registrar resumo da publicação
         if: always()
