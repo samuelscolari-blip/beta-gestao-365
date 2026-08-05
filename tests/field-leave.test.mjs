@@ -22,6 +22,7 @@ import test from "node:test";
  * texto reescrito por regex, não o motor.
  */
 import {
+  COMPRA_COMPOE_BASE_DE_IMPOSTOS,
   DIAS_DE_FOLGA,
   DIAS_PARA_NOVA_FOLGA,
   calculateFieldLeave,
@@ -122,11 +123,16 @@ test("folga comprada não gera custo de viagem que não aconteceu", () => {
   );
 });
 
-test("a compra avisa que a natureza tributária precisa da contabilidade", () => {
+test("a compra não incide na folha, e o registro diz isso", () => {
   /*
-   * O motor NÃO decide se o valor entra na base de INSS e IRRF. Essa é uma
-   * definição contábil, e chutá-la produziria folha errada com aparência de
-   * certa. O aviso existe para que a decisão seja tomada por quem pode.
+   * Definição de Samuel Scolari: por ora o valor da compra não compõe base
+   * de INSS nem de IRRF. Não é uma conclusão fiscal do sistema — mora numa
+   * constante só, com nome próprio, para ser revisada quando a
+   * contabilidade se pronunciar.
+   *
+   * O aviso continua existindo mesmo com a decisão tomada: quem confere o
+   * registro precisa saber por que o valor não apareceu na folha, e que
+   * isso foi decidido em vez de esquecido.
    */
   const r = calculateFieldLeave({
     contagemDesde: "2026-01-01",
@@ -134,7 +140,24 @@ test("a compra avisa que a natureza tributária precisa da contabilidade", () =>
     valorDaCompra: 1800,
   });
 
+  assert.equal(COMPRA_COMPOE_BASE_DE_IMPOSTOS, false);
+  assert.equal(r.compraIncideNaFolha, false);
   assert.ok(r.avisos.some((a) => a.includes("INSS") && a.includes("IRRF")));
+  assert.ok(
+    r.avisos.some((a) => a.includes("não incide")),
+    "O aviso precisa dizer que a decisão foi tomada, não que está pendente.",
+  );
+});
+
+test("a folga concedida não fala de imposto nenhum", () => {
+  /* Sem compra, não há verba a lançar — o aviso seria ruído. */
+  const r = calculateFieldLeave({
+    contagemDesde: "2026-01-01",
+    inicioDaFolga: "2026-04-01",
+    passagemIda: 300,
+  });
+  assert.ok(!r.avisos.some((a) => a.includes("INSS")));
+  assert.equal(r.compraIncideNaFolha, false);
 });
 
 test("comprar a folga não adia a folga seguinte", () => {

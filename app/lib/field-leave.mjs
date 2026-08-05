@@ -25,6 +25,19 @@ export const DIAS_PARA_NOVA_FOLGA = 90;
 /** Duração da folga, em dias corridos — inclui o primeiro e o último. */
 export const DIAS_DE_FOLGA = 9;
 
+/*
+ * O valor pago pela compra da folga NÃO compõe base de INSS nem de IRRF.
+ *
+ * Isto é uma DEFINIÇÃO DE SAMUEL SCOLARI, tomada em 2026-08, e não uma
+ * conclusão fiscal do sistema — que não tem como fazer esse enquadramento.
+ * Está aqui, com nome próprio e num só lugar, porque uma decisão dessas
+ * espalhada pelo código vira impossível de revisar.
+ *
+ * Se a contabilidade definir o contrário, mude para `true`: o valor passa a
+ * ser oferecido como verba tributável e o aviso da tela muda junto.
+ */
+export const COMPRA_COMPOE_BASE_DE_IMPOSTOS = false;
+
 /** Soma dias corridos a uma data ISO, sem depender do fuso do navegador. */
 function somarDias(iso, dias) {
   const data = new Date(`${iso}T00:00:00Z`);
@@ -108,13 +121,14 @@ export function calculateFieldLeave(input) {
       avisos.push("Informe o valor pago pela compra da folga.");
     }
     /*
-     * A natureza tributária deste valor não é decidida aqui, e não é por
-     * omissão: ela depende de enquadramento contábil que o sistema não tem
-     * como inferir. O motor entrega o valor e o aviso; quem lança na folha
-     * decide, com a contabilidade, se compõe base de INSS e IRRF.
+     * O aviso segue existindo mesmo com a definição tomada: quem confere o
+     * registro precisa saber por que aquele valor não apareceu na folha, e
+     * que isso foi decidido — não esquecido.
      */
     avisos.push(
-      "Confirme com a contabilidade se o valor da compra entra na base de INSS e IRRF antes de lançar na folha.",
+      COMPRA_COMPOE_BASE_DE_IMPOSTOS
+        ? "O valor da compra compõe base de INSS e IRRF: confira o lançamento na folha do mês."
+        : "Por definição atual, o valor da compra não incide na folha para INSS nem IRRF. Reveja com a contabilidade se a regra mudar.",
     );
   }
 
@@ -129,6 +143,8 @@ export function calculateFieldLeave(input) {
     : fimDaFolga || direitoEm;
 
   return {
+    /* Explícito no resultado para que a tela não precise adivinhar. */
+    compraIncideNaFolha: comprada && COMPRA_COMPOE_BASE_DE_IMPOSTOS,
     direitoEm,
     fimDaFolga,
     proximaContagemDesde,

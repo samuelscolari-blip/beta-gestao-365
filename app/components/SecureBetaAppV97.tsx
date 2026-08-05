@@ -127,7 +127,15 @@ const fieldLeaveDefinition: ModuleDefinition = {
   referenceField: "fieldLeaveId",
   statusField: "status",
   dateField: "leaveStart",
-  amountField: "totalCost",
+  /*
+   * Sem campo de valor no registro, de propósito.
+   *
+   * Havia um "Custo total" que pedia a soma à mão enquanto o resumo da
+   * tela já somava sozinho — dois números para a mesma pergunta, que
+   * divergem na primeira distração. Quem soma é o motor, em um lugar só,
+   * e o resultado aparece no resumo acima da lista.
+   */
+  amountField: "",
   spreadsheetSheets: [],
   tableColumns: [
     "employeeName",
@@ -150,8 +158,7 @@ const fieldLeaveDefinition: ModuleDefinition = {
     { key: "mealsOut", label: "Alimentação no percurso — ida", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
     { key: "mealsReturn", label: "Alimentação no percurso — volta", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
     { key: "hotel", label: "Hotel", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "Somente quando o trajeto exige parada. Deixe vazio se não houve." },
-    { key: "purchaseAmount", label: "Valor pago pela compra", type: "number", showWhen: { field: "resolution", equals: "Comprada pela empresa" }, help: "Confirme com a contabilidade se este valor entra na base de INSS e IRRF antes de lançar na folha." },
-    { key: "totalCost", label: "Custo total do registro", type: "number", help: "Some as despesas acima, ou o valor da compra. O resumo acima da lista confere o total." },
+    { key: "purchaseAmount", label: "Valor pago pela compra", type: "number", showWhen: { field: "resolution", equals: "Comprada pela empresa" }, help: "Valor combinado com o setor. Por definição atual, não incide na folha para INSS nem IRRF." },
     { key: "status", label: "Situação", type: "select", required: true, options: ["Prevista", "Autorizada", "Em andamento", "Concluída", "Comprada"] },
     { key: "notes", label: "Observações", type: "textarea", wide: true, placeholder: "Trajeto, companhia aérea ou rodoviária, comprovantes e o que mais precisar ficar registrado." },
   ],
