@@ -18,6 +18,15 @@ export type ModuleField = {
   help?: string;
   wide?: boolean;
   aliases?: string[];
+  /**
+   * Mostra o campo somente quando outro campo tiver determinado valor.
+   *
+   * Existe para perguntas que só fazem sentido depois de uma resposta: a
+   * cidade de origem só importa para quem mora fora da cidade da obra, e
+   * exibi-la sempre convidaria a preencher um dado que não vale para o
+   * caso — que depois viraria dúvida na hora de conferir a ficha.
+   */
+  showWhen?: { field: string; equals: string };
 };
 
 export type ModuleDefinition = {
@@ -505,6 +514,18 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "city", label: "Cidade", type: "text" },
       { key: "state", label: "UF", type: "text" },
       { key: "postalCode", label: "CEP", type: "text" },
+      /*
+       * Origem da Folga de Campo: quem mora fora da cidade da obra tem
+       * direito a 9 dias corridos em casa a cada 90 trabalhados.
+       *
+       * A marcação é explícita, e não deduzida da comparação entre a cidade
+       * do colaborador e a da obra. Cidade aqui é texto digitado à mão, e
+       * "Feira de Santana" contra "feira de santana - BA" já bastaria para
+       * negar o direito a quem tem.
+       */
+      { key: "livesOutOfTown", label: "Residência fora da cidade da obra", type: "select", options: ["Não", "Sim"], help: "Marque Sim para abrir o direito à Folga de Campo: 9 dias corridos em casa a cada 90 dias trabalhados." },
+      { key: "homeCity", label: "Cidade onde mora", type: "text", placeholder: "Ex.: Feira de Santana/BA", showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Destino das viagens de Folga de Campo. Pode ser diferente do endereço acima, que costuma ser o alojamento." },
+      { key: "fieldLeaveCountFrom", label: "Contar Folga de Campo a partir de", type: "date", showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Normalmente a data de admissão. Nas folgas seguintes, o sistema recomeça a contagem sozinho." },
       { key: "dependents", label: "Dependentes para IRRF", type: "number", aliases: ["Dependentes"] },
       { key: "dependentDetails", label: "Ficha dos dependentes", type: "textarea", wide: true, placeholder: "Um dependente por bloco: nome, parentesco, CPF, nascimento, sexo, condição de IRRF e plano de saúde.", help: "Registre somente dependentes comprovados. A contabilidade deve validar o enquadramento no IRRF." },
       { key: "role", label: "Cargo", type: "text", aliases: ["Cargo"] },

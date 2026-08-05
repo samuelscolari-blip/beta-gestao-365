@@ -35,16 +35,30 @@ test("Cálculo de Férias possui tela separada no grupo de RH", async () => {
   assert.match(source, /moduleMap\.vacations/);
 });
 
-test("a aba de férias fica sempre entre salário e rescisão", async () => {
+test("as abas de afastamento ficam sempre entre salário e rescisão", async () => {
+  /*
+   * A Folga de Campo entrou ao lado de Férias — são os dois afastamentos do
+   * grupo de RH, e ficam juntos entre o cálculo de salário e a rescisão.
+   *
+   * A verificação continua sendo da ORDEM, e não da posição literal: o que
+   * não pode acontecer é uma delas cair fora do intervalo, ou o item ser
+   * inserido duas vezes quando a camada roda de novo (ela é idempotente de
+   * propósito, porque outras camadas também reorganizam o menu).
+   */
   const source = await readFile(wrapperPath, "utf8");
 
   assert.match(
     source,
-    /rhGroup\.items\.filter\(\(item\) => item !== "vacations"\)/,
+    /item !== "vacations" && item !== "field_leave"/,
+    "Os dois precisam sair da lista antes de serem reinseridos, senão " +
+      "duplicam a cada execução.",
   );
   assert.match(source, /orderedItems\.indexOf\("payroll"\)/);
   assert.match(source, /orderedItems\.indexOf\("terminations"\)/);
-  assert.match(source, /orderedItems\.splice\(insertionIndex, 0, "vacations"\)/);
+  assert.match(
+    source,
+    /orderedItems\.splice\(insertionIndex, 0, "vacations", "field_leave"\)/,
+  );
   assert.match(source, /ensureRhStructure\(\);[\s\S]*return <SecureBetaAppV66/);
 });
 
