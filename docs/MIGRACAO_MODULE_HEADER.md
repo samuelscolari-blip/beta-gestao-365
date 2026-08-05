@@ -11,11 +11,40 @@ suposto) para que a etapa final seja executada sem redescobrir nada.
 | 2 — Linha de base visual | publicada | detecção de regressão comprovada |
 | 3 — Tokens oficiais | publicada | zero diferença visual |
 | 4 — Extrair `<ModuleHeader>` | publicada | HTML renderizado idêntico em 6 de 6 telas |
-| 5 — Dar CSS próprio ao componente | **não iniciada** | — |
+| 5A — CSS próprio da `executive` | publicada | linha de base sem diferença visual nas 12 telas |
+| 5B — CSS próprio da `financial` | **não iniciada** | — |
+| 5C — CSS próprio da `standard` e acentos | **não iniciada** | — |
+| 5D — remoção do legado | **não iniciada** | — |
 
 A etapa 4 deixou o componente ainda emitindo a classe global
 `.module-heading`, de propósito. Enquanto essa classe existir, o componente
-continua exposto às folhas globais — é isso que a etapa 5 resolve.
+continua exposto às folhas globais — é isso que a etapa 5 resolve, uma
+variante por vez.
+
+A 5A tirou as 12 telas executivas dessa exposição. As outras duas variantes
+continuam no caminho legado, e por isso **as regras legadas ainda não podem
+ser apagadas** — elas são o único estilo que resta para `financial` e
+`standard`. A limpeza é a 5D.
+
+### O que a 5A mediu, e o que sobrou
+
+`npm run baseline:check` fechou com **10 diferenças, todas do mesmo tipo**:
+`headerCount` caindo de 1 para 0 em Execução da Obra e Máquinas, nas cinco
+larguras. Não é regressão, é a correção: antes o cabeçalho era renderizado e
+depois escondido por CSS; agora não é renderizado. O `visibleHeaderCount`
+dessas telas já era 0 antes e continua 0 — nenhum pixel mudou.
+
+Duas diferenças reais apareceram no caminho e foram corrigidas, não
+regravadas:
+
+- **O ícone da Rescisão** é o único que é uma letra ("R"). Tamanho e peso
+  vinham da classe `termination-icon`, que a variante migrada deixou de
+  emitir; sem isso a letra caía de 16px para 15px. Virou `iconKind="letter"`,
+  uma exceção declarada em vez de herdada por acidente.
+- **A primeira tentativa de corrigir isso** aplicou o tamanho a todos os
+  ícones e quebrou as outras 12 telas — a medição mostrou que o ícone comum
+  computa 15px, e só o da Rescisão computa 16px. Vale como aviso: ler o CSS
+  legado diz qual regra *parece* vencer; só a medição diz qual vence.
 
 ## A descoberta que mudou o plano
 
@@ -109,9 +138,9 @@ Encontre-as com `grep -n "\.module-heading" app/*.css`.
 
 ## Plano da etapa 5, dividido por estrutura
 
-**5A — variante `executive`.** Migra as 12 telas executivas para o CSS
-Module, sem a classe global. No mesmo trabalho, substitui a deduplicação de
-Máquinas e Obra pela condição React. As outras variantes continuam no
+**5A — variante `executive`. Concluída.** Migrou as 12 telas executivas para
+o CSS Module, sem a classe global, e substituiu a deduplicação de Máquinas e
+Obra pela condição React (`hideHeading`). As outras variantes continuam no
 caminho legado.
 
 **5B — variante `financial`.** Altura, espaçamento e composição diferentes
@@ -137,12 +166,22 @@ variantes ainda **não** migradas:
 ```tsx
 const migrada = variant === "executive";
 
-<section className={migrada ? `${styles.root} ${styles.executive}` : "module-heading"}>
+const proprias = { root: `${styles.root} ${styles.executive}`, /* … */ };
+const legadas  = { root: "module-heading", /* … */ };
+
+const cls = migrada ? proprias : legadas;
 ```
 
 A regra que não pode ser quebrada: um elemento **nunca** carrega as duas
 classes ao mesmo tempo. Uma ou outra por variante é seguro; as duas juntas
-recriam a disputa que originou os defeitos. Este trecho desaparece na 5D.
+recriam a disputa que originou os defeitos.
+
+Por isso a escolha fica nesses **dois objetos**, e não espalhada em ternários
+dentro do JSX: assim as duas famílias não têm como se misturar, e
+`tests/module-header-component.test.mjs` consegue conferir a regra lendo o
+arquivo, sem navegador — o que importa, porque a linha de base precisa de
+Chromium e **não roda no CI**. Ao migrar 5B e 5C, mantenha esse formato.
+Todo o trecho desaparece na 5D.
 
 ## Proibições durante a transição
 

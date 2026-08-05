@@ -126,9 +126,15 @@ function readScreenStyles() {
   const visibleHeaders = headers.filter(visivel);
   const heading = visibleHeaders[0] ?? null;
 
+  /*
+   * Localiza os filhos por `data-ui`, não por classe. As classes mudam
+   * conforme a variante vai sendo migrada para CSS Module, e uma busca por
+   * classe passaria a devolver nulo — o que pareceria "elemento sumiu"
+   * quando na verdade era a medição olhando para o lugar errado.
+   */
   const title = heading?.querySelector("h1") ?? null;
-  const eyebrow = heading?.querySelector(".eyebrow") ?? null;
-  const icon = heading?.querySelector(".module-big-icon") ?? null;
+  const eyebrow = heading?.querySelector('[data-ui="module-header-eyebrow"]') ?? null;
+  const icon = heading?.querySelector('[data-ui="module-header-icon"]') ?? null;
   /* Bloco de ações: tudo que vem depois do título, à direita. */
   const actions = heading?.children?.[1] ?? null;
   const guide = document.querySelector(".module-guide");
