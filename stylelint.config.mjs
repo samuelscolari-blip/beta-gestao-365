@@ -23,6 +23,12 @@ const config = {
      * stylelint-config-standard não os conhece e os reprova como inválidos.
      * Sem estas duas liberações, o Stylelint barraria justamente o código
      * que a migração de componentes precisa escrever.
+     *
+     * `:global()` fica reconhecido, mas NÃO liberado para uso geral: ele
+     * permitiria a um CSS Module voltar a estilizar classes globais — um
+     * `:global(.module-heading) { … }` recriaria a disputa que a migração
+     * existe para acabar. O uso é restrito ao arquivo-ponte abaixo, e
+     * `tests/css-governance.test.mjs` reprova qualquer outro lugar.
      */
     "property-no-unknown": [true, { ignoreProperties: ["composes"] }],
     "selector-pseudo-class-no-unknown": [
@@ -31,5 +37,11 @@ const config = {
     ],
   },
 };
+
+/**
+ * Único arquivo autorizado a usar `:global()`, e apenas enquanto a migração
+ * do cabeçalho estiver em andamento. Deve desaparecer ao fim dela.
+ */
+export const GLOBAL_ESCAPE_HATCH = "app/styles/legacy-bridge.module.css";
 
 export default config;

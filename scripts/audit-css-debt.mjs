@@ -65,11 +65,60 @@ export function extractLegacyImports(layoutSource) {
   );
 }
 
-/** Arquivos CSS soltos em `app/` (a arquitetura antiga). */
-export function listLegacyCssFiles(appDir = APP_DIR) {
-  return readdirSync(appDir)
-    .filter((name) => name.endsWith(".css"))
+/** Prefixo da arquitetura nova no sistema de arquivos. */
+const NEW_ARCHITECTURE_DIR = join(APP_DIR, "styles");
+
+/**
+ * Todos os arquivos CSS sob `app/`, RECURSIVAMENTE.
+ *
+ * A primeira versão lia só o nível de cima, com `readdirSync(appDir)`.
+ * Comprovado que isso deixava passar: um `app/legacy/v108.css` com
+ * `!important` não era contado pela catraca, que seguia acusando o mesmo
+ * total. Um subdiretório era todo o disfarce necessário.
+ */
+export function listCssFiles(directory = APP_DIR) {
+  return readdirSync(directory, { withFileTypes: true })
+    .flatMap((entry) => {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) return listCssFiles(path);
+      return entry.name.endsWith(".css") ? [path] : [];
+    })
     .sort();
+}
+
+/**
+ * Arquivos que contam como dívida: tudo fora de `app/styles/`.
+ * A arquitetura nova não entra no orçamento — ela é a saída dele.
+ */
+export function listLegacyCssFiles(appDir = APP_DIR) {
+  return listCssFiles(appDir).filter(
+    (path) => !path.startsWith(`${NEW_ARCHITECTURE_DIR}/`),
+  );
+}
+
+/**
+ * Imports de CSS espalhados fora do `app/layout.tsx`.
+ *
+ * A auditoria original lia apenas o layout, então bastava importar uma
+ * folha global direto num componente para escapar de tudo. São aceitos
+ * apenas CSS Modules e arquivos da arquitetura nova.
+ */
+export function findStrayCssImports(directory = APP_DIR) {
+  const permitido = (specifier) =>
+    specifier.endsWith(".module.css") || /(^|\/)styles\//.test(specifier);
+
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) return findStrayCssImports(path);
+    if (path === LAYOUT_PATH) return [];
+    if (!/\.tsx?$/.test(entry.name)) return [];
+
+    const source = readFileSync(path, "utf8");
+    return [...source.matchAll(/import\s+(?:[\w{}*\s,]+from\s+)?["']([^"']+\.css)["']/g)]
+      .map((match) => match[1])
+      .filter((specifier) => !permitido(specifier))
+      .map((specifier) => `${path} → ${specifier}`);
+  });
 }
 
 /** Mede o estado atual do repositório. */
@@ -78,8 +127,8 @@ export function auditRepository(appDir = APP_DIR, layoutPath = LAYOUT_PATH) {
 
   let important = 0;
   let hasSelectors = 0;
-  for (const name of files) {
-    const path = join(appDir, name);
+  for (const path of files) {
+    /* A varredura recursiva já devolve o caminho completo. */
     const css = readFileSync(path, "utf8");
     important += countImportant(css, path);
     hasSelectors += countHasSelectors(css, path);
