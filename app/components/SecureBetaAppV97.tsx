@@ -181,11 +181,17 @@ function markVacationsPage() {
     .querySelectorAll<HTMLElement>(".page-stack.vacations-page")
     .forEach((page) => page.classList.remove("vacations-page"));
 
-  const vacationsHeading = Array.from(
-    document.querySelectorAll<HTMLElement>(".page-stack > .module-heading"),
-  ).find(
-    (heading) =>
-      heading.querySelector("h1")?.textContent?.trim() === "Cálculo de Férias",
+  /*
+   * Localiza o cabeçalho pelo identificador do módulo.
+   *
+   * Antes, a busca comparava o TEXTO do <h1> com "Cálculo de Férias" e
+   * dependia da classe global `.module-heading`. Eram duas fragilidades:
+   * renomear o título da tela apagava a estilização em silêncio, e a
+   * remoção da classe global — prevista nas próximas etapas — faria o
+   * mesmo. O id do módulo não muda por decisão de texto.
+   */
+  const vacationsHeading = document.querySelector<HTMLElement>(
+    `[data-ui="module-header"][data-module="${vacationsDefinition.id}"]`,
   );
 
   vacationsHeading?.parentElement?.classList.add("vacations-page");

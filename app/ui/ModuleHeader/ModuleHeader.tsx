@@ -45,6 +45,14 @@ export type ModuleHeaderProps = {
   /** Estrutura visual da tela. Declarada pelo React, nunca deduzida por CSS. */
   variant: ModuleHeaderVariant;
   accent?: ModuleHeaderAccent;
+  /**
+   * Identificador do módulo, quando a tela representa um.
+   *
+   * Existe para que outras camadas possam localizar um cabeçalho específico
+   * sem comparar o texto do título — era assim que a tela de Férias era
+   * encontrada, e renomear o título quebraria a estilização em silêncio.
+   */
+  moduleId?: string;
   /** Classe semântica da tela: `compliance-heading`, `admin-heading`, etc. */
   variantClass?: string;
   /** Classe extra do ícone: `payroll-icon`, `microsoft-icon`, etc. */
@@ -62,6 +70,7 @@ export type ModuleHeaderProps = {
 export default function ModuleHeader({
   variant,
   accent = "none",
+  moduleId,
   variantClass,
   iconClass,
   iconStyle,
@@ -83,6 +92,7 @@ export default function ModuleHeader({
       data-ui="module-header"
       data-variant={variant}
       data-accent={accent}
+      data-module={moduleId}
     >
       <div className="module-title-wrap">
         <span

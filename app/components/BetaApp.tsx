@@ -5389,6 +5389,7 @@ function ModulePage({
     <div className="page-stack">
       <ModuleHeader
         variant={variant}
+        moduleId={presentationModule.id}
         iconStyle={{
           color: presentationModule.color,
           backgroundColor: presentationModule.lightColor,
