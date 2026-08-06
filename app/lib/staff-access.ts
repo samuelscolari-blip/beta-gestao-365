@@ -2,7 +2,7 @@ const STAFF_SESSION_COOKIE = "__Host-beta_staff_access";
 export const STAFF_SESSION_TTL_SECONDS = 60 * 60 * 12;
 const PASSWORD_ITERATIONS = 120_000;
 
-export type StaffRole = "encarregado";
+export type StaffRole = "encarregado" | "colaborador";
 
 export type StaffSession = {
   registration: string;
@@ -11,10 +11,13 @@ export type StaffSession = {
   expiresAt: string;
 };
 
-type StaffAccountRow = {
+export type StaffAccount = {
   registration: string;
   name: string;
   role: StaffRole;
+};
+
+type StaffAccountRow = StaffAccount & {
   passwordSalt: string;
   passwordHash: string;
   active: number;
@@ -30,6 +33,7 @@ type D1Statement = {
   bind(...values: unknown[]): D1Statement;
   run(): Promise<{ meta?: { changes?: number } }>;
   first<T>(): Promise<T | null>;
+  all<T>(): Promise<{ results?: T[] }>;
 };
 
 type D1DatabaseLike = {
@@ -50,18 +54,20 @@ const TEST_ACCOUNTS = [
   {
     registration: "ENC-002",
     name: "Ricardo Lima",
-    role: "encarregado",
+    role: "colaborador",
     passwordSalt: "sK0jIeQUBdoNr11oI-5-lA",
     passwordHash: "O3TCj-fjfvEVdW-FFEtuqgC3sEglofCryp8M4vU_40Q",
   },
   {
     registration: "ENC-003",
     name: "João Ferreira",
-    role: "encarregado",
+    role: "colaborador",
     passwordSalt: "dAf6BqOz12-aMwa16TAm9g",
     passwordHash: "8gPx0qohk8yQuq9i-wN3oFBAF1OmMU2jWF7N5m4VvWM",
   },
-] as const;
+] as const satisfies ReadonlyArray<
+  StaffAccount & { passwordSalt: string; passwordHash: string }
+>;
 
 async function database(): Promise<D1DatabaseLike> {
   const { env } = await import("cloudflare:workers");
@@ -198,10 +204,17 @@ async function ensureSchema() {
           TEST_ACCOUNTS.map((account) =>
             db
               .prepare(`
-                INSERT OR IGNORE INTO staff_access_accounts (
+                INSERT INTO staff_access_accounts (
                   registration, name, role, password_salt, password_hash,
                   active, failed_attempts, locked_until, created_at, updated_at
                 ) VALUES (?, ?, ?, ?, ?, 1, 0, '', ?, ?)
+                ON CONFLICT (registration) DO UPDATE SET
+                  name = excluded.name,
+                  role = excluded.role,
+                  password_salt = excluded.password_salt,
+                  password_hash = excluded.password_hash,
+                  active = 1,
+                  updated_at = excluded.updated_at
               `)
               .bind(
                 account.registration,
@@ -227,6 +240,48 @@ export function hasStaffSessionCookie(headers: {
   get(name: string): string | null;
 }) {
   return Boolean(cookieValue(headers, STAFF_SESSION_COOKIE));
+}
+
+export async function listActiveStaffAccounts(): Promise<StaffAccount[]> {
+  await ensureSchema();
+  const db = await database();
+  const result = await db
+    .prepare(`
+      SELECT registration, name, role
+      FROM staff_access_accounts
+      WHERE active = 1
+      ORDER BY CASE role WHEN 'encarregado' THEN 0 ELSE 1 END, name
+    `)
+    .all<StaffAccount>();
+  return (result.results || []).filter(
+    (account) =>
+      account.role === "encarregado" || account.role === "colaborador",
+  );
+}
+
+export async function staffAccountByRegistration(
+  registrationInput: unknown,
+): Promise<StaffAccount | null> {
+  await ensureSchema();
+  const registration = normalizeRegistration(registrationInput);
+  if (!registration) return null;
+  const db = await database();
+  const account = await db
+    .prepare(`
+      SELECT registration, name, role
+      FROM staff_access_accounts
+      WHERE registration = ? AND active = 1
+      LIMIT 1
+    `)
+    .bind(registration)
+    .first<StaffAccount>();
+  if (
+    !account ||
+    (account.role !== "encarregado" && account.role !== "colaborador")
+  ) {
+    return null;
+  }
+  return account;
 }
 
 export async function verifyStaffCredentials(
@@ -282,16 +337,22 @@ export async function verifyStaffCredentials(
   if (!valid) {
     if (account) {
       const failedAttempts = Number(account.failedAttempts || 0) + 1;
-      const nextLock = failedAttempts >= 5
-        ? new Date(now.getTime() + 10 * 60 * 1000).toISOString()
-        : "";
+      const nextLock =
+        failedAttempts >= 5
+          ? new Date(now.getTime() + 10 * 60 * 1000).toISOString()
+          : "";
       await db
         .prepare(`
           UPDATE staff_access_accounts
           SET failed_attempts = ?, locked_until = ?, updated_at = ?
           WHERE registration = ?
         `)
-        .bind(failedAttempts >= 5 ? 0 : failedAttempts, nextLock, now.toISOString(), registration)
+        .bind(
+          failedAttempts >= 5 ? 0 : failedAttempts,
+          nextLock,
+          now.toISOString(),
+          registration,
+        )
         .run();
     }
     return { ok: false as const, error: "Matrícula ou senha inválida." };
@@ -316,11 +377,7 @@ export async function verifyStaffCredentials(
   };
 }
 
-export async function createStaffSession(account: {
-  registration: string;
-  name: string;
-  role: StaffRole;
-}) {
+export async function createStaffSession(account: StaffAccount) {
   await ensureSchema();
   const token = randomToken();
   const tokenHash = await sha256Hex(token);
@@ -383,7 +440,12 @@ export async function staffSessionFromHeaders(headers: {
       .bind(tokenHash)
       .first<StaffSessionRow>();
 
-    if (!row?.active || row.role !== "encarregado") return null;
+    if (
+      !row?.active ||
+      (row.role !== "encarregado" && row.role !== "colaborador")
+    ) {
+      return null;
+    }
     const expiresAt = Date.parse(row.expiresAt);
     if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
       await db
