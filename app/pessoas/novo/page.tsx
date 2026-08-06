@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 
 function normalizeCode(value: string) {
@@ -177,7 +178,7 @@ export default function NewEmployeePage() {
               <p className="subtitle">Cadastro do zero e liberação imediata para o ponto facial</p>
             </div>
           </div>
-          <a className="back" href="/">Voltar ao sistema</a>
+          <Link className="back" href="/">Voltar ao sistema</Link>
         </header>
 
         <form className="card" onSubmit={submit}>
