@@ -1,12 +1,12 @@
 import { headers } from "next/headers";
-import SecureBetaAppV100 from "./components/SecureBetaAppV100";
+import SecureBetaAppV131 from "./components/SecureBetaAppV131";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 
-// Cadeia preservada: SecureBetaAppV100 → SecureBetaAppV97 → SecureBetaAppV66 → SecureBetaAppV65.
-// A V100 unifica a tela de Máquinas sem alterar cálculos, acessos ou fluxos anteriores.
+// Cadeia preservada: V131 → V100 → V97 → V66 → V65.
+// A V131 conecta Pessoas ao cadastro facial e ao portal móvel de ponto.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -16,7 +16,7 @@ export default async function Home() {
   const fullName = isAdmin ? "Samuel Scolari" : null;
 
   return (
-    <SecureBetaAppV100
+    <SecureBetaAppV131
       userName={fullName}
       userEmail={email}
       isAdmin={isAdmin}
