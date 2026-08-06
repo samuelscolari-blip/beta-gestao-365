@@ -21,9 +21,15 @@ type D1DatabaseLike = {
   batch(statements: D1Statement[]): Promise<unknown>;
 };
 
+export type SupervisorIdentity = {
+  registration: string;
+  name: string;
+  role: "encarregado";
+};
+
 export type MasterPointSession = {
-  actorRegistration: "MASTER";
-  actorName: "Encarregado autorizado";
+  actorRegistration: string;
+  actorName: string;
   actorRole: "encarregado";
   selectedEmployeeRegistration: string;
   selectedEmployeeName: string;
@@ -31,6 +37,8 @@ export type MasterPointSession = {
 };
 
 type MasterPointSessionRow = {
+  actorRegistration: string;
+  actorName: string;
   selectedRegistration: string;
   expiresAt: string;
 };
@@ -128,8 +136,10 @@ async function ensureSchema() {
       .then((db) =>
         db.batch([
           db.prepare(`
-            CREATE TABLE IF NOT EXISTS master_point_sessions (
+            CREATE TABLE IF NOT EXISTS master_point_sessions_v2 (
               token_hash TEXT PRIMARY KEY,
+              actor_registration TEXT NOT NULL,
+              actor_name TEXT NOT NULL,
               selected_registration TEXT NOT NULL,
               created_at TEXT NOT NULL,
               expires_at TEXT NOT NULL,
@@ -137,8 +147,8 @@ async function ensureSchema() {
             )
           `),
           db.prepare(`
-            CREATE INDEX IF NOT EXISTS idx_master_point_sessions_expires
-            ON master_point_sessions (expires_at)
+            CREATE INDEX IF NOT EXISTS idx_master_point_sessions_v2_expires
+            ON master_point_sessions_v2 (expires_at)
           `),
         ]),
       )
@@ -175,7 +185,10 @@ export async function verifyMasterPointAccess(input: {
   return { ok: true as const, employee };
 }
 
-export async function createMasterPointSession(employee: PointEmployee) {
+export async function createMasterPointSession(
+  employee: PointEmployee,
+  supervisor: SupervisorIdentity,
+) {
   await ensureSchema();
   const token = randomToken();
   const tokenHash = await sha256Hex(token);
@@ -187,16 +200,19 @@ export async function createMasterPointSession(employee: PointEmployee) {
 
   await db.batch([
     db
-      .prepare("DELETE FROM master_point_sessions WHERE expires_at <= ?")
+      .prepare("DELETE FROM master_point_sessions_v2 WHERE expires_at <= ?")
       .bind(createdAt.toISOString()),
     db
       .prepare(`
-        INSERT INTO master_point_sessions (
-          token_hash, selected_registration, created_at, expires_at, last_seen_at
-        ) VALUES (?, ?, ?, ?, ?)
+        INSERT INTO master_point_sessions_v2 (
+          token_hash, actor_registration, actor_name,
+          selected_registration, created_at, expires_at, last_seen_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
       `)
       .bind(
         tokenHash,
+        supervisor.registration,
+        supervisor.name,
         employee.registration,
         createdAt.toISOString(),
         expiresAt.toISOString(),
@@ -224,9 +240,11 @@ export async function masterPointSessionFromHeaders(headers: {
     const row = await db
       .prepare(`
         SELECT
+          actor_registration AS actorRegistration,
+          actor_name AS actorName,
           selected_registration AS selectedRegistration,
           expires_at AS expiresAt
-        FROM master_point_sessions
+        FROM master_point_sessions_v2
         WHERE token_hash = ?
         LIMIT 1
       `)
@@ -236,7 +254,7 @@ export async function masterPointSessionFromHeaders(headers: {
     const expiresAt = Date.parse(row?.expiresAt || "");
     if (!row || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
       await db
-        .prepare("DELETE FROM master_point_sessions WHERE token_hash = ?")
+        .prepare("DELETE FROM master_point_sessions_v2 WHERE token_hash = ?")
         .bind(tokenHash)
         .run();
       return null;
@@ -246,8 +264,8 @@ export async function masterPointSessionFromHeaders(headers: {
     if (!employee) return null;
 
     return {
-      actorRegistration: "MASTER",
-      actorName: "Encarregado autorizado",
+      actorRegistration: row.actorRegistration,
+      actorName: row.actorName,
       actorRole: "encarregado",
       selectedEmployeeRegistration: employee.registration,
       selectedEmployeeName: employee.name,
@@ -266,7 +284,7 @@ export async function deleteMasterPointSession(headers: {
   await ensureSchema();
   const db = await database();
   await db
-    .prepare("DELETE FROM master_point_sessions WHERE token_hash = ?")
+    .prepare("DELETE FROM master_point_sessions_v2 WHERE token_hash = ?")
     .bind(await sha256Hex(token))
     .run();
 }
