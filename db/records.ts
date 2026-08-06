@@ -1090,6 +1090,23 @@ function onlyDigits(value: unknown): string {
   return String(value ?? "").replace(/\D/g, "");
 }
 
+/*
+ * Nome comparável: sem acento, sem caixa, sem espaço sobrando.
+ *
+ * A mesma pessoa vem como "José da Silva", "JOSE DA SILVA" e
+ * "  José  da Silva " em planilhas diferentes — às vezes na mesma. Comparar
+ * o texto cru faria cada variação virar um cadastro novo, que é exatamente
+ * o problema que casar por nome deveria resolver.
+ */
+function normalizeName(value: unknown): string {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function createMany(
   inputs: Array<Partial<RecordInput>>,
   actor: string,
@@ -1259,6 +1276,35 @@ export async function createMany(
     else existingByCpf.set(chave, row);
   }
 
+  /*
+   * Índice por NOME, porque é o que as planilhas de RH trazem na primeira
+   * coluna — pedir CPF obrigaria a montar a planilha de outro jeito.
+   *
+   * É a chave menos confiável das três, e por isso é a última tentada.
+   * Nome não identifica pessoa: homônimo existe, e numa folha com milhares
+   * de linhas é questão de tempo. Atualizar o salário do "José Carlos
+   * Santos" errado é um erro que ninguém percebe olhando o total.
+   *
+   * A trava é a mesma do CPF: nome repetido em dois cadastros não resolve
+   * para nenhum. A linha vira cadastro novo, o número não fecha, e a
+   * duplicidade aparece para ser tratada à mão — que é o comportamento
+   * seguro quando não se sabe de quem é a linha.
+   */
+  const existingByName = new Map<string, ExistingImportRow | null>();
+  for (const row of existingRows) {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
+    } catch {
+      payload = {};
+    }
+    const nome = normalizeName(payload.name || row.title);
+    if (nome.length < 3) continue;
+    const chave = `${row.module}::${nome}`;
+    if (existingByName.has(chave)) existingByName.set(chave, null);
+    else existingByName.set(chave, row);
+  }
+
   const seenBatchKeys = new Set<string>();
   const statements: ReturnType<typeof db.prepare>[] = [];
   let inserted = 0;
@@ -1281,12 +1327,21 @@ export async function createMany(
       ? `${input.module}::${input.reference.toLowerCase()}`
       : "";
     const cpfDaLinha = onlyDigits(input.payload?.cpf);
+    const nomeDaLinha = normalizeName(input.payload?.name || input.title);
     const existing =
       (importKey && existingByImportKey.get(`${input.module}::${importKey}`)) ||
       (referenceKey && existingByReference.get(referenceKey)) ||
       /* Sem código na planilha, o CPF identifica quem atualizar. */
       (cpfDaLinha.length === 11
         ? existingByCpf.get(`${input.module}::${cpfDaLinha}`) || null
+        : null) ||
+      /*
+       * Por último o nome, que é o que as planilhas de RH trazem. Fica no
+       * fim porque é a chave mais frágil: só vale quando não há código nem
+       * CPF, e mesmo assim recusa nomes repetidos.
+       */
+      (nomeDaLinha.length >= 3
+        ? existingByName.get(`${input.module}::${nomeDaLinha}`) || null
         : null);
 
     if (existing) {

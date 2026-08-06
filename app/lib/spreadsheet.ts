@@ -689,6 +689,17 @@ export async function exportImportTemplate(module: ModuleDefinition) {
    * O código vem em seguida, preenchido na exportação, para quem prefere
    * trabalhar a partir do que o sistema já tem.
    */
+  /*
+   * O NOME abre a planilha, porque é o que as planilhas de RH trazem na
+   * primeira coluna. Pedir outra ordem obrigaria a remontar o arquivo que
+   * eles já usam.
+   *
+   * CPF e código vêm em seguida, e não por preciosismo: nome não
+   * identifica pessoa. Quando a planilha traz um dos dois, a atualização
+   * acerta mesmo havendo homônimo — e homônimo numa folha de milhares de
+   * linhas é questão de tempo.
+   */
+  const chaveNome = module.fields.find((field) => field.key === module.titleField);
   const chaveCpf = module.fields.find((field) => field.key === "cpf");
   const referencia = module.fields.find(
     (field) => field.key === module.referenceField,
@@ -697,9 +708,11 @@ export async function exportImportTemplate(module: ModuleDefinition) {
     (field) =>
       !isInternalCodeField(module, field.key) &&
       field.key !== module.referenceField &&
-      field.key !== "cpf",
+      field.key !== "cpf" &&
+      field.key !== module.titleField,
   );
   const campos = [
+    ...(chaveNome ? [chaveNome] : []),
     ...(chaveCpf ? [chaveCpf] : []),
     ...(referencia ? [referencia] : []),
     ...demais,
@@ -741,10 +754,16 @@ export async function exportImportTemplate(module: ModuleDefinition) {
       },
       {
         value:
-          field.key === "cpf"
-            ? "IDENTIFICA A PESSOA. Se o CPF já existir no sistema, a linha " +
-              "ATUALIZA aquele cadastro em vez de criar outro — é assim que se " +
-              "corrige salário em massa pela planilha. Pode vir com ou sem pontos."
+          field.key === module.titleField
+            ? "IDENTIFICA A PESSOA. Se o nome já existir no sistema, a linha " +
+              "ATUALIZA aquele cadastro em vez de criar outro. Maiúsculas, " +
+              "acentos e espaços a mais não atrapalham. ATENÇÃO: se houver DUAS " +
+              "pessoas com o mesmo nome, nenhuma é atualizada — a linha vira " +
+              "cadastro novo, de propósito, para não alterar a pessoa errada. " +
+              "Nesse caso preencha o CPF ou o código ao lado."
+            : field.key === "cpf"
+            ? "IDENTIFICA A PESSOA, com mais segurança que o nome. Preencha " +
+              "quando houver homônimos. Pode vir com ou sem pontos."
             : field.key === module.referenceField
             ? "CHAVE DE ATUALIZAÇÃO. Deixe em branco para criar um cadastro novo. " +
               "Preencha com o código de um cadastro existente para ATUALIZAR esse " +
@@ -790,6 +809,9 @@ export async function exportModuleWorkbook(
    * arquivo costuma voltar. Alguém exporta, ajusta salários na planilha e
    * reimporta — e sem a referência cada linha voltaria como pessoa nova.
    */
+  const exportName = module.fields.find(
+    (field) => field.key === module.titleField,
+  );
   const exportCpf = module.fields.find((field) => field.key === "cpf");
   const exportReference = module.fields.find(
     (field) => field.key === module.referenceField,
@@ -798,9 +820,11 @@ export async function exportModuleWorkbook(
     (field) =>
       !isInternalCodeField(module, field.key) &&
       field.key !== module.referenceField &&
-      field.key !== "cpf",
+      field.key !== "cpf" &&
+      field.key !== module.titleField,
   );
   const exportFields = [
+    ...(exportName ? [exportName] : []),
     ...(exportCpf ? [exportCpf] : []),
     ...(exportReference ? [exportReference] : []),
     ...exportOthers,
