@@ -1,15 +1,16 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import AccessGate from "./components/AccessGate";
 import SecureBetaAppV131 from "./components/SecureBetaAppV131";
+import SupervisorLoginGate from "./components/SupervisorLoginGate";
 import { masterPointSessionFromHeaders } from "./lib/master-point-access";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
+import { businessStaffSessionFromHeaders } from "./lib/staff-business-access";
 
 // O administrador acessa o sistema completo pelo Google autorizado.
-// A senha master do encarregado libera somente o portal /ponto.
+// O encarregado passa por duas etapas antes de acessar somente o portal /ponto.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -30,5 +31,8 @@ export default async function Home() {
   const masterSession = await masterPointSessionFromHeaders(requestHeaders);
   if (masterSession) redirect("/ponto");
 
-  return <AccessGate nextPath="/" />;
+  const supervisor = await businessStaffSessionFromHeaders(requestHeaders);
+  if (supervisor?.role === "encarregado") redirect("/acesso-ponto");
+
+  return <SupervisorLoginGate />;
 }
