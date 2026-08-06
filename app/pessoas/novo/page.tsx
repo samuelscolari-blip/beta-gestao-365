@@ -53,7 +53,7 @@ export default function NewEmployeePage() {
       return;
     }
     if (!finalCode) {
-      setError("Informe ou gere o código do colaborador.");
+      setError("Informe ou gere a matrícula do colaborador.");
       return;
     }
 
@@ -75,7 +75,7 @@ export default function NewEmployeePage() {
         salaryType: "Mensal",
         contractType: "Prazo indeterminado",
         status: "Ativo",
-        timeClockAccess: "Aguardando cadastro facial",
+        timeClockAccess: "Cadastro ativo",
       };
 
       const response = await fetch("/api/records", {
@@ -108,13 +108,8 @@ export default function NewEmployeePage() {
         );
       }
 
-      setMessage("Colaborador cadastrado. Abrindo o cadastro facial no celular...");
-      const parameters = new URLSearchParams({
-        employeeCode: finalCode,
-        employeeName: name.trim(),
-        sourceRecordId: String(body.record.id || ""),
-      });
-      window.location.assign(`/ponto?${parameters.toString()}`);
+      setMessage("Colaborador cadastrado com sucesso.");
+      window.setTimeout(() => window.location.assign("/"), 650);
     } catch (caught) {
       setError(
         caught instanceof Error
@@ -175,7 +170,7 @@ export default function NewEmployeePage() {
             <div className="employee-icon">+</div>
             <div>
               <h1>Cadastrar colaborador</h1>
-              <p className="subtitle">Cadastro do zero e liberação imediata para o ponto facial</p>
+              <p className="subtitle">Cadastro administrativo do colaborador</p>
             </div>
           </div>
           <Link className="back" href="/">Voltar ao sistema</Link>
@@ -183,7 +178,7 @@ export default function NewEmployeePage() {
 
         <form className="card" onSubmit={submit}>
           <p className="intro">
-            Salve os dados básicos agora. Em seguida, o sistema abrirá o cadastro do rosto no celular e, após a validação, o colaborador já poderá bater o ponto.
+            Cadastre os dados básicos do colaborador. O ponto eletrônico desta etapa funciona por matrícula, senha, horário e localização, sem reconhecimento facial.
           </p>
 
           <div className="grid">
@@ -192,9 +187,9 @@ export default function NewEmployeePage() {
               <input id="name" value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required />
             </div>
             <div className="field">
-              <label htmlFor="code">Código ou matrícula</label>
-              <input id="code" value={employeeCode} onChange={(event) => setEmployeeCode(normalizeCode(event.target.value))} placeholder="Gerado automaticamente" />
-              <span className="code-preview">Código que será usado: <strong>{finalCode || "—"}</strong></span>
+              <label htmlFor="code">Matrícula</label>
+              <input id="code" value={employeeCode} onChange={(event) => setEmployeeCode(normalizeCode(event.target.value))} placeholder="Gerada automaticamente" />
+              <span className="code-preview">Matrícula que será usada: <strong>{finalCode || "—"}</strong></span>
             </div>
             <div className="field">
               <label htmlFor="cpf">CPF</label>
@@ -227,14 +222,14 @@ export default function NewEmployeePage() {
 
           <div className="actions">
             <button type="submit" disabled={busy}>
-              {busy ? "Salvando colaborador..." : "Salvar e cadastrar o rosto"}
+              {busy ? "Salvando colaborador..." : "Salvar colaborador"}
             </button>
           </div>
 
           <div className="flow">
-            <div><strong>1. Cadastro</strong>Nome, código, função e dados básicos.</div>
-            <div><strong>2. Rosto</strong>Câmera frontal e prova de vida no celular.</div>
-            <div><strong>3. Ponto liberado</strong>Entrada, intervalo, retorno e saída.</div>
+            <div><strong>1. Cadastro</strong>Nome, matrícula, função e dados básicos.</div>
+            <div><strong>2. Acesso</strong>Matrícula, senha e perfil definido pela administração.</div>
+            <div><strong>3. Ponto</strong>Registro online ou offline com horário e localização.</div>
           </div>
         </form>
       </div>
