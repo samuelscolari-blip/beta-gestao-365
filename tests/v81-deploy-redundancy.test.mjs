@@ -87,6 +87,41 @@ test("build, testes, D1 e diagnóstico precedem a conclusão", async () => {
   assert.ok(browser > marker);
 });
 
+test("a verificação pós-deploy tenta duas vezes", async () => {
+  /*
+   * Esta verificação falhou quatro vezes por tempo: três com 45s e uma com
+   * 90s, que estourou em 98 segundos. Nas quatro o Worker tinha sido
+   * publicado, e o mesmo diagnóstico disparado à mão logo depois passou.
+   *
+   * A causa não é a espera curta: é a PRIMEIRA visita a um Worker
+   * recém-publicado, que sobe frio. Esticar o cronômetro só empurra o
+   * problema — já foi esticado duas vezes. A segunda tentativa encontra o
+   * Worker quente.
+   *
+   * Se a interface estiver mesmo quebrada, as duas falham e o deploy fica
+   * vermelho: a verificação não foi enfraquecida, só parou de dar alarme
+   * falso.
+   */
+  const content = await deployWorkflow();
+  const passo = content.slice(
+    content.indexOf("Confirmar interface em navegador real"),
+    content.indexOf("Registrar resumo da publicação"),
+  );
+
+  assert.match(passo, /npm run diagnose:live && exit 0/);
+  assert.match(passo, /Worker pode ter subido frio/);
+  assert.equal(
+    (passo.match(/npm run diagnose:live/g) ?? []).length,
+    2,
+    "Precisa haver exatamente duas tentativas do diagnóstico.",
+  );
+  assert.equal(
+    (passo.match(/live-fleet-wide-diagnostic\.mjs/g) ?? []).length,
+    2,
+    "A verificação de frota também precisa de segunda tentativa.",
+  );
+});
+
 test("a verificação pós-deploy espera o Worker esquentar", async () => {
   /*
    * Comprovado, não suposto: com 45s, três publicações seguidas (#113,
