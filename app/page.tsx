@@ -7,9 +7,9 @@ import {
   SOLE_ADMIN_EMAIL,
 } from "./lib/server-access";
 import {
+  businessStaffSessionFromHeaders,
   hasStaffSessionCookie,
-  staffSessionFromHeaders,
-} from "./lib/staff-access";
+} from "./lib/staff-business-access";
 
 // Cadeia preservada pela V131: SecureBetaAppV100 → SecureBetaAppV97 →
 // SecureBetaAppV66 → SecureBetaAppV65. O administrador mantém o sistema
@@ -37,7 +37,7 @@ export default async function Home() {
     return <AccessGate nextPath="/" />;
   }
 
-  const staff = await staffSessionFromHeaders(requestHeaders);
+  const staff = await businessStaffSessionFromHeaders(requestHeaders);
   if (!staff) {
     return (
       <AccessGate
