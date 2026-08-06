@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import AccessGate from "../components/AccessGate";
+import StaffPointIdentityLock from "../components/StaffPointIdentityLock";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
@@ -55,5 +56,13 @@ export default async function TimeClockLayout({
     );
   }
 
-  return children;
+  return (
+    <>
+      <StaffPointIdentityLock
+        registration={staff.registration}
+        name={staff.name}
+      />
+      {children}
+    </>
+  );
 }
