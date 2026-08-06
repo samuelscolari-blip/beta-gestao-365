@@ -60,7 +60,7 @@ export default function AccessGate({ nextPath = "/", message = "" }: Props) {
   const [feedback, setFeedback] = useState(message);
   const [feedbackType, setFeedbackType] = useState<
     "info" | "error" | "success"
-  >(message ? "info" : "info");
+  >("info");
 
   const handleGoogleCredential = useCallback(
     async (response: GoogleCredentialResponse) => {
@@ -242,20 +242,21 @@ export default function AccessGate({ nextPath = "/", message = "" }: Props) {
             <h1>Beta Gestão 365</h1>
             <p>
               Ambiente fechado para a operação da empresa. O administrador entra
-              com o Google autorizado; encarregados entram com matrícula e senha.
+              com o Google autorizado; encarregado e colaboradores entram com
+              matrícula e senha.
             </p>
           </div>
           <div className="access-security">
             <div>✓ Sessão protegida no próprio dispositivo</div>
-            <div>✓ Encarregado com acesso limitado</div>
-            <div>✓ Administrador preservado pelo e-mail autorizado</div>
+            <div>✓ Permissões diferentes por perfil</div>
+            <div>✓ Ponto online ou offline com identificação</div>
           </div>
         </section>
 
         <section className="access-card">
           <small>ÁREA RESTRITA</small>
           <h2>Acessar o sistema</h2>
-          <p>Use os dados fornecidos pela administração da empresa.</p>
+          <p>Use a matrícula e a senha fornecidas pela administração.</p>
 
           <form className="access-form" onSubmit={loginStaff}>
             <div className="field">
@@ -263,7 +264,9 @@ export default function AccessGate({ nextPath = "/", message = "" }: Props) {
               <input
                 id="registration"
                 value={registration}
-                onChange={(event) => setRegistration(event.target.value.toUpperCase())}
+                onChange={(event) =>
+                  setRegistration(event.target.value.toUpperCase())
+                }
                 placeholder="Ex.: ENC-001"
                 autoComplete="username"
                 required
@@ -290,7 +293,7 @@ export default function AccessGate({ nextPath = "/", message = "" }: Props) {
               </div>
             </div>
             <button className="login-button" type="submit" disabled={busy}>
-              {busy ? "Validando acesso..." : "Entrar como encarregado"}
+              {busy ? "Validando acesso..." : "Entrar com matrícula"}
             </button>
           </form>
 
