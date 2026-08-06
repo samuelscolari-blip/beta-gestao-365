@@ -2,33 +2,20 @@
 
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
-
-function normalizeCode(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toUpperCase()
-    .replace(/[^A-Z0-9_-]/g, "")
-    .slice(0, 40);
-}
-
-function generatedCode(name: string) {
-  const initials = name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0] || "")
-    .join("")
-    .toUpperCase();
-  return normalizeCode(`${initials || "COLAB"}-${Date.now().toString().slice(-6)}`);
-}
+import {
+  formatCpf,
+  hasCompleteCpf,
+  registrationFromCpf,
+} from "../../lib/employee-registration";
 
 export default function NewEmployeePage() {
   const [name, setName] = useState("");
-  const [employeeCode, setEmployeeCode] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [accessRole, setAccessRole] = useState<"encarregado" | "colaborador">(
+    "colaborador",
+  );
   const [work, setWork] = useState("");
   const [admissionDate, setAdmissionDate] = useState(
     new Date().toISOString().slice(0, 10),
@@ -38,10 +25,7 @@ export default function NewEmployeePage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const finalCode = useMemo(
-    () => normalizeCode(employeeCode) || generatedCode(name),
-    [employeeCode, name],
-  );
+  const registration = useMemo(() => registrationFromCpf(cpf), [cpf]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -52,8 +36,12 @@ export default function NewEmployeePage() {
       setError("Informe o nome completo do colaborador.");
       return;
     }
-    if (!finalCode) {
-      setError("Informe ou gere a matrícula do colaborador.");
+    if (!hasCompleteCpf(cpf)) {
+      setError("Informe os 11 dígitos do CPF para gerar a matrícula.");
+      return;
+    }
+    if (registration.length !== 5) {
+      setError("Não foi possível gerar a matrícula com o CPF informado.");
       return;
     }
 
@@ -63,19 +51,21 @@ export default function NewEmployeePage() {
         salary.replace(/\./g, "").replace(",", ".").replace(/[^0-9.-]/g, ""),
       );
       const payload = {
-        employeeCode: finalCode,
-        registration: finalCode,
+        employeeCode: registration,
+        registration,
+        registrationRule: "Cinco primeiros dígitos do CPF",
         name: name.trim(),
         cpf: cpf.trim(),
         phone: phone.trim(),
-        role: role.trim(),
+        role: jobTitle.trim(),
+        accessRole,
         work: work.trim(),
         admissionDate,
         salary: Number.isFinite(amount) ? amount : 0,
         salaryType: "Mensal",
         contractType: "Prazo indeterminado",
         status: "Ativo",
-        timeClockAccess: "Cadastro ativo",
+        timeClockAccess: "Senha master do encarregado nesta etapa",
       };
 
       const response = await fetch("/api/records", {
@@ -86,7 +76,7 @@ export default function NewEmployeePage() {
           record: {
             module: "people",
             title: name.trim(),
-            reference: finalCode,
+            reference: registration,
             status: "Ativo",
             recordDate: admissionDate,
             amount: Number.isFinite(amount) ? amount : 0,
@@ -108,8 +98,9 @@ export default function NewEmployeePage() {
         );
       }
 
-      setMessage("Colaborador cadastrado com sucesso.");
-      window.setTimeout(() => window.location.assign("/"), 650);
+      setMessage(
+        `Colaborador cadastrado com a matrícula ${registration}. O acesso ao ponto usa a senha master nesta etapa.`,
+      );
     } catch (caught) {
       setError(
         caught instanceof Error
@@ -141,10 +132,11 @@ export default function NewEmployeePage() {
         .field { display: grid; gap: 7px; }
         .field.wide { grid-column: 1 / -1; }
         label { font-size: 13px; font-weight: 850; color: #405571; }
-        input { width: 100%; min-width: 0; border: 1px solid #c9d6e6; border-radius: 12px; padding: 12px 13px; background: white; color: #172b4d; outline: none; }
-        input:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.13); }
-        .code-preview { margin-top: 6px; color: #5d6f89; font-size: 12px; }
-        .code-preview strong { color: #0b2b5f; }
+        input, select { width: 100%; min-width: 0; border: 1px solid #c9d6e6; border-radius: 12px; padding: 12px 13px; background: white; color: #172b4d; outline: none; }
+        input:focus, select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.13); }
+        input[readonly] { background: #f2f6fb; color: #395473; font-weight: 900; }
+        .code-preview { margin-top: 4px; color: #5d6f89; font-size: 12px; line-height: 1.4; }
+        .rule-note { grid-column: 1 / -1; padding: 12px 13px; border: 1px solid #fed7aa; border-radius: 13px; color: #9a3412; background: #fff7ed; font-size: 13px; line-height: 1.45; }
         .feedback { margin-top: 15px; border-radius: 13px; padding: 12px 13px; font-size: 14px; }
         .feedback.error { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; }
         .feedback.success { color: #14532d; background: #ecfdf3; border: 1px solid #bbf7d0; }
@@ -158,7 +150,7 @@ export default function NewEmployeePage() {
           .new-employee-page { padding: 12px; }
           .employee-header { align-items: flex-start; }
           .grid, .flow { grid-template-columns: 1fr; }
-          .field.wide { grid-column: auto; }
+          .field.wide, .rule-note { grid-column: auto; }
           .card { padding: 16px; border-radius: 18px; }
           .back { padding: 9px 11px; font-size: 13px; }
         }
@@ -170,7 +162,7 @@ export default function NewEmployeePage() {
             <div className="employee-icon">+</div>
             <div>
               <h1>Cadastrar colaborador</h1>
-              <p className="subtitle">Cadastro administrativo do colaborador</p>
+              <p className="subtitle">CPF, matrícula automática e perfil no ponto</p>
             </div>
           </div>
           <Link className="back" href="/">Voltar ao sistema</Link>
@@ -178,42 +170,113 @@ export default function NewEmployeePage() {
 
         <form className="card" onSubmit={submit}>
           <p className="intro">
-            Cadastre os dados básicos do colaborador. O ponto eletrônico desta etapa funciona por matrícula, senha, horário e localização, sem reconhecimento facial.
+            A matrícula é uma regra do negócio: sempre os cinco primeiros
+            dígitos do CPF. Ela é calculada automaticamente e não pode ser
+            alterada manualmente.
           </p>
 
           <div className="grid">
             <div className="field wide">
               <label htmlFor="name">Nome completo *</label>
-              <input id="name" value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required />
+              <input
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                autoComplete="name"
+                required
+              />
             </div>
             <div className="field">
-              <label htmlFor="code">Matrícula</label>
-              <input id="code" value={employeeCode} onChange={(event) => setEmployeeCode(normalizeCode(event.target.value))} placeholder="Gerada automaticamente" />
-              <span className="code-preview">Matrícula que será usada: <strong>{finalCode || "—"}</strong></span>
+              <label htmlFor="cpf">CPF *</label>
+              <input
+                id="cpf"
+                value={formatCpf(cpf)}
+                onChange={(event) => setCpf(event.target.value)}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="000.000.000-00"
+                required
+              />
             </div>
             <div className="field">
-              <label htmlFor="cpf">CPF</label>
-              <input id="cpf" value={cpf} onChange={(event) => setCpf(event.target.value)} inputMode="numeric" autoComplete="off" />
+              <label htmlFor="registration">Matrícula automática</label>
+              <input
+                id="registration"
+                value={registration}
+                readOnly
+                placeholder="Gerada pelo CPF"
+              />
+              <span className="code-preview">
+                Cinco primeiros dígitos numéricos do CPF informado.
+              </span>
+            </div>
+            <div className="field">
+              <label htmlFor="access-role">Perfil no ponto</label>
+              <select
+                id="access-role"
+                value={accessRole}
+                onChange={(event) =>
+                  setAccessRole(
+                    event.target.value === "encarregado"
+                      ? "encarregado"
+                      : "colaborador",
+                  )
+                }
+              >
+                <option value="colaborador">Colaborador</option>
+                <option value="encarregado">Encarregado</option>
+              </select>
             </div>
             <div className="field">
               <label htmlFor="phone">Telefone</label>
-              <input id="phone" value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" autoComplete="tel" />
+              <input
+                id="phone"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                inputMode="tel"
+                autoComplete="tel"
+              />
             </div>
             <div className="field">
-              <label htmlFor="role">Cargo</label>
-              <input id="role" value={role} onChange={(event) => setRole(event.target.value)} placeholder="Ex.: Pedreiro" />
+              <label htmlFor="job-title">Cargo</label>
+              <input
+                id="job-title"
+                value={jobTitle}
+                onChange={(event) => setJobTitle(event.target.value)}
+                placeholder="Ex.: Pedreiro"
+              />
             </div>
             <div className="field">
               <label htmlFor="work">Obra / local de trabalho</label>
-              <input id="work" value={work} onChange={(event) => setWork(event.target.value)} />
+              <input
+                id="work"
+                value={work}
+                onChange={(event) => setWork(event.target.value)}
+              />
             </div>
             <div className="field">
               <label htmlFor="admission">Data de admissão</label>
-              <input id="admission" type="date" value={admissionDate} onChange={(event) => setAdmissionDate(event.target.value)} />
+              <input
+                id="admission"
+                type="date"
+                value={admissionDate}
+                onChange={(event) => setAdmissionDate(event.target.value)}
+              />
             </div>
             <div className="field">
               <label htmlFor="salary">Salário mensal</label>
-              <input id="salary" value={salary} onChange={(event) => setSalary(event.target.value)} inputMode="decimal" placeholder="Ex.: 2.500,00" />
+              <input
+                id="salary"
+                value={salary}
+                onChange={(event) => setSalary(event.target.value)}
+                inputMode="decimal"
+                placeholder="Ex.: 2.500,00"
+              />
+            </div>
+            <div className="rule-note">
+              <strong>Regra temporária de acesso:</strong> o encarregado escolhe
+              o CPF do colaborador e usa a senha master. A senha individual e a
+              recuperação por e-mail ou telefone serão adicionadas depois.
             </div>
           </div>
 
@@ -227,9 +290,15 @@ export default function NewEmployeePage() {
           </div>
 
           <div className="flow">
-            <div><strong>1. Cadastro</strong>Nome, matrícula, função e dados básicos.</div>
-            <div><strong>2. Acesso</strong>Matrícula, senha e perfil definido pela administração.</div>
-            <div><strong>3. Ponto</strong>Registro online ou offline com horário e localização.</div>
+            <div>
+              <strong>1. CPF</strong>Matrícula automática com cinco dígitos.
+            </div>
+            <div>
+              <strong>2. Senha master</strong>Acesso simples do encarregado nesta etapa.
+            </div>
+            <div>
+              <strong>3. Ponto</strong>Registro online ou offline com localização.
+            </div>
           </div>
         </form>
       </div>
