@@ -46,10 +46,22 @@ test("o cabeçalho do modelo é reconhecido pelo próprio importador", async () 
       }
     }
 
-    /* Exatamente as colunas que `exportImportTemplate` escreve. */
-    const colunasDoModelo = people.fields
-      .filter((campo) => !isInternalCodeField(people, campo.key))
-      .map((campo) => campo.label);
+    /*
+     * Exatamente as colunas que `exportImportTemplate` escreve: a chave de
+     * atualização primeiro, depois as demais. Espelhar a regra antiga aqui
+     * deixaria a coluna mais importante fora da verificação.
+     */
+    const chave = people.fields.find(
+      (campo) => campo.key === people.referenceField,
+    );
+    const colunasDoModelo = [
+      ...(chave ? [chave] : []),
+      ...people.fields.filter(
+        (campo) =>
+          !isInternalCodeField(people, campo.key) &&
+          campo.key !== people.referenceField,
+      ),
+    ].map((campo) => campo.label);
 
     const orfas = colunasDoModelo.filter(
       (rotulo) => !conhecidos.has(normalizeHeader(rotulo)),
@@ -170,5 +182,58 @@ test("as verbas exibidas têm código, e as medidas têm referência", async () 
       `Alíquota efetiva fora da faixa possível: ${inss.reference}. Acima de ` +
         "14 indicaria que a progressão não foi aplicada.",
     );
+  });
+});
+
+test("a planilha leva a chave que evita duplicar na reimportação", async () => {
+  /*
+   * O caso de uso real: exportar o quadro, ajustar salários na planilha e
+   * subir de volta.
+   *
+   * A importação já sabe atualizar em vez de duplicar — ela procura um
+   * registro com a mesma `reference`, que sai de `payload[referenceField]`.
+   * Mas o código do colaborador é marcado como "código interno" e por isso
+   * era filtrado da planilha. Sem ele, cada linha voltava sem referência e
+   * virava gente nova: o quadro inteiro duplicado, em silêncio.
+   *
+   * A regra de ocultar códigos internos vale para a TELA. Na planilha, esse
+   * campo é a chave.
+   */
+  await comServidor(async (server) => {
+    const { moduleMap } = await server.ssrLoadModule("/app/lib/modules.ts");
+    const planilha = await server.ssrLoadModule("/app/lib/spreadsheet.ts");
+
+    const people = moduleMap.people;
+    assert.equal(people.referenceField, "employeeCode");
+
+    /* As duas planilhas precisam começar pela chave. */
+    const fonte = planilha.exportImportTemplate.toString();
+    assert.match(
+      fonte,
+      /field\.key === module\.referenceField/,
+      "O modelo precisa incluir o campo de referência.",
+    );
+    assert.match(
+      planilha.exportModuleWorkbook.toString(),
+      /field\.key === module\.referenceField/,
+      "A exportação precisa incluir o campo de referência.",
+    );
+  });
+});
+
+test("a coluna-chave explica que serve para atualizar", async () => {
+  /*
+   * Uma coluna chamada "Código do colaborador" numa planilha em branco
+   * convida a inventar um código. A instrução precisa dizer o que acontece
+   * em cada caso — em branco cria, preenchido atualiza —, senão a pessoa
+   * escolhe errado sem saber que escolheu.
+   */
+  await comServidor(async (server) => {
+    const planilha = await server.ssrLoadModule("/app/lib/spreadsheet.ts");
+    const fonte = planilha.exportImportTemplate.toString();
+
+    assert.match(fonte, /CHAVE DE ATUALIZAÇÃO/);
+    assert.match(fonte, /Deixe em branco para criar/);
+    assert.match(fonte, /ATUALIZAR/);
   });
 });

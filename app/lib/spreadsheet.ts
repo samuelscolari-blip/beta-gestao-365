@@ -628,6 +628,7 @@ function excelCell(value: unknown, fieldType: string) {
  */
 const CAMPOS_QUE_O_CALCULO_EXIGE: Record<string, string[]> = {
   people: [
+    "cpf",
     "name",
     "salary",
     "monthlyHours",
@@ -667,9 +668,42 @@ function exemploDeCampo(field: ModuleField): string {
  * cálculo funcionar.
  */
 export async function exportImportTemplate(module: ModuleDefinition) {
-  const campos = module.fields.filter(
-    (field) => !isInternalCodeField(module, field.key),
+  /*
+   * O campo de referência entra na planilha, mesmo sendo "código interno".
+   *
+   * A regra de ocultar códigos internos vale para a TELA. Aqui ele é a
+   * CHAVE: a importação atualiza um registro existente quando reconhece a
+   * referência, e cria um novo quando não reconhece. Sem essa coluna,
+   * exportar, mudar o salário e reimportar duplicaria o quadro inteiro —
+   * silenciosamente, porque cada linha seria vista como gente nova.
+   */
+  /*
+   * O CPF abre a planilha, e não o código do sistema.
+   *
+   * A importação identifica a pessoa pelo código OU pelo CPF. O código é
+   * gerado aqui dentro, então quem monta a planilha no RH não o tem — para
+   * usá-lo teria que exportar antes só para descobrir o código de cada um,
+   * o que inviabiliza uma folha de milhares de linhas. O CPF já está na
+   * mão de quem preenche.
+   *
+   * O código vem em seguida, preenchido na exportação, para quem prefere
+   * trabalhar a partir do que o sistema já tem.
+   */
+  const chaveCpf = module.fields.find((field) => field.key === "cpf");
+  const referencia = module.fields.find(
+    (field) => field.key === module.referenceField,
   );
+  const demais = module.fields.filter(
+    (field) =>
+      !isInternalCodeField(module, field.key) &&
+      field.key !== module.referenceField &&
+      field.key !== "cpf",
+  );
+  const campos = [
+    ...(chaveCpf ? [chaveCpf] : []),
+    ...(referencia ? [referencia] : []),
+    ...demais,
+  ];
   const exigidos = new Set(CAMPOS_QUE_O_CALCULO_EXIGE[module.id] ?? []);
 
   const cabecalho = campos.map((field) => ({
@@ -707,10 +741,19 @@ export async function exportImportTemplate(module: ModuleDefinition) {
       },
       {
         value:
-          field.help ??
-          (field.options?.length
-            ? `Use um destes: ${field.options.join(", ")}`
-            : field.placeholder ?? ""),
+          field.key === "cpf"
+            ? "IDENTIFICA A PESSOA. Se o CPF já existir no sistema, a linha " +
+              "ATUALIZA aquele cadastro em vez de criar outro — é assim que se " +
+              "corrige salário em massa pela planilha. Pode vir com ou sem pontos."
+            : field.key === module.referenceField
+            ? "CHAVE DE ATUALIZAÇÃO. Deixe em branco para criar um cadastro novo. " +
+              "Preencha com o código de um cadastro existente para ATUALIZAR esse " +
+              "cadastro em vez de criar outro — é assim que se corrige um salário " +
+              "pela planilha sem duplicar a pessoa."
+            : (field.help ??
+              (field.options?.length
+                ? `Use um destes: ${field.options.join(", ")}`
+                : field.placeholder ?? "")),
         type: String,
       },
     ]),
@@ -742,9 +785,26 @@ export async function exportModuleWorkbook(
   module: ModuleDefinition,
   records: Array<{ payload: Record<string, unknown> }>,
 ) {
-  const exportFields = module.fields.filter(
-    (field) => !isInternalCodeField(module, field.key),
+  /*
+   * A exportação leva a chave junto pelo mesmo motivo do modelo: este
+   * arquivo costuma voltar. Alguém exporta, ajusta salários na planilha e
+   * reimporta — e sem a referência cada linha voltaria como pessoa nova.
+   */
+  const exportCpf = module.fields.find((field) => field.key === "cpf");
+  const exportReference = module.fields.find(
+    (field) => field.key === module.referenceField,
   );
+  const exportOthers = module.fields.filter(
+    (field) =>
+      !isInternalCodeField(module, field.key) &&
+      field.key !== module.referenceField &&
+      field.key !== "cpf",
+  );
+  const exportFields = [
+    ...(exportCpf ? [exportCpf] : []),
+    ...(exportReference ? [exportReference] : []),
+    ...exportOthers,
+  ];
   const header = exportFields.map((field) => ({
     value: field.label,
     fontWeight: "bold" as const,
