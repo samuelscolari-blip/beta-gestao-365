@@ -4808,6 +4808,71 @@
   background: #f3f7f9;
 }
 
+/*
+ * Legenda da coluna Referência.
+ *
+ * Fica VISÍVEL, e não dentro do bloco recolhido abaixo, porque é
+ * justamente quem está aprendendo a conferir a folha que precisa dela — e
+ * essa pessoa não sabe que existe algo a expandir.
+ */
+.statement-hint {
+  margin: 14px 18px 0;
+  padding: 11px 14px;
+  border: 1px solid #d9e6ec;
+  border-left: 3px solid #1477c9;
+  border-radius: 10px;
+  color: #45616e;
+  background: #f7fbfe;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.statement-hint strong {
+  color: #123f5c;
+}
+
+.statement-hint em {
+  padding: 1px 5px;
+  border-radius: 5px;
+  color: #0f5b8f;
+  background: #e6f2fb;
+  font-style: normal;
+  font-weight: 750;
+}
+
+/* O código da rubrica: tabular, para alinhar na leitura de cima para baixo. */
+.statement-code {
+  color: #5c7b88;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.statement-reference {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Rótulo acima do número, para o total não quebrar no meio do valor. */
+.statement-total {
+  white-space: nowrap;
+}
+
+.statement-total span {
+  display: block;
+  color: #6b8894;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.statement-total strong {
+  color: #123f5c;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
 .statement-rules {
   margin: 14px 18px 0;
   border: 1px solid #dce5e9;
