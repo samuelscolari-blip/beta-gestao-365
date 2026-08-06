@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 
+const access = fs.readFileSync("app/components/AccessGate.tsx", "utf8");
 const clockPage = fs.readFileSync("app/ponto/page.tsx", "utf8");
 const clockApi = fs.readFileSync("app/api/time-clock/route.js", "utf8");
+const masterAccess = fs.readFileSync("app/lib/master-point-access.ts", "utf8");
 const serviceWorker = fs.readFileSync("public/ponto-sw.js", "utf8");
 const manifest = fs.readFileSync("public/ponto.webmanifest", "utf8");
 
@@ -12,6 +14,14 @@ test("ponto funciona sem reconhecimento facial ou câmera", () => {
   assert.doesNotMatch(clockApi, /FACE_MATCH_THRESHOLD|faceSimilarity|evidence_photo/);
   assert.match(clockPage, /Ponto eletrônico operacional sem reconhecimento facial/);
   assert.match(clockPage, /Bater ponto agora/);
+});
+
+test("login seleciona CPF e confirma o nome do colaborador", () => {
+  assert.match(access, /CPF do colaborador/);
+  assert.match(access, /selectedEmployee\.name/);
+  assert.match(access, /formattedCpf/);
+  assert.match(access, /beta-clock-selected-v132/);
+  assert.match(masterAccess, /selectedEmployeeRegistration/);
 });
 
 test("batida preserva horário e geolocalização", () => {
@@ -24,21 +34,15 @@ test("batida preserva horário e geolocalização", () => {
   assert.match(clockApi, /accuracy REAL/);
 });
 
-test("encarregado pode registrar para colaboradores com autoria", () => {
+test("encarregado master pode registrar para qualquer colaborador com autoria", () => {
   assert.match(clockPage, /Quem está batendo o ponto\?/);
   assert.match(clockPage, /O lançamento ficará identificado/);
+  assert.match(clockApi, /masterPointSessionFromHeaders/);
+  assert.match(clockApi, /POINT_TEST_EMPLOYEES/);
   assert.match(clockApi, /actor_registration/);
   assert.match(clockApi, /actor_name/);
   assert.match(clockApi, /actor_role/);
-  assert.match(clockApi, /actor\.role === "administrador" \|\| actor\.role === "encarregado"/);
   assert.match(clockApi, /Ponto de \$\{employee\.name\} registrado/);
-});
-
-test("colaborador fica restrito ao próprio ponto", () => {
-  assert.match(clockPage, /actor\.role === "colaborador"/);
-  assert.match(clockPage, /identidade fixa nesta sessão/);
-  assert.match(clockApi, /actor\.registration === employeeCode/);
-  assert.match(clockApi, /O colaborador só pode registrar o próprio ponto/);
 });
 
 test("fila offline usa clientEventId e servidor impede duplicidade", () => {
