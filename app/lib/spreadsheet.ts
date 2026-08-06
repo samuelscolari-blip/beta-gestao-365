@@ -10,6 +10,7 @@ import {
   moduleDefinitions,
   normalizeHeader,
   type ModuleDefinition,
+  type ModuleField,
 } from "./modules";
 import { validateRecordPayload } from "./record-validation";
 import { SheetAnalyzer } from "./sheet-analyzer";
@@ -614,6 +615,127 @@ function excelCell(value: unknown, fieldType: string) {
     return { value: Number(value || 0), type: Number };
   }
   return String(value ?? "");
+}
+
+
+/*
+ * Campos sem os quais a folha e a rescisão não calculam.
+ *
+ * O modelo os marca em destaque porque a diferença entre "cadastro
+ * preenchido" e "cadastro que calcula" não é óbvia para quem preenche a
+ * planilha: falta o salário e o contracheque sai zerado; falta a data de
+ * admissão e a rescisão não tem de onde contar o aviso prévio.
+ */
+const CAMPOS_QUE_O_CALCULO_EXIGE: Record<string, string[]> = {
+  people: [
+    "name",
+    "salary",
+    "monthlyHours",
+    "admissionDate",
+    "status",
+    "role",
+    "dependents",
+  ],
+};
+
+/** Um exemplo por tipo, para o preenchimento não começar do zero. */
+function exemploDeCampo(field: ModuleField): string {
+  if (field.options?.length) return field.options[Math.min(1, field.options.length - 1)];
+  if (field.placeholder) return field.placeholder.replace(/^Ex\.:\s*/i, "");
+  switch (field.type) {
+    case "date":
+      return "2026-01-15";
+    case "number":
+      return "0";
+    case "url":
+      return "https://exemplo.com/documento";
+    default:
+      return "";
+  }
+}
+
+/**
+ * Planilha-modelo para preencher e importar.
+ *
+ * Existe porque o botão de exportar só serve quando JÁ existem registros —
+ * e quem mais precisa do modelo é justamente quem ainda não tem nenhum. Sem
+ * ele, preencher exige adivinhar os nomes das colunas, e uma coluna com
+ * nome errado é simplesmente ignorada na importação, em silêncio.
+ *
+ * O cabeçalho usa exatamente os rótulos que o importador reconhece, e a
+ * segunda aba explica cada coluna, incluindo quais são obrigatórias para o
+ * cálculo funcionar.
+ */
+export async function exportImportTemplate(module: ModuleDefinition) {
+  const campos = module.fields.filter(
+    (field) => !isInternalCodeField(module, field.key),
+  );
+  const exigidos = new Set(CAMPOS_QUE_O_CALCULO_EXIGE[module.id] ?? []);
+
+  const cabecalho = campos.map((field) => ({
+    value: field.label,
+    fontWeight: "bold" as const,
+    textColor: "#ffffff",
+    /* Verde nas colunas que o cálculo exige; azul nas demais. */
+    backgroundColor: exigidos.has(field.key) ? "#0f766e" : "#17324d",
+    wrap: true,
+  }));
+
+  const exemplo = campos.map((field) => ({
+    value: exemploDeCampo(field),
+    type: String,
+    textColor: "#8a97a3",
+    fontStyle: "italic" as const,
+  }));
+
+  const instrucoes = [
+    [
+      { value: "Coluna", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
+      { value: "Precisa para calcular?", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
+      { value: "O que preencher", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
+    ],
+    ...campos.map((field) => [
+      { value: field.label, type: String },
+      {
+        value: exigidos.has(field.key)
+          ? "SIM"
+          : field.required
+            ? "Obrigatório no cadastro"
+            : "Opcional",
+        type: String,
+        fontWeight: exigidos.has(field.key) ? ("bold" as const) : undefined,
+      },
+      {
+        value:
+          field.help ??
+          (field.options?.length
+            ? `Use um destes: ${field.options.join(", ")}`
+            : field.placeholder ?? ""),
+        type: String,
+      },
+    ]),
+  ] as SheetData;
+
+  await writeXlsxFile(
+    [
+      {
+        sheet: module.shortLabel.slice(0, 31),
+        data: [cabecalho, exemplo] as SheetData,
+        columns: campos.map((field) => ({
+          width: field.wide ? 32 : Math.max(16, Math.min(28, field.label.length + 4)),
+        })),
+        stickyRowsCount: 1,
+      },
+      {
+        sheet: "Como preencher",
+        data: instrucoes,
+        columns: [{ width: 34 }, { width: 24 }, { width: 80 }],
+        stickyRowsCount: 1,
+      },
+    ],
+  ).toFile(
+    `Modelo_Importacao_${module.shortLabel.replace(/\s+/g, "_")}.xlsx`,
+  );
 }
 
 export async function exportModuleWorkbook(
