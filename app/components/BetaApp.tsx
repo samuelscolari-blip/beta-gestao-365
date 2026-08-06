@@ -25,7 +25,6 @@ import {
   type ModuleField,
 } from "../lib/modules";
 import { NOVO_REGISTRO_EVENTO } from "../lib/quick-actions";
-import BrandMark from "../ui/BrandMark/BrandMark";
 import FieldLeaveSummary from "../ui/FieldLeaveSummary/FieldLeaveSummary";
 import TrainingsSummary from "../ui/TrainingsSummary/TrainingsSummary";
 import TrainingsTabs from "../ui/TrainingsTabs/TrainingsTabs";
@@ -209,7 +208,16 @@ const InternalCodeVisibilityContext =
 const defaultSettings: SystemSettings = {
   companyName: "Beta Construtora",
   systemName: "Beta Gestão 365",
-  logoUrl: "",
+  /*
+   * O logotipo da Beta Construtora, recortado do arquivo oficial e reduzido
+   * a 160px — o quádruplo do tamanho em que aparece, para ficar nítido em
+   * tela retina. O original tem 2816x1536 e 7,9 MB: serviria de cartaz, mas
+   * seriam 7,9 MB baixados a cada abertura de página para preencher 40
+   * pixels de barra lateral.
+   *
+   * Continua sendo um campo editável: trocar a marca não exige publicação.
+   */
+  logoUrl: "/logo-beta.png",
   primaryColor: "#173f58",
   welcomeMessage:
     "Acompanhe compromissos, pessoas, máquinas e documentos em um só lugar.",
@@ -9199,11 +9207,11 @@ throw new Error(
             />
           ) : (
             /*
-             * O arquivo enviado em Configurações tem precedência. Sem ele,
-             * vale a marca desenhada — que é o logotipo da empresa, e não
-             * mais a letra grega de placeholder.
+             * Só chega aqui quem apagar o campo Logotipo. O padrão aponta
+             * para o arquivo da empresa; a letra grega fica como último
+             * recurso, para a barra nunca ficar sem marca nenhuma.
              */
-            <BrandMark className="brand-mark-svg" title={settings.companyName} />
+            <span className="brand-mark">β</span>
           )}
           <span>
             {/*
