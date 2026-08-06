@@ -60,7 +60,7 @@ test("encarregado master pode alternar entre todos com autoria", () => {
   assert.match(clockApi, /masterPointSessionFromHeaders/);
   assert.match(clockApi, /POINT_TEST_EMPLOYEES/);
   assert.match(clockApi, /actorRegistration/);
-  assert.match(clockApi, /Encarregado autorizado/);
+  assert.match(masterAccess, /Encarregado autorizado/);
   assert.match(clockApi, /actor_registration/);
   assert.match(clockApi, /actor_name/);
   assert.match(clockApi, /actor_role/);
