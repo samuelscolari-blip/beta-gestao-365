@@ -292,7 +292,26 @@ function toPublicRecord<
 
 export async function GET(request: Request) {
   try {
-    await ensureDemoRecords();
+    /*
+     * A semeadura dos exemplos NÃO pode derrubar a leitura.
+     *
+     * Ela rodava dentro do mesmo `try` da consulta, e o que aconteceu foi
+     * isto: um registro fictício de treinamento passou a ser recusado por
+     * "Módulo inválido", a recusa derrubou a semeadura inteira, a resposta
+     * virou erro — e o sistema TODO ficou vazio. Obras, máquinas, contas,
+     * pessoas: tudo sumiu da tela por causa de um exemplo.
+     *
+     * Exemplo é conforto, dado real é o serviço. Se o conforto falhar, o
+     * serviço continua: a falha vai para o log e a consulta segue.
+     */
+    try {
+      await ensureDemoRecords();
+    } catch (error) {
+      console.error(
+        "Falha ao semear os registros de exemplo. A consulta segue com os dados reais.",
+        error,
+      );
+    }
     const url = new URL(request.url);
     if (url.searchParams.get("view") === "imports") {
       if (!isSoleAdmin(request)) {
