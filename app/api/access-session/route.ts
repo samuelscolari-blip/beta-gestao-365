@@ -2,6 +2,7 @@ import {
   authenticatedEmail,
   SOLE_ADMIN_EMAIL,
 } from "../../lib/server-access";
+import { masterPointSessionFromHeaders } from "../../lib/master-point-access";
 import { businessStaffSessionFromHeaders } from "../../lib/staff-business-access";
 
 export async function GET(request: Request) {
@@ -13,6 +14,22 @@ export async function GET(request: Request) {
         role: "administrador",
         name: "Samuel Scolari",
         email,
+      },
+      { headers: { "cache-control": "no-store" } },
+    );
+  }
+
+  const master = await masterPointSessionFromHeaders(request.headers);
+  if (master) {
+    return Response.json(
+      {
+        authenticated: true,
+        role: master.actorRole,
+        name: master.actorName,
+        registration: master.actorRegistration,
+        selectedEmployeeRegistration: master.selectedEmployeeRegistration,
+        selectedEmployeeName: master.selectedEmployeeName,
+        expiresAt: master.expiresAt,
       },
       { headers: { "cache-control": "no-store" } },
     );
