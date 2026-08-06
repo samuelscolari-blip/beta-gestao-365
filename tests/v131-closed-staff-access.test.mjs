@@ -46,7 +46,7 @@ test("login possui sessão curta, bloqueio e logout", () => {
   assert.match(staffAccess, /locked_until/);
   assert.match(staffAccess, /failedAttempts >= 5/);
   assert.match(staffLogin, /staffSessionCookie/);
-  assert.match(staffLogin, /HttpOnly/);
+  assert.match(staffAccess, /HttpOnly/);
   assert.match(staffLogout, /clearStaffSessionCookie/);
 });
 
