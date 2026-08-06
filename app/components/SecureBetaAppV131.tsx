@@ -75,89 +75,103 @@ export default function SecureBetaAppV131({
         isAdmin={isAdmin}
       />
 
+      <style>{`
+        .v131-session-card,
+        .v131-people-actions {
+          position: fixed;
+          z-index: 1300;
+          padding: 15px;
+          border: 1px solid #bfd4ec;
+          border-radius: 18px;
+          background: rgba(255,255,255,.98);
+          box-shadow: 0 18px 50px rgba(20,48,84,.2);
+          color: #17345c;
+        }
+        .v131-session-card {
+          left: 20px;
+          bottom: 18px;
+          width: min(430px, calc(100vw - 40px));
+          display: grid;
+          grid-template-columns: minmax(0,1fr) auto;
+          gap: 12px;
+          align-items: center;
+        }
+        .v131-people-actions {
+          right: 28px;
+          bottom: 24px;
+          width: min(390px, calc(100vw - 32px));
+        }
+        .v131-session-card strong,
+        .v131-people-actions strong {
+          display: block;
+          color: #0b2b5f;
+          font-size: 15px;
+          margin-bottom: 3px;
+        }
+        .v131-session-card small,
+        .v131-people-actions p {
+          color: #61748d;
+          font-size: 12px;
+          line-height: 1.4;
+        }
+        .v131-people-actions p { margin: 0 0 12px; }
+        .v131-actions {
+          display: flex;
+          gap: 8px;
+        }
+        .v131-actions a,
+        .v131-actions button {
+          flex: 1;
+          min-height: 40px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 11px;
+          padding: 9px 11px;
+          font: inherit;
+          font-size: 12px;
+          font-weight: 850;
+          text-decoration: none;
+          text-align: center;
+          cursor: pointer;
+        }
+        .v131-actions a:first-child {
+          color: white;
+          border: 1px solid #1264d5;
+          background: #1264d5;
+        }
+        .v131-actions a:not(:first-child),
+        .v131-actions button {
+          color: #24446d;
+          border: 1px solid #c8d7e8;
+          background: white;
+        }
+        .v131-actions button:disabled {
+          opacity: .6;
+          cursor: not-allowed;
+        }
+        @media (max-width: 720px) {
+          .v131-session-card,
+          .v131-people-actions {
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            width: auto;
+          }
+          .v131-session-card { grid-template-columns: 1fr; }
+          .v131-actions { flex-direction: column; }
+        }
+      `}</style>
+
       {!isAdmin && accessRole === "encarregado" ? (
-        <aside
-          className="v131-staff-session"
-          aria-label="Sessão do encarregado"
-        >
-          <style>{`
-            .v131-staff-session {
-              position: fixed;
-              z-index: 1300;
-              left: 20px;
-              bottom: 18px;
-              width: min(420px, calc(100vw - 40px));
-              display: grid;
-              grid-template-columns: minmax(0, 1fr) auto;
-              gap: 12px;
-              align-items: center;
-              padding: 13px 14px;
-              border: 1px solid #bcd2e9;
-              border-radius: 17px;
-              background: rgba(255,255,255,.98);
-              box-shadow: 0 17px 45px rgba(21,50,84,.2);
-              color: #17345c;
-            }
-            .v131-staff-session strong {
-              display: block;
-              color: #0b2b5f;
-              font-size: 14px;
-            }
-            .v131-staff-session small {
-              display: block;
-              margin-top: 3px;
-              color: #61748d;
-              font-size: 11px;
-            }
-            .v131-staff-links {
-              display: flex;
-              gap: 7px;
-            }
-            .v131-staff-links a,
-            .v131-staff-links button {
-              min-height: 37px;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 10px;
-              padding: 8px 11px;
-              font: inherit;
-              font-size: 12px;
-              font-weight: 850;
-              text-decoration: none;
-              cursor: pointer;
-            }
-            .v131-staff-links a {
-              color: white;
-              background: #1264d5;
-              border: 1px solid #1264d5;
-            }
-            .v131-staff-links button {
-              color: #24446d;
-              background: white;
-              border: 1px solid #c8d7e8;
-            }
-            .v131-staff-links button:disabled {
-              opacity: .6;
-              cursor: not-allowed;
-            }
-            @media (max-width: 660px) {
-              .v131-staff-session {
-                left: 12px;
-                bottom: 12px;
-                width: calc(100vw - 24px);
-                grid-template-columns: 1fr;
-              }
-              .v131-staff-links > * { flex: 1; }
-            }
-          `}</style>
+        <aside className="v131-session-card" aria-label="Sessão do encarregado">
           <div>
             <strong>{userName || "Encarregado"}</strong>
             <small>
-              Perfil encarregado · matrícula {employeeCode || "não informada"} · acesso limitado
+              Perfil encarregado · matrícula {employeeCode || "não informada"}. No ponto, você pode registrar para si ou para os colaboradores.
             </small>
           </div>
-          <div className="v131-staff-links">
+          <div className="v131-actions">
             <Link href="/ponto">Abrir ponto</Link>
             <button type="button" disabled={loggingOut} onClick={logoutStaff}>
               {loggingOut ? "Saindo..." : "Encerrar"}
@@ -171,72 +185,11 @@ export default function SecureBetaAppV131({
           className="v131-people-actions"
           aria-label="Ações do cadastro de colaboradores"
         >
-          <style>{`
-            .v131-people-actions {
-              position: fixed;
-              z-index: 1200;
-              right: 28px;
-              bottom: 24px;
-              width: min(390px, calc(100vw - 32px));
-              padding: 16px;
-              border: 1px solid #bfd4ec;
-              border-radius: 18px;
-              background: rgba(255,255,255,.98);
-              box-shadow: 0 18px 50px rgba(20,48,84,.2);
-              color: #17345c;
-            }
-            .v131-people-actions strong {
-              display: block;
-              color: #0b2b5f;
-              font-size: 16px;
-              margin-bottom: 4px;
-            }
-            .v131-people-actions p {
-              margin: 0 0 12px;
-              color: #5b6f8a;
-              font-size: 13px;
-              line-height: 1.4;
-            }
-            .v131-people-actions div {
-              display: flex;
-              gap: 8px;
-            }
-            .v131-people-actions a {
-              flex: 1;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              min-height: 42px;
-              padding: 10px 12px;
-              border-radius: 12px;
-              text-decoration: none;
-              font-size: 13px;
-              font-weight: 850;
-              text-align: center;
-            }
-            .v131-people-actions a:first-of-type {
-              color: white;
-              background: #1264d5;
-              box-shadow: 0 9px 20px rgba(18,100,213,.24);
-            }
-            .v131-people-actions a:last-of-type {
-              color: #1f456f;
-              border: 1px solid #c8d7e8;
-              background: #f8fbff;
-            }
-            @media (max-width: 720px) {
-              .v131-people-actions {
-                right: 16px;
-                bottom: 16px;
-              }
-              .v131-people-actions div { flex-direction: column; }
-            }
-          `}</style>
-          <strong>Cadastro de colaborador e ponto</strong>
+          <strong>Colaboradores e ponto eletrônico</strong>
           <p>
-            Cadastre a pessoa do zero e siga diretamente para a captura do rosto no celular.
+            Cadastre o colaborador e abra o portal de ponto por matrícula, senha, horário e localização.
           </p>
-          <div>
+          <div className="v131-actions">
             <Link href="/pessoas/novo">Cadastrar colaborador</Link>
             <Link href="/ponto">Abrir portal de ponto</Link>
           </div>
