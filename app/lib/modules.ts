@@ -523,9 +523,9 @@ export const moduleDefinitions: ModuleDefinition[] = [
        * "Feira de Santana" contra "feira de santana - BA" já bastaria para
        * negar o direito a quem tem.
        */
-      { key: "livesOutOfTown", label: "Residência fora da cidade da obra", type: "select", options: ["Não", "Sim"], help: "Marque Sim para abrir o direito à Folga de Campo: 9 dias corridos em casa a cada 90 dias trabalhados." },
-      { key: "homeCity", label: "Cidade onde mora", type: "text", placeholder: "Ex.: Feira de Santana/BA", showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Destino das viagens de Folga de Campo. Pode ser diferente do endereço acima, que costuma ser o alojamento." },
-      { key: "fieldLeaveCountFrom", label: "Contar Folga de Campo a partir de", type: "date", showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Normalmente a data de admissão. Nas folgas seguintes, o sistema recomeça a contagem sozinho." },
+      { key: "livesOutOfTown", label: "Residência fora da cidade da obra", type: "select", options: ["Não", "Sim"], aliases: ["Mora fora", "Fora da cidade", "Folga de Campo"], help: "Marque Sim para abrir o direito à Folga de Campo: 9 dias corridos em casa a cada 90 dias trabalhados." },
+      { key: "homeCity", label: "Cidade onde mora", type: "text", placeholder: "Ex.: Feira de Santana/BA", aliases: ["Cidade de origem", "Cidade natal"], showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Destino das viagens de Folga de Campo. Pode ser diferente do endereço acima, que costuma ser o alojamento." },
+      { key: "fieldLeaveCountFrom", label: "Contar Folga de Campo a partir de", type: "date", aliases: ["Início Folga de Campo", "Base Folga de Campo"], showWhen: { field: "livesOutOfTown", equals: "Sim" }, help: "Normalmente a data de admissão. Nas folgas seguintes, o sistema recomeça a contagem sozinho." },
       { key: "dependents", label: "Dependentes para IRRF", type: "number", aliases: ["Dependentes"] },
       { key: "dependentDetails", label: "Ficha dos dependentes", type: "textarea", wide: true, placeholder: "Um dependente por bloco: nome, parentesco, CPF, nascimento, sexo, condição de IRRF e plano de saúde.", help: "Registre somente dependentes comprovados. A contabilidade deve validar o enquadramento no IRRF." },
       { key: "role", label: "Cargo", type: "text", aliases: ["Cargo"] },
@@ -555,7 +555,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "vacationEnd", label: "Fim das férias atuais ou programadas", type: "date" },
       { key: "vacationDays", label: "Dias de férias", type: "number" },
       { key: "scheduleStartDate", label: "Início da jornada", type: "date" },
-      { key: "weeklyHours", label: "Carga horária semanal", type: "number" },
+      { key: "weeklyHours", label: "Carga horária semanal", type: "number", aliases: ["Carga horária", "Jornada semanal", "Horas semanais"] },
       { key: "restDay", label: "Dia de repouso", type: "select", options: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Variável"] },
       { key: "workRegime", label: "Regime de trabalho", type: "select", options: ["Submetido a horário", "Atividade externa", "Cargo de gestão", "Teletrabalho"] },
       { key: "journeyType", label: "Tipo de jornada", type: "select", options: ["Normal", "12x36", "Dia fixo com folga variável", "Escala variável", "Outro"] },

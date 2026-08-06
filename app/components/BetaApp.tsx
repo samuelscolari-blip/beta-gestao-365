@@ -30,6 +30,7 @@ import ModuleHeader, {
 } from "../ui/ModuleHeader/ModuleHeader";
 import {
   exportAllWorkbook,
+  exportImportTemplate,
   exportModuleWorkbook,
   importWorkbook,
 } from "../lib/spreadsheet";
@@ -5605,9 +5606,27 @@ function ModulePage({
             </select>
           ) : null}
           {canEdit && isImportableModule(module.id) ? (
-            <button className="button secondary compact-button" onClick={onImport}>
-              <Icon name="upload" size={17} /> Importar
-            </button>
+            <>
+              {/*
+                * O modelo vem ANTES do botão de importar de propósito: é a
+                * ordem em que o trabalho acontece. Baixar, preencher,
+                * importar.
+                *
+                * Sem ele, quem nunca importou precisa adivinhar os nomes das
+                * colunas — e uma coluna com nome errado é ignorada em
+                * silêncio, o que parece "importou e não veio nada".
+                */}
+              <button
+                className="button secondary compact-button"
+                onClick={() => exportImportTemplate(module)}
+                title="Planilha em branco com as colunas certas e uma aba explicando cada uma"
+              >
+                <Icon name="download" size={17} /> Modelo
+              </button>
+              <button className="button secondary compact-button" onClick={onImport}>
+                <Icon name="upload" size={17} /> Importar
+              </button>
+            </>
           ) : null}
           {canEdit ? (
             <button
