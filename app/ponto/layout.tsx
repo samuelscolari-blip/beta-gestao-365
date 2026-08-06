@@ -6,9 +6,9 @@ import {
   SOLE_ADMIN_EMAIL,
 } from "../lib/server-access";
 import {
+  businessStaffSessionFromHeaders,
   hasStaffSessionCookie,
-  staffSessionFromHeaders,
-} from "../lib/staff-access";
+} from "../lib/staff-business-access";
 
 export const metadata: Metadata = {
   title: "Beta Ponto",
@@ -45,7 +45,7 @@ export default async function TimeClockLayout({
     return <AccessGate nextPath="/ponto" />;
   }
 
-  const staff = await staffSessionFromHeaders(requestHeaders);
+  const staff = await businessStaffSessionFromHeaders(requestHeaders);
   if (!staff) {
     return (
       <AccessGate
