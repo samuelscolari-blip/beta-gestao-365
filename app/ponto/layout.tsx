@@ -1,14 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import AccessGate from "../components/AccessGate";
+import { masterPointSessionFromHeaders } from "../lib/master-point-access";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "../lib/server-access";
-import {
-  businessStaffSessionFromHeaders,
-  hasStaffSessionCookie,
-} from "../lib/staff-business-access";
 
 export const metadata: Metadata = {
   title: "Beta Ponto",
@@ -41,19 +38,13 @@ export default async function TimeClockLayout({
   const email = authenticatedEmailFromHeaders(requestHeaders);
   if (email === SOLE_ADMIN_EMAIL) return children;
 
-  if (!hasStaffSessionCookie(requestHeaders)) {
-    return <AccessGate nextPath="/ponto" />;
-  }
+  const masterSession = await masterPointSessionFromHeaders(requestHeaders);
+  if (masterSession) return children;
 
-  const staff = await businessStaffSessionFromHeaders(requestHeaders);
-  if (!staff) {
-    return (
-      <AccessGate
-        nextPath="/ponto"
-        message="Sua sessão expirou. Entre novamente para usar o ponto."
-      />
-    );
-  }
-
-  return children;
+  return (
+    <AccessGate
+      nextPath="/ponto"
+      message="Entre com o CPF do colaborador e a senha master do encarregado."
+    />
+  );
 }
