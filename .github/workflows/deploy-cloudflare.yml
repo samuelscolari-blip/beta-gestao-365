@@ -147,28 +147,45 @@ jobs:
           echo "Último valor lido em /deployment-version.txt: ${marker:-(vazio)}" >&2
           exit 1
 
-      # Os 90s não são folga por precaução: com 45s, três publicações
-      # seguidas (#113, #114 e #115) ficaram vermelhas mesmo tendo
-      # publicado — os passos "Publicar o Worker" e "Confirmar o commit
-      # exato publicado" acima passaram nas três. O mesmo diagnóstico,
-      # disparado à mão contra a MESMA produção com 90s, passou. O Worker
-      # recém-publicado começa frio e não termina de montar a interface a
-      # tempo.
+      # DUAS TENTATIVAS, e não uma espera ainda maior.
       #
-      # Um deploy vermelho a cada mesclagem, por um motivo que não é
-      # defeito, ensina a ignorar o sinal — que é pior do que não ter
-      # sinal nenhum.
+      # Esta verificação já falhou três vezes por tempo: com 45s (PRs #113,
+      # #114 e #115) e com 90s (PR #128, que estourou em 98 segundos). Nas
+      # quatro, o Worker tinha sido publicado — os passos anteriores
+      # passaram — e o mesmo diagnóstico, disparado à mão logo depois
+      # contra a MESMA produção, passou.
+      #
+      # A causa não é a espera curta: é a PRIMEIRA visita a um Worker
+      # recém-publicado, que sobe frio. Esticar o cronômetro só empurra o
+      # problema, e já foi esticado duas vezes. Uma segunda tentativa
+      # ataca o que realmente acontece — na segunda visita o Worker já
+      # está quente.
+      #
+      # A verificação continua valendo: se a interface estiver mesmo
+      # quebrada, as duas tentativas falham e o deploy fica vermelho. O
+      # que deixa de acontecer é o alarme falso, que ensina a ignorar o
+      # sinal — pior do que não ter sinal nenhum.
       - name: Confirmar interface em navegador real
-        run: npm run diagnose:live
+        shell: bash
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
           DIAGNOSTIC_WAIT_MS: "90000"
+        run: |
+          npm run diagnose:live && exit 0
+          echo "Primeira tentativa falhou. O Worker pode ter subido frio; repetindo uma vez." >&2
+          sleep 20
+          npm run diagnose:live
 
       - name: Confirmar frota em desktop largo
-        run: node scripts/live-fleet-wide-diagnostic.mjs
+        shell: bash
         env:
           DIAGNOSTIC_URL: https://beta-gestao-365.scolarisamuel.workers.dev/
           DIAGNOSTIC_WAIT_MS: "90000"
+        run: |
+          node scripts/live-fleet-wide-diagnostic.mjs && exit 0
+          echo "Primeira tentativa falhou. Repetindo uma vez." >&2
+          sleep 20
+          node scripts/live-fleet-wide-diagnostic.mjs
 
       - name: Registrar resumo da publicação
         if: always()
