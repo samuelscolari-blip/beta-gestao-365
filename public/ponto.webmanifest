@@ -1,0 +1,21 @@
+{
+  "name": "Beta Ponto",
+  "short_name": "Beta Ponto",
+  "description": "Registro móvel de ponto com rosto, horário, localização e modo offline.",
+  "lang": "pt-BR",
+  "start_url": "/ponto",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#eef3f9",
+  "theme_color": "#0b2b5f",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
