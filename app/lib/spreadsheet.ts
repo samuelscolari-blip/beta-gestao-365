@@ -624,6 +624,28 @@ function excelCell(value: unknown, fieldType: string) {
 
 
 
+
+/*
+ * Nome de arquivo a partir do nome da tela.
+ *
+ * Sem acento e sem caractere especial, de propósito: o arquivo sai do
+ * sistema e vai para anexo de e-mail, pasta compartilhada e às vezes outro
+ * sistema. "Cadastro_de_Funcionários.xlsx" chega quebrado como
+ * "Funcionc3a1rios" em quem não trata UTF-8, e o engenheiro que recebe não
+ * sabe se pode confiar no arquivo.
+ *
+ * O nome da TELA continua reconhecível, que é o pedido: quem exporta de
+ * Máquinas recebe um arquivo com "Maquinas" no nome, não um "export.xlsx"
+ * genérico que vira dez arquivos iguais na área de trabalho.
+ */
+export function nomeDeArquivo(texto: string): string {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Za-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 /*
  * Identidade visual das planilhas exportadas.
  *
@@ -854,7 +876,7 @@ export async function exportImportTemplate(module: ModuleDefinition) {
       },
     ],
   ).toFile(
-    `Modelo_Importacao_${module.shortLabel.replace(/\s+/g, "_")}.xlsx`,
+    `Beta_Construtora_Modelo_${nomeDeArquivo(module.shortLabel)}.xlsx`,
   );
 }
 
@@ -910,7 +932,7 @@ export async function exportModuleWorkbook(
     })),
     stickyRowsCount: 2,
   }).toFile(
-    `Beta_Construtora_${module.shortLabel.replace(/\s+/g, "_")}_${new Date()
+    `Beta_Construtora_${nomeDeArquivo(module.shortLabel)}_${new Date()
       .toISOString()
       .slice(0, 10)}.xlsx`,
   );

@@ -10,7 +10,13 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const modules = readFileSync("app/lib/modules.ts", "utf8");
-const wrapper = readFileSync("app/components/SecureBetaAppV97.tsx", "utf8");
+/*
+ * A definição do módulo mora em `app/lib/modules.ts`, e não no componente:
+ * é o arquivo que o SERVIDOR também lê. Enquanto ficava só no cliente, a
+ * tela abria, preenchia e não salvava — `validateRecordPayload` recusa
+ * módulo sem definição.
+ */
+const wrapper = readFileSync("app/lib/modules.ts", "utf8");
 const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
 const painel = readFileSync(
   "app/ui/FieldLeaveSummary/FieldLeaveSummary.tsx",
@@ -144,7 +150,7 @@ test("a Folga de Campo não encosta em férias", () => {
    */
   const semComentarios = (fonte) => fonte.replace(/\/\*[\s\S]*?\*\//g, "");
   const definicao =
-    wrapper.match(/const fieldLeaveDefinition[\s\S]*?\n\};/)?.[0] ?? "";
+    wrapper.match(/id: "field_leave"[\s\S]*?\n  \},/)?.[0] ?? "";
 
   assert.ok(definicao, "A definição da tela sumiu.");
   assert.doesNotMatch(definicao, /vacation|férias|aquisitivo|terço/i);

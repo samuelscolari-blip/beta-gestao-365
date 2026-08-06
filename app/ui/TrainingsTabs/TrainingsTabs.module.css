@@ -1,0 +1,92 @@
+/*
+ * Abas de treinamento.
+ *
+ * CSS Module, sem `!important` e sem classe global — o padrão da reforma do
+ * cabeçalho. Nenhuma folha `vNN` alcança estas classes.
+ *
+ * As abas rolam na horizontal em vez de quebrarem em várias linhas: com treze
+ * treinamentos possíveis, quebrar empilharia quatro fileiras e empurraria a
+ * lista para fora da tela justamente em quem abre no notebook.
+ */
+
+.root {
+  display: grid;
+  gap: 10px;
+}
+
+.abas {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.abas button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid #e4dccb;
+  border-radius: 999px;
+  background: #fff;
+  color: #5c4a2c;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.abas button:hover {
+  border-color: #cbb68c;
+  background: #fffdf7;
+}
+
+.abas button strong {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #f2ece0;
+  color: #6b5836;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.abas button em {
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.legenda {
+  margin: 0;
+  max-width: 78ch;
+  color: #7c6a4e;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+/*
+ * Estados. Vêm depois das regras base de propósito: o Stylelint exige o
+ * seletor mais específico por último, e a exigência evita o clássico "mudei a
+ * cor e não pegou".
+ */
+
+.alerta {
+  background: #fdecea;
+  color: #a32d1c;
+}
+
+.abas .ativa {
+  border-color: #17324d;
+  background: #17324d;
+  color: #fff;
+}
+
+.abas .ativa strong {
+  background: rgb(255 255 255 / 18%);
+  color: #fff;
+}

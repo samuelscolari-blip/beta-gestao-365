@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import BetaApp from "./BetaApp";
+import { pedirNovoRegistro } from "../lib/quick-actions";
 import {
   moduleMap,
   moduleTips,
@@ -522,16 +523,23 @@ function openPurchasesTab(thenCreate: boolean) {
   findSidebarButton(moduleMap.expenses.shortLabel)?.click();
   window.setTimeout(() => {
     findFinancialTabButton("Compras")?.click();
-    if (thenCreate) {
-      window.setTimeout(() => {
-        document
-          .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
-          ?.click();
-      }, 80);
-    }
+    if (thenCreate) pedirNovoRegistro("purchases");
   }, 80);
 }
 
+/*
+ * Leva à tela do módulo e abre o formulário de cadastro.
+ *
+ * A navegação continua por clique no menu — o menu é do próprio componente
+ * irmão e não há outra forma de alcançá-lo daqui.
+ *
+ * Já a abertura do formulário virou um pedido nomeado. Antes era um segundo
+ * clique, no botão "Novo registro" do cabeçalho, achado por seletor de CSS.
+ * Quando o cabeçalho de Administrativo parou de exibir esse botão, e o de
+ * Máquinas deixou de ser renderizado, "Cadastrar funcionário" e "Abrir
+ * máquinas" passaram a não fazer nada: o seletor não achava alvo e a função
+ * terminava em silêncio. O pedido nomeado não depende de o botão existir.
+ */
 function navigateAndCreate(moduleId: string) {
   if (moduleId === "purchases") {
     openPurchasesTab(true);
@@ -540,11 +548,11 @@ function navigateAndCreate(moduleId: string) {
   const moduleDefinition = moduleMap[moduleId];
   const navButton = findSidebarButton(moduleDefinition?.shortLabel || moduleId);
   navButton?.click();
-  window.setTimeout(() => {
-    document
-      .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
-      ?.click();
-  }, 80);
+  /*
+   * O intervalo cobre a troca de tela, para o formulário abrir já sobre o
+   * módulo certo — e não sobre a tela anterior.
+   */
+  window.setTimeout(() => pedirNovoRegistro(moduleId), 80);
 }
 
 function createIcon(name: string): ReactNode {

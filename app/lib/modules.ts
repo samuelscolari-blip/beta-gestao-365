@@ -1,3 +1,5 @@
+import { SITUACOES, TREINAMENTOS } from "./trainings.mjs";
+
 export type FieldType =
   | "text"
   | "number"
@@ -985,6 +987,219 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "notes", label: "Observações", type: "textarea", wide: true },
     ],
   },
+
+  /*
+   * As três telas de RH que antes eram declaradas só no componente do
+   * cliente: Cálculo de Férias, Folga de Campo e Treinamentos.
+   *
+   * Ficavam fora daqui e por isso o SERVIDOR não as conhecia — e
+   * `validateRecordPayload` recusa módulo sem definição. O resultado era
+   * uma tela que abre, preenche e não salva, com a mensagem genérica "O
+   * módulo informado não possui definição de dados".
+   *
+   * Este arquivo é lido pelos dois lados. Definição de módulo mora aqui;
+   * o componente cuida apenas da ORDEM no menu.
+   */
+  {
+    id: "vacations",
+    label: "Cálculo de Férias",
+    shortLabel: "Cálculo de Férias",
+    eyebrow: "RH • Férias",
+    description:
+      "Tela própria para organizar o colaborador, o período aquisitivo e a programação das férias. O cálculo será integrado aos dados salariais na próxima etapa.",
+    color: "#1477c9",
+    lightColor: "#edf7ff",
+    titleField: "employeeName",
+    referenceField: "vacationId",
+    statusField: "status",
+    dateField: "vacationStart",
+    amountField: "estimatedAmount",
+    spreadsheetSheets: [],
+    tableColumns: [
+      "employeeName",
+      "acquisitionStart",
+      "acquisitionEnd",
+      "vacationStart",
+      "vacationDays",
+      "status",
+    ],
+    fields: [
+      {
+        key: "vacationId",
+        label: "Código do registro",
+        type: "text",
+        required: true,
+        placeholder: "Ex.: FER-2026-001",
+      },
+      {
+        key: "employeeName",
+        label: "Colaborador",
+        type: "text",
+        required: true,
+        placeholder: "Nome completo do colaborador",
+        help: "O vínculo direto com o cadastro e o salário será usado pelo motor de férias na próxima etapa.",
+      },
+      {
+        key: "acquisitionStart",
+        label: "Início do período aquisitivo",
+        type: "date",
+        required: true,
+      },
+      {
+        key: "acquisitionEnd",
+        label: "Fim do período aquisitivo",
+        type: "date",
+        required: true,
+      },
+      {
+        key: "vacationStart",
+        label: "Início previsto das férias",
+        type: "date",
+      },
+      {
+        key: "vacationDays",
+        label: "Quantidade prevista de dias",
+        type: "number",
+        placeholder: "Ex.: 30",
+      },
+      {
+        key: "status",
+        label: "Situação",
+        type: "select",
+        required: true,
+        options: [
+          "Em preparação",
+          "Aguardando cálculo",
+          "Programada",
+          "Concluída",
+        ],
+      },
+      {
+        key: "notes",
+        label: "Observações",
+        type: "textarea",
+        wide: true,
+        placeholder:
+          "Registre informações para a futura conferência do cálculo de férias.",
+      },
+    ],
+  },
+
+  /*
+   * Folga de Campo — 9 dias corridos em casa a cada 90 trabalhados, para quem
+   * mora fora da cidade da obra.
+   *
+   * Tela própria, e não uma variação de Férias, porque as regras não se
+   * parecem: férias têm período aquisitivo de 12 meses, 30 dias e terço
+   * constitucional; a Folga de Campo tem 90 dias, 9 dias e é benefício da
+   * empresa, sem reflexo no eSocial. Misturar as duas produziria número
+   * errado nos dois lados.
+   *
+   * Quem tem direito é definido no Cadastro de Funcionários, pela marcação
+   * "Residência fora da cidade da obra".
+   */
+  {
+    id: "field_leave",
+    label: "Folga de Campo",
+    shortLabel: "Folga de Campo",
+    eyebrow: "RH • Folga de Campo",
+    description:
+      "Nove dias corridos em casa a cada noventa trabalhados, para quem mora fora da cidade da obra. Registra a viagem, o custo e a opção de compra da folga pela empresa.",
+    color: "#0f766e",
+    lightColor: "#effcf9",
+    titleField: "employeeName",
+    referenceField: "fieldLeaveId",
+    statusField: "status",
+    dateField: "leaveStart",
+    /*
+     * Sem campo de valor no registro, de propósito.
+     *
+     * Havia um "Custo total" que pedia a soma à mão enquanto o resumo da
+     * tela já somava sozinho — dois números para a mesma pergunta, que
+     * divergem na primeira distração. Quem soma é o motor, em um lugar só,
+     * e o resultado aparece no resumo acima da lista.
+     */
+    amountField: "",
+    spreadsheetSheets: [],
+    tableColumns: [
+      "employeeName",
+      "homeCity",
+      "leaveStart",
+      "leaveEnd",
+      "resolution",
+      "status",
+    ],
+    fields: [
+      { key: "fieldLeaveId", label: "Código do registro", type: "text", required: true, placeholder: "Ex.: FDC-2026-001" },
+      { key: "employeeName", label: "Colaborador", type: "text", required: true, placeholder: "Nome completo", help: "Precisa estar marcado como residência fora da cidade da obra no Cadastro de Funcionários." },
+      { key: "homeCity", label: "Cidade onde mora", type: "text", required: true, placeholder: "Ex.: Feira de Santana/BA", help: "Destino da viagem. Repita o que está no cadastro do colaborador." },
+      { key: "countFrom", label: "Contagem dos 90 dias a partir de", type: "date", required: true, help: "Na primeira folga, a admissão. Nas seguintes, o dia em que ele voltou da folga anterior." },
+      { key: "resolution", label: "Como a folga foi resolvida", type: "select", required: true, options: ["Folga concedida", "Comprada pela empresa"], help: "Comprada: a empresa paga o valor combinado e o colaborador segue na obra, sem viagem." },
+      { key: "leaveStart", label: "Primeiro dia da folga", type: "date", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "O sistema calcula o último dia: são 9 dias corridos contando este." },
+      { key: "leaveEnd", label: "Último dia da folga", type: "date", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "Confira contra o cálculo mostrado no resumo acima da lista." },
+      { key: "ticketOut", label: "Passagem — ida", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+      { key: "ticketReturn", label: "Passagem — volta", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+      { key: "mealsOut", label: "Alimentação no percurso — ida", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+      { key: "mealsReturn", label: "Alimentação no percurso — volta", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" } },
+      { key: "hotel", label: "Hotel", type: "number", showWhen: { field: "resolution", equals: "Folga concedida" }, help: "Somente quando o trajeto exige parada. Deixe vazio se não houve." },
+      { key: "purchaseAmount", label: "Valor pago pela compra", type: "number", showWhen: { field: "resolution", equals: "Comprada pela empresa" }, help: "Valor combinado com o setor. Por definição atual, não incide na folha para INSS nem IRRF." },
+      { key: "status", label: "Situação", type: "select", required: true, options: ["Prevista", "Autorizada", "Em andamento", "Concluída", "Comprada"] },
+      { key: "notes", label: "Observações", type: "textarea", wide: true, placeholder: "Trajeto, companhia aérea ou rodoviária, comprovantes e o que mais precisar ficar registrado." },
+    ],
+  },
+
+  /*
+   * Treinamentos e certificações obrigatórias.
+   *
+   * Quem entra numa obra da Elecnor ou da Engie precisa comprovar integração,
+   * NR de altura, NR11/NR12 e afins. Sem comprovante válido a pessoa não
+   * entra — e descobrir isso no portão custa um dia de trabalho perdido.
+   *
+   * Um registro por colaborador E treinamento, e não uma ficha com dezenas
+   * de colunas: cada combinação tem agendamento, conclusão e validade
+   * próprios, e a matriz larga não teria onde guardar essas três datas.
+   * Filtrar por colaborador ou por treinamento devolve as duas visões.
+   *
+   * A SITUAÇÃO NÃO É CAMPO. Ela sai das datas, no motor em
+   * `app/lib/trainings.mjs` — situação digitada envelhece sozinha, e um
+   * "Concluído" de dois anos atrás esconde um certificado vencido.
+   */
+  {
+    id: "trainings",
+    label: "Treinamentos e Certificações",
+    shortLabel: "Treinamentos",
+    eyebrow: "RH • Segurança do trabalho",
+    description:
+      "Integrações, NRs e reciclagens por colaborador. Mostra o que está pendente, o que foi agendado e o que vence, antes de a pessoa ser barrada no portão da obra.",
+    color: "#b45309",
+    lightColor: "#fffbeb",
+    titleField: "employeeName",
+    referenceField: "trainingId",
+    statusField: "status",
+    dateField: "scheduledDate",
+    amountField: "",
+    spreadsheetSheets: [],
+    tableColumns: [
+      "employeeName",
+      "trainingType",
+      "scheduledDate",
+      "completedDate",
+      "validityDate",
+      "status",
+    ],
+    fields: [
+      { key: "trainingId", label: "Código do registro", type: "text", required: true, placeholder: "Ex.: TRE-2026-001" },
+      { key: "employeeName", label: "Colaborador", type: "text", required: true, placeholder: "Nome completo", aliases: ["Nome", "Nome completo", "Funcionário"] },
+      { key: "trainingType", label: "Treinamento", type: "select", required: true, options: TREINAMENTOS, aliases: ["Curso", "Tipo de treinamento", "Certificação"] },
+      { key: "scheduledDate", label: "Data agendada", type: "date", help: "Quando a pessoa fará o curso. Passou dessa data sem conclusão, o registro aparece como pendência.", aliases: ["Agendamento", "Data do agendamento"] },
+      { key: "completedDate", label: "Data de conclusão", type: "date", help: "Quando o curso foi efetivamente feito.", aliases: ["Conclusão", "Data de conclusão"] },
+      { key: "validityDate", label: "Validade do certificado", type: "date", help: "Deixe vazio quando o treinamento não vence, como as integrações de contrato.", aliases: ["Validade", "Vencimento"] },
+      { key: "provider", label: "Quem ministrou", type: "text", placeholder: "Ex.: SESI, empresa contratante, instrutor interno" },
+      { key: "certificateUrl", label: "Certificado", type: "url", placeholder: "Cole o link protegido do certificado", help: "Guarde em pasta restrita do SharePoint ou OneDrive." },
+      { key: "status", label: "Situação registrada", type: "select", options: SITUACOES, help: "Referência do que foi lançado. Quem manda é o cálculo pelas datas, mostrado no resumo acima da lista." },
+      { key: "notes", label: "Observações", type: "textarea", wide: true, placeholder: "Turma, carga horária, pendência de documento e o que mais precisar ficar registrado." },
+    ],
+  },
 ];
 
 export const moduleMap = Object.fromEntries(
@@ -1097,7 +1312,13 @@ export const navigationGroups = [
   { label: "ENGENHARIA & MÁQUINAS", items: ["works", "worklogs", "assets"] },
   { label: "PESSOAS", items: ["people", "payroll", "terminations"] },
   { label: "FISCAL & COMPLIANCE", items: ["compliance", "taxes"] },
-  { label: "OPERAÇÃO & DOCUMENTOS", items: ["rentals", "food", "documents"] },
+  /*
+   * Treinamentos fica ao lado de Documentos por decisão de Samuel Scolari:
+   * certificado de NR é documento, e quem confere um confere o outro na mesma
+   * sentada. Ficaria igualmente defensável no grupo de RH — a escolha foi pela
+   * rotina de quem usa, não pela origem do dado.
+   */
+  { label: "OPERAÇÃO & DOCUMENTOS", items: ["rentals", "food", "documents", "trainings"] },
   { label: "MICROSOFT 365", items: ["emails", "m365"] },
 ];
 

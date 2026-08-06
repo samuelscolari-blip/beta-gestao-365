@@ -15,7 +15,12 @@ const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
 test("o modelo existe e traz uma aba explicando cada coluna", () => {
   assert.match(planilha, /export async function exportImportTemplate/);
   assert.match(planilha, /sheet: "Como preencher"/);
-  assert.match(planilha, /Modelo_Importacao_/);
+  /*
+   * O nome passou a levar a marca e a tela de origem, sem acento: dez
+   * exportações viram dez arquivos na área de trabalho, e o engenheiro que
+   * abre depois precisa saber de onde cada um saiu.
+   */
+  assert.match(planilha, /Beta_Construtora_Modelo_\$\{nomeDeArquivo\(module\.shortLabel\)\}/);
 });
 
 test("o modelo destaca o que o cálculo exige", () => {
