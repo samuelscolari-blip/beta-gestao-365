@@ -53,7 +53,7 @@ export default async function TimeClockLayout({
   return (
     <AccessGate
       nextPath="/ponto"
-      message="Encarregado identificado. Confirme a senha master uma única vez para liberar a sessão."
+      message={`Etapa 2 de 2: ${supervisor.name}, matrícula ${supervisor.registration}, foi identificado. Confirme a senha master uma única vez para liberar todos os colaboradores nesta sessão.`}
     />
   );
 }
