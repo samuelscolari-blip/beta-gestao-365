@@ -1,4 +1,5 @@
 import {
+  baseOficialAtiva,
   createMany,
   createRecord,
   deleteRecord,
@@ -185,7 +186,26 @@ function normalizeRecordForWrite(input: Record<string, unknown>) {
   return next;
 }
 
-function publicPayload(moduleId: string, payload: Record<string, unknown>) {
+/*
+ * O que deixa de aparecer quando a base é declarada real.
+ *
+ * Nome e salário estavam abertos a quem só abrisse o endereço do site. Com
+ * "Colaborador Teste 01" isso não custava nada. Com o eletricista da obra,
+ * custa duas coisas: é dado pessoal exposto a qualquer um com o link, e é
+ * justamente o dado que mais gera atrito dentro da equipe — cada um
+ * descobrindo quanto o outro ganha.
+ *
+ * Cargo e situação continuam visíveis: são o que faz a tela ter serventia
+ * para engenheiro e encarregado, que precisam saber quem está ativo e em que
+ * função, e nunca precisaram saber o salário.
+ */
+const camposPessoaisDaBaseReal = new Set(["name", "salary"]);
+
+function publicPayload(
+  moduleId: string,
+  payload: Record<string, unknown>,
+  baseOficial: boolean,
+) {
   const redacted = redactAdminIdentity(payload) as Record<string, unknown>;
   if (moduleId === "payroll") {
     return {
@@ -252,7 +272,9 @@ function publicPayload(moduleId: string, payload: Record<string, unknown>) {
   return Object.fromEntries(
     Object.entries(redacted).map(([key, value]) => [
       key,
-      protectedPeopleFields.has(key) && String(value ?? "").trim()
+      (protectedPeopleFields.has(key) ||
+        (baseOficial && camposPessoaisDaBaseReal.has(key))) &&
+      String(value ?? "").trim()
         ? "Dado protegido"
         : value,
     ]),
@@ -270,23 +292,31 @@ function toPublicRecord<
   },
 >(
   record: T,
+  baseOficial: boolean,
 ) {
   const isPayroll = record.module === "payroll";
   const isTermination = record.module === "terminations";
   const isProtectedCalculation = isPayroll || isTermination;
+  /*
+   * O título do cadastro de funcionário É o nome, e o valor É o salário.
+   * Proteger só o payload deixaria os dois passando pela porta da frente.
+   */
+  const pessoaProtegida = baseOficial && record.module === "people";
   return {
     ...record,
     title: isPayroll
       ? "Cálculo protegido"
       : isTermination
         ? "Rescisão protegida"
-        : record.title,
+        : pessoaProtegida
+          ? "Dado protegido"
+          : record.title,
     reference: isProtectedCalculation
       ? "Dado protegido"
       : record.reference,
-    amount: isProtectedCalculation ? 0 : record.amount,
+    amount: isProtectedCalculation || pessoaProtegida ? 0 : record.amount,
     createdBy: "",
-    payload: publicPayload(record.module, record.payload),
+    payload: publicPayload(record.module, record.payload, baseOficial),
   };
 }
 
@@ -365,9 +395,12 @@ export async function GET(request: Request) {
     ).filter((record) => Boolean(moduleMap[record.module]));
     const publicRecords = isSoleAdmin(request)
       ? records
-      : records
-          .filter((record) => record.module !== "settings")
-          .map(toPublicRecord);
+      : await (async () => {
+          const baseOficial = await baseOficialAtiva();
+          return records
+            .filter((record) => record.module !== "settings")
+            .map((record) => toPublicRecord(record, baseOficial));
+        })();
     return Response.json({
       records: publicRecords,
       ...(queryResult

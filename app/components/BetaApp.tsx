@@ -174,6 +174,8 @@ type SystemSettings = {
   supportEmail: string;
   supportPhone: string;
   corporateDomain: string;
+  /* "Sim" quando a base deixou de ser demonstração. Ver app/lib/official-base.ts. */
+  officialBase: string;
   commercialNotes: string;
   taxRegime: string;
   cnae: string;
@@ -214,6 +216,7 @@ const defaultSettings: SystemSettings = {
   supportEmail: "",
   supportPhone: "",
   corporateDomain: "",
+  officialBase: "Não",
   commercialNotes: "",
   taxRegime: "Não informado",
   cnae: "",
@@ -7822,6 +7825,44 @@ function AdminPanel({
         <section className="settings-card">
           <header>
             <span>4</span>
+            <div>
+              <h2>Situação da base de dados</h2>
+              <p>
+                Separa o sistema em demonstração do sistema em operação. É a
+                única decisão desta tela que muda o que os outros enxergam.
+              </p>
+            </div>
+          </header>
+          <div className="settings-grid">
+            <label className="wide">
+              <span>Esta base já é real?</span>
+              <select
+                value={draft.officialBase || "Não"}
+                onChange={(event) => update("officialBase", event.target.value)}
+              >
+                <option value="Não">
+                  Não — demonstração, com dados fictícios
+                </option>
+                <option value="Sim">
+                  Sim — base real, em operação
+                </option>
+              </select>
+              <small>
+                Marcando <strong>Sim</strong>, três coisas mudam de uma vez: os
+                colaboradores fictícios somem das listas e dos totais e param
+                de voltar sozinhos quando apagados; e nome e salário deixam de
+                aparecer para quem abre o sistema sem entrar com conta
+                autorizada. Nada é apagado do banco — voltando para{" "}
+                <strong>Não</strong>, a demonstração retorna inteira, útil no
+                dia em que precisar apresentar o sistema sem expor a operação.
+              </small>
+            </label>
+          </div>
+        </section>
+
+        <section className="settings-card">
+          <header>
+            <span>5</span>
             <div>
               <h2>Domínio e entrega comercial</h2>
               <p>Informações para administrar ou vender a solução.</p>

@@ -2,6 +2,7 @@ import { validateRecordPayload } from "../app/lib/record-validation";
 import { buildImportDeduplicationKey } from "../app/lib/import-deduplication.mjs";
 import { isImportableModule } from "../app/lib/import-policy";
 import { moduleMap } from "../app/lib/modules";
+import { baseEhOficial } from "../app/lib/official-base";
 
 export type StoredRecord = {
   id: number;
@@ -362,9 +363,47 @@ async function ensureSchemaOnce(): Promise<void> {
   ]);
 }
 
+/*
+ * Lê o interruptor "esta base é real" direto do banco.
+ *
+ * Consulta própria, e não `listRecords("settings")`: as funções de leitura
+ * precisam consultar a chave para saber se escondem os exemplos, e chamar
+ * `listRecords` daqui as faria chamar a si mesmas.
+ */
+export async function baseOficialAtiva() {
+  const db = await database();
+  const linha = await db
+    .prepare(
+      `SELECT payload FROM records
+       WHERE tenant_id = ? AND module = 'settings'
+       ORDER BY updated_at DESC, id DESC LIMIT 1`,
+    )
+    .bind(DEFAULT_TENANT_ID)
+    .first<{ payload: string }>();
+
+  if (!linha) return false;
+  try {
+    return baseEhOficial(JSON.parse(linha.payload || "{}"));
+  } catch {
+    /*
+     * Configuração ilegível não pode fechar o sistema. Vale o padrão —
+     * demonstração — e a decisão continua visível na tela para ser refeita.
+     */
+    return false;
+  }
+}
+
 export async function ensureDemoRecords() {
   await ensureSchema();
   const db = await database();
+
+  /*
+   * Base declarada real não recebe exemplo novo, e o que foi apagado
+   * continua apagado. Sem isto, apagar o "Colaborador Teste 01" não
+   * adiantava: ele voltava no carregamento seguinte.
+   */
+  if (await baseOficialAtiva()) return;
+
   const existing = await db
     .prepare(
       `SELECT id, module, reference, status, payload, source FROM records
@@ -958,9 +997,45 @@ function changedFields(previous: StoredRecord, next: RecordInput) {
   return changes;
 }
 
+/*
+ * Filtro de origem aplicado às leituras.
+ *
+ * Quando a base é declarada real, o registro fictício some da consulta —
+ * portanto some da lista, do total, do cálculo e da fila. É a regra do
+ * projeto escrita em SQL: exemplo não entra em decisão real.
+ *
+ * Somem da CONSULTA, não do banco: nada é apagado, e desligar a chave
+ * devolve tudo.
+ */
+async function filtroDeOrigem() {
+  return (await baseOficialAtiva()) ? " AND source <> ?" : "";
+}
+
 export async function listRecords(module?: string | null) {
   await ensureSchema();
   const db = await database();
+  const semExemplos = await filtroDeOrigem();
+
+  if (semExemplos) {
+    const query = module && allowedModules.has(module)
+      ? db
+          .prepare(
+            `SELECT * FROM records
+             WHERE tenant_id = ? AND module = ?${semExemplos}
+             ORDER BY updated_at DESC, id DESC LIMIT 2500`,
+          )
+          .bind(DEFAULT_TENANT_ID, module, DEMO_SOURCE)
+      : db
+          .prepare(
+            `SELECT * FROM records
+             WHERE tenant_id = ?${semExemplos}
+             ORDER BY updated_at DESC, id DESC LIMIT 5000`,
+          )
+          .bind(DEFAULT_TENANT_ID, DEMO_SOURCE);
+    const result = await query.all<Record<string, unknown>>();
+    return (result.results || []).map(rowToRecord);
+  }
+
   const query = module && allowedModules.has(module)
     ? db
         .prepare(
@@ -996,6 +1071,12 @@ export async function queryRecords(options: RecordQuery) {
   const conditions: string[] = [];
   const values: Array<string | number> = [DEFAULT_TENANT_ID];
   conditions.push("tenant_id = ?");
+
+  /* Base real não lista exemplo — nem aqui, na consulta paginada da tela. */
+  if (await baseOficialAtiva()) {
+    conditions.push("source <> ?");
+    values.push(DEMO_SOURCE);
+  }
 
   if (moduleId) {
     conditions.push("module = ?");
