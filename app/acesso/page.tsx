@@ -1,17 +1,12 @@
-import AccessGate from "../components/AccessGate";
+import SupervisorLoginGate from "../components/SupervisorLoginGate";
 
 export const dynamic = "force-dynamic";
 
 export default async function AccessPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ next?: string; message?: string }>;
+  searchParams?: Promise<{ message?: string }>;
 }) {
   const params = (await searchParams) || {};
-  return (
-    <AccessGate
-      nextPath={params.next || "/"}
-      message={params.message || ""}
-    />
-  );
+  return <SupervisorLoginGate message={params.message || ""} />;
 }
