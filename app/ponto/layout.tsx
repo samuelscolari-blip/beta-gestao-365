@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import AccessGate from "../components/AccessGate";
-import StaffPointIdentityLock from "../components/StaffPointIdentityLock";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
@@ -14,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Beta Ponto",
   description:
-    "Registro móvel de ponto com reconhecimento facial, horário, localização e modo offline.",
+    "Registro móvel de ponto com horário, localização e funcionamento online ou offline.",
   manifest: "/ponto.webmanifest",
   applicationName: "Beta Ponto",
   appleWebApp: {
@@ -56,13 +55,5 @@ export default async function TimeClockLayout({
     );
   }
 
-  return (
-    <>
-      <StaffPointIdentityLock
-        registration={staff.registration}
-        name={staff.name}
-      />
-      {children}
-    </>
-  );
+  return children;
 }
