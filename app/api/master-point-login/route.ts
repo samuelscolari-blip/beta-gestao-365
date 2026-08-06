@@ -3,6 +3,7 @@ import {
   masterPointSessionCookie,
   verifyMasterPointAccess,
 } from "../../lib/master-point-access";
+import { businessStaffSessionFromHeaders } from "../../lib/staff-business-access";
 
 function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");
@@ -14,6 +15,18 @@ export async function POST(request: Request) {
     return Response.json(
       { ok: false, message: "Origem de login inválida." },
       { status: 403 },
+    );
+  }
+
+  const supervisor = await businessStaffSessionFromHeaders(request.headers);
+  if (!supervisor || supervisor.role !== "encarregado") {
+    return Response.json(
+      {
+        ok: false,
+        message:
+          "Identifique primeiro o encarregado com matrícula e senha individual.",
+      },
+      { status: 401, headers: { "cache-control": "no-store" } },
     );
   }
 
@@ -41,11 +54,20 @@ export async function POST(request: Request) {
     );
   }
 
-  const session = await createMasterPointSession(verified.employee);
+  const session = await createMasterPointSession(verified.employee, {
+    registration: supervisor.registration,
+    name: supervisor.name,
+    role: "encarregado",
+  });
   return Response.json(
     {
       ok: true,
-      message: "Acesso ao ponto liberado.",
+      message:
+        "Senha master confirmada. A sessão do encarregado foi liberada para todos os colaboradores.",
+      supervisor: {
+        registration: supervisor.registration,
+        name: supervisor.name,
+      },
       selectedEmployee: {
         registration: verified.employee.registration,
         name: verified.employee.name,
