@@ -1,7 +1,7 @@
 {
   "name": "Beta Ponto",
   "short_name": "Beta Ponto",
-  "description": "Registro móvel de ponto com rosto, horário, localização e modo offline.",
+  "description": "Registro móvel de ponto com horário, localização e modo online ou offline.",
   "lang": "pt-BR",
   "start_url": "/ponto",
   "scope": "/",
