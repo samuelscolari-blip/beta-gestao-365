@@ -1085,6 +1085,11 @@ export async function createRecord(
   return record;
 }
 
+/** Só os dígitos: o mesmo CPF aparece formatado numa planilha e cru noutra. */
+function onlyDigits(value: unknown): string {
+  return String(value ?? "").replace(/\D/g, "");
+}
+
 export async function createMany(
   inputs: Array<Partial<RecordInput>>,
   actor: string,
@@ -1223,6 +1228,37 @@ export async function createMany(
       .map((row) => [`${row.module}::${row.import_key}`, row]),
   );
 
+  /*
+   * Índice por CPF, para reimportar planilha de folha sem duplicar ninguém.
+   *
+   * O código do colaborador é gerado pelo sistema, então quem monta a
+   * planilha no RH não o tem — ele teria que exportar antes só para
+   * descobrir o código de cada pessoa. Com milhares de linhas, isso
+   * inviabiliza o trabalho. O CPF é o identificador que já está na mão.
+   *
+   * Guarda só dígitos: a mesma pessoa aparece como "123.456.789-00" numa
+   * planilha e "12345678900" em outra, e as duas precisam casar.
+   */
+  const existingByCpf = new Map<string, ExistingImportRow>();
+  for (const row of existingRows) {
+    let payload: Record<string, unknown> = {};
+    try {
+      payload = JSON.parse(row.payload || "{}") as Record<string, unknown>;
+    } catch {
+      continue;
+    }
+    const cpf = onlyDigits(payload.cpf);
+    if (cpf.length !== 11) continue;
+    const chave = `${row.module}::${cpf}`;
+    /*
+     * Se dois cadastros compartilham o CPF, nenhum é escolhido: atualizar
+     * um deles às cegas mexeria na pessoa errada. A linha vira cadastro
+     * novo e a duplicidade fica visível para ser resolvida à mão.
+     */
+    if (existingByCpf.has(chave)) existingByCpf.set(chave, null as never);
+    else existingByCpf.set(chave, row);
+  }
+
   const seenBatchKeys = new Set<string>();
   const statements: ReturnType<typeof db.prepare>[] = [];
   let inserted = 0;
@@ -1244,9 +1280,14 @@ export async function createMany(
     const referenceKey = input.reference
       ? `${input.module}::${input.reference.toLowerCase()}`
       : "";
+    const cpfDaLinha = onlyDigits(input.payload?.cpf);
     const existing =
       (importKey && existingByImportKey.get(`${input.module}::${importKey}`)) ||
-      (referenceKey && existingByReference.get(referenceKey));
+      (referenceKey && existingByReference.get(referenceKey)) ||
+      /* Sem código na planilha, o CPF identifica quem atualizar. */
+      (cpfDaLinha.length === 11
+        ? existingByCpf.get(`${input.module}::${cpfDaLinha}`) || null
+        : null);
 
     if (existing) {
       if (!input.source.startsWith("Planilha:")) {
@@ -1286,10 +1327,26 @@ export async function createMany(
         ? Math.round(input.amount * 100)
         : Number(existing.amount_cents || 0);
       const amount = amountCents / 100;
+      /*
+       * Quando a linha foi identificada pelo CPF, ela não traz o código do
+       * colaborador — e gravar a referência vazia APAGARIA o código do
+       * cadastro. O registro perderia a chave que o liga a folha, rescisão
+       * e importações futuras.
+       *
+       * O código é do sistema; a planilha só o confirma quando o tem.
+       */
+      const reference = input.reference || existing.reference;
+      /* Idem para o payload: o código não pode ser sobrescrito por vazio. */
+      const referenceField = moduleMap[input.module]?.referenceField;
+      if (referenceField && !String(mergedPayload[referenceField] ?? "").trim()) {
+        mergedPayload[referenceField] =
+          previousPayload[referenceField] ?? existing.reference;
+      }
+
       const serializedPayload = JSON.stringify(mergedPayload);
       const unchanged =
         title === existing.title &&
-        input.reference === existing.reference &&
+        reference === existing.reference &&
         status === existing.status &&
         recordDate === existing.record_date &&
         amountCents === Number(existing.amount_cents || 0) &&
@@ -1311,7 +1368,7 @@ export async function createMany(
           )
           .bind(
             title,
-            input.reference,
+            reference,
             status,
             recordDate,
             amount,
