@@ -2,7 +2,7 @@ import {
   authenticatedEmail,
   SOLE_ADMIN_EMAIL,
 } from "../../lib/server-access";
-import { staffSessionFromHeaders } from "../../lib/staff-access";
+import { businessStaffSessionFromHeaders } from "../../lib/staff-business-access";
 
 export async function GET(request: Request) {
   const email = authenticatedEmail(request);
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const staff = await staffSessionFromHeaders(request.headers);
+  const staff = await businessStaffSessionFromHeaders(request.headers);
   if (!staff) {
     return Response.json(
       { authenticated: false },
