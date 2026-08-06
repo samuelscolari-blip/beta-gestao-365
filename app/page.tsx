@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import AccessGate from "./components/AccessGate";
 import SecureBetaAppV131 from "./components/SecureBetaAppV131";
 import {
@@ -11,8 +12,9 @@ import {
 } from "./lib/staff-access";
 
 // Cadeia preservada pela V131: SecureBetaAppV100 → SecureBetaAppV97 →
-// SecureBetaAppV66 → SecureBetaAppV65. A V131 adiciona o acesso fechado,
-// conecta Pessoas ao cadastro facial e mantém o portal móvel de ponto.
+// SecureBetaAppV66 → SecureBetaAppV65. O administrador mantém o sistema
+// completo, o encarregado recebe o painel limitado e o colaborador acessa
+// somente o próprio ponto.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
@@ -45,12 +47,16 @@ export default async function Home() {
     );
   }
 
+  if (staff.role === "colaborador") {
+    redirect("/ponto");
+  }
+
   return (
     <SecureBetaAppV131
       userName={staff.name}
       userEmail={null}
       isAdmin={false}
-      accessRole={staff.role}
+      accessRole="encarregado"
       employeeCode={staff.registration}
     />
   );
