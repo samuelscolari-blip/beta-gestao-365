@@ -4,39 +4,41 @@ import test from "node:test";
 
 const clockPage = fs.readFileSync("app/ponto/page.tsx", "utf8");
 const clockApi = fs.readFileSync("app/api/time-clock/route.js", "utf8");
-const newEmployee = fs.readFileSync("app/pessoas/novo/page.tsx", "utf8");
-const wrapper = fs.readFileSync("app/components/SecureBetaAppV131.tsx", "utf8");
 const serviceWorker = fs.readFileSync("public/ponto-sw.js", "utf8");
 const manifest = fs.readFileSync("public/ponto.webmanifest", "utf8");
 
-test("V131 conecta a tela Pessoas ao cadastro do colaborador do zero", () => {
-  assert.match(wrapper, /data-module=\\?"people\\?"/);
-  assert.match(wrapper, /\/pessoas\/novo/);
-  assert.match(newEmployee, /module:\s*"people"/);
-  assert.match(newEmployee, /Salvar e cadastrar o rosto/);
-  assert.match(newEmployee, /\/ponto\?/);
+test("ponto funciona sem reconhecimento facial ou câmera", () => {
+  assert.doesNotMatch(clockPage, /getUserMedia|HUMAN_SCRIPT|embedding|evidencePhoto/);
+  assert.doesNotMatch(clockApi, /FACE_MATCH_THRESHOLD|faceSimilarity|evidence_photo/);
+  assert.match(clockPage, /Ponto eletrônico operacional sem reconhecimento facial/);
+  assert.match(clockPage, /Bater ponto agora/);
 });
 
-test("cadastro facial libera o ponto no mesmo celular", () => {
-  assert.match(clockPage, /Cadastrar rosto e liberar ponto/);
-  assert.match(
-    clockPage,
-    /Rosto cadastrado com sucesso\. Seu acesso ao ponto está liberado\./,
-  );
-  assert.match(clockPage, /deviceToken/);
-  assert.match(clockApi, /device_token_hash/);
-  assert.match(clockApi, /FACE_MATCH_THRESHOLD/);
-});
-
-test("batida preserva horário, foto e geolocalização", () => {
-  assert.match(clockPage, /occurredAt/);
-  assert.match(clockPage, /evidencePhoto/);
+test("batida preserva horário e geolocalização", () => {
+  assert.match(clockPage, /occurredAt = new Date\(\)\.toISOString\(\)/);
   assert.match(clockPage, /position\.coords\.latitude/);
   assert.match(clockPage, /position\.coords\.longitude/);
   assert.match(clockApi, /occurred_at/);
-  assert.match(clockApi, /evidence_photo/);
   assert.match(clockApi, /latitude REAL/);
   assert.match(clockApi, /longitude REAL/);
+  assert.match(clockApi, /accuracy REAL/);
+});
+
+test("encarregado pode registrar para colaboradores com autoria", () => {
+  assert.match(clockPage, /Quem está batendo o ponto\?/);
+  assert.match(clockPage, /O lançamento ficará identificado/);
+  assert.match(clockApi, /actor_registration/);
+  assert.match(clockApi, /actor_name/);
+  assert.match(clockApi, /actor_role/);
+  assert.match(clockApi, /actor\.role === "administrador" \|\| actor\.role === "encarregado"/);
+  assert.match(clockApi, /Ponto de \$\{employee\.name\} registrado/);
+});
+
+test("colaborador fica restrito ao próprio ponto", () => {
+  assert.match(clockPage, /actor\.role === "colaborador"/);
+  assert.match(clockPage, /identidade fixa nesta sessão/);
+  assert.match(clockApi, /actor\.registration === employeeCode/);
+  assert.match(clockApi, /O colaborador só pode registrar o próprio ponto/);
 });
 
 test("fila offline usa clientEventId e servidor impede duplicidade", () => {
@@ -44,9 +46,10 @@ test("fila offline usa clientEventId e servidor impede duplicidade", () => {
   assert.match(clockPage, /clientEventId = crypto\.randomUUID\(\)/);
   assert.match(clockPage, /Sem conexão\. O registro foi salvo neste celular/);
   assert.match(clockApi, /UNIQUE \(tenant_id, client_event_id\)/);
-  assert.match(clockApi, /INSERT OR IGNORE INTO time_clock_events/);
+  assert.match(clockApi, /INSERT OR IGNORE INTO time_clock_entries/);
   assert.match(serviceWorker, /beta-time-clock-sync/);
   assert.match(serviceWorker, /indexedDB\.open/);
+  assert.match(serviceWorker, /A batida continua pendente/);
 });
 
 test("API carrega cloudflare:workers somente dentro da função", () => {
@@ -54,13 +57,14 @@ test("API carrega cloudflare:workers somente dentro da função", () => {
   assert.match(clockApi, /await import\("cloudflare:workers"\)/);
 });
 
-test("portal possui manifesto instalável e service worker", () => {
+test("portal possui manifesto instalável e cache PWA", () => {
   const parsedManifest = JSON.parse(manifest);
   assert.equal(parsedManifest.start_url, "/ponto");
   assert.equal(parsedManifest.display, "standalone");
+  assert.doesNotMatch(parsedManifest.description, /rosto|facial/i);
   assert.match(
     clockPage,
     /navigator\.serviceWorker\.register\("\/ponto-sw\.js"/,
   );
-  assert.match(serviceWorker, /caches\.open\(CACHE_NAME\)/);
+  assert.match(serviceWorker, /CACHE_NAME = "beta-ponto-v132"/);
 });
