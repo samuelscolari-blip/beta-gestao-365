@@ -109,26 +109,29 @@ export type ImportRun = {
   }>;
 };
 
+/*
+ * Módulos que o banco aceita gravar.
+ *
+ * Sai de `moduleMap`, a mesma definição que a tela usa. Antes era uma lista
+ * escrita à mão aqui — uma SEGUNDA verdade sobre quais telas existem, que
+ * envelhecia calada.
+ *
+ * O estrago que isso causou: ao criar Cálculo de Férias, Folga de Campo e
+ * Treinamentos, a definição foi para `app/lib/modules.ts` e ninguém lembrou
+ * desta lista. Os registros fictícios de treinamento passaram a ser recusados
+ * com "Módulo inválido", e a recusa derrubava a semeadura inteira — de onde
+ * `GET /api/records` respondia erro e o sistema TODO aparecia vazio. Um
+ * módulo novo apagou a tela de máquinas, a de obras e todas as outras.
+ *
+ * Derivando da definição, criar uma tela nova passa a bastar: não há segunda
+ * lista para esquecer.
+ */
 const allowedModules = new Set([
-  "works",
-  "worklogs",
-  "suppliers",
-  "expenses",
-  "cards",
-  "rentals",
-  "assets",
-  "asset_events",
-  "people",
-  "payroll",
-  "terminations",
-  "food",
-  "taxes",
-  "purchases",
-  "documents",
-  "emails",
-  "m365",
-  "compliance",
-  "rules",
+  ...Object.keys(moduleMap),
+  /*
+   * `settings` guarda a configuração do sistema em `records`. Não é tela, não
+   * tem definição de módulo, e por isso entra à parte.
+   */
   "settings",
 ]);
 
