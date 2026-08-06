@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import AccessGate from "../components/AccessGate";
+import SupervisorLoginGate from "../components/SupervisorLoginGate";
 import { masterPointSessionFromHeaders } from "../lib/master-point-access";
 import {
   authenticatedEmailFromHeaders,
   SOLE_ADMIN_EMAIL,
 } from "../lib/server-access";
+import { businessStaffSessionFromHeaders } from "../lib/staff-business-access";
 
 export const metadata: Metadata = {
   title: "Beta Ponto",
@@ -41,10 +43,17 @@ export default async function TimeClockLayout({
   const masterSession = await masterPointSessionFromHeaders(requestHeaders);
   if (masterSession) return children;
 
+  const supervisor = await businessStaffSessionFromHeaders(requestHeaders);
+  if (!supervisor || supervisor.role !== "encarregado") {
+    return (
+      <SupervisorLoginGate message="Identifique o encarregado antes de acessar o ponto." />
+    );
+  }
+
   return (
     <AccessGate
       nextPath="/ponto"
-      message="Entre com o CPF do colaborador e a senha master do encarregado."
+      message="Encarregado identificado. Confirme a senha master uma única vez para liberar a sessão."
     />
   );
 }
