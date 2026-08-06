@@ -5031,6 +5031,20 @@ a {
   line-height: 1;
 }
 
+/*
+ * A marca desenhada. Sem moldura e sem fundo, ao contrário do `β` que ficava
+ * dentro de um quadrado azul: o logotipo já é uma forma fechada, e emoldurar
+ * forma fechada rouba tamanho útil dela justamente no ponto em que ela é
+ * menor. `currentColor` deixa a marca herdar a cor do texto ao lado, então
+ * ela funciona igual na barra escura e em qualquer fundo claro.
+ */
+.brand-mark-svg {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  color: #fff;
+}
+
 .brand-logo {
   width: 40px;
   height: 40px;
@@ -5054,8 +5068,14 @@ a {
   overflow: hidden;
   font-size: 12px;
   font-weight: 720;
-  letter-spacing: 0.035em;
+  /*
+   * Maiúsculas, como no logotipo. O espaçamento sobe junto: caixa alta sem
+   * folga entre as letras fecha a palavra num bloco e fica mais difícil de
+   * ler do que a caixa mista que havia antes.
+   */
+  letter-spacing: 0.075em;
   text-overflow: ellipsis;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 

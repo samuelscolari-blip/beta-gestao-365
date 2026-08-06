@@ -25,6 +25,7 @@ import {
   type ModuleField,
 } from "../lib/modules";
 import { NOVO_REGISTRO_EVENTO } from "../lib/quick-actions";
+import BrandMark from "../ui/BrandMark/BrandMark";
 import FieldLeaveSummary from "../ui/FieldLeaveSummary/FieldLeaveSummary";
 import TrainingsSummary from "../ui/TrainingsSummary/TrainingsSummary";
 import TrainingsTabs from "../ui/TrainingsTabs/TrainingsTabs";
@@ -9197,11 +9198,21 @@ throw new Error(
               style={{ backgroundImage: `url("${settings.logoUrl}")` }}
             />
           ) : (
-            <span className="brand-mark">β</span>
+            /*
+             * O arquivo enviado em Configurações tem precedência. Sem ele,
+             * vale a marca desenhada — que é o logotipo da empresa, e não
+             * mais a letra grega de placeholder.
+             */
+            <BrandMark className="brand-mark-svg" title={settings.companyName} />
           )}
           <span>
+            {/*
+             * Só o nome da empresa, em maiúsculas. O nome do sistema saiu
+             * daqui a pedido de Samuel Scolari: quem abre a tela trabalha na
+             * Beta, não no "Beta Gestão 365", e a segunda linha competia com
+             * a primeira sem acrescentar nada.
+             */}
             <strong>{settings.companyName}</strong>
-            <small>{settings.systemName}</small>
           </span>
         </div>
         <nav>
