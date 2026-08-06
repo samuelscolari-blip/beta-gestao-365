@@ -429,6 +429,80 @@ export const demoRecords: DemoRecord[] = [
     corporateEmail: "colaborador.teste03@betaconstrutora.com.br", accessProfile: "Acesso encerrado",
     documentsUrl: docs("colaborador-003"),
   }),
+  /*
+   * Faixas salariais deliberadamente espalhadas.
+   *
+   * Um único salário de exemplo não mostra nada: INSS é progressivo por
+   * faixas e o IRRF tem isenção, então só com valores diferentes dá para
+   * conferir que o cálculo muda de alíquota onde deve. Os salários abaixo
+   * atravessam a isenção do IRRF, as quatro faixas do INSS e o teto.
+   *
+   * Três deles moram fora da cidade da obra, para a Folga de Campo ter o
+   * que mostrar.
+   */
+  demo("people", "Colaborador Teste 04", "TST-COL-004", "Ativo", "2025-02-17", 2680, {
+    employeeCode: "TST-COL-004", registration: "MAT-TST-004", name: "Colaborador Teste 04",
+    role: "Servente de obra", department: "Operações", work: "Residencial Horizonte — Obra Teste",
+    manager: "Encarregado Teste 01", admissionDate: "2025-02-17", salary: 1650, benefits: 1030,
+    monthlyCost: 2680, status: "Ativo", monthlyHours: 220, dependents: 0,
+    corporateEmail: "colaborador.teste04@betaconstrutora.com.br",
+    accessProfile: "Sem acesso administrativo", documentsUrl: docs("colaborador-004"),
+    livesOutOfTown: "Sim", homeCity: "Feira de Santana/BA", fieldLeaveCountFrom: "2026-05-04",
+  }),
+  demo("people", "Colaborador Teste 05", "TST-COL-005", "Ativo", "2024-09-02", 3910, {
+    employeeCode: "TST-COL-005", registration: "MAT-TST-005", name: "Colaborador Teste 05",
+    role: "Pedreiro", department: "Operações", work: "Residencial Horizonte — Obra Teste",
+    manager: "Encarregado Teste 01", admissionDate: "2024-09-02", salary: 2650, benefits: 1260,
+    monthlyCost: 3910, status: "Ativo", monthlyHours: 220, dependents: 2,
+    corporateEmail: "colaborador.teste05@betaconstrutora.com.br",
+    accessProfile: "Sem acesso administrativo", documentsUrl: docs("colaborador-005"),
+    livesOutOfTown: "Não",
+  }),
+  demo("people", "Colaborador Teste 06", "TST-COL-006", "Ativo", "2023-03-13", 6420, {
+    employeeCode: "TST-COL-006", registration: "MAT-TST-006", name: "Colaborador Teste 06",
+    role: "Mestre de obras", department: "Operações", work: "Reforma Administrativa — Obra Teste",
+    manager: "Gestor Teste 01", admissionDate: "2023-03-13", salary: 5100, benefits: 1320,
+    monthlyCost: 6420, status: "Ativo", monthlyHours: 220, dependents: 1,
+    corporateEmail: "colaborador.teste06@betaconstrutora.com.br",
+    accessProfile: "Gestor de obra", documentsUrl: docs("colaborador-006"),
+    livesOutOfTown: "Sim", homeCity: "Vitória da Conquista/BA", fieldLeaveCountFrom: "2026-06-20",
+  }),
+  demo("people", "Colaborador Teste 07", "TST-COL-007", "Ativo", "2022-07-25", 10480, {
+    employeeCode: "TST-COL-007", registration: "MAT-TST-007", name: "Colaborador Teste 07",
+    role: "Engenheiro civil", department: "Engenharia", work: "Residencial Horizonte — Obra Teste",
+    manager: "Diretoria Teste", admissionDate: "2022-07-25", salary: 8900, benefits: 1580,
+    monthlyCost: 10480, status: "Ativo", monthlyHours: 220, dependents: 2,
+    corporateEmail: "colaborador.teste07@betaconstrutora.com.br",
+    accessProfile: "Gestor de obra", documentsUrl: docs("colaborador-007"),
+    livesOutOfTown: "Não",
+  }),
+  demo("people", "Colaborador Teste 08", "TST-COL-008", "Ativo", "2021-11-08", 16250, {
+    employeeCode: "TST-COL-008", registration: "MAT-TST-008", name: "Colaborador Teste 08",
+    role: "Gerente de contratos", department: "Administrativo", work: "Reforma Administrativa — Obra Teste",
+    manager: "Diretoria Teste", admissionDate: "2021-11-08", salary: 14200, benefits: 2050,
+    monthlyCost: 16250, status: "Ativo", monthlyHours: 220, dependents: 3,
+    corporateEmail: "colaborador.teste08@betaconstrutora.com.br",
+    accessProfile: "Administrador", documentsUrl: docs("colaborador-008"),
+    livesOutOfTown: "Não",
+  }),
+  demo("people", "Colaborador Teste 09", "TST-COL-009", "Ativo", "2025-08-19", 3145, {
+    employeeCode: "TST-COL-009", registration: "MAT-TST-009", name: "Colaborador Teste 09",
+    role: "Carpinteiro", department: "Operações", work: "Residencial Horizonte — Obra Teste",
+    manager: "Encarregado Teste 01", admissionDate: "2025-08-19", salary: 2120, benefits: 1025,
+    monthlyCost: 3145, status: "Ativo", monthlyHours: 220, dependents: 0,
+    corporateEmail: "colaborador.teste09@betaconstrutora.com.br",
+    accessProfile: "Sem acesso administrativo", documentsUrl: docs("colaborador-009"),
+    livesOutOfTown: "Sim", homeCity: "Juazeiro/BA", fieldLeaveCountFrom: "2026-07-11",
+  }),
+  demo("people", "Colaborador Teste 10", "TST-COL-010", "Ativo", "2024-01-30", 4735, {
+    employeeCode: "TST-COL-010", registration: "MAT-TST-010", name: "Colaborador Teste 10",
+    role: "Técnica em segurança do trabalho", department: "Segurança", work: "Residencial Horizonte — Obra Teste",
+    manager: "Gestor Teste 01", admissionDate: "2024-01-30", salary: 3480, benefits: 1255,
+    monthlyCost: 4735, status: "Ativo", monthlyHours: 220, dependents: 1,
+    corporateEmail: "colaborador.teste10@betaconstrutora.com.br",
+    accessProfile: "Gestor de obra", documentsUrl: docs("colaborador-010"),
+    livesOutOfTown: "Não",
+  }),
   demo("terminations", "Colaborador Teste 03", "TST-RES-001", "Prévia — não transmitida", "2026-07-18", 7279.12, {
     terminationCode: "TST-RES-001", employeeName: "Colaborador Teste 03",
     employeeCode: "TST-COL-003", role: "Eletricista", admissionDate: "2025-08-01",

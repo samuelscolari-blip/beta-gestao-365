@@ -42,6 +42,23 @@ export type PayrollLine = {
   label: string;
   base: number;
   rate?: number;
+  /*
+   * O que a coluna "Referência" do contracheque mostra: quantidade quando
+   * a verba é medida (horas), alíquota quando é percentual, e 1,00 quando
+   * é valor fixo informado.
+   *
+   * É diferente de `base`, que é o valor sobre o qual a verba incidiu. Ver
+   * a base repetida em toda linha não ajuda a conferir nada; ver "14,00"
+   * ao lado do INSS mostra na hora se a alíquota efetiva faz sentido — que
+   * é para isso que se olha um contracheque linha a linha.
+   */
+  reference?: number;
+  /*
+   * A unidade da referência, para a tela não obrigar ninguém a adivinhar
+   * se "220,00" são horas e "9,06" é percentual. Quem confere a folha
+   * precisa ler a linha sem consultar outra pessoa.
+   */
+  referenceUnit?: "h" | "%" | "un";
   amount: number;
   kind: "earning" | "deduction" | "employer" | "provision";
   note: string;
@@ -381,11 +398,25 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
           }
         : null;
 
+  /*
+   * Alíquota efetiva de uma verba: quanto ela representou da própria base.
+   *
+   * Para INSS e IRRF o número não é o da tabela — é o resultado do cálculo
+   * progressivo. Mostrar a alíquota efetiva é justamente o que permite
+   * conferir: 14,00 num salário de faixa alta indica que as faixas foram
+   * aplicadas; 7,5 indicaria erro.
+   */
+  const aliquota = (valor: number, sobre: number) =>
+    sobre > 0 ? money((valor / sobre) * 100) : 0;
+
   const lines: Array<PayrollLine | null> = [
     {
       code: "10000",
       label: "Salário mensal",
       base: salary,
+      /* Horas contratuais do mês, como no contracheque de referência. */
+      reference: input.monthlyHours,
+      referenceUnit: "h",
       amount: salary,
       kind: "earning",
       note: "Remuneração mensal informada no Cadastro de Funcionários.",
@@ -396,13 +427,15 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
       label: "Horas extras",
       base: salary / input.monthlyHours,
       rate: overtimeFactor,
+      reference: input.overtimeHours,
+      referenceUnit: "h",
       amount: overtimeAmount,
       kind: "earning",
       note: `${input.overtimeHours} h com adicional de ${input.overtimePercent}%.`,
     },
     {
       code: "11990",
-      label: "Outros proventos tributáveis",
+      label: "Outras verbas de natureza salarial",
       base: input.taxableAdditions,
       amount: input.taxableAdditions,
       kind: "earning",
@@ -410,7 +443,7 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
     },
     {
       code: "12000",
-      label: "Proventos não tributáveis",
+      label: "Verbas de natureza indenizatória",
       base: input.nonTaxableEarnings,
       amount: input.nonTaxableEarnings,
       kind: "earning",
@@ -418,16 +451,20 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
     },
     {
       code: "15000",
-      label: "INSS do empregado",
+      label: "Contribuição previdenciária do segurado",
       base: taxableGross,
+      reference: aliquota(inss, taxableGross),
+      referenceUnit: "%",
       amount: inss,
       kind: "deduction",
       note: "Cálculo progressivo pelas faixas vigentes em 2026.",
     },
     {
       code: "15500",
-      label: "IRRF mensal",
+      label: "Imposto de renda retido na fonte",
       base: irrfBase,
+      reference: aliquota(irrf, irrfBase),
+      referenceUnit: "%",
       amount: irrf,
       kind: "deduction",
       note: `${useSimplified ? "Desconto simplificado" : "Deduções legais"}; redução 2026 de ${money(irrfReduction).toFixed(2)}.`,
@@ -450,7 +487,7 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
     },
     {
       code: "16950",
-      label: "Consignados e convênios",
+      label: "Desconto de empréstimo consignado",
       base: input.consignments,
       amount: input.consignments,
       kind: "deduction",
@@ -474,9 +511,13 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
     },
     {
       code: "90000",
-      label: `FGTS mensal — ${money(fgtsRate * 100)}%`,
+      /* O percentual saiu do nome: a coluna Referência já o mostra, e
+         repetir obrigava a ler duas vezes a mesma informação. */
+      label: "FGTS mensal",
       base: taxableGross,
       rate: fgtsRate,
+      reference: money(fgtsRate * 100),
+      referenceUnit: "%",
       amount: fgts,
       kind: "employer",
       note:
@@ -486,27 +527,33 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
     },
     {
       code: "94010",
-      label: "Contribuição patronal",
+      label: "Contribuição previdenciária patronal",
       base: taxableGross,
       rate: input.employerInssPercent / 100,
+      reference: input.employerInssPercent,
+      referenceUnit: "%",
       amount: employerInss,
       kind: "employer",
       note: `Parâmetro patronal informado: ${input.employerInssPercent}%.`,
     },
     {
       code: "94020",
-      label: "RAT ajustado",
+      label: "RAT ajustado pelo FAP",
       base: taxableGross,
       rate: ratAdjustedPercent / 100,
+      reference: ratAdjustedPercent,
+      referenceUnit: "%",
       amount: ratAdjusted,
       kind: "employer",
       note: `RAT ${input.ratPercent}% × FAP ${input.fapFactor} = ${ratAdjustedPercent}%.`,
     },
     {
       code: "94030",
-      label: "Outras entidades e fundos",
+      label: "Contribuições a outras entidades e fundos",
       base: taxableGross,
       rate: input.thirdPartiesPercent / 100,
+      reference: input.thirdPartiesPercent,
+      referenceUnit: "%",
       amount: thirdParties,
       kind: "employer",
       note: `Percentual de terceiros informado: ${input.thirdPartiesPercent}%.`,
@@ -516,6 +563,8 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
       label: "Provisão mensal de 13º",
       base: taxableGross,
       rate: 1 / 12,
+      reference: money((1 / 12) * 100),
+      referenceUnit: "%",
       amount: thirteenthProvision,
       kind: "provision",
       note: "Estimativa mensal de 1/12 da remuneração tributável.",
@@ -525,6 +574,8 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
       label: "Provisão mensal de férias",
       base: taxableGross,
       rate: 1 / 12,
+      reference: money((1 / 12) * 100),
+      referenceUnit: "%",
       amount: vacationProvision,
       kind: "provision",
       note: "Estimativa mensal de 1/12 da remuneração tributável.",
@@ -534,6 +585,8 @@ export function calculatePayroll(rawInput: PayrollInput): PayrollResult {
       label: "Provisão do terço de férias",
       base: vacationProvision,
       rate: 1 / 3,
+      reference: money((1 / 3) * 100),
+      referenceUnit: "%",
       amount: vacationThirdProvision,
       kind: "provision",
       note: "Um terço da provisão mensal de férias.",

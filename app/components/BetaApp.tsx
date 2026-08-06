@@ -41,6 +41,7 @@ import {
   calculatePayroll,
   payrollRules2026,
   type PayrollInput,
+  type PayrollLine,
   type PayrollResult,
 } from "../lib/payroll";
 import {
@@ -1015,6 +1016,39 @@ function InfrastructureCenter({ canEdit }: { canEdit: boolean }) {
       </section>
     </div>
   );
+}
+
+/*
+ * A coluna "Referência" do contracheque.
+ *
+ * Mostra a QUANTIDADE quando a verba é medida (horas trabalhadas, horas
+ * extras) e a ALÍQUOTA quando é percentual (INSS, IRRF, FGTS, patronal).
+ * Verba de valor fixo informado aparece como 1,00 — uma ocorrência —, que
+ * é como o contracheque de referência do cliente as apresenta.
+ *
+ * Duas casas decimais sempre, inclusive em números redondos: numa coluna
+ * de conferência, "8" e "8,00" alinhados de formas diferentes atrapalham a
+ * leitura de cima para baixo.
+ */
+function formatReference(line: PayrollLine) {
+  const numero = line.reference ?? (line.amount ? 1 : 0);
+  if (!numero) return "—";
+
+  const formatado = numero.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  /*
+   * A unidade fica ao lado do número porque a coluna mistura naturezas:
+   * 220,00 são horas e 9,06 é percentual. Sem a marca, quem confere
+   * precisa saber de cor qual verba é qual — e é justamente quem está
+   * aprendendo a conferir que mais precisa da tela.
+   *
+   * "un." é ocorrência: verba de valor fixo, lançada uma vez.
+   */
+  const unidade = line.referenceUnit ?? "un";
+  return `${formatado} ${unidade === "un" ? "un." : unidade}`;
 }
 
 function formatValue(field: ModuleField | undefined, value: unknown) {
@@ -7312,19 +7346,37 @@ function PayrollStudio({
           <table>
             <thead>
               <tr>
-                {showInternalCodes ? <th>Verba</th> : null}
+                {/*
+                  * O código da rubrica é coluna fixa do contracheque, e não
+                  * um "código interno" do sistema: é por ele que a folha é
+                  * conferida contra a contabilidade, e quem recebe o
+                  * demonstrativo espera encontrá-lo. A regra de ocultar
+                  * códigos internos continua valendo para os identificadores
+                  * de registro dos outros módulos.
+                  */}
+                <th>Verba</th>
                 <th>Nome da verba</th>
                 <th>Tipo de verba</th>
-                <th>Referência / base</th>
+                <th>Referência</th>
+                <th>Base de cálculo</th>
                 <th>Valor</th>
               </tr>
             </thead>
             <tbody>
               {result.lines.map((line) => (
                 <tr key={line.code} className={`statement-row ${line.kind}`}>
-                  {showInternalCodes ? <td>{line.code}</td> : null}
+                  <td className="statement-code">{line.code}</td>
                   <td><strong>{line.label}</strong></td>
                   <td>{line.kind === "earning" ? "Proventos" : line.kind === "deduction" ? "Descontos" : line.kind === "employer" ? "Outros / empresa" : "Provisões"}</td>
+                  {/*
+                    * Quantidade quando a verba é medida em horas, alíquota
+                    * quando é percentual, e 1,00 quando é valor fixo
+                    * informado — como no contracheque de referência. Ver a
+                    * base repetida em toda linha não permitia conferir nada.
+                    */}
+                  <td className="statement-reference">
+                    {formatReference(line)}
+                  </td>
                   <td>{line.base ? currency.format(line.base) : "—"}</td>
                   <td>{currency.format(line.amount)}</td>
                 </tr>
@@ -7332,11 +7384,17 @@ function PayrollStudio({
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan={showInternalCodes ? 2 : 1}>
+                <td colSpan={3}>
                   <strong>Totais do cálculo</strong>
                 </td>
-                <td>Bruto: {currency.format(result.gross)}</td>
-                <td>Descontos: {currency.format(result.totalDeductions)}</td>
+                <td className="statement-total">
+                  <span>Bruto</span>
+                  <strong>{currency.format(result.gross)}</strong>
+                </td>
+                <td className="statement-total">
+                  <span>Descontos</span>
+                  <strong>{currency.format(result.totalDeductions)}</strong>
+                </td>
                 <td>
                   <span>Líquido estimado</span>
                   <strong>{currency.format(result.net)}</strong>
@@ -7345,14 +7403,20 @@ function PayrollStudio({
             </tfoot>
           </table>
         </div>
+        <p className="statement-hint">
+          <strong>Como ler a referência:</strong> <em>h</em> são horas do mês
+          ou horas extras lançadas; <em>%</em> é a alíquota efetivamente
+          aplicada sobre a base ao lado — no INSS e no IRRF ela sai do
+          cálculo por faixas, então costuma diferir da alíquota de tabela;
+          <em>un.</em> é uma ocorrência, usada em verba de valor fixo.
+        </p>
         <details className="statement-rules">
           <summary>Ver regras aplicadas em cada verba</summary>
           <div>
             {result.lines.map((line) => (
               <p key={line.code}>
                 <strong>
-                  {showInternalCodes ? `${line.code} • ` : ""}
-                  {line.label}:
+                  {line.code} • {line.label}:
                 </strong>{" "}
                 {line.note}
               </p>
