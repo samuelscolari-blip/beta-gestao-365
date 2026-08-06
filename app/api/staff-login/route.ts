@@ -1,8 +1,8 @@
 import {
-  createStaffSession,
+  createBusinessStaffSession,
   staffSessionCookie,
-  verifyStaffCredentials,
-} from "../../lib/staff-access";
+  verifyBusinessStaffCredentials,
+} from "../../lib/staff-business-access";
 
 function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const verified = await verifyStaffCredentials(registration, password);
+  const verified = await verifyBusinessStaffCredentials(registration, password);
   if (!verified.ok) {
     return Response.json(
       { ok: false, message: verified.error },
@@ -41,11 +41,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const session = await createStaffSession(verified.account);
+  const session = await createBusinessStaffSession(verified.internalAccount);
   return Response.json(
     {
       ok: true,
-      message: "Acesso de encarregado liberado neste celular.",
+      message: "Acesso liberado neste celular.",
       user: verified.account,
       expiresAt: session.expiresAt,
     },
