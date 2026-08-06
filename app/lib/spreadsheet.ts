@@ -77,7 +77,12 @@ function hasSpreadsheetValue(value: unknown) {
   return value !== null && value !== undefined && String(value).trim() !== "";
 }
 
-function resolveFieldColumns(module: ModuleDefinition, header: unknown[]) {
+/*
+ * Exportada para teste: é ela que decide se uma linha é o cabeçalho.
+ * `tests/spreadsheet-roundtrip.test.mjs` usa isso para provar que a faixa
+ * da empresa não é confundida com títulos de coluna.
+ */
+export function resolveFieldColumns(module: ModuleDefinition, header: unknown[]) {
   const fieldByKey = new Map(module.fields.map((field) => [field.key, field]));
   return normalizeSemanticHeaders(header, module.fields).flatMap(
     (key: string | null, index: number) => {
@@ -618,6 +623,54 @@ function excelCell(value: unknown, fieldType: string) {
 }
 
 
+
+/*
+ * Identidade visual das planilhas exportadas.
+ *
+ * Azul da empresa, o mesmo do cabeçalho das tabelas do sistema, para o
+ * arquivo que circula por fora ser reconhecível como material da Beta
+ * Construtora.
+ */
+const AZUL_BETA = "#17324d";
+
+/*
+ * Verde das colunas que o cálculo exige. Cor diferente e não só negrito,
+ * porque a distinção precisa sobreviver a quem imprime a planilha e a quem
+ * a lê de relance antes de preencher.
+ */
+const VERDE_EXIGIDO = "#0f766e";
+
+/*
+ * Faixa de identificação no topo.
+ *
+ * A biblioteca de Excel não mescla células, então a faixa é a linha
+ * inteira pintada: o nome na primeira coluna e as demais vazias com o
+ * mesmo fundo. No Excel o resultado é uma tarja contínua.
+ *
+ * Isto NÃO quebra a importação: `parseConventionalTable` procura a linha
+ * de cabeçalho nas 25 primeiras linhas, em vez de assumir a primeira.
+ * `tests/spreadsheet-branding.test.mjs` guarda essa dependência, que não
+ * é óbvia ao ler os dois arquivos separados.
+ */
+function faixaDaEmpresa(colunas: number) {
+  const primeira = {
+    value: "BETA CONSTRUTORA",
+    type: String,
+    fontWeight: "bold" as const,
+    fontSize: 14,
+    textColor: "#ffffff",
+    backgroundColor: AZUL_BETA,
+    align: "left" as const,
+    alignVertical: "center" as const,
+  };
+  const resto = Array.from({ length: Math.max(0, colunas - 1) }, () => ({
+    value: "",
+    type: String,
+    backgroundColor: AZUL_BETA,
+  }));
+  return [primeira, ...resto];
+}
+
 /*
  * Campos sem os quais a folha e a rescisão não calculam.
  *
@@ -724,7 +777,7 @@ export async function exportImportTemplate(module: ModuleDefinition) {
     fontWeight: "bold" as const,
     textColor: "#ffffff",
     /* Verde nas colunas que o cálculo exige; azul nas demais. */
-    backgroundColor: exigidos.has(field.key) ? "#0f766e" : "#17324d",
+    backgroundColor: exigidos.has(field.key) ? VERDE_EXIGIDO : AZUL_BETA,
     wrap: true,
   }));
 
@@ -737,9 +790,9 @@ export async function exportImportTemplate(module: ModuleDefinition) {
 
   const instrucoes = [
     [
-      { value: "Coluna", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
-      { value: "Precisa para calcular?", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
-      { value: "O que preencher", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: "#17324d" },
+      { value: "Coluna", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: AZUL_BETA },
+      { value: "Precisa para calcular?", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: AZUL_BETA },
+      { value: "O que preencher", fontWeight: "bold" as const, textColor: "#ffffff", backgroundColor: AZUL_BETA },
     ],
     ...campos.map((field) => [
       { value: field.label, type: String },
@@ -782,17 +835,22 @@ export async function exportImportTemplate(module: ModuleDefinition) {
     [
       {
         sheet: module.shortLabel.slice(0, 31),
-        data: [cabecalho, exemplo] as SheetData,
+        data: [
+          faixaDaEmpresa(campos.length),
+          cabecalho,
+          exemplo,
+        ] as SheetData,
         columns: campos.map((field) => ({
           width: field.wide ? 32 : Math.max(16, Math.min(28, field.label.length + 4)),
         })),
-        stickyRowsCount: 1,
+        /* Faixa e cabeçalho ficam fixos ao rolar. */
+        stickyRowsCount: 2,
       },
       {
         sheet: "Como preencher",
-        data: instrucoes,
+        data: [faixaDaEmpresa(3), ...instrucoes] as SheetData,
         columns: [{ width: 34 }, { width: 24 }, { width: 80 }],
-        stickyRowsCount: 1,
+        stickyRowsCount: 2,
       },
     ],
   ).toFile(
@@ -833,7 +891,7 @@ export async function exportModuleWorkbook(
     value: field.label,
     fontWeight: "bold" as const,
     textColor: "#ffffff",
-    backgroundColor: "#17324d",
+    backgroundColor: AZUL_BETA,
     wrap: true,
   }));
   const rows = records.map((record) =>
@@ -841,12 +899,16 @@ export async function exportModuleWorkbook(
       excelCell(record.payload[field.key], field.type),
     ),
   );
-  const data = [header, ...rows] as SheetData;
+  const data = [
+    faixaDaEmpresa(exportFields.length),
+    header,
+    ...rows,
+  ] as SheetData;
   await writeXlsxFile(data, {
     columns: exportFields.map((field) => ({
       width: field.wide ? 32 : Math.max(14, Math.min(24, field.label.length + 4)),
     })),
-    stickyRowsCount: 1,
+    stickyRowsCount: 2,
   }).toFile(
     `Beta_Construtora_${module.shortLabel.replace(/\s+/g, "_")}_${new Date()
       .toISOString()
@@ -868,12 +930,13 @@ export async function exportAllWorkbook(
         value: field.label,
         fontWeight: "bold" as const,
         textColor: "#ffffff",
-        backgroundColor: "#17324d",
+        backgroundColor: AZUL_BETA,
         wrap: true,
       }));
       return {
         sheet: module.shortLabel.slice(0, 31),
         data: [
+          faixaDaEmpresa(exportFields.length),
           header,
           ...moduleRows.map((record) =>
             exportFields.map((field) =>
@@ -886,7 +949,7 @@ export async function exportAllWorkbook(
             ? 32
             : Math.max(14, Math.min(24, field.label.length + 4)),
         })),
-        stickyRowsCount: 1,
+        stickyRowsCount: 2,
       };
     });
 
