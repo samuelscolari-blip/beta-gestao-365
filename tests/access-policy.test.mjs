@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("página pública mostra somente o acesso fechado ao ponto", async () => {
+test("página pública mostra somente a identificação do encarregado", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("access-test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
@@ -24,10 +24,11 @@ test("página pública mostra somente o acesso fechado ao ponto", async () => {
 
   const html = await response.text();
   assert.equal(response.status, 200);
-  assert.match(html, /Acesso do encarregado/i);
-  assert.match(html, /CPF do colaborador/i);
-  assert.match(html, /Senha master/i);
-  assert.match(html, /PONTO ELETRÔNICO/i);
+  assert.match(html, /Identificar o encarregado/i);
+  assert.match(html, /Matrícula do encarregado/i);
+  assert.match(html, /Senha individual/i);
+  assert.match(html, /ETAPA 1 DE 2/i);
+  assert.doesNotMatch(html, /CPF do colaborador|Senha master/i);
   assert.doesNotMatch(html, /scolarisamuel@gmail\.com/i);
   assert.doesNotMatch(html, /Visão Geral|Central Financeira|Folha de Pagamento/i);
 });
