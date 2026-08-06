@@ -19,5 +19,10 @@ export default async function PointAccessPage() {
     );
   }
 
-  return <AccessGate nextPath="/ponto" />;
+  return (
+    <AccessGate
+      nextPath="/ponto"
+      message={`Etapa 2 de 2: ${supervisor.name}, matrícula ${supervisor.registration}, foi identificado. Confirme a senha master uma única vez para liberar todos os colaboradores nesta sessão.`}
+    />
+  );
 }
