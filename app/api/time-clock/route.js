@@ -2,11 +2,11 @@ import {
   authenticatedEmail,
   SOLE_ADMIN_EMAIL,
 } from "../../lib/server-access";
+import { masterPointSessionFromHeaders } from "../../lib/master-point-access";
 import {
-  listActiveStaffAccounts,
-  staffAccountByRegistration,
-  staffSessionFromHeaders,
-} from "../../lib/staff-access";
+  POINT_TEST_EMPLOYEES,
+  pointEmployeeByRegistration,
+} from "../../lib/point-test-employees";
 
 const TENANT_ID = "beta-construtora";
 let schemaPromise;
@@ -22,12 +22,7 @@ function text(value, maxLength = 240) {
 }
 
 function normalizeRegistration(value) {
-  return text(value, 80)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toUpperCase()
-    .replace(/[^A-Z0-9_-]/g, "")
-    .slice(0, 40);
+  return text(value, 20).replace(/\D/g, "").slice(0, 5);
 }
 
 function numberOrNull(value) {
@@ -122,25 +117,33 @@ async function accessActor(request) {
       registration: "ADMIN",
       name: "Samuel Scolari",
       role: "administrador",
+      preferredEmployeeRegistration: "",
     };
   }
-  return staffSessionFromHeaders(request.headers);
+
+  const master = await masterPointSessionFromHeaders(request.headers);
+  if (!master) return null;
+  return {
+    registration: master.actorRegistration,
+    name: master.actorName,
+    role: master.actorRole,
+    preferredEmployeeRegistration: master.selectedEmployeeRegistration,
+  };
 }
 
-function canActFor(actor, employeeCode) {
-  if (!actor) return false;
-  if (actor.role === "administrador" || actor.role === "encarregado") {
-    return true;
-  }
-  return actor.role === "colaborador" && actor.registration === employeeCode;
+function canActFor(actor) {
+  return Boolean(
+    actor &&
+      (actor.role === "administrador" || actor.role === "encarregado"),
+  );
 }
 
-async function availableEmployees(actor) {
-  if (actor.role === "colaborador") {
-    const own = await staffAccountByRegistration(actor.registration);
-    return own ? [own] : [];
-  }
-  return listActiveStaffAccounts();
+function availableEmployees() {
+  return POINT_TEST_EMPLOYEES.map((employee) => ({
+    registration: employee.registration,
+    name: employee.name,
+    role: employee.role,
+  }));
 }
 
 async function punch(request, payload) {
@@ -168,7 +171,9 @@ async function punch(request, payload) {
   if (!clientEventId || clientEventId.length < 20) {
     throw new Error("Identificador da batida inválido.");
   }
-  if (!employeeCode) throw new Error("Colaborador não identificado.");
+  if (employeeCode.length !== 5) {
+    throw new Error("Colaborador não identificado.");
+  }
   if (
     !["ENTRADA", "INICIO_INTERVALO", "FIM_INTERVALO", "SAIDA"].includes(
       eventType,
@@ -179,17 +184,11 @@ async function punch(request, payload) {
   if (latitude === null || longitude === null || accuracy === null) {
     throw new Error("A localização da batida é obrigatória.");
   }
-  if (!canActFor(actor, employeeCode)) {
-    return json(
-      {
-        ok: false,
-        error: "O colaborador só pode registrar o próprio ponto.",
-      },
-      403,
-    );
+  if (!canActFor(actor)) {
+    return json({ ok: false, error: "Acesso ao ponto não autorizado." }, 403);
   }
 
-  const employee = await staffAccountByRegistration(employeeCode);
+  const employee = pointEmployeeByRegistration(employeeCode);
   if (!employee) {
     return json(
       { ok: false, error: "Colaborador não encontrado ou inativo." },
@@ -265,15 +264,12 @@ async function punch(request, payload) {
     // Mantém o horário ISO caso o navegador envie um fuso inválido.
   }
 
-  const actingForAnother = actor.registration !== employee.registration;
   return json({
     ok: true,
     duplicate: !inserted,
     event,
     message: inserted
-      ? actingForAnother
-        ? `Ponto de ${employee.name} registrado às ${displayedTime} por ${actor.name}.`
-        : `Ponto registrado às ${displayedTime}.`
+      ? `Ponto de ${employee.name} registrado às ${displayedTime} por ${actor.name}.`
       : "Esta batida já havia sido sincronizada e não foi duplicada.",
   });
 }
@@ -299,7 +295,9 @@ export async function GET(request) {
           name: actor.name,
           role: actor.role,
         },
-        employees: await availableEmployees(actor),
+        preferredEmployeeRegistration:
+          actor.preferredEmployeeRegistration || "",
+        employees: availableEmployees(),
       });
     }
 
@@ -310,11 +308,16 @@ export async function GET(request) {
     const employeeCode = normalizeRegistration(
       url.searchParams.get("employeeCode"),
     );
-    if (!employeeCode || !canActFor(actor, employeeCode)) {
+    if (employeeCode.length !== 5 || !canActFor(actor)) {
       return json(
         { ok: false, error: "Acesso ao histórico não autorizado." },
         403,
       );
+    }
+
+    const employee = pointEmployeeByRegistration(employeeCode);
+    if (!employee) {
+      return json({ ok: false, error: "Colaborador não encontrado." }, 404);
     }
 
     const db = await database();
