@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import { pedirNovoRegistro } from "../lib/quick-actions";
 
 const BetaAppV52 = dynamic(() => import("./BetaAppV52Ready"), {
   ssr: false,
@@ -111,13 +112,12 @@ function openSupplierModule(create: boolean) {
       normalizeText(button.textContent).includes(normalizeText("Fornecedores")),
     )
     ?.click();
-  if (create) {
-    window.setTimeout(() => {
-      document
-        .querySelector<HTMLButtonElement>('[data-ui="module-header"] .button.primary')
-        ?.click();
-    }, 100);
-  }
+  /*
+   * Mesma correção aplicada às "Ações rápidas": pedir o cadastro pelo nome do
+   * módulo, em vez de procurar e clicar no botão do cabeçalho. O botão é
+   * detalhe visual e já sumiu de duas telas; o pedido não depende dele.
+   */
+  if (create) window.setTimeout(() => pedirNovoRegistro("suppliers"), 100);
 }
 
 export default function SecureBetaAppV52(props: Props) {

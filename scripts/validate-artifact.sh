@@ -46,7 +46,53 @@ if (!d1 || d1.database_name !== "beta-gestao-365-db") {
 
 const workerUrl = pathToFileURL(workerPath);
 workerUrl.searchParams.set("cloudflare-validation", `${process.pid}-${Date.now()}`);
-const worker = await import(workerUrl.href);
+
+let worker;
+try {
+  worker = await import(workerUrl.href);
+} catch (error) {
+  /*
+   * O erro cru do Node aqui é uma pilha de dez linhas terminando em
+   * "Received protocol 'cloudflare:'" — verdadeiro e inútil para quem só quer
+   * saber por que o deploy parou.
+   *
+   * A causa é sempre a mesma: algum arquivo que entra no bundle do Worker fez
+   * `import ... from "cloudflare:workers"` no topo. Esses módulos só existem
+   * dentro do runtime da Cloudflare; o Node não consegue carregá-los, e a
+   * importação estática é içada para o topo do bundle, onde é avaliada antes
+   * de qualquer coisa. A forma tardia adia isso para o momento da chamada,
+   * que só acontece dentro do Worker.
+   */
+  if (error?.code === "ERR_UNSUPPORTED_ESM_URL_SCHEME") {
+    console.error(
+      [
+        "",
+        "O Worker construído importa um módulo `cloudflare:` no topo do arquivo.",
+        "",
+        "Esses módulos existem apenas dentro do runtime da Cloudflare, então esta",
+        "validação — que carrega o bundle no Node — não consegue abrir o artefato.",
+        "Publicar assim quebra o build na Cloudflare, antes do deploy.",
+        "",
+        "Correção: troque a importação estática pela tardia, dentro da função que",
+        "usa o valor.",
+        "",
+        '  ✗  import { env } from "cloudflare:workers";',
+        "",
+        "  ✓  async function workerEnv() {",
+        '       const { env } = await import("cloudflare:workers");',
+        "       return env;",
+        "     }",
+        "",
+        "Para achar o arquivo responsável:",
+        "",
+        "  grep -rn 'from \"cloudflare:' app db packages",
+        "",
+      ].join("\n"),
+    );
+  }
+  throw error;
+}
+
 if (!worker.default || typeof worker.default.fetch !== "function") {
   throw new Error("dist/server/index.js must have an ESM default export with fetch(request, env, ctx)");
 }

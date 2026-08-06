@@ -24,7 +24,10 @@ import {
   type ModuleDefinition,
   type ModuleField,
 } from "../lib/modules";
+import { NOVO_REGISTRO_EVENTO } from "../lib/quick-actions";
 import FieldLeaveSummary from "../ui/FieldLeaveSummary/FieldLeaveSummary";
+import TrainingsSummary from "../ui/TrainingsSummary/TrainingsSummary";
+import TrainingsTabs from "../ui/TrainingsTabs/TrainingsTabs";
 import ModuleHeader, {
   type ModuleHeaderVariant,
 } from "../ui/ModuleHeader/ModuleHeader";
@@ -5420,6 +5423,15 @@ function ModulePage({
 }) {
   const { visible: showInternalCodes, toggle: toggleInternalCodes } =
     useContext(InternalCodeVisibilityContext);
+  /*
+   * Aba de treinamento escolhida. Vazia significa "todos".
+   *
+   * Mora aqui, e não numa segunda lista, porque a aba RECORTA a tabela de
+   * baixo em vez de duplicá-la. Uma lista por aba mais a lista geral seriam
+   * dois lugares mostrando o mesmo dado — e a hora em que discordassem seria
+   * exatamente a hora de conferir antes da reunião de segurança.
+   */
+  const [trainingTab, setTrainingTab] = useState("");
   const presentationModule = headerModule || module;
   const statuses = Array.from(
     new Set(records.map(recordStatusLabel).filter(Boolean)),
@@ -5441,7 +5453,15 @@ function ModulePage({
       (module.id === "people" && status === "__inactive__"
         ? ["Em desligamento", "Desligado"].includes(displayedStatus)
         : displayedStatus === status);
-    return (!search || haystack.includes(search.toLowerCase())) && matchesStatus;
+    const matchesTraining =
+      module.id !== "trainings" ||
+      !trainingTab ||
+      String(record.payload.trainingType ?? "").trim() === trainingTab;
+    return (
+      (!search || haystack.includes(search.toLowerCase())) &&
+      matchesStatus &&
+      matchesTraining
+    );
   });
   const total = records.reduce(
     (sum, record) =>
@@ -5500,6 +5520,17 @@ function ModulePage({
 
       {module.id === "field_leave" ? (
         <FieldLeaveSummary records={records} />
+      ) : null}
+
+      {module.id === "trainings" ? (
+        <>
+          <TrainingsSummary records={records} />
+          <TrainingsTabs
+            records={records}
+            active={trainingTab}
+            onSelect={setTrainingTab}
+          />
+        </>
       ) : null}
 
       {module.id === "people" ? (
@@ -8204,6 +8235,42 @@ export default function BetaApp({
     const timer = window.setTimeout(() => setToast(null), 4200);
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  /*
+   * Ponte para as "Ações rápidas" da tela Administrativo.
+   *
+   * Aquele painel vive em `BetaAppV52`, que é IRMÃO deste componente na
+   * árvore — não há contexto compartilhado entre os dois, e por isso o
+   * atalho sempre precisou falar com esta tela por fora do React.
+   *
+   * O jeito antigo era procurar no DOM o botão "Novo registro" do cabeçalho
+   * e clicar nele. Isso amarrava uma função a um detalhe visual: quando o
+   * cabeçalho de Administrativo deixou de exibir o botão (e o de Máquinas
+   * deixou de existir), "Cadastrar funcionário" e "Abrir máquinas" pararam
+   * de abrir a ficha — em silêncio, sem erro no console.
+   *
+   * Um evento nomeado não tem esse problema: quem pede o cadastro diz qual
+   * módulo quer, e a tela abre o formulário exista ou não botão na página.
+   */
+  useEffect(() => {
+    function abrirCadastro(event: Event) {
+      const moduleId = (event as CustomEvent<{ moduleId?: string }>).detail
+        ?.moduleId;
+      if (!moduleId || !moduleMap[moduleId]) return;
+      if (!isAdmin) {
+        setToast({
+          kind: "error",
+          text: "Este acesso é somente para consulta. Entre como administrador para alterar dados.",
+        });
+        return;
+      }
+      setEditing(null);
+      setModalModule(moduleMap[moduleId]);
+    }
+
+    window.addEventListener(NOVO_REGISTRO_EVENTO, abrirCadastro);
+    return () => window.removeEventListener(NOVO_REGISTRO_EVENTO, abrirCadastro);
+  }, [isAdmin]);
 
   const operationalRecords = useMemo(
     () =>

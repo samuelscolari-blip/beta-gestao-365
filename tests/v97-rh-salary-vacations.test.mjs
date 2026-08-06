@@ -27,12 +27,26 @@ test("Cálculo de Folha passa a se chamar Cálculo de Salário", async () => {
 });
 
 test("Cálculo de Férias possui tela separada no grupo de RH", async () => {
-  const source = await readFile(wrapperPath, "utf8");
+  /*
+   * A DEFINIÇÃO mora em `app/lib/modules.ts`, e não no componente. Esse
+   * arquivo é o único que o SERVIDOR também lê: enquanto a definição ficava
+   * só no cliente, a tela abria, preenchia e não salvava — o
+   * `validateRecordPayload` recusa módulo que não conhece.
+   *
+   * A POSIÇÃO no menu continua no componente, que é quem reorganiza o grupo.
+   * São duas responsabilidades e dois arquivos, e o teste cobra cada uma no
+   * seu lugar.
+   */
+  const definicoes = await readFile(
+    new URL("../app/lib/modules.ts", import.meta.url),
+    "utf8",
+  );
+  const componente = await readFile(wrapperPath, "utf8");
 
-  assert.match(source, /id:\s*"vacations"/);
-  assert.match(source, /label:\s*"Cálculo de Férias"/);
-  assert.match(source, /rhGroup\.items\.splice/);
-  assert.match(source, /moduleMap\.vacations/);
+  assert.match(definicoes, /id:\s*"vacations"/);
+  assert.match(definicoes, /label:\s*"Cálculo de Férias"/);
+  assert.match(componente, /rhGroup\.items\.splice/);
+  assert.match(componente, /moduleMap\.payroll/);
 });
 
 test("as abas de afastamento ficam sempre entre salário e rescisão", async () => {
@@ -63,7 +77,10 @@ test("as abas de afastamento ficam sempre entre salário e rescisão", async () 
 });
 
 test("a etapa não implementa fórmulas de férias antecipadamente", async () => {
-  const source = await readFile(wrapperPath, "utf8");
+  const source = await readFile(
+    new URL("../app/lib/modules.ts", import.meta.url),
+    "utf8",
+  );
 
   assert.doesNotMatch(
     source,

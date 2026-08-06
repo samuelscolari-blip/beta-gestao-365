@@ -503,6 +503,55 @@ export const demoRecords: DemoRecord[] = [
     accessProfile: "Gestor de obra", documentsUrl: docs("colaborador-010"),
     livesOutOfTown: "Não",
   }),
+  /*
+   * Treinamentos cobrindo os cinco estados que a tela distingue: vencido,
+   * agendamento perdido, a vencer, agendado e concluído.
+   *
+   * Um estado só não demonstra nada — é vendo o vermelho, o âmbar e o
+   * verde juntos que se entende o que a tela faz.
+   */
+  demo("trainings", "Colaborador Teste 01", "TST-TRE-001", "Vencido", "2024-07-01", 0, {
+    trainingId: "TST-TRE-001", employeeName: "Colaborador Teste 01",
+    trainingType: "Trabalho em altura — NR-35", completedDate: "2024-07-01",
+    validityDate: "2026-07-01", provider: "SESI — turma fictícia",
+    status: "Vencido",
+  }),
+  demo("trainings", "Colaborador Teste 04", "TST-TRE-002", "A vencer", "2024-08-20", 0, {
+    trainingId: "TST-TRE-002", employeeName: "Colaborador Teste 04",
+    trainingType: "NR-11 — Movimentação de cargas", completedDate: "2024-08-20",
+    validityDate: "2026-08-20", provider: "Instrutor interno — cenário fictício",
+    status: "A vencer",
+  }),
+  demo("trainings", "Colaborador Teste 05", "TST-TRE-003", "Agendado", "2026-09-15", 0, {
+    trainingId: "TST-TRE-003", employeeName: "Colaborador Teste 05",
+    trainingType: "Direção Defensiva", scheduledDate: "2026-09-15",
+    provider: "Autoescola parceira — cenário fictício", status: "Agendado",
+  }),
+  demo("trainings", "Colaborador Teste 06", "TST-TRE-004", "Agendamento vencido", "2026-07-10", 0, {
+    trainingId: "TST-TRE-004", employeeName: "Colaborador Teste 06",
+    trainingType: "Treinamento Sinaleiro", scheduledDate: "2026-07-10",
+    provider: "Contratante — cenário fictício", status: "Agendamento vencido",
+  }),
+  demo("trainings", "Colaborador Teste 07", "TST-TRE-005", "Pendente", "", 0, {
+    trainingId: "TST-TRE-005", employeeName: "Colaborador Teste 07",
+    trainingType: "NR-12 — Máquinas e equipamentos", status: "Pendente",
+  }),
+  demo("trainings", "Colaborador Teste 08", "TST-TRE-006", "Concluído", "2026-02-12", 0, {
+    trainingId: "TST-TRE-006", employeeName: "Colaborador Teste 08",
+    trainingType: "Integração Elecnor", completedDate: "2026-02-12",
+    provider: "Elecnor — cenário fictício", status: "Concluído",
+  }),
+  demo("trainings", "Colaborador Teste 09", "TST-TRE-007", "Concluído", "2026-03-03", 0, {
+    trainingId: "TST-TRE-007", employeeName: "Colaborador Teste 09",
+    trainingType: "Integração Engie", completedDate: "2026-03-03",
+    provider: "Engie — cenário fictício", status: "Concluído",
+  }),
+  demo("trainings", "Colaborador Teste 10", "TST-TRE-008", "Concluído", "2026-01-20", 0, {
+    trainingId: "TST-TRE-008", employeeName: "Colaborador Teste 10",
+    trainingType: "NR-10 — Segurança em eletricidade", completedDate: "2026-01-20",
+    validityDate: "2028-01-20", provider: "SENAI — cenário fictício",
+    status: "Concluído",
+  }),
   demo("terminations", "Colaborador Teste 03", "TST-RES-001", "Prévia — não transmitida", "2026-07-18", 7279.12, {
     terminationCode: "TST-RES-001", employeeName: "Colaborador Teste 03",
     employeeCode: "TST-COL-003", role: "Eletricista", admissionDate: "2025-08-01",

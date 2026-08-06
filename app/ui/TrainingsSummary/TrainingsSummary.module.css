@@ -1,0 +1,176 @@
+/*
+ * Resumo de treinamentos.
+ *
+ * CSS Module, sem `!important` e sem classe global — o padrão que a
+ * reforma do cabeçalho estabeleceu. Nenhuma folha `vNN` alcança estas
+ * classes, então o visual não depende de ordem de carregamento.
+ *
+ * As cores separam três estados por gravidade, e não por gosto: vermelho é
+ * quem está barrado hoje, âmbar é quem estará em breve, verde é quem pode
+ * trabalhar. Numa tela que se lê em dez segundos antes da reunião de
+ * segurança, a cor é o que ordena a leitura.
+ */
+
+.root {
+  display: grid;
+  gap: 16px;
+  padding: 20px 22px;
+  border: 1px solid #ecdcc0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fffdf7, #fff 70%);
+  box-shadow: 0 12px 32px rgb(146 96 12 / 7%);
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.numeros article {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid #eee3d3;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.numeros span {
+  color: #7c6a4e;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.numeros strong {
+  color: #7c4a08;
+  font-size: 1.45rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.bloco {
+  display: grid;
+  gap: 8px;
+}
+
+.bloco h3 {
+  margin: 0;
+  color: #6b4a12;
+  font-size: 0.82rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bloco ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 6px;
+  list-style: none;
+}
+
+.bloco li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 13px;
+  border: 1px solid #eee3d3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.bloco li div {
+  display: grid;
+  gap: 2px;
+}
+
+.bloco li strong {
+  color: #4a3a20;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.bloco li em {
+  color: #7c6a4e;
+  font-size: 0.8rem;
+  font-style: normal;
+}
+
+.bloco li > span {
+  padding: 4px 10px;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.resto {
+  margin: 0;
+  color: #7c6a4e;
+  font-size: 0.8rem;
+}
+
+.vazio {
+  margin: 0;
+  color: #6b5a3e;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/*
+ * Realces de cor por gravidade. Ficam DEPOIS dos blocos base de propósito:
+ * o Stylelint exige que seletor mais específico venha por último, e a
+ * exigência é boa — regra específica escrita antes da genérica é a receita
+ * de "mudei a cor e não pegou".
+ */
+
+/* Vermelho: barrado hoje. */
+.grave {
+  border-color: #f0c2bb;
+  background: #fff6f5;
+  color: #a32d1c;
+}
+
+/* Âmbar: será barrado em breve. */
+.atencao {
+  border-color: #f1d9a2;
+  background: #fffbf0;
+  color: #8a6414;
+}
+
+/* Verde: pode trabalhar. */
+.ok {
+  border-color: #c5e3d3;
+  background: #f5fbf8;
+}
+
+.numeros .grave strong {
+  color: #a32d1c;
+}
+
+.numeros .atencao strong {
+  color: #8a6414;
+}
+
+.numeros .ok strong {
+  color: #146c46;
+}
+
+@media (width <= 980px) {
+  .numeros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width <= 620px) {
+  .numeros {
+    grid-template-columns: 1fr;
+  }
+}
