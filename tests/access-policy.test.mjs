@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("public page renders a safe loading shell without exposing the administrator", async () => {
+test("página pública mostra somente o acesso fechado", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("access-test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
@@ -24,9 +24,11 @@ test("public page renders a safe loading shell without exposing the administrato
 
   const html = await response.text();
   assert.equal(response.status, 200);
-  assert.match(html, /Carregando a central de gestão/i);
+  assert.match(html, /Acessar o sistema/i);
+  assert.match(html, /Matrícula/i);
+  assert.match(html, /ÁREA RESTRITA/i);
   assert.doesNotMatch(html, /scolarisamuel@gmail\.com/i);
-  assert.doesNotMatch(html, /Samuel Scolari/i);
+  assert.doesNotMatch(html, /Visão Geral|Central Financeira|Folha de Pagamento/i);
 });
 
 test("anonymous writes are rejected before reaching the database", async () => {
