@@ -3,7 +3,7 @@ import fs from "node:fs";
 import test from "node:test";
 
 const clockPage = fs.readFileSync("app/ponto/page.tsx", "utf8");
-const clockApi = fs.readFileSync("app/api/time-clock/route.ts", "utf8");
+const clockApi = fs.readFileSync("app/api/time-clock/route.js", "utf8");
 const newEmployee = fs.readFileSync("app/pessoas/novo/page.tsx", "utf8");
 const wrapper = fs.readFileSync("app/components/SecureBetaAppV131.tsx", "utf8");
 const serviceWorker = fs.readFileSync("public/ponto-sw.js", "utf8");
@@ -19,7 +19,10 @@ test("V131 conecta a tela Pessoas ao cadastro do colaborador do zero", () => {
 
 test("cadastro facial libera o ponto no mesmo celular", () => {
   assert.match(clockPage, /Cadastrar rosto e liberar ponto/);
-  assert.match(clockPage, /Rosto cadastrado com sucesso\. Seu acesso ao ponto está liberado\./);
+  assert.match(
+    clockPage,
+    /Rosto cadastrado com sucesso\. Seu acesso ao ponto está liberado\./,
+  );
   assert.match(clockPage, /deviceToken/);
   assert.match(clockApi, /device_token_hash/);
   assert.match(clockApi, /FACE_MATCH_THRESHOLD/);
@@ -46,10 +49,18 @@ test("fila offline usa clientEventId e servidor impede duplicidade", () => {
   assert.match(serviceWorker, /indexedDB\.open/);
 });
 
+test("API carrega cloudflare:workers somente dentro da função", () => {
+  assert.doesNotMatch(clockApi, /^import .*cloudflare:workers/m);
+  assert.match(clockApi, /await import\("cloudflare:workers"\)/);
+});
+
 test("portal possui manifesto instalável e service worker", () => {
   const parsedManifest = JSON.parse(manifest);
   assert.equal(parsedManifest.start_url, "/ponto");
   assert.equal(parsedManifest.display, "standalone");
-  assert.match(clockPage, /navigator\.serviceWorker\.register\("\/ponto-sw\.js"/);
+  assert.match(
+    clockPage,
+    /navigator\.serviceWorker\.register\("\/ponto-sw\.js"/,
+  );
   assert.match(serviceWorker, /caches\.open\(CACHE_NAME\)/);
 });
