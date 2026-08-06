@@ -1,4 +1,4 @@
-const CACHE_NAME = "beta-ponto-v131";
+const CACHE_NAME = "beta-ponto-v132";
 const DB_NAME = "beta-gestao-365-time-clock";
 const DB_VERSION = 1;
 const SHELL = ["/ponto", "/ponto.webmanifest", "/favicon.svg"];
@@ -18,7 +18,9 @@ self.addEventListener("activate", (event) => {
       caches.keys().then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key.startsWith("beta-ponto-") && key !== CACHE_NAME)
+            .filter(
+              (key) => key.startsWith("beta-ponto-") && key !== CACHE_NAME,
+            )
             .map((key) => caches.delete(key)),
         ),
       ),
@@ -30,10 +32,7 @@ self.addEventListener("activate", (event) => {
 function shouldCache(request) {
   if (request.method !== "GET") return false;
   const url = new URL(request.url);
-  return (
-    url.origin === self.location.origin ||
-    url.hostname === "cdn.jsdelivr.net"
-  );
+  return url.origin === self.location.origin;
 }
 
 self.addEventListener("fetch", (event) => {
@@ -42,19 +41,20 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   const isNavigation = request.mode === "navigate";
-  const isClockShell = url.origin === self.location.origin && url.pathname.startsWith("/ponto");
+  const isPointShell = url.pathname.startsWith("/ponto");
   const isRuntimeAsset =
-    url.hostname === "cdn.jsdelivr.net" ||
     url.pathname.startsWith("/_next/") ||
-    url.pathname.startsWith("/assets/");
+    url.pathname.startsWith("/assets/") ||
+    url.pathname === "/favicon.svg";
 
-  if (isNavigation || isClockShell) {
+  if (isNavigation || isPointShell) {
     event.respondWith(
       fetch(request)
         .then((response) => {
           if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(request, response.clone()));
           }
           return response;
         })
@@ -77,8 +77,11 @@ self.addEventListener("fetch", (event) => {
       caches.match(request).then((cached) => {
         if (cached) return cached;
         return fetch(request).then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          if (response.ok) {
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(request, response.clone()));
+          }
           return response;
         });
       }),
@@ -188,6 +191,7 @@ async function synchronize() {
     try {
       response = await fetch(item.endpoint, {
         method: "POST",
+        credentials: "same-origin",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(item.payload),
         cache: "no-store",
@@ -198,15 +202,14 @@ async function synchronize() {
 
     const body = await response.json().catch(() => ({}));
     if (!response.ok || body.ok === false) {
+      if (response.status === 401) {
+        throw new Error("Sessão expirada. A batida continua pendente.");
+      }
       if (response.status >= 400 && response.status < 500) {
         await remove("queue", item.id);
-        if (item.kind === "punch") {
-          const event = await read("events", item.id);
-          if (event) await write("events", { ...event, syncStatus: "rejected" });
-        } else {
-          const code = String(item.payload.employeeCode || "");
-          const profile = await read("profiles", code);
-          if (profile) await write("profiles", { ...profile, syncStatus: "rejected" });
+        const clockEvent = await read("events", item.id);
+        if (clockEvent) {
+          await write("events", { ...clockEvent, syncStatus: "rejected" });
         }
         continue;
       }
@@ -214,19 +217,14 @@ async function synchronize() {
     }
 
     await remove("queue", item.id);
-    if (item.kind === "punch") {
-      const event = await read("events", item.id);
-      if (event) {
-        await write("events", {
-          ...event,
-          receivedAt: body.event?.receivedAt || new Date().toISOString(),
-          syncStatus: "synced",
-        });
-      }
-    } else {
-      const code = String(item.payload.employeeCode || "");
-      const profile = await read("profiles", code);
-      if (profile) await write("profiles", { ...profile, syncStatus: "synced" });
+    const clockEvent = await read("events", item.id);
+    if (clockEvent) {
+      await write("events", {
+        ...clockEvent,
+        ...body.event,
+        receivedAt: body.event?.receivedAt || new Date().toISOString(),
+        syncStatus: "synced",
+      });
     }
   }
 
@@ -234,7 +232,9 @@ async function synchronize() {
     type: "window",
     includeUncontrolled: true,
   });
-  clients.forEach((client) => client.postMessage({ type: "BETA_CLOCK_SYNCED" }));
+  clients.forEach((client) =>
+    client.postMessage({ type: "BETA_CLOCK_SYNCED" }),
+  );
 }
 
 self.addEventListener("sync", (event) => {
