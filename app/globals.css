@@ -5031,16 +5031,27 @@ a {
   line-height: 1;
 }
 
+
+
+/*
+ * O logotipo. O fundo era branco, herdado de quando se esperava uma marca
+ * recortada; a da Beta vem do arquivo oficial COM o fundo azul da parede de
+ * concreto, e um quadrado branco em volta viraria uma moldura acesa na barra
+ * escura. Sem cor de fundo, o azul do próprio arquivo encosta no azul da
+ * barra e a marca lê como um selo, não como um adesivo colado.
+ *
+ * `cover`, e não `contain`: o recorte já é quadrado e justo na marca, então
+ * preencher a caixa aproveita os 40 pixels inteiros em vez de deixar tarja.
+ */
 .brand-logo {
   width: 40px;
   height: 40px;
   flex: 0 0 auto;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 12px;
-  background-color: #fff;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 }
 
 .brand > span:last-child {
@@ -5054,8 +5065,14 @@ a {
   overflow: hidden;
   font-size: 12px;
   font-weight: 720;
-  letter-spacing: 0.035em;
+  /*
+   * Maiúsculas, como no logotipo. O espaçamento sobe junto: caixa alta sem
+   * folga entre as letras fecha a palavra num bloco e fica mais difícil de
+   * ler do que a caixa mista que havia antes.
+   */
+  letter-spacing: 0.075em;
   text-overflow: ellipsis;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 

@@ -208,7 +208,16 @@ const InternalCodeVisibilityContext =
 const defaultSettings: SystemSettings = {
   companyName: "Beta Construtora",
   systemName: "Beta Gestão 365",
-  logoUrl: "",
+  /*
+   * O logotipo da Beta Construtora, recortado do arquivo oficial e reduzido
+   * a 160px — o quádruplo do tamanho em que aparece, para ficar nítido em
+   * tela retina. O original tem 2816x1536 e 7,9 MB: serviria de cartaz, mas
+   * seriam 7,9 MB baixados a cada abertura de página para preencher 40
+   * pixels de barra lateral.
+   *
+   * Continua sendo um campo editável: trocar a marca não exige publicação.
+   */
+  logoUrl: "/logo-beta.png",
   primaryColor: "#173f58",
   welcomeMessage:
     "Acompanhe compromissos, pessoas, máquinas e documentos em um só lugar.",
@@ -9197,11 +9206,21 @@ throw new Error(
               style={{ backgroundImage: `url("${settings.logoUrl}")` }}
             />
           ) : (
+            /*
+             * Só chega aqui quem apagar o campo Logotipo. O padrão aponta
+             * para o arquivo da empresa; a letra grega fica como último
+             * recurso, para a barra nunca ficar sem marca nenhuma.
+             */
             <span className="brand-mark">β</span>
           )}
           <span>
+            {/*
+             * Só o nome da empresa, em maiúsculas. O nome do sistema saiu
+             * daqui a pedido de Samuel Scolari: quem abre a tela trabalha na
+             * Beta, não no "Beta Gestão 365", e a segunda linha competia com
+             * a primeira sem acrescentar nada.
+             */}
             <strong>{settings.companyName}</strong>
-            <small>{settings.systemName}</small>
           </span>
         </div>
         <nav>
