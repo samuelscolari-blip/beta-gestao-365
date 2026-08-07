@@ -61,7 +61,10 @@ test("Pessoas e Obras disparam sincronização automática após gravação", ()
   assert.match(wrapper, /pathname !== "\/api\/records"/);
   assert.match(wrapper, /moduleId === "people" \|\| moduleId === "works"/);
   assert.match(wrapper, /if \(affectsPoint && response\.ok\) schedule\(\)/);
-  assert.match(wrapper, /schedule\(\);\s*\n\s*return \(\) =>/);
+  // A abertura administrativa também agenda uma recuperação silenciosa.
+  // Não acoplamos o teste à posição exata dos comentários dessa rotina.
+  assert.match(wrapper, /schedule\(\);/);
+  assert.match(wrapper, /stopped = true/);
 });
 
 test("o botão manual continua existindo como conferência administrativa", () => {
