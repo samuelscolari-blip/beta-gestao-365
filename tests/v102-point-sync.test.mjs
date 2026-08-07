@@ -8,6 +8,7 @@ const route = readFileSync(
 );
 const sync = readFileSync("app/lib/ponto-sync.ts", "utf8");
 const modules = readFileSync("app/lib/modules.ts", "utf8");
+const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
 const wrapper = readFileSync(
   "app/components/SecureBetaAppV102.tsx",
   "utf8",
@@ -55,6 +56,10 @@ test("perfil operacional é explícito, reversível e não depende do nome", () 
   assert.match(modules, /canRegisterTeamPoint/);
   assert.match(modules, /Pode registrar o ponto da equipe\?/);
   assert.match(modules, /options: \["Não", "Sim"\]/);
+  assert.match(
+    betaApp,
+    /fields: \[[^\]]*"timeClockEmployeeId", "canRegisterTeamPoint", "timeClockSyncStatus"/,
+  );
 });
 
 test("o Gestão valida e envia snapshot antes de uma ativação explícita", () => {
