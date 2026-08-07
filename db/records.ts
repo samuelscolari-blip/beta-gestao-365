@@ -1266,6 +1266,28 @@ export async function createMany(
       (_, index) => values.slice(index * size, (index + 1) * size),
     );
   for (const [moduleId, entries] of byModule) {
+    /*
+     * Pessoas precisam de uma visão completa do cadastro existente.
+     *
+     * A planilha pode chegar sem o código interno ou com um código corrigido.
+     * Se buscarmos candidatos apenas pela referência/import_key recebida,
+     * os mapas por CPF e nome ficam vazios justamente quando são necessários
+     * e a mesma pessoa pode ser inserida outra vez. O lote é limitado a 250;
+     * carregar o diretório de pessoas uma vez torna a decisão correta e
+     * continua barato para o quadro operacional.
+     */
+    if (moduleId === "people") {
+      selectStatements.push(
+        db
+          .prepare(
+            `SELECT ${selectColumns} FROM records
+             WHERE tenant_id = ? AND module = ?`,
+          )
+          .bind(DEFAULT_TENANT_ID, moduleId),
+      );
+      continue;
+    }
+
     const references = [
       ...new Set(
         entries
@@ -1390,6 +1412,7 @@ export async function createMany(
   }
 
   const seenBatchKeys = new Set<string>();
+  const seenBatchPeopleCpf = new Set<string>();
   const statements: ReturnType<typeof db.prepare>[] = [];
   let inserted = 0;
   let updated = 0;
@@ -1412,6 +1435,25 @@ export async function createMany(
       : "";
     const cpfDaLinha = onlyDigits(input.payload?.cpf);
     const nomeDaLinha = normalizeName(input.payload?.name || input.title);
+
+    /*
+     * Duas linhas do mesmo arquivo também não podem criar duas pessoas.
+     * Referências diferentes não vencem um CPF idêntico: CPF identifica a
+     * pessoa; a segunda ocorrência é ignorada e aparece no relatório.
+     */
+    const peopleCpfBatchKey =
+      input.module === "people" && cpfDaLinha.length === 11
+        ? `${input.module}::${cpfDaLinha}`
+        : "";
+    if (
+      peopleCpfBatchKey &&
+      seenBatchPeopleCpf.has(peopleCpfBatchKey)
+    ) {
+      skipped += 1;
+      continue;
+    }
+    if (peopleCpfBatchKey) seenBatchPeopleCpf.add(peopleCpfBatchKey);
+
     const existing =
       (importKey && existingByImportKey.get(`${input.module}::${importKey}`)) ||
       (referenceKey && existingByReference.get(referenceKey)) ||
