@@ -19,10 +19,14 @@ function peopleToolbar() {
   return page?.querySelector<HTMLElement>(".table-toolbar") || null;
 }
 
-async function requestPointSync(fetcher: typeof window.fetch) {
+async function requestPointSync(
+  fetcher: typeof window.fetch,
+  activateReal = false,
+) {
   const response = await fetcher("/api/integrations/ponto/sync", {
     method: "POST",
     headers: { "content-type": "application/json" },
+    body: JSON.stringify({ activateReal }),
   });
   const result = (await response.json().catch(() => ({}))) as {
     ok?: boolean;
@@ -110,7 +114,7 @@ function installAutomaticPointSync(isAdmin: boolean) {
     if (timer) window.clearTimeout(timer);
     timer = window.setTimeout(() => {
       timer = 0;
-      void requestPointSync(originalFetch).catch((error) => {
+      void requestPointSync(originalFetch, false).catch((error) => {
         console.error("Sincronização automática com o Beta Ponto pendente.", error);
       });
     }, AUTO_SYNC_DELAY_MS);
@@ -143,17 +147,17 @@ function installPointSyncButton(isAdmin: boolean) {
   button.type = "button";
   button.className = "button secondary compact-button";
   button.dataset.ui = BUTTON_MARKER;
-  button.textContent = "Sincronizar com Ponto";
+  button.textContent = "Ativar / sincronizar Ponto";
   button.title =
-    "Confere imediatamente o cadastro oficial no Beta Ponto. A sincronização também acontece automaticamente.";
+    "Sincroniza o cadastro oficial. Se o Ponto ainda estiver em demonstração, ativa a BASE REAL somente após validar quadro, obra, jornada e credenciais.";
 
   button.addEventListener("click", async () => {
     if (button.disabled) return;
-    const original = button.textContent || "Sincronizar com Ponto";
+    const original = button.textContent || "Ativar / sincronizar Ponto";
     button.disabled = true;
     button.textContent = "Sincronizando…";
     try {
-      const result = await requestPointSync(window.fetch.bind(window));
+      const result = await requestPointSync(window.fetch.bind(window), true);
       button.textContent = `Ponto sincronizado (${result.total || 0})`;
       window.alert(
         `${result.message || "Sincronização concluída."}\n\n` +
