@@ -23,6 +23,14 @@ test("Cloudflare deployment binds the production D1 database", async () => {
   );
 });
 
+test("Cloudflare routes the fixed Ponto host through public workers.dev", async () => {
+  const configuration = JSON.parse(await source("wrangler.jsonc"));
+  assert.ok(configuration.compatibility_flags.includes("nodejs_compat"));
+  assert.ok(
+    configuration.compatibility_flags.includes("global_fetch_strictly_public"),
+  );
+});
+
 test("Vite uses Wrangler as the deployment source of truth", async () => {
   const vite = await source("vite.config.ts");
   assert.doesNotMatch(vite, /SITE_CREATOR_PLACEHOLDER_DATABASE_ID/);
