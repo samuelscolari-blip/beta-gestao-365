@@ -565,6 +565,7 @@ export const moduleDefinitions: ModuleDefinition[] = [
       { key: "flexibleHours", label: "Horário flexível", type: "select", options: ["Não", "Sim", "Parcial"] },
       { key: "partTimeContract", label: "Contrato em regime parcial", type: "select", options: ["Não", "Sim"] },
       { key: "timeClockEmployeeId", label: "Identificador no sistema de ponto", type: "text", help: "Código que relacionará este colaborador ao cadastro do futuro sistema de ponto." },
+      { key: "canRegisterTeamPoint", label: "Pode registrar o ponto da equipe?", type: "select", options: ["Não", "Sim"], help: "Sim libera o fluxo de encarregado: login individual, senha master e marcação para a equipe da própria obra.", aliases: ["Operador do ponto", "Registra ponto da equipe", "Pode bater ponto da equipe"] },
       { key: "timeClockSyncStatus", label: "Situação da integração com o ponto", type: "select", options: ["Aguardando implantação", "Pronto para sincronizar", "Sincronizado", "Com divergência"] },
       { key: "lastTimeClockSync", label: "Última sincronização do ponto", type: "text", placeholder: "Preenchido automaticamente pela integração" },
       { key: "terminationDate", label: "Data do desligamento", type: "date", aliases: ["Data desligamento"] },

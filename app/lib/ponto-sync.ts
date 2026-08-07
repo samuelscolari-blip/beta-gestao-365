@@ -53,6 +53,20 @@ type PointSyncOptions = {
 const INITIAL_REAL_DIRECTORY_TOTAL = 42;
 const INITIAL_REAL_WORKSITE = "ASA BRANCA";
 
+/*
+ * Perfis iniciais definidos pelo código oficial do RH, nunca pelo nome.
+ *
+ * O campo canRegisterTeamPoint passa a ser a autoridade editável. Enquanto
+ * esses três cadastros ainda não foram regravados com o novo campo, os códigos
+ * oficiais abaixo garantem a liberação solicitada. Um valor explícito "Não"
+ * sempre revoga a permissão, inclusive para estes códigos.
+ */
+const INITIAL_TEAM_POINT_OPERATOR_CODES = new Set([
+  "20029",
+  "20033",
+  "20044",
+]);
+
 export type PointSyncResult = {
   ok: true;
   total: number;
@@ -81,8 +95,27 @@ export class PointSyncError extends Error {
   }
 }
 
-function pointRole(jobTitle: unknown): PointRole {
-  const role = String(jobTitle || "")
+function explicitTeamPointPermission(value: unknown): boolean | null {
+  const configured = normalize(value);
+  if (["sim", "true", "1"].includes(configured)) return true;
+  if (["nao", "false", "0"].includes(configured)) return false;
+  return null;
+}
+
+function pointRole(
+  person: Record<string, unknown>,
+  recordReference: unknown,
+): PointRole {
+  const explicitPermission = explicitTeamPointPermission(
+    person.canRegisterTeamPoint,
+  );
+  if (explicitPermission === true) return "OPERATOR";
+  if (explicitPermission === false) return "EMPLOYEE_SELF_SERVICE";
+
+  const employeeCode = onlyDigits(person.employeeCode || recordReference);
+  if (INITIAL_TEAM_POINT_OPERATOR_CODES.has(employeeCode)) return "OPERATOR";
+
+  const role = String(person.role || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toUpperCase();
@@ -372,7 +405,7 @@ export async function syncOfficialDirectoryToPoint(
       jobTitle: String(person.role || "").trim() || null,
       scheduleLabel: scheduleLabel(person) || null,
       employmentStatus: employmentStatus(record.status || person.status),
-      role: pointRole(person.role),
+      role: pointRole(person, record.reference),
       worksite: workName
         ? {
             sourceRecordId: workRecord

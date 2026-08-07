@@ -7,6 +7,8 @@ const route = readFileSync(
   "utf8",
 );
 const sync = readFileSync("app/lib/ponto-sync.ts", "utf8");
+const modules = readFileSync("app/lib/modules.ts", "utf8");
+const betaApp = readFileSync("app/components/BetaApp.tsx", "utf8");
 const wrapper = readFileSync(
   "app/components/SecureBetaAppV102.tsx",
   "utf8",
@@ -42,10 +44,22 @@ test("a matrícula operacional usa cinco dígitos sem enviar o CPF ao Ponto", ()
   }
 });
 
-test("perfil operacional é conservador", () => {
+test("perfil operacional é explícito, reversível e não depende do nome", () => {
+  assert.match(sync, /INITIAL_TEAM_POINT_OPERATOR_CODES[\s\S]*"20029"[\s\S]*"20033"[\s\S]*"20044"/);
+  assert.match(sync, /person\.employeeCode \|\| recordReference/);
+  assert.match(sync, /person\.canRegisterTeamPoint/);
+  assert.match(sync, /explicitPermission === true[\s\S]*"OPERATOR"/);
+  assert.match(sync, /explicitPermission === false[\s\S]*"EMPLOYEE_SELF_SERVICE"/);
   assert.match(sync, /role\.includes\("ENCARREG"\).*"OPERATOR"/s);
   assert.match(sync, /role\.includes\("ENGENHEIRO"\).*"CHIEF_ENGINEER"/s);
-  assert.match(sync, /return "EMPLOYEE_SELF_SERVICE"/);
+  assert.doesNotMatch(sync, /ALINE|FLORAYNE|STEPHANY/i);
+  assert.match(modules, /canRegisterTeamPoint/);
+  assert.match(modules, /Pode registrar o ponto da equipe\?/);
+  assert.match(modules, /options: \["Não", "Sim"\]/);
+  assert.match(
+    betaApp,
+    /fields: \[[^\]]*"timeClockEmployeeId", "canRegisterTeamPoint", "timeClockSyncStatus"/,
+  );
 });
 
 test("o Gestão valida e envia snapshot antes de uma ativação explícita", () => {
