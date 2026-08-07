@@ -3,7 +3,7 @@
   "name": "beta-gestao-365",
   "main": "./worker/index.ts",
   "compatibility_date": "2026-07-31",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "vars": {
     "DEPLOYMENT_PLATFORM": "cloudflare"
   },
