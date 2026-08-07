@@ -22,7 +22,11 @@ function pointRole(jobTitle: unknown): PointRole {
 function employmentStatus(status: unknown) {
   const normalized = String(status || "").toLowerCase();
   if (normalized.includes("deslig")) return "TERMINATED" as const;
-  if (normalized.includes("afast") || normalized.includes("ferias") || normalized.includes("férias")) {
+  if (
+    normalized.includes("afast") ||
+    normalized.includes("ferias") ||
+    normalized.includes("férias")
+  ) {
     return "ON_LEAVE" as const;
   }
   return "ACTIVE" as const;
@@ -56,6 +60,16 @@ async function integrationConfig() {
       .trim()
       .replace(/\/+$/, ""),
   };
+}
+
+function pointValidationMessage(status: number) {
+  if (status === 401) {
+    return "O receptor do Beta Ponto está no ar, mas o GESTAO_365_SYNC_TOKEN não confere entre os dois sistemas.";
+  }
+  if (status === 404) {
+    return "O receptor de funcionários do Beta Ponto ainda não está publicado em produção.";
+  }
+  return "O Beta Ponto recusou a validação do quadro de funcionários.";
 }
 
 export async function POST(request: Request) {
@@ -105,14 +119,18 @@ export async function POST(request: Request) {
             sourceRecordId: workRecord
               ? `beta-gestao-365:works:${workRecord.id}`
               : `beta-gestao-365:work-name:${normalize(workName)}`,
-            code: String(workRecord?.payload.code || workRecord?.reference || workName)
+            code: String(
+              workRecord?.payload.code || workRecord?.reference || workName,
+            )
               .trim()
               .slice(0, 60),
             name: workName,
             status:
-              workRecord && String(workRecord.status).toLowerCase().includes("concl")
+              workRecord &&
+              String(workRecord.status).toLowerCase().includes("concl")
                 ? "COMPLETED"
-                : workRecord && String(workRecord.status).toLowerCase().includes("paus")
+                : workRecord &&
+                    String(workRecord.status).toLowerCase().includes("paus")
                   ? "INACTIVE"
                   : "ACTIVE",
           }
@@ -135,39 +153,51 @@ export async function POST(request: Request) {
     authorization: `Bearer ${token}`,
     "content-type": "application/json",
   };
+  const requestBody = {
+    origin: "BETA_GESTAO_365" as const,
+    people: payload,
+  };
 
   const validationResponse = await fetch(
     `${baseUrl}/api/integrations/people/validate`,
     {
       method: "POST",
       headers,
-      body: JSON.stringify({ people: payload }),
+      body: JSON.stringify(requestBody),
     },
   );
-  const validation = (await validationResponse.json()) as Record<string, unknown>;
+  const validation = (await validationResponse.json().catch(() => ({}))) as Record<
+    string,
+    unknown
+  >;
   if (!validationResponse.ok || validation.ok !== true) {
     return Response.json(
       {
         ok: false,
         stage: "validate",
-        message: "O Beta Ponto recusou a validação do quadro de funcionários.",
+        pointStatus: validationResponse.status,
+        message: pointValidationMessage(validationResponse.status),
         point: validation,
       },
-      { status: 422 },
+      { status: validationResponse.status === 401 ? 401 : 422 },
     );
   }
 
   const syncResponse = await fetch(`${baseUrl}/api/integrations/people/sync`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ origin: "BETA_GESTAO_365", people: payload }),
+    body: JSON.stringify(requestBody),
   });
-  const synced = (await syncResponse.json()) as Record<string, unknown>;
+  const synced = (await syncResponse.json().catch(() => ({}))) as Record<
+    string,
+    unknown
+  >;
   if (!syncResponse.ok || synced.ok !== true) {
     return Response.json(
       {
         ok: false,
         stage: "sync",
+        pointStatus: syncResponse.status,
         message: "O Beta Ponto não concluiu a sincronização.",
         point: synced,
       },
@@ -179,7 +209,9 @@ export async function POST(request: Request) {
     {
       ok: true,
       total: payload.length,
-      worksite: Array.from(new Set(payload.map((item) => item.worksite?.name).filter(Boolean))),
+      worksite: Array.from(
+        new Set(payload.map((item) => item.worksite?.name).filter(Boolean)),
+      ),
       created: synced.created || 0,
       updated: synced.updated || 0,
       semAcesso: synced.semAcesso || [],
