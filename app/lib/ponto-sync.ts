@@ -172,38 +172,14 @@ function operationalEmployeeNumber(person: Record<string, unknown>) {
   return configured.length === 5 ? configured : "";
 }
 
-function pointBaseUrl(configuredValue: unknown): string {
-  const official = new URL(DEFAULT_POINT_BASE_URL);
-  const configured = String(configuredValue || "").trim();
-
-  if (configured) {
-    try {
-      const parsed = new URL(configured);
-      if (
-        parsed.protocol === "https:" &&
-        parsed.hostname === official.hostname
-      ) {
-        // O binding pode ter recebido /api por engano. A integração sempre
-        // parte da raiz do único domínio oficial do Ponto.
-        return official.origin;
-      }
-    } catch {
-      // Configuração antiga ou malformada cai no domínio oficial abaixo.
-    }
-  }
-
-  return official.origin;
-}
-
 async function integrationConfig() {
   const { env } = await import("cloudflare:workers");
   const runtime = env as unknown as {
     GESTAO_365_SYNC_TOKEN?: string;
-    BETA_PONTO_BASE_URL?: string;
   };
   return {
     token: String(runtime.GESTAO_365_SYNC_TOKEN || "").trim(),
-    baseUrl: pointBaseUrl(runtime.BETA_PONTO_BASE_URL),
+    baseUrl: DEFAULT_POINT_BASE_URL,
   };
 }
 
