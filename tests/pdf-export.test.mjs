@@ -16,19 +16,28 @@ test("Modelo vira Arquivo PDF e exporta a tabela exibida", () => {
   assert.match(wrapper, /event\.stopImmediatePropagation\(\)/);
 });
 
-test("Arquivo PDF e Excel ficam antes de Importar", () => {
+test("Arquivo PDF e Excel ficam antes de Importar sem movimentação repetida", () => {
   const reorder = wrapper.slice(
     wrapper.indexOf("const importButton"),
     wrapper.indexOf("function peopleToolbar"),
   );
-  const excelBeforeImport = reorder.indexOf(
+  const excelGuard = reorder.indexOf(
+    "if (excelButton.nextElementSibling !== importButton)",
+  );
+  const excelMove = reorder.indexOf(
     "toolbar.insertBefore(excelButton, importButton)",
   );
-  const pdfBeforeExcel = reorder.indexOf(
+  const pdfGuard = reorder.indexOf(
+    "if (pdfButton.nextElementSibling !== excelButton)",
+  );
+  const pdfMove = reorder.indexOf(
     "toolbar.insertBefore(pdfButton, excelButton)",
   );
-  assert.ok(excelBeforeImport >= 0);
-  assert.ok(pdfBeforeExcel > excelBeforeImport);
+
+  assert.ok(excelGuard >= 0);
+  assert.ok(excelMove > excelGuard);
+  assert.ok(pdfGuard > excelMove);
+  assert.ok(pdfMove > pdfGuard);
 });
 
 test("o arquivo gerado é um PDF real, paginado e sem a coluna Ações", () => {
