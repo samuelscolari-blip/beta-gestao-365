@@ -30,14 +30,28 @@ type PointPerson = {
   sourceRecordId: string;
   employeeNumber: string;
   fullName: string;
+  /**
+   * Dados trabalhistas seguem somente dentro desta integração autenticada.
+   * Nunca são devolvidos pelo diretório operacional nem escritos em logs.
+   */
+  cpfDigits: string | null;
+  pis: string | null;
+  admissionDate: string | null;
   jobTitle: string | null;
   scheduleLabel: string | null;
   employmentStatus: "ACTIVE" | "ON_LEAVE" | "TERMINATED";
   role: PointRole;
+  canManageTime: boolean;
+  employer: {
+    legalName: string | null;
+    tradeName: string | null;
+    cnpj: string | null;
+  };
   worksite: {
     sourceRecordId: string;
     code: string;
     name: string;
+    cno: string | null;
     status: "ACTIVE" | "INACTIVE" | "COMPLETED";
   } | null;
 };
@@ -62,6 +76,17 @@ const INITIAL_REAL_WORKSITE = "ASA BRANCA";
  * sempre revoga a permissão, inclusive para estes códigos.
  */
 const INITIAL_TEAM_POINT_OPERATOR_CODES = new Set([
+  "20029",
+  "20033",
+  "20044",
+]);
+
+/*
+ * Permissão de jornadas/espelhos é independente do perfil OPERATOR.
+ * Enquanto o novo campo ainda não foi regravado nos três cadastros oficiais,
+ * o código do RH mantém o acesso. "Não" explícito sempre revoga.
+ */
+const INITIAL_TIME_MANAGEMENT_CODES = new Set([
   "20029",
   "20033",
   "20044",
@@ -100,6 +125,17 @@ function explicitTeamPointPermission(value: unknown): boolean | null {
   if (["sim", "true", "1"].includes(configured)) return true;
   if (["nao", "false", "0"].includes(configured)) return false;
   return null;
+}
+
+function canManageTime(
+  person: Record<string, unknown>,
+  recordReference: unknown,
+): boolean {
+  const explicitPermission = explicitTeamPointPermission(person.canManageTime);
+  if (explicitPermission !== null) return explicitPermission;
+
+  const employeeCode = onlyDigits(person.employeeCode || recordReference);
+  return INITIAL_TIME_MANAGEMENT_CODES.has(employeeCode);
 }
 
 function pointRole(
@@ -155,6 +191,16 @@ function normalize(value: unknown) {
 
 function onlyDigits(value: unknown) {
   return String(value || "").replace(/\D/g, "");
+}
+
+function exactDigitsOrNull(value: unknown, length: number) {
+  const digits = onlyDigits(value);
+  return digits.length === length ? digits : null;
+}
+
+function isoDateOrNull(value: unknown) {
+  const date = String(value || "").trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : null;
 }
 
 /*
@@ -356,12 +402,26 @@ export async function syncOfficialDirectoryToPoint(
     );
   }
 
-  const [storedPeople, storedWorks] = await Promise.all([
+  const [storedPeople, storedWorks, storedSettings] = await Promise.all([
     listRecords("people"),
     listRecords("works"),
+    listRecords("settings"),
   ]);
   const people = storedPeople.filter((record) => record.source !== DEMO_SOURCE);
   const works = storedWorks.filter((record) => record.source !== DEMO_SOURCE);
+  const settings =
+    storedSettings.find(
+      (record) =>
+        record.source !== DEMO_SOURCE && record.reference === "system-config",
+    )?.payload ||
+    storedSettings.find((record) => record.source !== DEMO_SOURCE)?.payload ||
+    {};
+  const employer = {
+    legalName: String(settings.legalName || "").trim() || null,
+    tradeName:
+      String(settings.tradeName || settings.companyName || "").trim() || null,
+    cnpj: exactDigitsOrNull(settings.cnpj, 14),
+  };
 
   const currentEnvironment = options.activateReal
     ? await pointEnvironmentMode(baseUrl)
@@ -406,10 +466,15 @@ export async function syncOfficialDirectoryToPoint(
       sourceRecordId: `beta-gestao-365:people:${record.id}`,
       employeeNumber,
       fullName: String(person.name || record.title).trim(),
+      cpfDigits: exactDigitsOrNull(person.cpf, 11),
+      pis: exactDigitsOrNull(person.pis, 11),
+      admissionDate: isoDateOrNull(person.admissionDate),
       jobTitle: String(person.role || "").trim() || null,
       scheduleLabel: scheduleLabel(person) || null,
       employmentStatus: employmentStatus(record.status || person.status),
       role: pointRole(person, record.reference),
+      canManageTime: canManageTime(person, record.reference),
+      employer,
       worksite: workName
         ? {
             sourceRecordId: workRecord
@@ -421,6 +486,7 @@ export async function syncOfficialDirectoryToPoint(
               .trim()
               .slice(0, 60),
             name: workName,
+            cno: exactDigitsOrNull(workRecord?.payload.cno, 12),
             status:
               workRecord &&
               String(workRecord.status).toLowerCase().includes("concl")
