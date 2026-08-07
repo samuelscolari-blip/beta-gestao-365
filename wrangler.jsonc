@@ -5,8 +5,7 @@
   "compatibility_date": "2026-07-31",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "DEPLOYMENT_PLATFORM": "cloudflare",
-    "BETA_PONTO_BASE_URL": "https://beta-ponto-eletronico-365.scolarisamuel.workers.dev"
+    "DEPLOYMENT_PLATFORM": "cloudflare"
   },
   "d1_databases": [
     {
