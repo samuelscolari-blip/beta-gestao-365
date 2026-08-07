@@ -18,6 +18,11 @@ test("a sincronização lê o Cadastro de Funcionários persistente", () => {
   assert.match(route, /person\.registration \|\| person\.employeeCode \|\| record\.reference/);
 });
 
+test("a obra do cadastro oficial é enviada pelo campo work", () => {
+  assert.match(route, /const workName = String\(person\.work \|\| ""\)\.trim\(\)/);
+  assert.match(route, /name: workName/);
+});
+
 test("documentos pessoais nunca entram no payload enviado ao Ponto", () => {
   const payloadBlock = route.slice(
     route.indexOf("const payload = people.map"),
@@ -41,11 +46,21 @@ test("perfil operacional é conservador", () => {
   assert.match(route, /return "EMPLOYEE_SELF_SERVICE"/);
 });
 
-test("o Gestão valida antes de sincronizar e declara a origem oficial", () => {
+test("validate e sync recebem exatamente o mesmo contrato oficial", () => {
+  assert.match(route, /const requestBody = \{/);
+  assert.match(route, /origin: "BETA_GESTAO_365" as const/);
+  assert.match(route, /body: JSON\.stringify\(requestBody\)/g);
   assert.match(route, /\/api\/integrations\/people\/validate/);
   assert.match(route, /\/api\/integrations\/people\/sync/);
-  assert.match(route, /origin: "BETA_GESTAO_365"/);
   assert.match(route, /GESTAO_365_SYNC_TOKEN/);
+});
+
+test("o diagnóstico distingue receptor ausente de token divergente", () => {
+  assert.match(route, /status === 401/);
+  assert.match(route, /token não confere entre os dois sistemas/);
+  assert.match(route, /status === 404/);
+  assert.match(route, /ainda não está publicado em produção/);
+  assert.match(route, /pointStatus: validationResponse\.status/);
 });
 
 test("somente o administrador ganha a ação visível de sincronização", () => {
