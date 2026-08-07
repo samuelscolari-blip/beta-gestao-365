@@ -10,12 +10,128 @@ type Props = {
 };
 
 const BUTTON_MARKER = "beta-point-sync-button";
+const AUTO_SYNC_DELAY_MS = 600;
 
 function peopleToolbar() {
   const tabs = document.querySelector<HTMLElement>(".people-status-tabs");
   if (!tabs) return null;
   const page = tabs.closest<HTMLElement>(".page-stack") || tabs.parentElement;
   return page?.querySelector<HTMLElement>(".table-toolbar") || null;
+}
+
+async function requestPointSync(fetcher: typeof window.fetch) {
+  const response = await fetcher("/api/integrations/ponto/sync", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+  });
+  const result = (await response.json().catch(() => ({}))) as {
+    ok?: boolean;
+    total?: number;
+    created?: number;
+    updated?: number;
+    deactivated?: number;
+    semAcesso?: string[];
+    message?: string;
+  };
+  if (!response.ok || !result.ok) {
+    throw new Error(
+      result.message || "Não foi possível sincronizar com o Beta Ponto.",
+    );
+  }
+  return result;
+}
+
+function recordMutationAffectsPoint(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+): boolean {
+  const url =
+    typeof input === "string"
+      ? input
+      : input instanceof URL
+        ? input.toString()
+        : input.url;
+  const pathname = new URL(url, window.location.origin).pathname;
+  if (pathname !== "/api/records") return false;
+
+  const method = String(
+    init?.method || (input instanceof Request ? input.method : "GET"),
+  ).toUpperCase();
+  if (!new Set(["POST", "PUT", "DELETE"]).has(method)) return false;
+  if (method === "DELETE") return true;
+
+  const body = init?.body;
+  if (typeof body !== "string") {
+    // Corpo não inspecionável: sincronizar é mais seguro do que deixar uma
+    // alteração de Pessoas/Obras passar sem chegar ao Ponto.
+    return true;
+  }
+
+  try {
+    const parsed = JSON.parse(body) as {
+      record?: { module?: unknown };
+      records?: Array<{ module?: unknown }>;
+      module?: unknown;
+    };
+    const modules = [
+      parsed.module,
+      parsed.record?.module,
+      ...(parsed.records || []).map((record) => record.module),
+    ];
+    return modules.some((moduleId) =>
+      moduleId === "people" || moduleId === "works",
+    );
+  } catch {
+    return true;
+  }
+}
+
+/*
+ * Sincronização automática do cadastro.
+ *
+ * A aplicação inteira já escreve Pessoas e Obras por `/api/records`. Em vez
+ * de espalhar chamadas ao Ponto por cada formulário, observamos essa única
+ * fronteira: uma gravação oficial bem-sucedida agenda um snapshot completo.
+ * Várias alterações feitas em sequência viram um único envio por debounce.
+ *
+ * O salvamento no Gestão 365 não é revertido se o Ponto estiver fora do ar.
+ * O botão manual continua disponível e, ao abrir a área administrativa, há
+ * ainda uma sincronização silenciosa de recuperação.
+ */
+function installAutomaticPointSync(isAdmin: boolean) {
+  if (!isAdmin) return () => undefined;
+
+  const originalFetch = window.fetch.bind(window);
+  let timer = 0;
+  let stopped = false;
+
+  const schedule = () => {
+    if (stopped) return;
+    if (timer) window.clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      timer = 0;
+      void requestPointSync(originalFetch).catch((error) => {
+        console.error("Sincronização automática com o Beta Ponto pendente.", error);
+      });
+    }, AUTO_SYNC_DELAY_MS);
+  };
+
+  window.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const affectsPoint = recordMutationAffectsPoint(input, init);
+    const response = await originalFetch(input, init);
+    if (affectsPoint && response.ok) schedule();
+    return response;
+  }) as typeof window.fetch;
+
+  // Recupera qualquer alteração feita enquanto o Ponto ou a rede estavam
+  // indisponíveis, sem depender do clique manual.
+  schedule();
+
+  return () => {
+    stopped = true;
+    if (timer) window.clearTimeout(timer);
+    window.fetch = originalFetch;
+  };
 }
 
 function installPointSyncButton(isAdmin: boolean) {
@@ -29,7 +145,7 @@ function installPointSyncButton(isAdmin: boolean) {
   button.dataset.ui = BUTTON_MARKER;
   button.textContent = "Sincronizar com Ponto";
   button.title =
-    "Envia ao Beta Ponto apenas matrícula, nome, função, status, obra, jornada e perfil. Documentos pessoais não são enviados.";
+    "Confere imediatamente o cadastro oficial no Beta Ponto. A sincronização também acontece automaticamente.";
 
   button.addEventListener("click", async () => {
     if (button.disabled) return;
@@ -37,26 +153,13 @@ function installPointSyncButton(isAdmin: boolean) {
     button.disabled = true;
     button.textContent = "Sincronizando…";
     try {
-      const response = await fetch("/api/integrations/ponto/sync", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-      });
-      const result = (await response.json()) as {
-        ok?: boolean;
-        total?: number;
-        created?: number;
-        updated?: number;
-        semAcesso?: string[];
-        message?: string;
-      };
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "Não foi possível sincronizar com o Beta Ponto.");
-      }
+      const result = await requestPointSync(window.fetch.bind(window));
       button.textContent = `Ponto sincronizado (${result.total || 0})`;
       window.alert(
         `${result.message || "Sincronização concluída."}\n\n` +
           `Novos: ${result.created || 0}\n` +
           `Atualizados: ${result.updated || 0}\n` +
+          `Desativados: ${result.deactivated || 0}\n` +
           `Sem credencial de acesso ainda: ${result.semAcesso?.length || 0}`,
       );
       window.setTimeout(() => {
@@ -92,6 +195,7 @@ function installPointSyncButton(isAdmin: boolean) {
 export default function SecureBetaAppV102(props: Props) {
   useLayoutEffect(() => {
     let frame = 0;
+    const stopAutomaticSync = installAutomaticPointSync(props.isAdmin);
     const schedule = () => {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
@@ -105,6 +209,7 @@ export default function SecureBetaAppV102(props: Props) {
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      stopAutomaticSync();
       observer.disconnect();
       if (frame) window.cancelAnimationFrame(frame);
     };
