@@ -9,13 +9,24 @@ export async function POST(request: Request) {
   if (denied) return denied;
 
   try {
-    const result = await syncOfficialDirectoryToPoint();
+    const body = (await request.json().catch(() => ({}))) as {
+      activateReal?: unknown;
+    };
+    const result = await syncOfficialDirectoryToPoint({
+      activateReal: body.activateReal === true,
+    });
+    const environmentMessage =
+      result.environmentAction === "ACTIVATED"
+        ? "Ambiente ativado como BASE REAL."
+        : result.environmentAction === "ALREADY_REAL"
+          ? "O ambiente já estava em BASE REAL."
+          : "O modo do ambiente não foi alterado.";
     return Response.json(
       {
         ...result,
         message:
           `${result.total} funcionários sincronizados com o Beta Ponto. ` +
-          `Ambiente confirmado como BASE REAL.`,
+          environmentMessage,
       },
       { headers: { "cache-control": "no-store" } },
     );
