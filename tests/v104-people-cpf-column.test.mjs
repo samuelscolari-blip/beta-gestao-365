@@ -14,6 +14,14 @@ test("lista de funcionários exibe o CPF já salvo logo após o nome", () => {
   assert.match(enhancements, /insertColumnAfter\(moduleMap\.people, "cpf", "name"\)/);
 });
 
+test("lista de funcionários exibe o PIS/NIS já salvo logo após o CPF", () => {
+  assert.match(modules, /\{ key: "pis", label: "PIS\/NIS", type: "text"/);
+  assert.match(
+    enhancements,
+    /insertColumnAfter\(moduleMap\.people, "pis", "cpf"\)/,
+  );
+});
+
 test("a mudança visual não cria nem importa um segundo CPF", () => {
   const occurrences = (enhancements.match(/key: "cpf"/g) || []).length;
   assert.equal(occurrences, 0);
