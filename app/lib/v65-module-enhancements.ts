@@ -22,6 +22,17 @@ function appendColumn(definition: ModuleDefinition | undefined, key: string) {
   else definition.tableColumns.push(key);
 }
 
+function insertColumnAfter(
+  definition: ModuleDefinition | undefined,
+  key: string,
+  afterKey: string,
+) {
+  if (!definition || definition.tableColumns.includes(key)) return;
+  const index = definition.tableColumns.indexOf(afterKey);
+  if (index >= 0) definition.tableColumns.splice(index + 1, 0, key);
+  else definition.tableColumns.unshift(key);
+}
+
 function appendPaymentEvidenceFields(
   definition: ModuleDefinition | undefined,
   expectedLabel: string,
@@ -73,6 +84,11 @@ if (!marker.__v65Applied) {
 
   applyPaymentFields("rentals", "aluguel e das contas do imóvel");
   applyPaymentFields("food", "fornecimento de alimentação");
+
+  // CPF já faz parte da ficha oficial do colaborador. A tela administrativa
+  // precisa exibir o valor já persistido para conferência diária do RH, sem
+  // criar novo campo, duplicar cadastro ou exigir reimportação.
+  insertColumnAfter(moduleMap.people, "cpf", "name");
 
   // A configuração visual V52 simplificou a tela do cartão e removeu estes
   // campos. Eles precisam voltar para que o usuário consiga cumprir a regra
