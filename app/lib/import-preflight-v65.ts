@@ -3,13 +3,14 @@
 import readXlsxFile from "read-excel-file/browser";
 import {
   moduleDefinitions,
+  normalizeHeader,
 } from "./modules";
 import {
   allowedImportModuleIds,
   importFamilyForModule,
 } from "./import-policy";
 import { parseCsvRows } from "./spreadsheet-csv.mjs";
-import { resolveImportSheet } from "./spreadsheet";
+import { parseModuleSheet, resolveImportSheet } from "./spreadsheet";
 import "./v65-module-enhancements";
 
 type SheetData = { sheet: string; data: unknown[][] };
@@ -31,6 +32,29 @@ async function workbookSheets(file: File): Promise<SheetData[]> {
     ];
   }
   return (await readXlsxFile(file)) as SheetData[];
+}
+
+/*
+ * Uma aba com o nome oficial de um módulo é uma declaração explícita de
+ * destino, não apenas mais um indício semântico. Isso é especialmente
+ * importante em RH: `03_COLABORADORES` contém colunas como Obra, Status e
+ * Código, que também existem em outros módulos. Deixar o classificador
+ * competir depois de reconhecer o nome oficial fazia a mesma planilha ser
+ * apresentada como dois destinos possíveis.
+ *
+ * A segurança continua conservadora: o nome oficial só vence se a estrutura
+ * realmente produzir registros desse módulo. Se não produzir, a aba é
+ * recusada em vez de ser redirecionada silenciosamente para outro cadastro.
+ */
+function declaredModuleForSheet(sheetName: string) {
+  const normalizedSheet = normalizeHeader(sheetName);
+  return moduleDefinitions.find(
+    (module) =>
+      allowedImportModuleIds.has(module.id) &&
+      module.spreadsheetSheets.some(
+        (declaredName) => normalizeHeader(declaredName) === normalizedSheet,
+      ),
+  );
 }
 
 export async function inspectImportFileV65(
@@ -70,6 +94,29 @@ export async function inspectImportFileV65(
     );
     if (!visibleRows.length) {
       details.push(`${sheet.sheet}: aba vazia, será ignorada.`);
+      continue;
+    }
+
+    const declaredModule = declaredModuleForSheet(sheet.sheet);
+    if (declaredModule) {
+      const parsed = parseModuleSheet(
+        declaredModule,
+        rows,
+        `${file.name} / ${sheet.sheet}`,
+      );
+      if (!parsed.records.length) {
+        unrecognized.push(
+          `${sheet.sheet}: o nome declara ${declaredModule.label}, mas a estrutura não contém registros válidos desse cadastro.`,
+        );
+        continue;
+      }
+
+      recognized += 1;
+      const family =
+        importFamilyForModule(declaredModule.id)?.label || declaredModule.label;
+      details.push(
+        `${sheet.sheet}: ${family} / ${declaredModule.label} • ${parsed.layout} • ${parsed.records.length} registro(s) • destino fixado pelo nome oficial da aba.`,
+      );
       continue;
     }
 
@@ -114,7 +161,9 @@ export async function inspectImportFileV65(
       title: "Dados não reconhecidos",
       message:
         "Nenhuma aba apresentou cabeçalhos suficientes para uma importação segura. Confira os títulos das colunas ou escolha o módulo manualmente.",
-      details: unrecognized.map((sheet) => `${sheet}: estrutura não reconhecida.`),
+      details: unrecognized.map((sheet) =>
+        sheet.includes(":") ? sheet : `${sheet}: estrutura não reconhecida.`,
+      ),
     };
   }
 
@@ -123,9 +172,13 @@ export async function inspectImportFileV65(
       kind: "warning",
       title: "Revisão necessária antes de importar",
       message:
-        "O sistema encontrou abas ambíguas ou não reconhecidas. Revise a identificação abaixo; ao continuar, a prévia normal ainda mostrará linhas válidas, rejeitadas e duplicadas antes da gravação.",
+        "O sistema encontrou abas não reconhecidas. Revise a identificação abaixo; ao continuar, a prévia normal ainda mostrará linhas válidas, rejeitadas e duplicadas antes da gravação.",
       details: [
-        ...unrecognized.map((sheet) => `${sheet}: estrutura não reconhecida e será ignorada.`),
+        ...unrecognized.map((sheet) =>
+          sheet.includes(":")
+            ? sheet
+            : `${sheet}: estrutura não reconhecida e será ignorada.`,
+        ),
         ...details,
       ],
     };
