@@ -14,6 +14,7 @@ const wrapper = readFileSync(
   "utf8",
 );
 const page = readFileSync("app/page.tsx", "utf8");
+const wrangler = readFileSync("wrangler.jsonc", "utf8");
 
 test("a sincronização lê o Cadastro de Funcionários persistente", () => {
   assert.match(sync, /listRecords\("people"\)/);
@@ -59,6 +60,18 @@ test("perfil operacional é explícito, reversível e não depende do nome", () 
   assert.match(
     betaApp,
     /fields: \[[^\]]*"timeClockEmployeeId", "canRegisterTeamPoint", "timeClockSyncStatus"/,
+  );
+});
+
+test("a ponte usa somente o domínio oficial do Beta Ponto", () => {
+  assert.match(sync, /function pointBaseUrl/);
+  assert.match(sync, /new URL\(DEFAULT_POINT_BASE_URL\)/);
+  assert.match(sync, /parsed\.hostname === official\.hostname/);
+  assert.match(sync, /return official\.origin/);
+  assert.match(sync, /pointBaseUrl\(runtime\.BETA_PONTO_BASE_URL\)/);
+  assert.match(
+    wrangler,
+    /"BETA_PONTO_BASE_URL": "https:\/\/beta-ponto-eletronico-365\.scolarisamuel\.workers\.dev"/,
   );
 });
 
@@ -108,6 +121,7 @@ test("o botão manual continua existindo como conferência administrativa", () =
 
 test("falhas remotas mostram o status e diagnósticos operacionais", () => {
   assert.match(sync, /httpStatus: response\.status/);
+  assert.match(sync, /remoteUrl: response\.url/);
   assert.match(sync, /response\.status === 401/);
   assert.match(sync, /GESTAO_365_SYNC_TOKEN é idêntico nos dois Workers/);
   assert.match(sync, /response\.status === 404/);
