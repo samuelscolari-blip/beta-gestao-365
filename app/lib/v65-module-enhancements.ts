@@ -90,6 +90,11 @@ if (!marker.__v65Applied) {
   // criar novo campo, duplicar cadastro ou exigir reimportação.
   insertColumnAfter(moduleMap.people, "cpf", "name");
 
+  // O PIS/NIS também já pertence à ficha e à importação oficial. Exibi-lo
+  // logo após o CPF permite conferência e emissão de documentos sem abrir
+  // colaborador por colaborador.
+  insertColumnAfter(moduleMap.people, "pis", "cpf");
+
   // A configuração visual V52 simplificou a tela do cartão e removeu estes
   // campos. Eles precisam voltar para que o usuário consiga cumprir a regra
   // que bloqueia o status Paga sem data, valor e comprovante.
