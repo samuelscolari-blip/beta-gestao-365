@@ -14,7 +14,6 @@ const wrapper = readFileSync(
   "utf8",
 );
 const page = readFileSync("app/page.tsx", "utf8");
-const wrangler = readFileSync("wrangler.jsonc", "utf8");
 
 test("a sincronização lê o Cadastro de Funcionários persistente", () => {
   assert.match(sync, /listRecords\("people"\)/);
@@ -64,15 +63,16 @@ test("perfil operacional é explícito, reversível e não depende do nome", () 
 });
 
 test("a ponte usa somente o domínio oficial do Beta Ponto", () => {
-  assert.match(sync, /function pointBaseUrl/);
-  assert.match(sync, /new URL\(DEFAULT_POINT_BASE_URL\)/);
-  assert.match(sync, /parsed\.hostname === official\.hostname/);
-  assert.match(sync, /return official\.origin/);
-  assert.match(sync, /pointBaseUrl\(runtime\.BETA_PONTO_BASE_URL\)/);
   assert.match(
-    wrangler,
-    /"BETA_PONTO_BASE_URL": "https:\/\/beta-ponto-eletronico-365\.scolarisamuel\.workers\.dev"/,
+    sync,
+    /baseUrl: DEFAULT_POINT_BASE_URL/,
   );
+  assert.match(
+    sync,
+    /https:\/\/beta-ponto-eletronico-365\.scolarisamuel\.workers\.dev/,
+  );
+  assert.doesNotMatch(sync, /BETA_PONTO_BASE_URL/);
+  assert.doesNotMatch(sync, /function pointBaseUrl/);
 });
 
 test("o Gestão valida e envia snapshot antes de uma ativação explícita", () => {
