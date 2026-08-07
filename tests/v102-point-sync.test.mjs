@@ -16,23 +16,29 @@ const page = readFileSync("app/page.tsx", "utf8");
 test("a sincronização lê o Cadastro de Funcionários persistente", () => {
   assert.match(sync, /listRecords\("people"\)/);
   assert.match(sync, /sourceRecordId: `beta-gestao-365:people:\$\{record\.id\}`/);
-  assert.match(sync, /person\.registration \|\| person\.employeeCode \|\| record\.reference/);
+  assert.match(sync, /storedPeople\.filter\(\(record\) => record\.source !== DEMO_SOURCE\)/);
+  assert.match(sync, /storedWorks\.filter\(\(record\) => record\.source !== DEMO_SOURCE\)/);
 });
 
-test("documentos pessoais nunca entram no payload enviado ao Ponto", () => {
+test("a matrícula operacional usa cinco dígitos sem enviar o CPF ao Ponto", () => {
+  assert.match(sync, /onlyDigits\(person\.cpf\)/);
+  assert.match(sync, /cpfDigits\.slice\(0, 5\)/);
+  assert.match(sync, /ensureUniqueEmployeeNumbers\(payload\)/);
+
   const payloadBlock = sync.slice(
     sync.indexOf("const payload = people.map"),
     sync.indexOf("if (!payload.length)"),
   );
   for (const forbidden of [
-    "person.cpf",
-    "person.pis",
-    "person.rgNumber",
-    "person.ctpsNumber",
-    "person.birthDate",
-    "person.salary",
+    "cpf:",
+    "cpfDigits:",
+    "pis:",
+    "rgNumber:",
+    "ctpsNumber:",
+    "birthDate:",
+    "salary:",
   ]) {
-    assert.doesNotMatch(payloadBlock, new RegExp(forbidden.replace(".", "\\.")));
+    assert.doesNotMatch(payloadBlock, new RegExp(forbidden));
   }
 });
 
@@ -42,7 +48,7 @@ test("perfil operacional é conservador", () => {
   assert.match(sync, /return "EMPLOYEE_SELF_SERVICE"/);
 });
 
-test("o Gestão valida, envia snapshot completo e confirma BASE REAL nessa ordem", () => {
+test("o Gestão valida e envia snapshot antes de uma ativação explícita", () => {
   const validateAt = sync.indexOf("/api/integrations/people/validate");
   const peopleAt = sync.indexOf("/api/integrations/people/sync");
   const environmentAt = sync.indexOf("/api/integrations/environment/mode");
@@ -54,6 +60,14 @@ test("o Gestão valida, envia snapshot completo e confirma BASE REAL nessa ordem
   assert.match(sync, /fullSnapshot: true/);
   assert.match(sync, /mode: "REAL"/);
   assert.match(sync, /GESTAO_365_SYNC_TOKEN/);
+  assert.match(sync, /options\.activateReal === true/);
+  assert.match(sync, /ensureInitialActivationSource\(payload\)/);
+  assert.match(sync, /ensureInitialActivationSync\(payload, synced\)/);
+  assert.match(sync, /semAcesso\.length/);
+  assert.match(sync, /INITIAL_REAL_DIRECTORY_TOTAL = 42/);
+  assert.match(sync, /INITIAL_REAL_WORKSITE = "ASA BRANCA"/);
+  assert.match(sync, /person\.role === "OPERATOR"/);
+  assert.match(sync, /ao menos um encarregado com perfil para registrar o ponto da equipe/);
 });
 
 test("Pessoas e Obras disparam sincronização automática após gravação", () => {
@@ -61,6 +75,7 @@ test("Pessoas e Obras disparam sincronização automática após gravação", ()
   assert.match(wrapper, /pathname !== "\/api\/records"/);
   assert.match(wrapper, /moduleId === "people" \|\| moduleId === "works"/);
   assert.match(wrapper, /if \(affectsPoint && response\.ok\) schedule\(\)/);
+  assert.match(wrapper, /requestPointSync\(originalFetch, false\)/);
   // A abertura administrativa também agenda uma recuperação silenciosa.
   // Não acoplamos o teste à posição exata dos comentários dessa rotina.
   assert.match(wrapper, /schedule\(\);/);
@@ -69,8 +84,17 @@ test("Pessoas e Obras disparam sincronização automática após gravação", ()
 
 test("o botão manual continua existindo como conferência administrativa", () => {
   assert.match(wrapper, /if \(!isAdmin\) return/);
-  assert.match(wrapper, /Sincronizar com Ponto/);
+  assert.match(wrapper, /Ativar \/ sincronizar Ponto/);
+  assert.match(wrapper, /requestPointSync\(window\.fetch\.bind\(window\), true\)/);
   assert.match(route, /requireSoleAdmin\(request\)/);
+  assert.match(route, /body\.activateReal === true/);
   assert.match(route, /syncOfficialDirectoryToPoint/);
   assert.match(page, /SecureBetaAppV102/);
+});
+
+test("falhas remotas mostram o status e diagnósticos operacionais", () => {
+  assert.match(sync, /httpStatus: response\.status/);
+  assert.match(sync, /response\.status === 401/);
+  assert.match(sync, /GESTAO_365_SYNC_TOKEN é idêntico nos dois Workers/);
+  assert.match(sync, /response\.status === 404/);
 });
