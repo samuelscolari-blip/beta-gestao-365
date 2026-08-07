@@ -125,8 +125,21 @@ function installPdfExportButtons(isAdmin: boolean) {
         excelButton?.parentElement === toolbar &&
         pdfButton.parentElement === toolbar
       ) {
-        toolbar.insertBefore(excelButton, importButton);
-        toolbar.insertBefore(pdfButton, excelButton);
+        /*
+         * `insertBefore` remove e reinsere o nó mesmo quando ele já ocupa a
+         * posição pedida. Como esta rotina é chamada por um MutationObserver,
+         * a movimentação incondicional criava um ciclo contínuo de mutações.
+         * Os botões mudavam de lugar entre o pressionar e o soltar do mouse,
+         * então o navegador não concluía o clique de PDF nem o de Excel.
+         *
+         * Só tocamos no DOM quando a ordem realmente estiver incorreta.
+         */
+        if (excelButton.nextElementSibling !== importButton) {
+          toolbar.insertBefore(excelButton, importButton);
+        }
+        if (pdfButton.nextElementSibling !== excelButton) {
+          toolbar.insertBefore(pdfButton, excelButton);
+        }
       }
     });
 }
