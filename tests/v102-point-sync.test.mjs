@@ -102,7 +102,7 @@ test("Pessoas e Obras disparam sincronização automática após gravação", ()
   assert.match(wrapper, /pathname !== "\/api\/records"/);
   assert.match(wrapper, /moduleId === "people" \|\| moduleId === "works"/);
   assert.match(wrapper, /if \(affectsPoint && response\.ok\) schedule\(\)/);
-  assert.match(wrapper, /requestPointSync\(originalFetch, false\)/);
+  assert.match(wrapper, /requestPointSync\(originalFetch\)/);
   // A abertura administrativa também agenda uma recuperação silenciosa.
   // Não acoplamos o teste à posição exata dos comentários dessa rotina.
   assert.match(wrapper, /schedule\(\);/);
@@ -112,10 +112,15 @@ test("Pessoas e Obras disparam sincronização automática após gravação", ()
 test("o botão manual continua existindo como conferência administrativa", () => {
   assert.match(wrapper, /if \(!isAdmin\) return/);
   assert.match(wrapper, /Ativar \/ sincronizar Ponto/);
-  assert.match(wrapper, /requestPointSync\(window\.fetch\.bind\(window\), true\)/);
+  assert.match(wrapper, /requestPointSync\(window\.fetch\.bind\(window\)\)/);
   assert.match(route, /requireSoleAdmin\(request\)/);
-  assert.match(route, /body\.activateReal === true/);
+  assert.match(route, /activateReal: false/);
   assert.match(route, /syncOfficialDirectoryToPoint/);
+  assert.match(route, /EXPECTED_REAL_DIRECTORY_TOTAL = 42/);
+  assert.match(route, /snapshotCompleto/);
+  assert.match(route, /modoAlterado: false/);
+  assert.doesNotMatch(route, /request\.json/);
+  assert.doesNotMatch(wrapper, /requestPointSync[\s\S]*activateReal/);
   assert.match(page, /SecureBetaAppV102/);
 });
 
