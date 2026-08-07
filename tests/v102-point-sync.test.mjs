@@ -62,6 +62,19 @@ test("perfil operacional é explícito, reversível e não depende do nome", () 
   );
 });
 
+test("a ponte usa somente o domínio oficial do Beta Ponto", () => {
+  assert.match(
+    sync,
+    /baseUrl: DEFAULT_POINT_BASE_URL/,
+  );
+  assert.match(
+    sync,
+    /https:\/\/beta-ponto-eletronico-365\.scolarisamuel\.workers\.dev/,
+  );
+  assert.doesNotMatch(sync, /BETA_PONTO_BASE_URL/);
+  assert.doesNotMatch(sync, /function pointBaseUrl/);
+});
+
 test("o Gestão valida e envia snapshot antes de uma ativação explícita", () => {
   const validateAt = sync.indexOf("/api/integrations/people/validate");
   const peopleAt = sync.indexOf("/api/integrations/people/sync");
@@ -108,6 +121,7 @@ test("o botão manual continua existindo como conferência administrativa", () =
 
 test("falhas remotas mostram o status e diagnósticos operacionais", () => {
   assert.match(sync, /httpStatus: response\.status/);
+  assert.match(sync, /remoteUrl: response\.url/);
   assert.match(sync, /response\.status === 401/);
   assert.match(sync, /GESTAO_365_SYNC_TOKEN é idêntico nos dois Workers/);
   assert.match(sync, /response\.status === 404/);
