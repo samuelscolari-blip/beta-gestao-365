@@ -1181,7 +1181,7 @@ const peopleFormSections = [
     id: "journey",
     label: "Jornada de Trabalho",
     description: "Jornada, escala, regime, local de trabalho e vínculo com o futuro sistema de ponto.",
-    fields: ["scheduleStartDate", "weeklyHours", "restDay", "workRegime", "journeyType", "weeklySchedule", "flexibleHours", "partTimeContract", "timeClockEmployeeId", "canRegisterTeamPoint", "timeClockSyncStatus", "lastTimeClockSync"],
+    fields: ["scheduleStartDate", "weeklyHours", "restDay", "workRegime", "journeyType", "weeklySchedule", "flexibleHours", "partTimeContract", "timeClockEmployeeId", "canRegisterTeamPoint", "canManageTime", "timeClockSyncStatus", "lastTimeClockSync"],
   },
   {
     id: "termination",
