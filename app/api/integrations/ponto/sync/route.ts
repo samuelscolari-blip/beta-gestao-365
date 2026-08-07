@@ -4,29 +4,40 @@ import {
 } from "../../../../lib/ponto-sync";
 import { requireSoleAdmin } from "../../../../lib/server-access";
 
+const EXPECTED_REAL_DIRECTORY_TOTAL = 42;
+
 export async function POST(request: Request) {
   const denied = requireSoleAdmin(request);
   if (denied) return denied;
 
   try {
-    const body = (await request.json().catch(() => ({}))) as {
-      activateReal?: unknown;
-    };
-    const result = await syncOfficialDirectoryToPoint({
-      activateReal: body.activateReal === true,
-    });
-    const environmentMessage =
-      result.environmentAction === "ACTIVATED"
-        ? "Ambiente ativado como BASE REAL."
-        : result.environmentAction === "ALREADY_REAL"
-          ? "O ambiente já estava em BASE REAL."
-          : "O modo do ambiente não foi alterado.";
+    /*
+     * O Ponto já está em BASE REAL. Esta porta faz somente o snapshot:
+     * não consulta, ativa nem altera o modo e não reaplica os gates antigos
+     * de jornada ou credencial usados exclusivamente na primeira ativação.
+     */
+    const result = await syncOfficialDirectoryToPoint({ activateReal: false });
+    const processed = result.created + result.updated;
+    const snapshotCompleto = result.total === EXPECTED_REAL_DIRECTORY_TOTAL;
+
     return Response.json(
       {
         ...result,
+        modoAlterado: false,
+        snapshotCompleto,
+        diagnostico: {
+          esperados: EXPECTED_REAL_DIRECTORY_TOTAL,
+          enviados: result.total,
+          processados: processed,
+          desativados: result.deactivated,
+          semAcesso: result.semAcesso.length,
+        },
         message:
           `${result.total} funcionários sincronizados com o Beta Ponto. ` +
-          environmentMessage,
+          "O ambiente permaneceu em BASE REAL e nenhuma batida foi registrada." +
+          (snapshotCompleto
+            ? ""
+            : ` Atenção: eram esperados ${EXPECTED_REAL_DIRECTORY_TOTAL} funcionários oficiais.`),
       },
       { headers: { "cache-control": "no-store" } },
     );
@@ -44,10 +55,11 @@ export async function POST(request: Request) {
         {
           ok: false,
           stage: error.stage,
+          modoAlterado: false,
           message: error.message,
           point: error.details,
         },
-        { status },
+        { status, headers: { "cache-control": "no-store" } },
       );
     }
 
@@ -55,9 +67,10 @@ export async function POST(request: Request) {
       {
         ok: false,
         stage: "unknown",
+        modoAlterado: false,
         message: "Não foi possível sincronizar o Beta Gestão 365 com o Beta Ponto.",
       },
-      { status: 502 },
+      { status: 502, headers: { "cache-control": "no-store" } },
     );
   }
 }
