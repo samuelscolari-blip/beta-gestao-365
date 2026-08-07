@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect } from "react";
+import { exportHtmlTableToPdf } from "../lib/pdf-export";
 import SecureBetaAppV101 from "./SecureBetaAppV101";
 
 type Props = {
@@ -10,7 +11,125 @@ type Props = {
 };
 
 const BUTTON_MARKER = "beta-point-sync-button";
+const PDF_BUTTON_MARKER = "beta-pdf-export-button";
 const AUTO_SYNC_DELAY_MS = 600;
+
+function normalize(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function buttonLabel(button: HTMLButtonElement) {
+  return normalize(button.textContent || "");
+}
+
+function setButtonLabel(button: HTMLButtonElement, label: string) {
+  const textNode = Array.from(button.childNodes).find(
+    (node) => node.nodeType === Node.TEXT_NODE,
+  );
+  const nextLabel = ` ${label}`;
+  if (textNode) {
+    if (textNode.textContent !== nextLabel) textNode.textContent = nextLabel;
+  } else {
+    button.append(document.createTextNode(nextLabel));
+  }
+}
+
+function moduleTitle(toolbar: HTMLElement) {
+  const page = toolbar.closest<HTMLElement>(".page-stack");
+  const headerTitle = page
+    ?.querySelector<HTMLElement>('[data-ui="module-header"] h1')
+    ?.textContent?.trim();
+  const activeNavigation = document
+    .querySelector<HTMLElement>(".sidebar button.active span:last-child")
+    ?.textContent?.trim();
+  return headerTitle || activeNavigation || "Relatório";
+}
+
+function installPdfExportButtons(isAdmin: boolean) {
+  if (!isAdmin) return;
+
+  document
+    .querySelectorAll<HTMLElement>(".table-toolbar")
+    .forEach((toolbar) => {
+      const buttons = Array.from(
+        toolbar.querySelectorAll<HTMLButtonElement>("button"),
+      );
+      const pdfButton = buttons.find(
+        (candidate) =>
+          candidate.dataset.ui === PDF_BUTTON_MARKER ||
+          buttonLabel(candidate) === "modelo",
+      );
+      if (!pdfButton) return;
+
+      pdfButton.dataset.ui = PDF_BUTTON_MARKER;
+      pdfButton.type = "button";
+      pdfButton.title =
+        "Exportar os registros exibidos nesta tabela em um arquivo PDF.";
+      pdfButton.setAttribute(
+        "aria-label",
+        "Exportar os registros exibidos em Arquivo PDF",
+      );
+      setButtonLabel(pdfButton, "Arquivo PDF");
+
+      if (pdfButton.dataset.pdfExportReady !== "true") {
+        pdfButton.dataset.pdfExportReady = "true";
+        pdfButton.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            const currentToolbar = pdfButton.closest<HTMLElement>(
+              ".table-toolbar",
+            );
+            const table = currentToolbar
+              ?.closest<HTMLElement>(".table-card")
+              ?.querySelector<HTMLTableElement>("table");
+            if (!table || !currentToolbar) {
+              window.alert("A tabela desta tela não foi encontrada para o PDF.");
+              return;
+            }
+
+            const title = moduleTitle(currentToolbar);
+            try {
+              exportHtmlTableToPdf(table, {
+                title,
+                fileName: `Beta Construtora - ${title}`,
+              });
+            } catch (error) {
+              window.alert(
+                error instanceof Error
+                  ? error.message
+                  : "Não foi possível gerar o Arquivo PDF.",
+              );
+            }
+          },
+          { capture: true },
+        );
+      }
+
+      const importButton = buttons.find(
+        (candidate) => buttonLabel(candidate) === "importar",
+      );
+      const excelButton = buttons.find(
+        (candidate) => buttonLabel(candidate) === "excel",
+      );
+      if (
+        importButton?.parentElement === toolbar &&
+        excelButton?.parentElement === toolbar &&
+        pdfButton.parentElement === toolbar
+      ) {
+        toolbar.insertBefore(excelButton, importButton);
+        toolbar.insertBefore(pdfButton, excelButton);
+      }
+    });
+}
 
 function peopleToolbar() {
   const tabs = document.querySelector<HTMLElement>(".people-status-tabs");
@@ -200,17 +319,25 @@ export default function SecureBetaAppV102(props: Props) {
   useLayoutEffect(() => {
     let frame = 0;
     const stopAutomaticSync = installAutomaticPointSync(props.isAdmin);
+    const enhanceToolbar = () => {
+      installPdfExportButtons(props.isAdmin);
+      installPointSyncButton(props.isAdmin);
+    };
     const schedule = () => {
       if (frame) return;
       frame = window.requestAnimationFrame(() => {
         frame = 0;
-        installPointSyncButton(props.isAdmin);
+        enhanceToolbar();
       });
     };
 
-    installPointSyncButton(props.isAdmin);
+    enhanceToolbar();
     const observer = new MutationObserver(schedule);
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
 
     return () => {
       stopAutomaticSync();
