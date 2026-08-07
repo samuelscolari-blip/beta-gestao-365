@@ -22,10 +22,13 @@ test("a sincronização lê o Cadastro de Funcionários persistente", () => {
   assert.match(sync, /storedWorks\.filter\(\(record\) => record\.source !== DEMO_SOURCE\)/);
 });
 
-test("a matrícula operacional usa cinco dígitos sem enviar o CPF ao Ponto", () => {
+test("a matrícula operacional usa cinco dígitos e a ponte autenticada leva a identificação oficial", () => {
   assert.match(sync, /onlyDigits\(person\.cpf\)/);
   assert.match(sync, /cpfDigits\.slice\(0, 5\)/);
   assert.match(sync, /ensureUniqueEmployeeNumbers\(payload\)/);
+  assert.match(sync, /cpfDigits: exactDigitsOrNull\(person\.cpf, 11\)/);
+  assert.match(sync, /pis: exactDigitsOrNull\(person\.pis, 11\)/);
+  assert.match(sync, /admissionDate: isoDateOrNull\(person\.admissionDate\)/);
 
   const payloadBlock = sync.slice(
     sync.indexOf("const payload = people.map"),
@@ -33,8 +36,6 @@ test("a matrícula operacional usa cinco dígitos sem enviar o CPF ao Ponto", ()
   );
   for (const forbidden of [
     "cpf:",
-    "cpfDigits:",
-    "pis:",
     "rgNumber:",
     "ctpsNumber:",
     "birthDate:",
@@ -42,6 +43,7 @@ test("a matrícula operacional usa cinco dígitos sem enviar o CPF ao Ponto", ()
   ]) {
     assert.doesNotMatch(payloadBlock, new RegExp(forbidden));
   }
+  assert.match(sync, /authorization: `Bearer \$\{token\}`/);
 });
 
 test("perfil operacional é explícito, reversível e não depende do nome", () => {
@@ -56,10 +58,31 @@ test("perfil operacional é explícito, reversível e não depende do nome", () 
   assert.match(modules, /canRegisterTeamPoint/);
   assert.match(modules, /Pode registrar o ponto da equipe\?/);
   assert.match(modules, /options: \["Não", "Sim"\]/);
+  assert.match(modules, /canManageTime/);
+  assert.match(modules, /Pode administrar jornadas e espelhos\?/);
+  assert.match(sync, /INITIAL_TIME_MANAGEMENT_CODES[\s\S]*"20029"[\s\S]*"20033"[\s\S]*"20044"/);
+  assert.match(sync, /person\.canManageTime/);
+  assert.match(sync, /explicitPermission !== null/);
+  assert.match(sync, /canManageTime: canManageTime\(person, record\.reference\)/);
   assert.match(
     betaApp,
-    /fields: \[[^\]]*"timeClockEmployeeId", "canRegisterTeamPoint", "timeClockSyncStatus"/,
+    /fields: \[[^\]]*"timeClockEmployeeId", "canRegisterTeamPoint", "canManageTime", "timeClockSyncStatus"/,
   );
+});
+
+test("metadados de empregador e obra vêm dos cadastros oficiais, sem salário", () => {
+  assert.match(sync, /listRecords\("settings"\)/);
+  assert.match(sync, /legalName: String\(settings\.legalName/);
+  assert.match(sync, /tradeName:/);
+  assert.match(sync, /cnpj: exactDigitsOrNull\(settings\.cnpj, 14\)/);
+  assert.match(sync, /cno: exactDigitsOrNull\(workRecord\?\.payload\.cno, 12\)/);
+  assert.match(sync, /employer,/);
+
+  const payloadBlock = sync.slice(
+    sync.indexOf("const payload = people.map"),
+    sync.indexOf("if (!payload.length)"),
+  );
+  assert.doesNotMatch(payloadBlock, /salary:/);
 });
 
 test("a ponte usa somente o domínio oficial do Beta Ponto", () => {
